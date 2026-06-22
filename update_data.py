@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-WC2026 Auto Data Updater - Fixed Version
-Handles missing API keys and unexpected response structures
+WC2026 Auto Data Updater - Smart Merge Version
+Preserves manual match data, only updates standings/live scores from API
 """
 
 import json
@@ -24,7 +24,6 @@ def log(msg):
 
 
 def safe_get(obj, *keys, default=None):
-    """Safely navigate nested dicts"""
     for key in keys:
         if not isinstance(obj, dict):
             return default
@@ -36,7 +35,7 @@ def safe_get(obj, *keys, default=None):
 
 def fetch_api(endpoint, params=None):
     if not API_KEY:
-        log("WARNING: No API key found. Using fallback data.")
+        log("WARNING: No API key found.")
         return None
     try:
         url = f"{API_BASE}{endpoint}"
@@ -84,7 +83,14 @@ def create_template():
 
 
 def update_matches(data):
+    """Update match scores/status from API, but preserve manual match list if API returns different matches"""
     today = datetime.now().strftime("%Y-%m-%d")
+    existing_matches = data.get('matches', {}).get('today', [])
+    existing_live = data.get('matches', {}).get('live', [])
+
+    if not existing_matches:
+        log("No existing matches in data.json")
+        return data
 
     # Find World Cup league ID
     leagues = fetch_api('/leagues', {'search': 'World Cup'})
@@ -100,10 +106,10 @@ def update_matches(data):
                 break
 
     if not wc_league_id:
-        log("Could not find World Cup league ID, using fallback data")
+        log("Could not find World Cup league ID, keeping existing match data")
         return data
 
-    # Fetch fixtures
+    # Fetch fixtures for today
     fixtures = fetch_api('/fixtures', {
         'league': wc_league_id,
         'season': wc_season,
@@ -112,127 +118,58 @@ def update_matches(data):
     })
 
     if not fixtures:
-        log("No fixtures found for today, keeping existing data")
+        log("No fixtures from API, keeping existing match data")
         return data
 
-    matches_today = []
-    matches_live = []
+    # Build a map of existing matches by team names for quick lookup
+    existing_map = {}
+    for m in existing_matches:
+        key = f"{m.get('home', '')} vs {m.get('away', '')}"
+        existing_map[key.lower()] = m
 
+    # Try to update existing matches with live scores from API
+    api_matches_found = 0
     for fixture in fixtures:
         try:
-            match_id = safe_get(fixture, 'fixture', 'id')
-            status_short = safe_get(fixture, 'fixture', 'status', 'short', default='NS')
+            home_name = safe_get(fixture, 'teams', 'home', 'name', default='')
+            away_name = safe_get(fixture, 'teams', 'away', 'name', default='')
+            lookup_key = f"{home_name} vs {away_name}".lower()
 
-            if status_short in ['1H', 'HT', '2H', 'ET', 'P']:
-                status = 'live'
-            elif status_short == 'NS':
-                status = 'upcoming'
-            elif status_short in ['FT', 'AET', 'PEN']:
-                status = 'finished'
-            else:
-                status = 'upcoming'
+            # Check if this API match matches any of our existing matches
+            matched = False
+            for key in existing_map:
+                if home_name.lower() in key and away_name.lower() in key:
+                    # Update score and status for this match
+                    existing_match = existing_map[key]
+                    status_short = safe_get(fixture, 'fixture', 'status', 'short', default='NS')
 
-            date_str = safe_get(fixture, 'fixture', 'date', default='')
-            time_str = date_str.split('T')[1][:5] if 'T' in date_str else "TBC"
+                    if status_short in ['1H', 'HT', '2H', 'ET', 'P']:
+                        existing_match['status'] = 'live'
+                    elif status_short in ['FT', 'AET', 'PEN']:
+                        existing_match['status'] = 'finished'
 
-            home_goals = safe_get(fixture, 'goals', 'home')
-            away_goals = safe_get(fixture, 'goals', 'away')
-            score = f"{home_goals} - {away_goals}" if home_goals is not None else None
+                    home_goals = safe_get(fixture, 'goals', 'home')
+                    away_goals = safe_get(fixture, 'goals', 'away')
+                    if home_goals is not None and away_goals is not None:
+                        existing_match['score'] = f"{home_goals} - {away_goals}"
 
-            match_data = {
-                "id": match_id,
-                "time": time_str,
-                "home": safe_get(fixture, 'teams', 'home', 'name', default='Home'),
-                "home_flag": safe_get(fixture, 'teams', 'home', 'logo', default=''),
-                "home_fifa": f"FIFA #{safe_get(fixture, 'teams', 'home', 'fifa_rank', default='N/A')}",
-                "away": safe_get(fixture, 'teams', 'away', 'name', default='Away'),
-                "away_flag": safe_get(fixture, 'teams', 'away', 'logo', default=''),
-                "away_fifa": f"FIFA #{safe_get(fixture, 'teams', 'away', 'fifa_rank', default='N/A')}",
-                "group": safe_get(fixture, 'league', 'round', default=''),
-                "status": status,
-                "score": score,
-                "live_time": safe_get(fixture, 'fixture', 'status', 'elapsed') if status == 'live' else None,
-                "predictions": {},
-                "odds": {}
-            }
+                    existing_match['live_time'] = safe_get(fixture, 'fixture', 'status', 'elapsed')
+                    api_matches_found += 1
+                    matched = True
+                    break
 
-            # Fetch predictions
-            predictions = fetch_api('/predictions', {'fixture': match_id})
-            if predictions and len(predictions) > 0:
-                pred = predictions[0]
-                pred_data = safe_get(pred, 'predictions', default={})
-
-                # Safely get prediction values with defaults
-                draw_val = safe_get(pred_data, 'draw', default='25%')
-                if draw_val is None:
-                    draw_val = '25%'
-
-                winner = safe_get(pred_data, 'winner', default={})
-                winner_id = safe_get(winner, 'id')
-
-                home_id = safe_get(pred, 'teams', 'home', 'id')
-                away_id = safe_get(pred, 'teams', 'away', 'id')
-
-                if winner_id and home_id and away_id:
-                    home_prob = '68%' if winner_id == home_id else '35%'
-                    away_prob = '68%' if winner_id == away_id else '35%'
-                else:
-                    home_prob = '50%'
-                    away_prob = '25%'
-
-                over_under = safe_get(pred_data, 'over_under', default='50%')
-                if over_under is None:
-                    over_under = '50%'
-
-                match_data['predictions'] = {
-                    "home": home_prob,
-                    "draw": str(draw_val),
-                    "away": away_prob,
-                    "ou": f"大2.5 {over_under}"
-                }
-            else:
-                match_data['predictions'] = {
-                    "home": "50%", "draw": "25%", "away": "25%", "ou": "大2.5 50%"
-                }
-
-            # Fetch odds
-            odds = fetch_api('/odds', {'fixture': match_id, 'bookmaker': 1})
-            if odds and len(odds) > 0:
-                bookmakers = safe_get(odds[0], 'bookmakers', default=[])
-                if bookmakers and len(bookmakers) > 0:
-                    bets = safe_get(bookmakers[0], 'bets', default=[])
-                    for bet in bets:
-                        if safe_get(bet, 'name') == 'Match Winner':
-                            values = safe_get(bet, 'values', default=[])
-                            if len(values) >= 3:
-                                try:
-                                    match_data['odds'] = {
-                                        "home": float(values[0]['odd']),
-                                        "draw": float(values[1]['odd']),
-                                        "away": float(values[2]['odd'])
-                                    }
-                                except (KeyError, ValueError, IndexError):
-                                    match_data['odds'] = {"home": 2.0, "draw": 3.2, "away": 3.5}
-                            break
-
-            if not match_data['odds']:
-                match_data['odds'] = {"home": 2.0, "draw": 3.2, "away": 3.5}
-
-            if status == 'live':
-                matches_live.append(match_data)
-            else:
-                matches_today.append(match_data)
+            if not matched:
+                log(f"API match '{home_name} vs {away_name}' not found in existing data, skipping")
 
         except Exception as e:
             log(f"Error processing fixture: {e}")
             continue
 
-    if matches_today or matches_live:
-        data['matches']['today'] = matches_today
-        data['matches']['live'] = matches_live
-        log(f"Updated {len(matches_today)} upcoming + {len(matches_live)} live matches")
-    else:
-        log("No matches to update")
+    log(f"Updated {api_matches_found} existing matches with live data from API")
+
+    # Update the data with modified existing matches
+    data['matches']['today'] = existing_matches
+    data['matches']['live'] = [m for m in existing_matches if m.get('status') == 'live']
 
     return data
 
@@ -329,18 +266,20 @@ def main():
         log("WARNING: API_FOOTBALL_KEY not set! Using fallback data.")
 
     data = load_existing_data()
-    log(f"Loaded existing data (last updated: {data.get('last_updated', 'N/A')})")
+    existing_count = len(data.get('matches', {}).get('today', []))
+    log(f"Loaded existing data with {existing_count} matches (last updated: {data.get('last_updated', 'N/A')})")
 
-    log("Fetching today's matches...")
+    log("Fetching today's matches from API...")
     data = update_matches(data)
 
-    log("Fetching group standings...")
+    log("Fetching group standings from API...")
     data = update_standings(data)
 
     data = update_timestamp(data)
 
     if save_data(data):
-        log(f"Update complete! Last updated: {data['last_updated']}")
+        final_count = len(data.get('matches', {}).get('today', []))
+        log(f"Update complete! {final_count} matches in data. Last updated: {data['last_updated']}")
     else:
         log("ERROR: Failed to save data!")
         sys.exit(1)
