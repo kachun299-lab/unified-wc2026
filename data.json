@@ -1,0 +1,112 @@
+{
+  "last_updated": "2026-06-23 01:00",
+  "stats": {
+    "completed": "36/72",
+    "qualified": "3",
+    "eliminated": "2",
+    "accuracy_1x2": "58.3%",
+    "accuracy_ou": "69.4%",
+    "accuracy_btts": "75.0%",
+    "upset_high": "8",
+    "upset_max": "43.3%",
+    "upset_key": "捷克vs墨西哥",
+    "ml_mae": "0.0305",
+    "ml_features": "8",
+    "ml_status": "✅就緒"
+  },
+  "standings": {
+    "A": [
+      {"rank": 1, "team": "🇲🇽 墨西哥", "pts": 6, "status": "✓ 晉級", "status_color": "success"},
+      {"rank": 2, "team": "🇰🇷 韓國", "pts": 3, "status": "? 待定", "status_color": "muted"},
+      {"rank": 3, "team": "🇨🇿 捷克", "pts": 1, "status": "? 待定", "status_color": "muted"},
+      {"rank": 4, "team": "🇿🇦 南非", "pts": 1, "status": "? 待定", "status_color": "muted"}
+    ],
+    "G": [
+      {"rank": 1, "team": "🇪🇬 埃及", "pts": 4, "status": "? 待定", "status_color": "muted"},
+      {"rank": 2, "team": "🇧🇪 比利時", "pts": 2, "status": "? 待定", "status_color": "muted"},
+      {"rank": 3, "team": "🇮🇷 伊朗", "pts": 2, "status": "? 待定", "status_color": "muted"},
+      {"rank": 4, "team": "🇳🇿 紐西蘭", "pts": 1, "status": "? 待定", "status_color": "muted"}
+    ],
+    "H": [
+      {"rank": 1, "team": "🇪🇸 西班牙", "pts": 4, "status": "? 待定", "status_color": "muted"},
+      {"rank": 2, "team": "🇺🇾 烏拉圭", "pts": 2, "status": "? 待定", "status_color": "muted"},
+      {"rank": 3, "team": "🇨🇻 佛得角", "pts": 2, "status": "? 待定", "status_color": "muted"},
+      {"rank": 4, "team": "🇸🇦 沙地阿拉伯", "pts": 1, "status": "? 待定", "status_color": "muted"}
+    ]
+  },
+  "fixtures": [
+    {"date": "6月23日", "group": "J組 R3", "time": "01:00", "home": "阿根廷", "away": "奧地利", "home_mot": 7.0, "away_mot": 8.5, "exp_goals": 2.66},
+    {"date": "6月23日", "group": "I組 R3", "time": "05:00", "home": "法國", "away": "伊拉克", "home_mot": 7.0, "away_mot": 8.5, "exp_goals": 2.95},
+    {"date": "6月23日", "group": "I組 R3", "time": "08:00", "home": "挪威", "away": "塞內加爾", "home_mot": 8.5, "away_mot": 8.5, "exp_goals": 2.66},
+    {"date": "6月23日", "group": "J組 R3", "time": "11:00", "home": "約旦", "away": "阿爾及利亞", "home_mot": 9.5, "away_mot": 3.0, "exp_goals": 2.40},
+    {"date": "6月24日", "group": "K組 R3", "time": "01:00", "home": "葡萄牙", "away": "烏茲別克"},
+    {"date": "6月24日", "group": "L組 R3", "time": "04:00", "home": "英格蘭", "away": "加納"}
+  ],
+  "predictions": [
+    {
+      "title": "阿根廷 vs 奧地利",
+      "alert": "⚠️ 爆冷",
+      "alert_class": "alert-high",
+      "alert_desc": "戰意差異 -1.5",
+      "home_win": 50.8,
+      "draw": 24.5,
+      "away_win": 24.7,
+      "exp_goals": 2.66,
+      "over_3": 27.8,
+      "btts": 53.9,
+      "corners": "預期8.5個"
+    },
+    {
+      "title": "法國 vs 伊拉克",
+      "alert": "🟡 戰意差",
+      "alert_class": "alert-medium",
+      "alert_desc": "",
+      "home_win": 57.0,
+      "draw": 22.5,
+      "away_win": 20.5,
+      "exp_goals": 2.95,
+      "over_3": 34.1,
+      "btts": 58.8,
+      "corners": null
+    },
+    {
+      "title": "挪威 vs 塞內加爾",
+      "alert": "🟡 生死戰",
+      "alert_class": "alert-medium",
+      "alert_desc": "",
+      "home_win": 42.3,
+      "draw": 36.4,
+      "away_win": 21.3,
+      "exp_goals": null,
+      "over_3": null,
+      "btts": null,
+      "corners": null
+    },
+    {
+      "title": "約旦 vs 阿爾及利亞",
+      "alert": "🔴 極端差異",
+      "alert_class": "alert-critical",
+      "alert_desc": "",
+      "home_win": 45.0,
+      "draw": 30.0,
+      "away_win": 25.0,
+      "exp_goals": null,
+      "over_3": null,
+      "btts": null,
+      "corners": null
+    }
+  ],
+  "motivation_high": [
+    {"team": "約旦", "value": 9.5, "desc": "僅1分，必須大勝"},
+    {"team": "巴拉圭", "value": 9.0, "desc": "僅3分，必須大勝"},
+    {"team": "奧地利", "value": 8.5, "desc": "僅1分，必須取勝"},
+    {"team": "伊拉克", "value": 8.5, "desc": "僅1分，必須取勝"},
+    {"team": "挪威", "value": 8.5, "desc": "僅1分，必須取勝"},
+    {"team": "塞內加爾", "value": 8.5, "desc": "僅1分，必須取勝"}
+  ],
+  "motivation_low": [
+    {"team": "墨西哥", "value": 2.0, "desc": "已確定晉級"},
+    {"team": "德國", "value": 2.0, "desc": "已確定晉級"},
+    {"team": "美國", "value": 1.5, "desc": "已確定出局"}
+  ]
+}
