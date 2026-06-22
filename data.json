@@ -22,10 +22,10 @@
         "score": null,
         "venue": "AT&T Stadium, Arlington",
         "predictions": {
-          "home": "65%",
-          "draw": "22%",
-          "away": "13%",
-          "ou": "大2.5 58%"
+          "home": "65",
+          "draw": "22",
+          "away": "13",
+          "ou": "大2.5 58"
         },
         "odds": {
           "home": 1.55,
@@ -34,27 +34,27 @@
         },
         "handicap": {
           "line": "(+1.5)",
-          "prob": "主隊讓勝 62%",
+          "prob": "主隊讓勝 62",
           "expected": "預期淨勝球: 1.2"
         },
         "ou": {
           "line": "(2.5)",
-          "prob": "大球 58%",
+          "prob": "大球 58",
           "expected": "預期總入球: 3.2"
         },
         "btts": {
           "line": "",
-          "prob": "是 56%",
+          "prob": "是 56",
           "note": "奧地利 近期進攻 一般"
         },
         "corners": {
           "line": "(9.5)",
-          "prob": "大角 61%",
+          "prob": "大角 61",
           "expected": "預期角球: 10.3"
         },
         "ht": {
           "line": "",
-          "prob": "主勝 52%",
+          "prob": "主勝 52",
           "note": "HT 大0.5: 64%"
         },
         "scores": [
@@ -170,10 +170,10 @@
         "score": null,
         "venue": "Lincoln Financial Field, Philadelphia",
         "predictions": {
-          "home": "72%",
-          "draw": "18%",
-          "away": "10%",
-          "ou": "大2.5 71%"
+          "home": "72",
+          "draw": "18",
+          "away": "10",
+          "ou": "大2.5 71"
         },
         "odds": {
           "home": 1.35,
@@ -182,27 +182,27 @@
         },
         "handicap": {
           "line": "(+1.5)",
-          "prob": "主隊讓勝 75%",
+          "prob": "主隊讓勝 75",
           "expected": "預期淨勝球: 2.1"
         },
         "ou": {
           "line": "(2.5)",
-          "prob": "大球 71%",
+          "prob": "大球 71",
           "expected": "預期總入球: 3.4"
         },
         "btts": {
           "line": "",
-          "prob": "是 57%",
+          "prob": "是 57",
           "note": "伊拉克 近期進攻 一般"
         },
         "corners": {
           "line": "(9.5)",
-          "prob": "大角 71%",
+          "prob": "大角 71",
           "expected": "預期角球: 11.0"
         },
         "ht": {
           "line": "",
-          "prob": "主勝 61%",
+          "prob": "主勝 61",
           "note": "HT 大0.5: 68%"
         },
         "scores": [
@@ -318,10 +318,10 @@
         "score": null,
         "venue": "MetLife Stadium, East Rutherford",
         "predictions": {
-          "home": "45%",
-          "draw": "28%",
-          "away": "27%",
-          "ou": "大2.5 53%"
+          "home": "45",
+          "draw": "28",
+          "away": "27",
+          "ou": "大2.5 53"
         },
         "odds": {
           "home": 2.1,
@@ -330,27 +330,27 @@
         },
         "handicap": {
           "line": "(+0)",
-          "prob": "主隊讓勝 55%",
+          "prob": "主隊讓勝 55",
           "expected": "預期淨勝球: 0.5"
         },
         "ou": {
           "line": "(2.5)",
-          "prob": "大球 53%",
+          "prob": "大球 53",
           "expected": "預期總入球: 3.2"
         },
         "btts": {
           "line": "",
-          "prob": "是 56%",
+          "prob": "是 56",
           "note": "塞內加爾 近期進攻 穩定"
         },
         "corners": {
           "line": "(9.5)",
-          "prob": "大角 57%",
+          "prob": "大角 57",
           "expected": "預期角球: 10.4"
         },
         "ht": {
           "line": "",
-          "prob": "主勝 45%",
+          "prob": "主勝 45",
           "note": "HT 大0.5: 64%"
         },
         "scores": [
@@ -466,10 +466,10 @@
         "score": null,
         "venue": "Levi's Stadium, Santa Clara",
         "predictions": {
-          "home": "18%",
-          "draw": "20%",
-          "away": "62%",
-          "ou": "大2.5 38%"
+          "home": "18",
+          "draw": "20",
+          "away": "62",
+          "ou": "大2.5 38"
         },
         "odds": {
           "home": 5.5,
@@ -478,27 +478,27 @@
         },
         "handicap": {
           "line": "(-0.5)",
-          "prob": "客隊讓勝 68%",
+          "prob": "客隊讓勝 68",
           "expected": "預期淨勝球: -2.2"
         },
         "ou": {
           "line": "(2.5)",
-          "prob": "大球 38%",
+          "prob": "大球 38",
           "expected": "預期總入球: 3.7"
         },
         "btts": {
           "line": "",
-          "prob": "是 58%",
+          "prob": "是 58",
           "note": "阿爾及利亞 近期進攻 穩定"
         },
         "corners": {
           "line": "(9.5)",
-          "prob": "大角 46%",
+          "prob": "大角 46",
           "expected": "預期角球: 11.9"
         },
         "ht": {
           "line": "",
-          "prob": "客勝 61%",
+          "prob": "客勝 61",
           "note": "HT 大0.5: 74%"
         },
         "scores": [
