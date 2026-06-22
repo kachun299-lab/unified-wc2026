@@ -1,142 +1,225 @@
 #!/usr/bin/env python3
 """
-UNIFIED v3.3.43 - Auto Update with Correct Score Analysis
+WC2026 Auto Data Updater
+Fetches live data from API-Football and updates data.json
+Run: python update_data.py
 """
-import json
-from datetime import datetime
 
-def load_data():
+import json
+import requests
+import os
+from datetime import datetime, timezone, timedelta
+
+# API Configuration
+API_KEY = os.environ.get('API_FOOTBALL_KEY', '5268ae5daae7ba1b20e8e1f963f221ff')
+API_BASE = 'https://v3.football.api-sports.io'
+HEADERS = {
+    'x-rapidapi-key': API_KEY,
+    'x-rapidapi-host': 'v3.football.api-sports.io'
+}
+
+# World Cup 2026 League ID (API-Football)
+WC_LEAGUE_ID = 1  # Update this with actual World Cup league ID
+WC_SEASON = 2026
+
+OUTPUT_FILE = 'data.json'
+
+
+def fetch_api(endpoint, params=None):
+    """Fetch data from API-Football"""
     try:
-        with open('data.json', 'r', encoding='utf-8') as f:
-            return json.load(f)
+        url = f"{API_BASE}{endpoint}"
+        response = requests.get(url, headers=HEADERS, params=params, timeout=30)
+        response.raise_for_status()
+        data = response.json()
+        if data.get('errors'):
+            print(f"API Error: {data['errors']}")
+            return None
+        return data.get('response', [])
     except Exception as e:
-        print(f"Error loading data.json: {e}")
+        print(f"Fetch error: {e}")
         return None
 
-def build_standings(data):
-    html = ""
-    for group, teams in data.get('standings', {}).items():
-        rows = ""
-        for t in teams:
-            status_color = f"color:var(--{t['status_color']});" if t['status_color'] != 'muted' else ""
-            rows += '<div class="table-row"><div class="team-info"><span class="team-rank">' + str(t["rank"]) + '</span><span class="team-name-cell">' + t["team"] + '</span></div><div style="text-align:right"><div class="team-pts">' + str(t["pts"]) + '</div><div class="team-stats" style="' + status_color + '">' + t["status"] + '</div></div></div>'
-        html += '<div class="card"><div class="card-title">&#127942; ' + group + '組</div><div class="mobile-table">' + rows + '</div></div>'
-    return html
 
-def build_fixtures(data):
-    html = ""
-    current_date = ""
-    for f in data.get('fixtures', []):
-        if f['date'] != current_date:
-            if current_date:
-                html += '</div>'
-            html += '<div class="card"><div class="card-title">&#128197; ' + f["date"] + '</div>'
-            current_date = f['date']
+def load_existing_data():
+    """Load existing data.json or create template"""
+    try:
+        with open(OUTPUT_FILE, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    except FileNotFoundError:
+        return create_template()
 
-        extra = '<div style="font-size:0.75rem;color:var(--text-muted)">戰意: ' + str(f.get("home_mot","")) + ' vs ' + str(f.get("away_mot","")) + ' | 預期: ' + str(f.get("exp_goals","")) + '球</div>' if 'exp_goals' in f else ''
-        html += '<div class="match-card"><div class="match-header"><span class="match-group">' + f["group"] + '</span><span class="match-time">' + f["time"] + '</span></div><div class="match-teams"><div class="team-block"><div class="team-name-big">' + f["home"] + '</div></div><div class="vs-divider">VS</div><div class="team-block"><div class="team-name-big">' + f["away"] + '</div></div></div>' + extra + '</div>'
 
-    if current_date:
-        html += '</div>'
-    return html
+def create_template():
+    """Create initial data template"""
+    return {
+        "last_updated": datetime.now(timezone(timedelta(hours=8))).isoformat(),
+        "meta": {
+            "date_display": datetime.now().strftime("%Y年%m月%d日"),
+            "round_info": "世界盃小組賽",
+            "round": "R3",
+            "version": "3.3.42"
+        },
+        "matches": {"today": [], "live": [], "upcoming": []},
+        "groups": {},
+        "predictions": {"selected": None, "matches": []},
+        "motivation": {},
+        "weather": {},
+        "live_betting": {"alerts": [], "strategies": [], "time_segments": []},
+        "analysis": {"corners": {}, "teams": [], "referee": {}}
+    }
 
-def build_predictions(data):
-    html = ""
-    for p in data.get('predictions', []):
-        alert_desc = '<span style="font-size:0.75rem;color:var(--text-muted);margin-left:0.5rem">' + p.get("alert_desc","") + '</span>' if p.get('alert_desc') else ''
 
-        extra_stats = ""
-        if p.get('exp_goals'):
-            extra_stats += '<div class="stat-row"><span class="stat-label">預期入球</span><span class="stat-value">' + str(p["exp_goals"]) + '</span></div>'
-        if p.get('over_3'):
-            extra_stats += '<div class="stat-row"><span class="stat-label">大3.0</span><span class="stat-value">' + str(p["over_3"]) + '%</span></div>'
-        if p.get('btts'):
-            extra_stats += '<div class="stat-row"><span class="stat-label">BTTS</span><span class="stat-value">' + str(p["btts"]) + '%</span></div>'
-        if p.get('corners'):
-            extra_stats += '<div class="stat-row"><span class="stat-label">角球</span><span class="stat-value">' + str(p["corners"]) + '</span></div>'
+def update_matches(data):
+    """Fetch and update today's matches from API"""
+    today = datetime.now().strftime("%Y-%m-%d")
 
-        html += '<div class="card"><div class="card-title">&#127919; ' + p["title"] + '</div><div style="margin-bottom:0.75rem"><span class="alert-badge ' + p["alert_class"] + '">' + p["alert"] + '</span>' + alert_desc + '</div><div class="pred-bar"><div class="pred-label"><span>主勝</span><span>' + str(p["home_win"]) + '%</span></div><div class="pred-track"><div class="pred-fill home" style="width:' + str(p["home_win"]) + '%"></div></div></div><div class="pred-bar"><div class="pred-label"><span>和局</span><span>' + str(p["draw"]) + '%</span></div><div class="pred-track"><div class="pred-fill draw" style="width:' + str(p["draw"]) + '%"></div></div></div><div class="pred-bar"><div class="pred-label"><span>客勝</span><span>' + str(p["away_win"]) + '%</span></div><div class="pred-track"><div class="pred-fill away" style="width:' + str(p["away_win"]) + '%"></div></div></div><div style="margin-top:0.75rem;font-size:0.8rem">' + extra_stats + '</div></div>'
-    return html
+    # Fetch fixtures for today
+    fixtures = fetch_api('/fixtures', {
+        'league': WC_LEAGUE_ID,
+        'season': WC_SEASON,
+        'date': today,
+        'timezone': 'Asia/Hong_Kong'
+    })
 
-def build_correct_scores(data):
-    html = ""
-    for cs in data.get('correct_scores', []):
-        top = cs['top_pick']
-        top_prob = cs['top_prob']
-        top_odds = next((x["odds"] for x in cs["scores"] if x["score"]==top), "-")
+    if not fixtures:
+        print("No fixtures found or API error, keeping existing data")
+        return data
 
-        score_rows = ""
-        for i, s in enumerate(cs['scores'][:5]):
-            is_top = s['score'] == top
-            highlight = 'style="background:rgba(0,212,170,0.15);border:1px solid var(--primary);"' if is_top else ''
-            top_badge = '<span style="font-size:0.6rem;color:var(--primary);margin-left:0.3rem">&#9733; 首選</span>' if is_top else ''
-            score_rows += '<div class="cs-row" ' + highlight + '><span class="cs-score">' + s["score"] + '</span><span class="cs-prob">' + str(s["prob"]) + '%</span><span class="cs-odds">' + str(s["odds"]) + '</span>' + top_badge + '</div>'
+    matches_today = []
+    matches_live = []
 
-        top_section = '<div class="cs-top-pick"><div style="font-size:0.8rem;color:var(--text-muted);margin-bottom:0.3rem">最高概率波膽</div><div style="font-size:2rem;font-weight:800;color:var(--primary);text-align:center">' + top + '</div><div style="font-size:0.9rem;color:var(--accent);text-align:center">' + str(top_prob) + '% | 賠率 ' + str(top_odds) + '</div></div>'
+    for fixture in fixtures:
+        match_id = fixture['fixture']['id']
+        status = fixture['fixture']['status']['short']
 
-        html += '<div class="card"><div class="card-title">&#127922; ' + cs["match"] + '</div>' + top_section + '<div style="margin-top:0.75rem"><div style="font-size:0.8rem;color:var(--text-muted);margin-bottom:0.5rem">波膽概率排行</div>' + score_rows + '</div></div>'
-    return html
+        match_data = {
+            "id": match_id,
+            "time": fixture['fixture']['date'].split('T')[1][:5] if 'T' in fixture['fixture']['date'] else "TBC",
+            "home": fixture['teams']['home']['name'],
+            "home_flag": fixture['teams']['home']['logo'],
+            "home_fifa": f"FIFA #{fixture['teams']['home'].get('fifa_rank', 'N/A')}",
+            "away": fixture['teams']['away']['name'],
+            "away_flag": fixture['teams']['away']['logo'],
+            "away_fifa": f"FIFA #{fixture['teams']['away'].get('fifa_rank', 'N/A')}",
+            "group": fixture['league']['round'] or "",
+            "status": "live" if status in ['1H', 'HT', '2H', 'ET', 'P'] else "upcoming" if status == 'NS' else "finished",
+            "score": f"{fixture['goals']['home']} - {fixture['goals']['away']}" if fixture['goals']['home'] is not None else None,
+            "live_time": fixture['fixture']['status']['elapsed'] if status in ['1H', 'HT', '2H'] else None,
+            "predictions": {},
+            "odds": {}
+        }
 
-def build_motivation(data):
-    mot_high = ""
-    for m in data.get('motivation_high', []):
-        mot_high += '<div class="mot-meter"><span class="mot-label">' + m["team"] + '</span><div class="mot-track"><div class="mot-fill high" style="width:' + str(m["value"]*10) + '%"></div></div><span class="mot-value" style="color:var(--danger)">' + str(m["value"]) + '</span></div><div style="font-size:0.7rem;color:var(--text-muted);margin-left:75px;margin-bottom:0.5rem">' + m["desc"] + '</div>'
+        # Fetch predictions for this match
+        predictions = fetch_api('/predictions', {'fixture': match_id})
+        if predictions:
+            pred = predictions[0]
+            match_data['predictions'] = {
+                "home": f"{pred['predictions']['winner']['id'] == pred['teams']['home']['id'] and pred['predictions']['winner']['comment'] or '50%'}",
+                "draw": f"{pred['predictions']['draw'] or '25%'}",
+                "away": f"{pred['predictions']['winner']['id'] == pred['teams']['away']['id'] and pred['predictions']['winner']['comment'] or '25%'}",
+                "ou": f"大2.5 {pred['predictions']['over_under'] or '50%'}"
+            }
 
-    mot_low = ""
-    for m in data.get('motivation_low', []):
-        mot_low += '<div class="mot-meter"><span class="mot-label">' + m["team"] + '</span><div class="mot-track"><div class="mot-fill low" style="width:' + str(m["value"]*10) + '%"></div></div><span class="mot-value" style="color:var(--success)">' + str(m["value"]) + '</span></div><div style="font-size:0.7rem;color:var(--text-muted);margin-left:75px;margin-bottom:0.5rem">' + m["desc"] + '</div>'
+        # Fetch odds
+        odds = fetch_api('/odds', {'fixture': match_id, 'bookmaker': 1})
+        if odds and odds[0].get('bookmakers'):
+            bets = odds[0]['bookmakers'][0].get('bets', [])
+            for bet in bets:
+                if bet['name'] == 'Match Winner':
+                    values = bet.get('values', [])
+                    match_data['odds'] = {
+                        "home": float(values[0]['odd']) if len(values) > 0 else 2.0,
+                        "draw": float(values[1]['odd']) if len(values) > 1 else 3.2,
+                        "away": float(values[2]['odd']) if len(values) > 2 else 3.5
+                    }
 
-    return mot_high, mot_low
+        if match_data['status'] == 'live':
+            matches_live.append(match_data)
+        else:
+            matches_today.append(match_data)
 
-def generate_html():
-    data = load_data()
-    if not data:
-        print("Failed to load data.json")
-        return
+    data['matches']['today'] = matches_today
+    data['matches']['live'] = matches_live
 
-    now = datetime.now()
-    time_str = now.strftime("%H:%M")
-    date_str = now.strftime("%-m月%-d日")
+    return data
 
-    standings_html = build_standings(data)
-    fixtures_html = build_fixtures(data)
-    predictions_html = build_predictions(data)
-    correct_scores_html = build_correct_scores(data)
-    mot_high, mot_low = build_motivation(data)
 
-    stats = data.get('stats', {})
+def update_standings(data):
+    """Fetch and update group standings"""
+    standings = fetch_api('/standings', {
+        'league': WC_LEAGUE_ID,
+        'season': WC_SEASON
+    })
 
-    with open('template.html', 'r', encoding='utf-8') as f:
-        template = f.read()
+    if not standings:
+        return data
 
-    template = template.replace('{{TIME}}', time_str)
-    template = template.replace('{{DATE}}', date_str)
-    template = template.replace('{{LAST_UPDATE}}', now.strftime("%Y-%m-%d %H:%M"))
-    template = template.replace('{{STANDINGS}}', standings_html)
-    template = template.replace('{{FIXTURES}}', fixtures_html)
-    template = template.replace('{{PREDICTIONS}}', predictions_html)
-    template = template.replace('{{CORRECT_SCORES}}', correct_scores_html)
-    template = template.replace('{{MOT_HIGH}}', mot_high)
-    template = template.replace('{{MOT_LOW}}', mot_low)
+    groups = {}
+    for standing in standings[0].get('league', {}).get('standings', []):
+        for group_data in standing:
+            group_name = group_data[0]['group'][-1] if group_data else 'A'
+            teams = []
+            for team in group_data:
+                teams.append({
+                    "team": team['team']['name'],
+                    "flag": team['team']['logo'],
+                    "played": team['all']['played'],
+                    "won": team['all']['win'],
+                    "drawn": team['all']['draw'],
+                    "lost": team['all']['lose'],
+                    "gf": team['all']['goals']['for'],
+                    "ga": team['all']['goals']['against'],
+                    "pts": team['points']
+                })
+            groups[group_name] = teams
 
-    template = template.replace('{{COMPLETED}}', stats.get('completed', '36/72'))
-    template = template.replace('{{QUALIFIED}}', stats.get('qualified', '3'))
-    template = template.replace('{{ELIMINATED}}', stats.get('eliminated', '2'))
-    template = template.replace('{{ACC_1X2}}', stats.get('accuracy_1x2', '58.3%'))
-    template = template.replace('{{ACC_OU}}', stats.get('accuracy_ou', '69.4%'))
-    template = template.replace('{{ACC_BTTS}}', stats.get('accuracy_btts', '75.0%'))
-    template = template.replace('{{ACC_CS}}', stats.get('accuracy_cs', '32.1%'))
-    template = template.replace('{{UPSET_HIGH}}', stats.get('upset_high', '8'))
-    template = template.replace('{{UPSET_MAX}}', stats.get('upset_max', '43.3%'))
-    template = template.replace('{{UPSET_KEY}}', stats.get('upset_key', '捷克vs墨西哥'))
-    template = template.replace('{{ML_MAE}}', stats.get('ml_mae', '0.0305'))
-    template = template.replace('{{ML_FEATURES}}', stats.get('ml_features', '8'))
-    template = template.replace('{{ML_STATUS}}', stats.get('ml_status', '✅就緒'))
+    if groups:
+        data['groups'] = groups
 
-    with open('index.html', 'w', encoding='utf-8') as f:
-        f.write(template)
+    return data
 
-    print(f"index.html updated at {now.strftime('%Y-%m-%d %H:%M:%S')}")
+
+def update_timestamp(data):
+    """Update last updated timestamp"""
+    hk_tz = timezone(timedelta(hours=8))
+    data['last_updated'] = datetime.now(hk_tz).isoformat()
+    data['meta']['date_display'] = datetime.now(hk_tz).strftime("%Y年%m月%d日")
+    return data
+
+
+def save_data(data):
+    """Save data to JSON file"""
+    with open(OUTPUT_FILE, 'w', encoding='utf-8') as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
+    print(f"Data saved to {OUTPUT_FILE}")
+
+
+def main():
+    print("=" * 50)
+    print("WC2026 Auto Data Updater v3.3.42")
+    print("=" * 50)
+
+    # Load existing data
+    data = load_existing_data()
+    print(f"Loaded existing data (last updated: {data.get('last_updated', 'N/A')})")
+
+    # Update matches
+    print("\nFetching today's matches...")
+    data = update_matches(data)
+
+    # Update standings
+    print("Fetching group standings...")
+    data = update_standings(data)
+
+    # Update timestamp
+    data = update_timestamp(data)
+
+    # Save
+    save_data(data)
+    print(f"\nUpdate complete! Last updated: {data['last_updated']}")
+    print("=" * 50)
+
 
 if __name__ == '__main__':
-    generate_html()
+    main()
