@@ -1,0 +1,605 @@
+{
+  "last_updated": "2026-06-23T02:30:00+08:00",
+  "meta": {
+    "date_display": "2026年6月23日",
+    "round_info": "世界盃小組賽第三輪",
+    "round": "R3",
+    "version": "3.3.42"
+  },
+  "matches": {
+    "today": [
+      {
+        "id": 1,
+        "time": "20:00",
+        "home": "阿根廷",
+        "home_flag": "https://flagcdn.com/w160/ar.png",
+        "home_fifa": "FIFA #1",
+        "away": "奧地利",
+        "away_flag": "https://flagcdn.com/w160/at.png",
+        "away_fifa": "FIFA #25",
+        "group": "C組",
+        "status": "upcoming",
+        "score": null,
+        "predictions": {
+          "home": "68%",
+          "draw": "18%",
+          "away": "14%",
+          "ou": "大2.5 65%"
+        },
+        "odds": {
+          "home": 1.45,
+          "draw": 4.2,
+          "away": 7.5
+        },
+        "handicap": {
+          "line": "(+1.5)",
+          "prob": "主隊讓勝 72%",
+          "expected": "預期淨勝球: +1.8"
+        },
+        "ou": {
+          "line": "(2.5)",
+          "prob": "大球 65%",
+          "expected": "預期總入球: 2.8"
+        },
+        "btts": {
+          "line": "",
+          "prob": "是 58%",
+          "note": "奧地利近期進攻穩定"
+        },
+        "corners": {
+          "line": "(9.5)",
+          "prob": "大角 62%",
+          "expected": "預期角球: 10.2"
+        },
+        "ht": {
+          "line": "",
+          "prob": "主勝 55%",
+          "note": "HT 大1: 48%"
+        },
+        "scores": [
+          {
+            "score": "2-0",
+            "prob": 12.5
+          },
+          {
+            "score": "2-1",
+            "prob": 9.8
+          },
+          {
+            "score": "3-1",
+            "prob": 7.2
+          },
+          {
+            "score": "1-0",
+            "prob": 6.5
+          },
+          {
+            "score": "3-0",
+            "prob": 5.8
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "time": "20:00",
+        "home": "法國",
+        "home_flag": "https://flagcdn.com/w160/fr.png",
+        "home_fifa": "FIFA #3",
+        "away": "伊拉克",
+        "away_flag": "https://flagcdn.com/w160/iq.png",
+        "away_fifa": "FIFA #68",
+        "group": "B組",
+        "status": "upcoming",
+        "score": null,
+        "predictions": {
+          "home": "75%",
+          "draw": "15%",
+          "away": "10%",
+          "ou": "大2.5 70%"
+        },
+        "odds": {
+          "home": 1.25,
+          "draw": 5.5,
+          "away": 12.0
+        }
+      },
+      {
+        "id": 3,
+        "time": "23:00",
+        "home": "挪威",
+        "home_flag": "https://flagcdn.com/w160/no.png",
+        "home_fifa": "FIFA #12",
+        "away": "塞內加爾",
+        "away_flag": "https://flagcdn.com/w160/sn.png",
+        "away_fifa": "FIFA #22",
+        "group": "E組",
+        "status": "upcoming",
+        "score": null,
+        "predictions": {
+          "home": "55%",
+          "draw": "25%",
+          "away": "20%",
+          "ou": "大2.5 52%"
+        },
+        "odds": {
+          "home": 1.85,
+          "draw": 3.4,
+          "away": 4.2
+        }
+      },
+      {
+        "id": 4,
+        "time": "23:00",
+        "home": "約旦",
+        "home_flag": "https://flagcdn.com/w160/jo.png",
+        "home_fifa": "FIFA #72",
+        "away": "阿爾及利亞",
+        "away_flag": "https://flagcdn.com/w160/dz.png",
+        "away_fifa": "FIFA #35",
+        "group": "G組",
+        "status": "upcoming",
+        "score": null,
+        "predictions": {
+          "home": "42%",
+          "draw": "28%",
+          "away": "30%",
+          "ou": "大2.5 48%"
+        },
+        "odds": {
+          "home": 2.3,
+          "draw": 3.2,
+          "away": 3.1
+        }
+      }
+    ],
+    "live": [],
+    "upcoming": []
+  },
+  "groups": {
+    "A": [
+      {
+        "team": "墨西哥",
+        "flag": "https://flagcdn.com/w160/mx.png",
+        "played": 2,
+        "won": 1,
+        "drawn": 1,
+        "lost": 0,
+        "gf": 4,
+        "ga": 2,
+        "pts": 4
+      },
+      {
+        "team": "南非",
+        "flag": "https://flagcdn.com/w160/za.png",
+        "played": 2,
+        "won": 1,
+        "drawn": 0,
+        "lost": 1,
+        "gf": 3,
+        "ga": 3,
+        "pts": 3
+      },
+      {
+        "team": "芬蘭",
+        "flag": "https://flagcdn.com/w160/fi.png",
+        "played": 2,
+        "won": 0,
+        "drawn": 1,
+        "lost": 1,
+        "gf": 2,
+        "ga": 4,
+        "pts": 1
+      }
+    ],
+    "B": [
+      {
+        "team": "法國",
+        "flag": "https://flagcdn.com/w160/fr.png",
+        "played": 2,
+        "won": 2,
+        "drawn": 0,
+        "lost": 0,
+        "gf": 5,
+        "ga": 1,
+        "pts": 6
+      },
+      {
+        "team": "伊拉克",
+        "flag": "https://flagcdn.com/w160/iq.png",
+        "played": 2,
+        "won": 0,
+        "drawn": 1,
+        "lost": 1,
+        "gf": 2,
+        "ga": 4,
+        "pts": 1
+      },
+      {
+        "team": "巴拉圭",
+        "flag": "https://flagcdn.com/w160/py.png",
+        "played": 2,
+        "won": 0,
+        "drawn": 1,
+        "lost": 1,
+        "gf": 2,
+        "ga": 4,
+        "pts": 1
+      }
+    ],
+    "C": [
+      {
+        "team": "阿根廷",
+        "flag": "https://flagcdn.com/w160/ar.png",
+        "played": 2,
+        "won": 2,
+        "drawn": 0,
+        "lost": 0,
+        "gf": 6,
+        "ga": 1,
+        "pts": 6
+      },
+      {
+        "team": "奧地利",
+        "flag": "https://flagcdn.com/w160/at.png",
+        "played": 2,
+        "won": 1,
+        "drawn": 0,
+        "lost": 1,
+        "gf": 3,
+        "ga": 3,
+        "pts": 3
+      },
+      {
+        "team": "澳洲",
+        "flag": "https://flagcdn.com/w160/au.png",
+        "played": 2,
+        "won": 0,
+        "drawn": 0,
+        "lost": 2,
+        "gf": 1,
+        "ga": 6,
+        "pts": 0
+      }
+    ],
+    "D": [
+      {
+        "team": "美國",
+        "flag": "https://flagcdn.com/w160/us.png",
+        "played": 2,
+        "won": 1,
+        "drawn": 1,
+        "lost": 0,
+        "gf": 4,
+        "ga": 2,
+        "pts": 4
+      },
+      {
+        "team": "韓國",
+        "flag": "https://flagcdn.com/w160/kr.png",
+        "played": 2,
+        "won": 1,
+        "drawn": 0,
+        "lost": 1,
+        "gf": 3,
+        "ga": 3,
+        "pts": 3
+      },
+      {
+        "team": "捷克",
+        "flag": "https://flagcdn.com/w160/cz.png",
+        "played": 2,
+        "won": 0,
+        "drawn": 1,
+        "lost": 1,
+        "gf": 2,
+        "ga": 4,
+        "pts": 1
+      }
+    ],
+    "E": [
+      {
+        "team": "挪威",
+        "flag": "https://flagcdn.com/w160/no.png",
+        "played": 2,
+        "won": 2,
+        "drawn": 0,
+        "lost": 0,
+        "gf": 5,
+        "ga": 1,
+        "pts": 6
+      },
+      {
+        "team": "塞內加爾",
+        "flag": "https://flagcdn.com/w160/sn.png",
+        "played": 2,
+        "won": 1,
+        "drawn": 0,
+        "lost": 1,
+        "gf": 3,
+        "ga": 3,
+        "pts": 3
+      },
+      {
+        "team": "波黑",
+        "flag": "https://flagcdn.com/w160/ba.png",
+        "played": 2,
+        "won": 0,
+        "drawn": 0,
+        "lost": 2,
+        "gf": 1,
+        "ga": 5,
+        "pts": 0
+      }
+    ],
+    "F": [
+      {
+        "team": "西班牙",
+        "flag": "https://flagcdn.com/w160/es.png",
+        "played": 2,
+        "won": 2,
+        "drawn": 0,
+        "lost": 0,
+        "gf": 5,
+        "ga": 1,
+        "pts": 6
+      },
+      {
+        "team": "摩洛哥",
+        "flag": "https://flagcdn.com/w160/ma.png",
+        "played": 2,
+        "won": 0,
+        "drawn": 1,
+        "lost": 1,
+        "gf": 2,
+        "ga": 3,
+        "pts": 1
+      },
+      {
+        "team": "加拿大",
+        "flag": "https://flagcdn.com/w160/ca.png",
+        "played": 2,
+        "won": 0,
+        "drawn": 1,
+        "lost": 1,
+        "gf": 2,
+        "ga": 5,
+        "pts": 1
+      }
+    ],
+    "G": [
+      {
+        "team": "約旦",
+        "flag": "https://flagcdn.com/w160/jo.png",
+        "played": 2,
+        "won": 1,
+        "drawn": 1,
+        "lost": 0,
+        "gf": 3,
+        "ga": 2,
+        "pts": 4
+      },
+      {
+        "team": "阿爾及利亞",
+        "flag": "https://flagcdn.com/w160/dz.png",
+        "played": 2,
+        "won": 1,
+        "drawn": 0,
+        "lost": 1,
+        "gf": 3,
+        "ga": 3,
+        "pts": 3
+      },
+      {
+        "team": "瑞士",
+        "flag": "https://flagcdn.com/w160/ch.png",
+        "played": 2,
+        "won": 0,
+        "drawn": 1,
+        "lost": 1,
+        "gf": 2,
+        "ga": 3,
+        "pts": 1
+      }
+    ],
+    "H": [
+      {
+        "team": "英格蘭",
+        "flag": "https://flagcdn.com/w160/gb.png",
+        "played": 2,
+        "won": 2,
+        "drawn": 0,
+        "lost": 0,
+        "gf": 6,
+        "ga": 1,
+        "pts": 6
+      },
+      {
+        "team": "日本",
+        "flag": "https://flagcdn.com/w160/jp.png",
+        "played": 2,
+        "won": 1,
+        "drawn": 0,
+        "lost": 1,
+        "gf": 3,
+        "ga": 3,
+        "pts": 3
+      },
+      {
+        "team": "厄瓜多爾",
+        "flag": "https://flagcdn.com/w160/ec.png",
+        "played": 2,
+        "won": 0,
+        "drawn": 0,
+        "lost": 2,
+        "gf": 1,
+        "ga": 6,
+        "pts": 0
+      }
+    ]
+  },
+  "predictions": {
+    "selected": null,
+    "matches": []
+  },
+  "motivation": {
+    "round": "R3",
+    "subtitle": "小組賽第三輪關鍵戰意評分",
+    "teams": [
+      {
+        "name": "阿根廷",
+        "score": 8.5,
+        "level": "high",
+        "label": "必勝"
+      },
+      {
+        "name": "奧地利",
+        "score": 6.0,
+        "level": "medium",
+        "label": "爭分"
+      }
+    ],
+    "note": "阿根廷已確保出線但爭取小組首名，奧地利需要至少1分確保晉級。主隊戰意略高，但已無生死壓力。"
+  },
+  "weather": {
+    "venue": "阿茲特克體育場",
+    "venue_image": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Estadio_Azteca_2018.jpg/800px-Estadio_Azteca_2018.jpg",
+    "location": "墨西哥城, 墨西哥",
+    "altitude": "2,240m",
+    "tags": [
+      "<i class=\"fas fa-mountain\"></i> 高海拔",
+      "<i class=\"fas fa-users\"></i> 87,523人",
+      "<i class=\"fas fa-futbol\"></i> 天然草"
+    ],
+    "icon": "sun",
+    "condition": "晴朗",
+    "forecast_time": "比賽時間天氣預報",
+    "temp": "24°C",
+    "humidity": "45% 濕度",
+    "wind": "12 km/h",
+    "analysis": [
+      "高海拔(2,240m)將加速皮球運行，預期遠射威脅增加15%",
+      "歐洲球隊(奧地利)適應時間不足，下半場體能下降預期+20%",
+      "晴朗天氣有利技術型球隊發揮，預期總入球上調0.3",
+      "低濕度環境下皮球彈跳較高，頭球爭頂成功率預期下降"
+    ]
+  },
+  "live_betting": {
+    "alerts": [],
+    "strategies": [
+      {
+        "title": "下一球預測",
+        "subtitle": "預計未來15分鐘",
+        "icon": "fa-futbol",
+        "market": "主隊進球",
+        "odds": "1.85",
+        "trend": "up",
+        "trend_value": "2.1%",
+        "confidence": 78,
+        "confidence_level": "high",
+        "highlight": true
+      },
+      {
+        "title": "角球策略",
+        "subtitle": "下一個角球時間",
+        "icon": "fa-flag",
+        "market": "5分鐘內角球",
+        "odds": "2.10",
+        "trend": "down",
+        "trend_value": "1.5%",
+        "confidence": 65,
+        "confidence_level": "medium",
+        "highlight": false
+      },
+      {
+        "title": "亞洲讓球",
+        "subtitle": "即時讓球盤",
+        "icon": "fa-exchange-alt",
+        "market": "阿根廷 -1.25",
+        "odds": "1.92",
+        "trend": "up",
+        "trend_value": "0.8%",
+        "confidence": 82,
+        "confidence_level": "high",
+        "highlight": false
+      },
+      {
+        "title": "大小球滾球",
+        "subtitle": "即時大小球盤",
+        "icon": "fa-chart-bar",
+        "market": "大 3.5",
+        "odds": "1.75",
+        "trend": "up",
+        "trend_value": "3.2%",
+        "confidence": 70,
+        "confidence_level": "medium",
+        "highlight": false
+      }
+    ],
+    "time_segments": [
+      {
+        "time": "46-60分鐘",
+        "prob": 28,
+        "note": "↑ 歷史高發時段",
+        "highlight": true
+      },
+      {
+        "time": "61-75分鐘",
+        "prob": 22,
+        "note": "換人調整期",
+        "highlight": false
+      },
+      {
+        "time": "76-90分鐘",
+        "prob": 35,
+        "note": "↑ 尾段進球高峰",
+        "highlight": true
+      },
+      {
+        "time": "補時階段",
+        "prob": 12,
+        "note": "絕殺機會",
+        "highlight": false
+      }
+    ]
+  },
+  "analysis": {
+    "corners": {
+      "total": 10.2,
+      "home": 6.5,
+      "away": 3.7,
+      "tips": [
+        "阿根廷控球圍攻型打法，預期主導角球(預期6.5個)",
+        "奧地利反擊型球隊，角球數較少但質量高",
+        "高海拔場地皮球運行快，角球直接得分機會+15%",
+        "建議關注「角大9.5」及「主隊角球讓1.5」"
+      ]
+    },
+    "teams": [
+      {
+        "name": "阿根廷",
+        "flag": "https://flagcdn.com/w160/ar.png",
+        "recent": "4勝1和",
+        "avg_goals": "2.4",
+        "avg_conceded": "0.6",
+        "avg_corners": "6.8"
+      },
+      {
+        "name": "奧地利",
+        "flag": "https://flagcdn.com/w160/at.png",
+        "recent": "2勝2和1負",
+        "avg_goals": "1.6",
+        "avg_conceded": "1.2",
+        "avg_corners": "4.2"
+      }
+    ],
+    "referee": {
+      "name": "馬克基列 (Mark Clattenburg)",
+      "nationality": "英格蘭",
+      "level": "國際級裁判",
+      "yellow_avg": "4.2",
+      "red_avg": "0.3",
+      "home_win_rate": "58%",
+      "note": "執法風格偏向寬鬆，允許較多身體對抗。世界盃經驗豐富，判罰一致性高。預期本場黃牌數: 3-4張。"
+    }
+  }
+}
