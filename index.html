@@ -8,1205 +8,234 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary: #00d4aa;
-            --primary-dark: #00b894;
-            --secondary: #ff6b6b;
-            --accent: #ffd93d;
-            --dark: #0a0e1a;
-            --darker: #060812;
-            --card: #111827;
-            --card-light: #1a2236;
-            --text: #e2e8f0;
-            --text-muted: #94a3b8;
-            --border: #1e293b;
-            --success: #10b981;
-            --danger: #ef4444;
-            --warning: #f59e0b;
-            --info: #3b82f6;
+            --primary: #00d4aa; --primary-dark: #00b894; --secondary: #ff6b6b;
+            --accent: #ffd93d; --dark: #0a0e1a; --darker: #060812;
+            --card: #111827; --card-light: #1a2236; --text: #e2e8f0;
+            --text-muted: #94a3b8; --border: #1e293b;
+            --success: #10b981; --danger: #ef4444; --warning: #f59e0b; --info: #3b82f6;
             --gradient-1: linear-gradient(135deg, #00d4aa 0%, #00b894 100%);
             --gradient-2: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%);
             --gradient-3: linear-gradient(135deg, #ffd93d 0%, #f6ad55 100%);
             --shadow: 0 10px 40px rgba(0,0,0,0.4);
             --shadow-glow: 0 0 30px rgba(0,212,170,0.3);
         }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { font-family: 'Noto Sans TC', sans-serif; background: var(--darker); color: var(--text); min-height: 100vh; overflow-x: hidden; padding-bottom: 80px; }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
+        .bg-animation { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; overflow: hidden; }
+        .bg-animation::before { content: ''; position: absolute; width: 600px; height: 600px; background: radial-gradient(circle, rgba(0,212,170,0.08) 0%, transparent 70%); top: -200px; right: -200px; animation: float 20s infinite ease-in-out; }
+        .bg-animation::after { content: ''; position: absolute; width: 500px; height: 500px; background: radial-gradient(circle, rgba(255,107,107,0.06) 0%, transparent 70%); bottom: -150px; left: -150px; animation: float 25s infinite ease-in-out reverse; }
+        @keyframes float { 0%,100% { transform: translate(0,0) scale(1); } 33% { transform: translate(30px,-30px) scale(1.1); } 66% { transform: translate(-20px,20px) scale(0.9); } }
 
-        body {
-            font-family: 'Noto Sans TC', sans-serif;
-            background: var(--darker);
-            color: var(--text);
-            min-height: 100vh;
-            overflow-x: hidden;
-            padding-bottom: 80px;
-        }
+        .header { background: linear-gradient(180deg, rgba(6,8,18,0.95) 0%, rgba(6,8,18,0.8) 100%); backdrop-filter: blur(20px); position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid var(--border); padding: 15px 20px; }
+        .header-content { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; }
+        .logo { display: flex; align-items: center; gap: 12px; }
+        .logo-icon { width: 42px; height: 42px; background: var(--gradient-1); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; box-shadow: var(--shadow-glow); }
+        .logo-text h1 { font-size: 18px; font-weight: 900; background: var(--gradient-1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1.2; }
+        .logo-text span { font-size: 11px; color: var(--text-muted); font-weight: 500; }
+        .header-actions { display: flex; gap: 10px; align-items: center; }
+        .btn-icon { width: 40px; height: 40px; border-radius: 10px; background: var(--card); border: 1px solid var(--border); color: var(--text); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s; }
+        .btn-icon:hover { background: var(--card-light); border-color: var(--primary); color: var(--primary); }
+        .api-status { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-muted); }
+        .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--success); box-shadow: 0 0 10px var(--success); animation: pulse 2s infinite; }
+        .status-dot.offline { background: var(--danger); box-shadow: 0 0 10px var(--danger); }
+        .status-dot.syncing { background: var(--warning); box-shadow: 0 0 10px var(--warning); }
+        @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
 
-        .bg-animation {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            overflow: hidden;
-        }
-
-        .bg-animation::before {
-            content: '';
-            position: absolute;
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(0,212,170,0.08) 0%, transparent 70%);
-            top: -200px;
-            right: -200px;
-            animation: float 20s infinite ease-in-out;
-        }
-
-        .bg-animation::after {
-            content: '';
-            position: absolute;
-            width: 500px;
-            height: 500px;
-            background: radial-gradient(circle, rgba(255,107,107,0.06) 0%, transparent 70%);
-            bottom: -150px;
-            left: -150px;
-            animation: float 25s infinite ease-in-out reverse;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            33% { transform: translate(30px, -30px) scale(1.1); }
-            66% { transform: translate(-20px, 20px) scale(0.9); }
-        }
-
-        .header {
-            background: linear-gradient(180deg, rgba(6,8,18,0.95) 0%, rgba(6,8,18,0.8) 100%);
-            backdrop-filter: blur(20px);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            border-bottom: 1px solid var(--border);
-            padding: 15px 20px;
-        }
-
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .logo-icon {
-            width: 42px;
-            height: 42px;
-            background: var(--gradient-1);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            box-shadow: var(--shadow-glow);
-        }
-
-        .logo-text h1 {
-            font-size: 18px;
-            font-weight: 900;
-            background: var(--gradient-1);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            line-height: 1.2;
-        }
-
-        .logo-text span {
-            font-size: 11px;
-            color: var(--text-muted);
-            font-weight: 500;
-        }
-
-        .header-actions {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-
-        .btn-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            background: var(--card);
-            border: 1px solid var(--border);
-            color: var(--text);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .btn-icon:hover {
-            background: var(--card-light);
-            border-color: var(--primary);
-            color: var(--primary);
-        }
-
-        .api-status {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 12px;
-            color: var(--text-muted);
-        }
-
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: var(--success);
-            box-shadow: 0 0 10px var(--success);
-            animation: pulse 2s infinite;
-        }
-
-        .status-dot.offline {
-            background: var(--danger);
-            box-shadow: 0 0 10px var(--danger);
-        }
-
-        .status-dot.syncing {
-            background: var(--warning);
-            box-shadow: 0 0 10px var(--warning);
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        .nav-container {
-            background: var(--card);
-            border-bottom: 1px solid var(--border);
-            position: sticky;
-            top: 73px;
-            z-index: 999;
-            overflow-x: auto;
-            scrollbar-width: none;
-        }
-
+        .nav-container { background: var(--card); border-bottom: 1px solid var(--border); position: sticky; top: 73px; z-index: 999; overflow-x: auto; scrollbar-width: none; }
         .nav-container::-webkit-scrollbar { display: none; }
+        .nav-tabs { display: flex; gap: 5px; padding: 10px 15px; min-width: max-content; }
+        .nav-tab { padding: 10px 18px; border-radius: 10px; border: none; background: transparent; color: var(--text-muted); font-family: inherit; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.3s; white-space: nowrap; display: flex; align-items: center; gap: 8px; }
+        .nav-tab.active { background: var(--gradient-1); color: var(--dark); font-weight: 700; box-shadow: var(--shadow-glow); }
+        .nav-tab:hover:not(.active) { background: var(--card-light); color: var(--text); }
+        .nav-tab .badge { background: var(--secondary); color: white; font-size: 10px; padding: 2px 6px; border-radius: 10px; font-weight: 700; }
 
-        .nav-tabs {
-            display: flex;
-            gap: 5px;
-            padding: 10px 15px;
-            min-width: max-content;
-        }
+        .main-content { max-width: 1200px; margin: 0 auto; padding: 20px 15px; }
+        .section { display: none; animation: fadeIn 0.4s ease; }
+        .section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .nav-tab {
-            padding: 10px 18px;
-            border-radius: 10px;
-            border: none;
-            background: transparent;
-            color: var(--text-muted);
-            font-family: inherit;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s;
-            white-space: nowrap;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
+        .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 20px; margin-bottom: 15px; transition: all 0.3s; }
+        .card:hover { border-color: rgba(0,212,170,0.3); transform: translateY(-2px); box-shadow: var(--shadow); }
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .card-title { font-size: 16px; font-weight: 700; display: flex; align-items: center; gap: 10px; }
+        .card-title i { color: var(--primary); }
+        .card-subtitle { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
 
-        .nav-tab.active {
-            background: var(--gradient-1);
-            color: var(--dark);
-            font-weight: 700;
-            box-shadow: var(--shadow-glow);
-        }
+        .data-sync-info { display: flex; align-items: center; gap: 8px; font-size: 11px; color: var(--text-muted); padding: 8px 15px; background: var(--card); border-radius: 8px; margin-bottom: 15px; }
+        .data-sync-info i { color: var(--primary); }
 
-        .nav-tab:hover:not(.active) {
-            background: var(--card-light);
-            color: var(--text);
-        }
+        .live-banner { background: linear-gradient(135deg, rgba(239,68,68,0.15) 0%, rgba(239,68,68,0.05) 100%); border: 1px solid rgba(239,68,68,0.3); border-radius: 16px; padding: 20px; margin-bottom: 20px; position: relative; overflow: hidden; }
+        .live-banner::before { content: 'LIVE'; position: absolute; top: 10px; right: 15px; background: var(--secondary); color: white; font-size: 10px; font-weight: 900; padding: 4px 10px; border-radius: 6px; animation: blink 1.5s infinite; }
+        @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.6; } }
+        .live-match { display: flex; align-items: center; justify-content: space-between; gap: 15px; }
+        .live-team { display: flex; flex-direction: column; align-items: center; gap: 8px; flex: 1; }
+        .live-team img { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 2px solid var(--border); }
+        .live-team-name { font-size: 14px; font-weight: 700; text-align: center; }
+        .live-score-box { text-align: center; flex-shrink: 0; }
+        .live-score { font-size: 36px; font-weight: 900; color: var(--accent); font-family: 'Courier New', monospace; }
+        .live-time { font-size: 13px; color: var(--secondary); font-weight: 700; margin-top: 5px; }
+        .live-stats { display: flex; justify-content: center; gap: 20px; margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(239,68,68,0.2); }
+        .live-stat { text-align: center; }
+        .live-stat-value { font-size: 18px; font-weight: 700; color: var(--text); }
+        .live-stat-label { font-size: 11px; color: var(--text-muted); }
 
-        .nav-tab .badge {
-            background: var(--secondary);
-            color: white;
-            font-size: 10px;
-            padding: 2px 6px;
-            border-radius: 10px;
-            font-weight: 700;
-        }
-
-        .main-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px 15px;
-        }
-
-        .section {
-            display: none;
-            animation: fadeIn 0.4s ease;
-        }
-
-        .section.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .card {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 15px;
-            transition: all 0.3s;
-        }
-
-        .card:hover {
-            border-color: rgba(0,212,170,0.3);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow);
-        }
-
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-
-        .card-title {
-            font-size: 16px;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .card-title i {
-            color: var(--primary);
-        }
-
-        .card-subtitle {
-            font-size: 12px;
-            color: var(--text-muted);
-            margin-top: 2px;
-        }
-
-        .live-banner {
-            background: linear-gradient(135deg, rgba(239,68,68,0.15) 0%, rgba(239,68,68,0.05) 100%);
-            border: 1px solid rgba(239,68,68,0.3);
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 20px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .live-banner::before {
-            content: 'LIVE';
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            background: var(--secondary);
-            color: white;
-            font-size: 10px;
-            font-weight: 900;
-            padding: 4px 10px;
-            border-radius: 6px;
-            animation: blink 1.5s infinite;
-        }
-
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.6; }
-        }
-
-        .live-match {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 15px;
-        }
-
-        .live-team {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-            flex: 1;
-        }
-
-        .live-team img {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid var(--border);
-        }
-
-        .live-team-name {
-            font-size: 14px;
-            font-weight: 700;
-            text-align: center;
-        }
-
-        .live-score-box {
-            text-align: center;
-            flex-shrink: 0;
-        }
-
-        .live-score {
-            font-size: 36px;
-            font-weight: 900;
-            color: var(--accent);
-            font-family: 'Courier New', monospace;
-        }
-
-        .live-time {
-            font-size: 13px;
-            color: var(--secondary);
-            font-weight: 700;
-            margin-top: 5px;
-        }
-
-        .live-stats {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px solid rgba(239,68,68,0.2);
-        }
-
-        .live-stat {
-            text-align: center;
-        }
-
-        .live-stat-value {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--text);
-        }
-
-        .live-stat-label {
-            font-size: 11px;
-            color: var(--text-muted);
-        }
-
-        .match-card {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 18px;
-            margin-bottom: 12px;
-            transition: all 0.3s;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .match-card::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 4px;
-            height: 100%;
-            background: var(--gradient-1);
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        .match-card:hover::before {
-            opacity: 1;
-        }
-
-        .match-card:hover {
-            border-color: rgba(0,212,170,0.3);
-            transform: translateX(5px);
-        }
-
+        .match-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 18px; margin-bottom: 12px; transition: all 0.3s; cursor: pointer; position: relative; overflow: hidden; }
+        .match-card::before { content: ''; position: absolute; left: 0; top: 0; width: 4px; height: 100%; background: var(--gradient-1); opacity: 0; transition: opacity 0.3s; }
+        .match-card:hover::before { opacity: 1; }
+        .match-card:hover { border-color: rgba(0,212,170,0.3); transform: translateX(5px); }
         .match-card.upcoming::before { background: var(--gradient-3); }
         .match-card.finished::before { background: var(--text-muted); }
         .match-card.live::before { background: var(--gradient-2); opacity: 1; }
+        .match-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .match-league { font-size: 11px; color: var(--primary); font-weight: 700; background: rgba(0,212,170,0.1); padding: 4px 10px; border-radius: 6px; }
+        .match-time { font-size: 12px; color: var(--text-muted); display: flex; align-items: center; gap: 5px; }
+        .match-teams { display: flex; align-items: center; justify-content: space-between; gap: 15px; }
+        .match-team { display: flex; align-items: center; gap: 12px; flex: 1; }
+        .match-team.away { flex-direction: row-reverse; text-align: right; }
+        .match-team-flag { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid var(--border); background: var(--card-light); }
+        .match-team-info h3 { font-size: 15px; font-weight: 700; }
+        .match-team-info span { font-size: 12px; color: var(--text-muted); }
+        .match-vs { text-align: center; flex-shrink: 0; }
+        .match-vs-score { font-size: 24px; font-weight: 900; color: var(--text); }
+        .match-vs-time { font-size: 12px; color: var(--primary); font-weight: 700; }
+        .match-predictions { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px; padding-top: 15px; border-top: 1px solid var(--border); }
+        .prediction-box { background: var(--card-light); border-radius: 10px; padding: 10px; text-align: center; }
+        .prediction-label { font-size: 11px; color: var(--text-muted); margin-bottom: 5px; }
+        .prediction-value { font-size: 16px; font-weight: 700; color: var(--primary); }
+        .prediction-odds { font-size: 11px; color: var(--accent); margin-top: 3px; }
 
-        .match-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-        }
-
-        .match-league {
-            font-size: 11px;
-            color: var(--primary);
-            font-weight: 700;
-            background: rgba(0,212,170,0.1);
-            padding: 4px 10px;
-            border-radius: 6px;
-        }
-
-        .match-time {
-            font-size: 12px;
-            color: var(--text-muted);
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .match-teams {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 15px;
-        }
-
-        .match-team {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            flex: 1;
-        }
-
-        .match-team.away {
-            flex-direction: row-reverse;
-            text-align: right;
-        }
-
-        .match-team-flag {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid var(--border);
-            background: var(--card-light);
-        }
-
-        .match-team-info h3 {
-            font-size: 15px;
-            font-weight: 700;
-        }
-
-        .match-team-info span {
-            font-size: 12px;
-            color: var(--text-muted);
-        }
-
-        .match-vs {
-            text-align: center;
-            flex-shrink: 0;
-        }
-
-        .match-vs-score {
-            font-size: 24px;
-            font-weight: 900;
-            color: var(--text);
-        }
-
-        .match-vs-time {
-            font-size: 12px;
-            color: var(--primary);
-            font-weight: 700;
-        }
-
-        .match-predictions {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px solid var(--border);
-        }
-
-        .prediction-box {
-            background: var(--card-light);
-            border-radius: 10px;
-            padding: 10px;
-            text-align: center;
-        }
-
-        .prediction-label {
-            font-size: 11px;
-            color: var(--text-muted);
-            margin-bottom: 5px;
-        }
-
-        .prediction-value {
-            font-size: 16px;
-            font-weight: 700;
-            color: var(--primary);
-        }
-
-        .prediction-odds {
-            font-size: 11px;
-            color: var(--accent);
-            margin-top: 3px;
-        }
-
-        .group-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 15px;
-        }
-
-        .group-card {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            overflow: hidden;
-        }
-
-        .group-header {
-            background: var(--gradient-1);
-            padding: 12px 18px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .group-header h3 {
-            font-size: 16px;
-            font-weight: 900;
-            color: var(--dark);
-        }
-
-        .group-header span {
-            font-size: 12px;
-            color: rgba(0,0,0,0.6);
-            font-weight: 700;
-        }
-
-        .group-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .group-table th {
-            font-size: 11px;
-            color: var(--text-muted);
-            padding: 10px 8px;
-            text-align: center;
-            font-weight: 500;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .group-table td {
-            padding: 12px 8px;
-            text-align: center;
-            font-size: 13px;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .group-table tr:last-child td {
-            border-bottom: none;
-        }
-
-        .group-table .team-cell {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            text-align: left;
-        }
-
-        .group-table .team-flag {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
-        .group-table .team-name {
-            font-weight: 700;
-        }
-
-        .group-table .points {
-            font-weight: 900;
-            color: var(--primary);
-        }
-
+        .group-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; }
+        .group-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; }
+        .group-header { background: var(--gradient-1); padding: 12px 18px; display: flex; justify-content: space-between; align-items: center; }
+        .group-header h3 { font-size: 16px; font-weight: 900; color: var(--dark); }
+        .group-header span { font-size: 12px; color: rgba(0,0,0,0.6); font-weight: 700; }
+        .group-table { width: 100%; border-collapse: collapse; }
+        .group-table th { font-size: 11px; color: var(--text-muted); padding: 10px 8px; text-align: center; font-weight: 500; border-bottom: 1px solid var(--border); }
+        .group-table td { padding: 12px 8px; text-align: center; font-size: 13px; border-bottom: 1px solid var(--border); }
+        .group-table tr:last-child td { border-bottom: none; }
+        .group-table .team-cell { display: flex; align-items: center; gap: 10px; text-align: left; }
+        .group-table .team-flag { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; }
+        .group-table .team-name { font-weight: 700; }
+        .group-table .points { font-weight: 900; color: var(--primary); }
         .qualified { color: var(--success); }
         .eliminated { color: var(--text-muted); }
 
-        .prediction-panel {
-            background: linear-gradient(135deg, var(--card) 0%, var(--card-light) 100%);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 25px;
-            margin-bottom: 20px;
-        }
+        .prediction-panel { background: linear-gradient(135deg, var(--card) 0%, var(--card-light) 100%); border: 1px solid var(--border); border-radius: 20px; padding: 25px; margin-bottom: 20px; }
+        .prediction-teams { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+        .pred-team { text-align: center; flex: 1; }
+        .pred-team img { width: 70px; height: 70px; border-radius: 50%; border: 3px solid var(--primary); margin-bottom: 10px; }
+        .pred-team h2 { font-size: 18px; font-weight: 900; }
+        .pred-team span { font-size: 12px; color: var(--text-muted); }
+        .pred-vs { text-align: center; padding: 0 20px; }
+        .pred-vs-text { font-size: 14px; color: var(--text-muted); margin-bottom: 10px; }
+        .pred-probability { font-size: 32px; font-weight: 900; background: var(--gradient-1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .pred-probability-label { font-size: 12px; color: var(--text-muted); }
 
-        .prediction-teams {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-        }
-
-        .pred-team {
-            text-align: center;
-            flex: 1;
-        }
-
-        .pred-team img {
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            border: 3px solid var(--primary);
-            margin-bottom: 10px;
-        }
-
-        .pred-team h2 {
-            font-size: 18px;
-            font-weight: 900;
-        }
-
-        .pred-team span {
-            font-size: 12px;
-            color: var(--text-muted);
-        }
-
-        .pred-vs {
-            text-align: center;
-            padding: 0 20px;
-        }
-
-        .pred-vs-text {
-            font-size: 14px;
-            color: var(--text-muted);
-            margin-bottom: 10px;
-        }
-
-        .pred-probability {
-            font-size: 32px;
-            font-weight: 900;
-            background: var(--gradient-1);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .pred-probability-label {
-            font-size: 12px;
-            color: var(--text-muted);
-        }
-
-        .prediction-details {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-        }
-
-        .detail-box {
-            background: var(--darker);
-            border-radius: 12px;
-            padding: 15px;
-            border: 1px solid var(--border);
-        }
-
-        .detail-box.full-width {
-            grid-column: span 2;
-        }
-
-        .detail-box h4 {
-            font-size: 12px;
-            color: var(--text-muted);
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .detail-box h4 i {
-            color: var(--primary);
-        }
-
-        .prob-bar {
-            display: flex;
-            height: 35px;
-            border-radius: 10px;
-            overflow: hidden;
-            margin-bottom: 10px;
-        }
-
-        .prob-bar-segment {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            font-weight: 700;
-            color: white;
-            transition: all 0.3s;
-        }
-
+        .prediction-details { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+        .detail-box { background: var(--darker); border-radius: 12px; padding: 15px; border: 1px solid var(--border); }
+        .detail-box.full-width { grid-column: span 2; }
+        .detail-box h4 { font-size: 12px; color: var(--text-muted); margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+        .detail-box h4 i { color: var(--primary); }
+        .prob-bar { display: flex; height: 35px; border-radius: 10px; overflow: hidden; margin-bottom: 10px; }
+        .prob-bar-segment { display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: white; transition: all 0.3s; }
         .prob-home { background: var(--primary); }
         .prob-draw { background: var(--accent); color: var(--dark); }
         .prob-away { background: var(--secondary); }
+        .prob-labels { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted); }
 
-        .prob-labels {
-            display: flex;
-            justify-content: space-between;
-            font-size: 11px;
-            color: var(--text-muted);
-        }
+        .score-predictions { display: flex; gap: 10px; flex-wrap: wrap; }
+        .score-chip { background: var(--card-light); border: 1px solid var(--border); border-radius: 8px; padding: 8px 14px; font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+        .score-chip .prob { color: var(--primary); font-size: 11px; }
+        .score-chip.best { border-color: var(--primary); background: rgba(0,212,170,0.1); }
+        .score-chip.ht { border-color: var(--info); background: rgba(59,130,246,0.1); }
 
-        .score-predictions {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
+        .score-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        .score-table th { font-size: 11px; color: var(--text-muted); padding: 8px; text-align: center; font-weight: 500; border-bottom: 1px solid var(--border); }
+        .score-table td { padding: 10px 8px; text-align: center; font-size: 13px; border-bottom: 1px solid var(--border); }
+        .score-table tr:last-child td { border-bottom: none; }
+        .score-table .score-cell { font-weight: 900; color: var(--accent); }
+        .score-table .prob-cell { color: var(--primary); font-weight: 700; }
+        .score-table .odds-cell { color: var(--text-muted); font-size: 12px; }
 
-        .score-chip {
-            background: var(--card-light);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 8px 14px;
-            font-size: 13px;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
+        .xg-display { display: flex; align-items: center; justify-content: center; gap: 20px; margin: 15px 0; }
+        .xg-item { text-align: center; }
+        .xg-value { font-size: 28px; font-weight: 900; color: var(--primary); }
+        .xg-label { font-size: 11px; color: var(--text-muted); margin-top: 5px; }
+        .xg-vs { font-size: 20px; color: var(--text-muted); font-weight: 700; }
 
-        .score-chip .prob {
-            color: var(--primary);
-            font-size: 11px;
-        }
-
-        .score-chip.best {
-            border-color: var(--primary);
-            background: rgba(0,212,170,0.1);
-        }
-
-        .betting-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-        }
-
-        .betting-card {
-            background: var(--card-light);
-            border-radius: 12px;
-            padding: 15px;
-            border: 1px solid var(--border);
-        }
-
-        .betting-card.highlight {
-            border-color: var(--primary);
-            background: rgba(0,212,170,0.05);
-        }
-
-        .betting-card h4 {
-            font-size: 13px;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .betting-card h4 i {
-            color: var(--primary);
-        }
-
-        .betting-odds {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 10px;
-        }
-
-        .odds-value {
-            font-size: 20px;
-            font-weight: 900;
-            color: var(--accent);
-        }
-
-        .odds-trend {
-            font-size: 11px;
-            padding: 4px 8px;
-            border-radius: 6px;
-            font-weight: 700;
-        }
-
-        .odds-trend.up {
-            background: rgba(16,185,129,0.2);
-            color: var(--success);
-        }
-
-        .odds-trend.down {
-            background: rgba(239,68,68,0.2);
-            color: var(--secondary);
-        }
-
-        .confidence-meter {
-            width: 100%;
-            height: 6px;
-            background: var(--darker);
-            border-radius: 3px;
-            margin-top: 10px;
-            overflow: hidden;
-        }
-
-        .confidence-fill {
-            height: 100%;
-            border-radius: 3px;
-            transition: width 0.5s ease;
-        }
-
+        .betting-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+        .betting-card { background: var(--card-light); border-radius: 12px; padding: 15px; border: 1px solid var(--border); }
+        .betting-card.highlight { border-color: var(--primary); background: rgba(0,212,170,0.05); }
+        .betting-card h4 { font-size: 13px; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+        .betting-card h4 i { color: var(--primary); }
+        .betting-odds { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
+        .odds-value { font-size: 20px; font-weight: 900; color: var(--accent); }
+        .odds-trend { font-size: 11px; padding: 4px 8px; border-radius: 6px; font-weight: 700; }
+        .odds-trend.up { background: rgba(16,185,129,0.2); color: var(--success); }
+        .odds-trend.down { background: rgba(239,68,68,0.2); color: var(--secondary); }
+        .confidence-meter { width: 100%; height: 6px; background: var(--darker); border-radius: 3px; margin-top: 10px; overflow: hidden; }
+        .confidence-fill { height: 100%; border-radius: 3px; transition: width 0.5s ease; }
         .confidence-fill.high { background: var(--success); }
         .confidence-fill.medium { background: var(--warning); }
         .confidence-fill.low { background: var(--secondary); }
 
-        .weather-card {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            background: var(--card-light);
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 12px;
-        }
+        .weather-card { display: flex; align-items: center; gap: 20px; background: var(--card-light); border-radius: 16px; padding: 20px; margin-bottom: 12px; }
+        .weather-icon { font-size: 48px; color: var(--accent); }
+        .weather-info h4 { font-size: 16px; font-weight: 700; margin-bottom: 5px; }
+        .weather-info p { font-size: 13px; color: var(--text-muted); }
+        .weather-stats { display: flex; gap: 20px; margin-top: 10px; }
+        .weather-stat { display: flex; align-items: center; gap: 6px; font-size: 13px; }
+        .weather-stat i { color: var(--primary); }
 
-        .weather-icon {
-            font-size: 48px;
-            color: var(--accent);
-        }
+        .venue-card { position: relative; border-radius: 16px; overflow: hidden; margin-bottom: 15px; }
+        .venue-image { width: 100%; height: 180px; object-fit: cover; }
+        .venue-overlay { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.9)); padding: 20px; }
+        .venue-overlay h3 { font-size: 18px; font-weight: 900; margin-bottom: 5px; }
+        .venue-overlay p { font-size: 13px; color: var(--text-muted); }
+        .venue-tags { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+        .venue-tag { background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 500; }
 
-        .weather-info h4 {
-            font-size: 16px;
-            font-weight: 700;
-            margin-bottom: 5px;
-        }
+        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(6,8,18,0.95); backdrop-filter: blur(20px); border-top: 1px solid var(--border); z-index: 1000; display: flex; justify-content: space-around; padding: 8px 0; }
+        .bottom-nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px 15px; border: none; background: none; color: var(--text-muted); font-family: inherit; font-size: 10px; cursor: pointer; transition: all 0.3s; position: relative; }
+        .bottom-nav-item i { font-size: 20px; }
+        .bottom-nav-item.active { color: var(--primary); }
+        .bottom-nav-item .nav-badge { position: absolute; top: 5px; right: 10px; width: 8px; height: 8px; background: var(--secondary); border-radius: 50%; }
 
-        .weather-info p {
-            font-size: 13px;
-            color: var(--text-muted);
-        }
+        .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--darker); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; transition: opacity 0.5s; }
+        .loading-overlay.hidden { opacity: 0; pointer-events: none; }
+        .loader { width: 60px; height: 60px; border: 3px solid var(--border); border-top-color: var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .loading-text { margin-top: 20px; font-size: 14px; color: var(--text-muted); }
 
-        .weather-stats {
-            display: flex;
-            gap: 20px;
-            margin-top: 10px;
-        }
+        .alert { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); border-radius: 12px; padding: 15px; margin-bottom: 15px; display: flex; align-items: center; gap: 12px; }
+        .alert-icon { width: 40px; height: 40px; background: rgba(239,68,68,0.2); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--secondary); font-size: 18px; flex-shrink: 0; }
+        .alert-content h4 { font-size: 14px; font-weight: 700; color: var(--secondary); margin-bottom: 3px; }
+        .alert-content p { font-size: 12px; color: var(--text-muted); }
+        .alert.success { background: rgba(16,185,129,0.1); border-color: rgba(16,185,129,0.3); }
+        .alert.success .alert-icon { background: rgba(16,185,129,0.2); color: var(--success); }
+        .alert.success .alert-content h4 { color: var(--success); }
 
-        .weather-stat {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 13px;
-        }
-
-        .weather-stat i {
-            color: var(--primary);
-        }
-
-        .venue-card {
-            position: relative;
-            border-radius: 16px;
-            overflow: hidden;
-            margin-bottom: 15px;
-        }
-
-        .venue-image {
-            width: 100%;
-            height: 180px;
-            object-fit: cover;
-        }
-
-        .venue-overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(transparent, rgba(0,0,0,0.9));
-            padding: 20px;
-        }
-
-        .venue-overlay h3 {
-            font-size: 18px;
-            font-weight: 900;
-            margin-bottom: 5px;
-        }
-
-        .venue-overlay p {
-            font-size: 13px;
-            color: var(--text-muted);
-        }
-
-        .venue-tags {
-            display: flex;
-            gap: 8px;
-            margin-top: 10px;
-            flex-wrap: wrap;
-        }
-
-        .venue-tag {
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px);
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 500;
-        }
-
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(6,8,18,0.95);
-            backdrop-filter: blur(20px);
-            border-top: 1px solid var(--border);
-            z-index: 1000;
-            display: flex;
-            justify-content: space-around;
-            padding: 8px 0;
-        }
-
-        .bottom-nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-            padding: 8px 15px;
-            border: none;
-            background: none;
-            color: var(--text-muted);
-            font-family: inherit;
-            font-size: 10px;
-            cursor: pointer;
-            transition: all 0.3s;
-            position: relative;
-        }
-
-        .bottom-nav-item i {
-            font-size: 20px;
-        }
-
-        .bottom-nav-item.active {
-            color: var(--primary);
-        }
-
-        .bottom-nav-item .nav-badge {
-            position: absolute;
-            top: 5px;
-            right: 10px;
-            width: 8px;
-            height: 8px;
-            background: var(--secondary);
-            border-radius: 50%;
-        }
-
-        .loading-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--darker);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-            transition: opacity 0.5s;
-        }
-
-        .loading-overlay.hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .loader {
-            width: 60px;
-            height: 60px;
-            border: 3px solid var(--border);
-            border-top-color: var(--primary);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        .loading-text {
-            margin-top: 20px;
-            font-size: 14px;
-            color: var(--text-muted);
-        }
-
-        .alert {
-            background: rgba(239,68,68,0.1);
-            border: 1px solid rgba(239,68,68,0.3);
-            border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .alert-icon {
-            width: 40px;
-            height: 40px;
-            background: rgba(239,68,68,0.2);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--secondary);
-            font-size: 18px;
-            flex-shrink: 0;
-        }
-
-        .alert-content h4 {
-            font-size: 14px;
-            font-weight: 700;
-            color: var(--secondary);
-            margin-bottom: 3px;
-        }
-
-        .alert-content p {
-            font-size: 12px;
-            color: var(--text-muted);
-        }
-
-        .alert.success {
-            background: rgba(16,185,129,0.1);
-            border-color: rgba(16,185,129,0.3);
-        }
-
-        .alert.success .alert-icon {
-            background: rgba(16,185,129,0.2);
-            color: var(--success);
-        }
-
-        .alert.success .alert-content h4 {
-            color: var(--success);
-        }
-
-        .motivation-card {
-            background: linear-gradient(135deg, rgba(0,212,170,0.1) 0%, rgba(0,212,170,0.02) 100%);
-            border: 1px solid rgba(0,212,170,0.3);
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 15px;
-        }
-
-        .motivation-bar {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 15px;
-        }
-
-        .motivation-bar:last-child {
-            margin-bottom: 0;
-        }
-
-        .motivation-team {
-            width: 100px;
-            font-size: 14px;
-            font-weight: 700;
-            flex-shrink: 0;
-        }
-
-        .motivation-track {
-            flex: 1;
-            height: 30px;
-            background: var(--darker);
-            border-radius: 8px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .motivation-fill {
-            height: 100%;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            padding-right: 10px;
-            font-size: 12px;
-            font-weight: 900;
-            color: white;
-            transition: width 1s ease;
-        }
-
+        .motivation-card { background: linear-gradient(135deg, rgba(0,212,170,0.1) 0%, rgba(0,212,170,0.02) 100%); border: 1px solid rgba(0,212,170,0.3); border-radius: 16px; padding: 20px; margin-bottom: 15px; }
+        .motivation-bar { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
+        .motivation-bar:last-child { margin-bottom: 0; }
+        .motivation-team { width: 100px; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+        .motivation-track { flex: 1; height: 30px; background: var(--darker); border-radius: 8px; overflow: hidden; position: relative; }
+        .motivation-fill { height: 100%; border-radius: 8px; display: flex; align-items: center; justify-content: flex-end; padding-right: 10px; font-size: 12px; font-weight: 900; color: white; transition: width 1s ease; }
         .motivation-fill.high { background: var(--success); }
         .motivation-fill.medium { background: var(--warning); }
         .motivation-fill.low { background: var(--secondary); }
+        .motivation-score { width: 50px; text-align: right; font-size: 18px; font-weight: 900; color: var(--primary); }
 
-        .motivation-score {
-            width: 50px;
-            text-align: right;
-            font-size: 18px;
-            font-weight: 900;
-            color: var(--primary);
-        }
+        .corner-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px; }
+        .corner-stat { background: var(--card-light); border-radius: 10px; padding: 12px; text-align: center; }
+        .corner-stat-value { font-size: 20px; font-weight: 900; color: var(--primary); }
+        .corner-stat-label { font-size: 11px; color: var(--text-muted); margin-top: 5px; }
 
-        .corner-stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-top: 15px;
-        }
+        .recommendation-box { background: linear-gradient(135deg, rgba(0,212,170,0.1) 0%, rgba(0,212,170,0.02) 100%); border: 1px solid rgba(0,212,170,0.3); border-radius: 12px; padding: 15px; margin-top: 15px; font-size: 13px; line-height: 1.8; }
+        .recommendation-box .title { font-weight: 700; color: var(--primary); margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
 
-        .corner-stat {
-            background: var(--card-light);
-            border-radius: 10px;
-            padding: 12px;
-            text-align: center;
-        }
-
-        .corner-stat-value {
-            font-size: 20px;
-            font-weight: 900;
-            color: var(--primary);
-        }
-
-        .corner-stat-label {
-            font-size: 11px;
-            color: var(--text-muted);
-            margin-top: 5px;
-        }
-
-        .data-sync-info {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 11px;
-            color: var(--text-muted);
-            padding: 8px 15px;
-            background: var(--card);
-            border-radius: 8px;
-            margin-bottom: 15px;
-        }
-
-        .data-sync-info i {
-            color: var(--primary);
-        }
-
-        .refreshing {
-            animation: spin 1s linear infinite;
-        }
+        .refreshing { animation: spin 1s linear infinite; }
 
         @media (min-width: 768px) {
             .match-teams { gap: 30px; }
@@ -1215,38 +244,24 @@
             .betting-grid { grid-template-columns: repeat(3, 1fr); }
         }
 
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: var(--darker);
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: var(--border);
-            border-radius: 3px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--primary);
-        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--darker); }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
     </style>
+<base target="_blank">
 </head>
 <body>
     <div class="loading-overlay" id="loadingOverlay">
         <div class="loader"></div>
         <div class="loading-text">正在載入 UNIFIED v3.3.42...</div>
     </div>
-
     <div class="bg-animation"></div>
 
     <header class="header">
         <div class="header-content">
             <div class="logo">
-                <div class="logo-icon">
-                    <i class="fas fa-futbol"></i>
-                </div>
+                <div class="logo-icon"><i class="fas fa-futbol"></i></div>
                 <div class="logo-text">
                     <h1>世界盃預測中心</h1>
                     <span>UNIFIED v3.3.42</span>
@@ -1266,27 +281,15 @@
 
     <nav class="nav-container">
         <div class="nav-tabs" id="topNav">
-            <button class="nav-tab active" onclick="switchTab('today', this)">
-                <i class="fas fa-calendar-day"></i> 今日賽事
-            </button>
-            <button class="nav-tab" onclick="switchTab('groups', this)">
-                <i class="fas fa-table"></i> 小組積分
-            </button>
-            <button class="nav-tab" onclick="switchTab('predictions', this)">
-                <i class="fas fa-brain"></i> AI預測
-            </button>
-            <button class="nav-tab" onclick="switchTab('live', this)">
-                <i class="fas fa-bolt"></i> 滾球策略
-                <span class="badge" id="liveBadge" style="display:none;">LIVE</span>
-            </button>
-            <button class="nav-tab" onclick="switchTab('analysis', this)">
-                <i class="fas fa-chart-line"></i> 深度分析
-            </button>
+            <button class="nav-tab active" onclick="switchTab('today', this)"><i class="fas fa-calendar-day"></i> 今日賽事</button>
+            <button class="nav-tab" onclick="switchTab('groups', this)"><i class="fas fa-table"></i> 小組積分</button>
+            <button class="nav-tab" onclick="switchTab('predictions', this)"><i class="fas fa-brain"></i> AI預測</button>
+            <button class="nav-tab" onclick="switchTab('live', this)"><i class="fas fa-bolt"></i> 滾球策略<span class="badge" id="liveBadge" style="display:none;">LIVE</span></button>
+            <button class="nav-tab" onclick="switchTab('analysis', this)"><i class="fas fa-chart-line"></i> 深度分析</button>
         </div>
     </nav>
 
     <main class="main-content">
-        <!-- TODAY -->
         <section id="today" class="section active">
             <div class="data-sync-info" id="syncInfo">
                 <i class="fas fa-database"></i>
@@ -1305,7 +308,6 @@
             <div id="todayMatches"></div>
         </section>
 
-        <!-- GROUPS -->
         <section id="groups" class="section">
             <div class="card">
                 <div class="card-header">
@@ -1316,20 +318,19 @@
             <div class="group-grid" id="groupsContainer"></div>
         </section>
 
-        <!-- PREDICTIONS -->
         <section id="predictions" class="section">
             <div class="card">
                 <div class="card-header">
                     <div class="card-title"><i class="fas fa-brain"></i> AI 智能預測模型</div>
-                    <div class="card-subtitle">UNIFIED v3.3.42 多維度分析</div>
+                    <div class="card-subtitle">UNIFIED v3.3.42 多維度分析 + 波膽預測</div>
                 </div>
             </div>
             <div class="prediction-panel" id="predictionPanel"></div>
+            <div id="scoreAnalysisSection"></div>
             <div id="motivationSection"></div>
             <div id="weatherSection"></div>
         </section>
 
-        <!-- LIVE -->
         <section id="live" class="section">
             <div class="card">
                 <div class="card-header">
@@ -1342,857 +343,400 @@
             <div id="timeSegmentSection"></div>
         </section>
 
-        <!-- ANALYSIS -->
         <section id="analysis" class="section">
             <div id="analysisContent"></div>
         </section>
     </main>
 
     <nav class="bottom-nav">
-        <button class="bottom-nav-item active" onclick="switchTab('today', null, this)">
-            <i class="fas fa-calendar-day"></i><span>賽程</span>
-        </button>
-        <button class="bottom-nav-item" onclick="switchTab('groups', null, this)">
-            <i class="fas fa-table"></i><span>積分</span>
-        </button>
-        <button class="bottom-nav-item" onclick="switchTab('predictions', null, this)">
-            <i class="fas fa-brain"></i><span>預測</span>
-            <span class="nav-badge" style="display:none;" id="bottomLiveBadge"></span>
-        </button>
-        <button class="bottom-nav-item" onclick="switchTab('live', null, this)">
-            <i class="fas fa-bolt"></i><span>滾球</span>
-        </button>
-        <button class="bottom-nav-item" onclick="switchTab('analysis', null, this)">
-            <i class="fas fa-chart-pie"></i><span>分析</span>
-        </button>
+        <button class="bottom-nav-item active" onclick="switchTab('today', null, this)"><i class="fas fa-calendar-day"></i><span>賽程</span></button>
+        <button class="bottom-nav-item" onclick="switchTab('groups', null, this)"><i class="fas fa-table"></i><span>積分</span></button>
+        <button class="bottom-nav-item" onclick="switchTab('predictions', null, this)"><i class="fas fa-brain"></i><span>預測</span><span class="nav-badge" style="display:none;" id="bottomLiveBadge"></span></button>
+        <button class="bottom-nav-item" onclick="switchTab('live', null, this)"><i class="fas fa-bolt"></i><span>滾球</span></button>
+        <button class="bottom-nav-item" onclick="switchTab('analysis', null, this)"><i class="fas fa-chart-pie"></i><span>分析</span></button>
     </nav>
 
-    <script>
-        // ===================== GLOBAL STATE =====================
-        let appData = null;
-        let selectedMatchId = null;
-        let refreshInterval = null;
-        const DATA_URL = 'data.json';
-        const REFRESH_INTERVAL = 60000; // 60 seconds
+<script>
+let appData = null;
+let selectedMatchId = null;
+const DATA_URL = 'data.json';
 
-        // ===================== INITIALIZATION =====================
-        document.addEventListener('DOMContentLoaded', async function() {
-            await loadData();
-            setTimeout(() => {
-                document.getElementById('loadingOverlay').classList.add('hidden');
-            }, 800);
+document.addEventListener('DOMContentLoaded', async function() {
+    await loadData();
+    setTimeout(() => document.getElementById('loadingOverlay').classList.add('hidden'), 800);
+    setInterval(loadData, 60000);
+});
 
-            // Auto refresh every 60 seconds
-            refreshInterval = setInterval(loadData, REFRESH_INTERVAL);
-        });
+async function loadData() {
+    const statusDot = document.getElementById('apiStatus');
+    const statusText = document.getElementById('apiStatusText');
+    statusDot.className = 'status-dot syncing';
+    statusText.textContent = '數據同步中';
+    try {
+        const response = await fetch(DATA_URL + '?t=' + Date.now(), { cache: 'no-store' });
+        if (!response.ok) throw new Error('Failed');
+        appData = await response.json();
+        renderAll();
+        statusDot.className = 'status-dot';
+        statusText.textContent = '已同步';
+        document.getElementById('lastUpdated').textContent = new Date(appData.last_updated).toLocaleString('zh-HK', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+    } catch (e) {
+        statusDot.className = 'status-dot offline';
+        statusText.textContent = '離線模式';
+        if (!appData) { appData = getFallbackData(); renderAll(); }
+    }
+}
 
-        // ===================== DATA LOADING =====================
-        async function loadData() {
-            const statusDot = document.getElementById('apiStatus');
-            const statusText = document.getElementById('apiStatusText');
-            statusDot.className = 'status-dot syncing';
-            statusText.textContent = '數據同步中';
+function refreshData() {
+    const icon = document.getElementById('refreshIcon');
+    icon.classList.add('refreshing');
+    loadData().then(() => setTimeout(() => icon.classList.remove('refreshing'), 500));
+}
 
-            try {
-                const response = await fetch(DATA_URL + '?t=' + Date.now(), {
-                    cache: 'no-store'
-                });
-                
-                if (!response.ok) throw new Error('Failed to load data');
-                
-                const newData = await response.json();
-                appData = newData;
-                
-                renderAll();
-                
-                statusDot.className = 'status-dot';
-                statusText.textContent = '已同步';
-                document.getElementById('lastUpdated').textContent = 
-                    new Date(appData.last_updated).toLocaleString('zh-HK', { 
-                        month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' 
-                    });
-            } catch (error) {
-                console.error('Data load error:', error);
-                statusDot.className = 'status-dot offline';
-                statusText.textContent = '離線模式';
-                
-                // Use fallback data if available
-                if (!appData) {
-                    appData = getFallbackData();
-                    renderAll();
-                }
-            }
-        }
+function renderAll() {
+    if (!appData) return;
+    renderTodayMatches();
+    renderGroups();
+    renderPredictions();
+    renderLiveBetting();
+    renderAnalysis();
+    updateStandingsTime();
+    checkLiveMatches();
+}
 
-        function refreshData() {
-            const icon = document.getElementById('refreshIcon');
-            icon.classList.add('refreshing');
-            loadData().then(() => {
-                setTimeout(() => icon.classList.remove('refreshing'), 500);
-            });
-        }
-
-        // ===================== RENDER ALL =====================
-        function renderAll() {
-            if (!appData) return;
-            
-            renderTodayMatches();
-            renderGroups();
-            renderPredictions();
-            renderLiveBetting();
-            renderAnalysis();
-            updateStandingsTime();
-            checkLiveMatches();
-        }
-
-        // ===================== TODAY MATCHES =====================
-        function renderTodayMatches() {
-            const container = document.getElementById('todayMatches');
-            const bannerContainer = document.getElementById('liveBannerContainer');
-            const matches = appData.matches?.today || [];
-            
-            if (matches.length === 0) {
-                container.innerHTML = '<div class="card" style="text-align:center;padding:40px;color:var(--text-muted);"><i class="fas fa-calendar-times" style="font-size:32px;margin-bottom:10px;"></i><div>今日暫無賽事</div></div>';
-                return;
-            }
-
-            // Update date info
-            if (appData.meta) {
-                document.getElementById('todayDate').textContent = appData.meta.date_display || '今日賽程';
-                document.getElementById('todaySubtitle').textContent = appData.meta.round_info || '世界盃小組賽';
-                document.getElementById('todayRound').textContent = appData.meta.round || 'R3';
-            }
-
-            // Check for live matches
-            const liveMatches = matches.filter(m => m.status === 'live');
-            if (liveMatches.length > 0) {
-                bannerContainer.innerHTML = liveMatches.map(m => renderLiveBanner(m)).join('');
-                document.getElementById('liveBadge').style.display = 'inline';
-                document.getElementById('bottomLiveBadge').style.display = 'block';
-            } else {
-                bannerContainer.innerHTML = '';
-                document.getElementById('liveBadge').style.display = 'none';
-                document.getElementById('bottomLiveBadge').style.display = 'none';
-            }
-
-            // Render match cards
-            container.innerHTML = matches.map(match => {
-                const isSelected = selectedMatchId === match.id;
-                const statusClass = match.status || 'upcoming';
-                const homeOdds = match.odds?.home || '-';
-                const awayOdds = match.odds?.away || '-';
-                
-                return `
-                <div class="match-card ${statusClass} ${isSelected ? 'selected' : ''}" onclick="selectMatch(${match.id})">
-                    <div class="match-header">
-                        <span class="match-league">${match.group || ''}</span>
-                        <span class="match-time">
-                            <i class="far fa-clock"></i> ${match.time || 'TBC'}
-                            ${match.status === 'live' ? '<span style="color:var(--secondary);margin-left:5px;">● 進行中</span>' : ''}
-                        </span>
-                    </div>
-                    <div class="match-teams">
-                        <div class="match-team">
-                            <img src="${match.home_flag || 'https://flagcdn.com/w160/xx.png'}" class="match-team-flag" alt="${match.home}">
-                            <div class="match-team-info">
-                                <h3>${match.home}</h3>
-                                <span>主勝 ${homeOdds}</span>
-                            </div>
-                        </div>
-                        <div class="match-vs">
-                            <div class="match-vs-score">${match.score || 'VS'}</div>
-                            <div class="match-vs-time">${match.time || ''}</div>
-                        </div>
-                        <div class="match-team away">
-                            <img src="${match.away_flag || 'https://flagcdn.com/w160/xx.png'}" class="match-team-flag" alt="${match.away}">
-                            <div class="match-team-info">
-                                <h3>${match.away}</h3>
-                                <span>客勝 ${awayOdds}</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="match-predictions">
-                        <div class="prediction-box">
-                            <div class="prediction-label">主勝機率</div>
-                            <div class="prediction-value">${match.predictions?.home || '--'}</div>
-                            <div class="prediction-odds">賠率 ${homeOdds}</div>
-                        </div>
-                        <div class="prediction-box">
-                            <div class="prediction-label">和局機率</div>
-                            <div class="prediction-value" style="color:var(--accent);">${match.predictions?.draw || '--'}</div>
-                            <div class="prediction-odds">賠率 ${match.odds?.draw || '-'}</div>
-                        </div>
-                        <div class="prediction-box">
-                            <div class="prediction-label">大小球</div>
-                            <div class="prediction-value">${match.predictions?.ou || '--'}</div>
-                        </div>
-                    </div>
+function renderTodayMatches() {
+    const container = document.getElementById('todayMatches');
+    const bannerContainer = document.getElementById('liveBannerContainer');
+    const matches = appData.matches?.today || [];
+    if (matches.length === 0) {
+        container.innerHTML = '<div class="card" style="text-align:center;padding:40px;color:var(--text-muted);"><i class="fas fa-calendar-times" style="font-size:32px;margin-bottom:10px;"></i><div>今日暫無賽事</div></div>';
+        return;
+    }
+    if (appData.meta) {
+        document.getElementById('todayDate').textContent = appData.meta.date_display || '今日賽程';
+        document.getElementById('todaySubtitle').textContent = appData.meta.round_info || '世界盃小組賽';
+        document.getElementById('todayRound').textContent = appData.meta.round || 'R3';
+    }
+    const liveMatches = matches.filter(m => m.status === 'live');
+    if (liveMatches.length > 0) {
+        bannerContainer.innerHTML = liveMatches.map(m => renderLiveBanner(m)).join('');
+        document.getElementById('liveBadge').style.display = 'inline';
+        document.getElementById('bottomLiveBadge').style.display = 'block';
+    } else {
+        bannerContainer.innerHTML = '';
+        document.getElementById('liveBadge').style.display = 'none';
+        document.getElementById('bottomLiveBadge').style.display = 'none';
+    }
+    container.innerHTML = matches.map(match => {
+        const statusClass = match.status || 'upcoming';
+        const homeOdds = match.odds?.home || '-';
+        const awayOdds = match.odds?.away || '-';
+        return `
+        <div class="match-card ${statusClass}" onclick="selectMatch(${match.id})">
+            <div class="match-header">
+                <span class="match-league">${match.group || ''}</span>
+                <span class="match-time"><i class="far fa-clock"></i> ${match.time || 'TBC'} ${match.status === 'live' ? '<span style="color:var(--secondary);margin-left:5px;">● 進行中</span>' : ''}</span>
+            </div>
+            <div class="match-teams">
+                <div class="match-team">
+                    <img src="${match.home_flag || ''}" class="match-team-flag" alt="${match.home}">
+                    <div class="match-team-info"><h3>${match.home}</h3><span>主勝 ${homeOdds}</span></div>
                 </div>
-                `;
-            }).join('');
-        }
-
-        function renderLiveBanner(match) {
-            return `
-            <div class="live-banner">
-                <div class="live-match">
-                    <div class="live-team">
-                        <img src="${match.home_flag}" alt="${match.home}">
-                        <div class="live-team-name">${match.home}</div>
-                    </div>
-                    <div class="live-score-box">
-                        <div class="live-score">${match.score || '0 - 0'}</div>
-                        <div class="live-time">${match.live_time || "\'"}</div>
-                    </div>
-                    <div class="live-team">
-                        <img src="${match.away_flag}" alt="${match.away}">
-                        <div class="live-team-name">${match.away}</div>
-                    </div>
-                </div>
-                <div class="live-stats">
-                    <div class="live-stat">
-                        <div class="live-stat-value">${match.live_stats?.corners || 0}</div>
-                        <div class="live-stat-label">角球</div>
-                    </div>
-                    <div class="live-stat">
-                        <div class="live-stat-value">${match.live_stats?.shots || 0}</div>
-                        <div class="live-stat-label">射門</div>
-                    </div>
-                    <div class="live-stat">
-                        <div class="live-stat-value">${match.live_stats?.possession || '50%'}</div>
-                        <div class="live-stat-label">控球</div>
-                    </div>
-                    <div class="live-stat">
-                        <div class="live-stat-value">${match.live_stats?.danger || 0}</div>
-                        <div class="live-stat-label">危險攻勢</div>
-                    </div>
+                <div class="match-vs"><div class="match-vs-score">${match.score || 'VS'}</div><div class="match-vs-time">${match.time || ''}</div></div>
+                <div class="match-team away">
+                    <img src="${match.away_flag || ''}" class="match-team-flag" alt="${match.away}">
+                    <div class="match-team-info"><h3>${match.away}</h3><span>客勝 ${awayOdds}</span></div>
                 </div>
             </div>
-            `;
-        }
+            <div class="match-predictions">
+                <div class="prediction-box"><div class="prediction-label">主勝機率</div><div class="prediction-value">${match.predictions?.home || '--'}</div><div class="prediction-odds">賠率 ${homeOdds}</div></div>
+                <div class="prediction-box"><div class="prediction-label">和局機率</div><div class="prediction-value" style="color:var(--accent);">${match.predictions?.draw || '--'}</div><div class="prediction-odds">賠率 ${match.odds?.draw || '-'}</div></div>
+                <div class="prediction-box"><div class="prediction-label">大小球</div><div class="prediction-value">${match.predictions?.ou || '--'}</div></div>
+            </div>
+        </div>`;
+    }).join('');
+}
 
-        // ===================== GROUPS =====================
-        function renderGroups() {
-            const container = document.getElementById('groupsContainer');
-            const groups = appData.groups || {};
-            
-            if (Object.keys(groups).length === 0) {
-                container.innerHTML = '<div class="card" style="text-align:center;padding:40px;">暫無積分數據</div>';
-                return;
-            }
+function renderLiveBanner(match) {
+    return `<div class="live-banner">
+        <div class="live-match">
+            <div class="live-team"><img src="${match.home_flag}" alt="${match.home}"><div class="live-team-name">${match.home}</div></div>
+            <div class="live-score-box"><div class="live-score">${match.score || '0 - 0'}</div><div class="live-time">${match.live_time || "'"}</div></div>
+            <div class="live-team"><img src="${match.away_flag}" alt="${match.away}"><div class="live-team-name">${match.away}</div></div>
+        </div>
+        <div class="live-stats">
+            <div class="live-stat"><div class="live-stat-value">${match.live_stats?.corners || 0}</div><div class="live-stat-label">角球</div></div>
+            <div class="live-stat"><div class="live-stat-value">${match.live_stats?.shots || 0}</div><div class="live-stat-label">射門</div></div>
+            <div class="live-stat"><div class="live-stat-value">${match.live_stats?.possession || '50%'}</div><div class="live-stat-label">控球</div></div>
+            <div class="live-stat"><div class="live-stat-value">${match.live_stats?.danger || 0}</div><div class="live-stat-label">危險攻勢</div></div>
+        </div>
+    </div>`;
+}
 
-            container.innerHTML = Object.entries(groups).map(([group, teams]) => {
-                const sorted = teams.sort((a, b) => b.pts - a.pts || (b.gf - b.ga) - (a.gf - a.ga));
-                return `
-                <div class="group-card">
-                    <div class="group-header">
-                        <h3>${group}組</h3>
-                        <span>2026世界盃</span>
-                    </div>
-                    <table class="group-table">
-                        <thead>
-                            <tr>
-                                <th style="text-align:left;padding-left:15px;">球隊</th>
-                                <th>賽</th>
-                                <th>勝</th>
-                                <th>和</th>
-                                <th>負</th>
-                                <th>得</th>
-                                <th>失</th>
-                                <th>積分</th>
-                            </tr>
-                        </thead>
+function renderGroups() {
+    const container = document.getElementById('groupsContainer');
+    const groups = appData.groups || {};
+    if (Object.keys(groups).length === 0) { container.innerHTML = '<div class="card" style="text-align:center;padding:40px;">暫無積分數據</div>'; return; }
+    container.innerHTML = Object.entries(groups).map(([group, teams]) => {
+        const sorted = teams.sort((a, b) => b.pts - a.pts || (b.gf - b.ga) - (a.gf - a.ga));
+        return `<div class="group-card">
+            <div class="group-header"><h3>${group}組</h3><span>2026世界盃</span></div>
+            <table class="group-table">
+                <thead><tr><th style="text-align:left;padding-left:15px;">球隊</th><th>賽</th><th>勝</th><th>和</th><th>負</th><th>得</th><th>失</th><th>積分</th></tr></thead>
+                <tbody>${sorted.map((team, i) => `<tr class="${i < 2 ? 'qualified' : 'eliminated'}"><td style="padding-left:15px;"><div class="team-cell"><img src="${team.flag || ''}" class="team-flag" alt="${team.team}"><span class="team-name">${team.team}</span></div></td><td>${team.played || 0}</td><td>${team.won || 0}</td><td>${team.drawn || 0}</td><td>${team.lost || 0}</td><td>${team.gf || 0}</td><td>${team.ga || 0}</td><td class="points">${team.pts || 0}</td></tr>`).join('')}</tbody>
+            </table>
+        </div>`;
+    }).join('');
+}
+
+function renderPredictions() {
+    const panel = document.getElementById('predictionPanel');
+    const scoreSection = document.getElementById('scoreAnalysisSection');
+    const pred = appData.predictions?.selected || appData.predictions?.matches?.[0];
+    if (!pred) { panel.innerHTML = '<div class="card" style="text-align:center;padding:40px;">請選擇賽事查看預測</div>'; return; }
+
+    const homeProb = pred.probabilities?.home || 50;
+    const drawProb = pred.probabilities?.draw || 25;
+    const awayProb = pred.probabilities?.away || 25;
+
+    panel.innerHTML = `
+    <div class="prediction-teams">
+        <div class="pred-team"><img src="${pred.home_flag}" alt="${pred.home}"><h2>${pred.home}</h2><span>${pred.home_fifa || ''}</span></div>
+        <div class="pred-vs"><div class="pred-vs-text">勝率預測</div><div class="pred-probability">${homeProb}%</div><div class="pred-probability-label">主勝機率</div></div>
+        <div class="pred-team"><img src="${pred.away_flag}" alt="${pred.away}"><h2>${pred.away}</h2><span>${pred.away_fifa || ''}</span></div>
+    </div>
+    <div class="prediction-details">
+        <div class="detail-box full-width">
+            <h4><i class="fas fa-percentage"></i> 1X2 勝平負機率</h4>
+            <div class="prob-bar">
+                <div class="prob-bar-segment prob-home" style="width: ${homeProb}%">主 ${homeProb}%</div>
+                <div class="prob-bar-segment prob-draw" style="width: ${drawProb}%">和 ${drawProb}%</div>
+                <div class="prob-bar-segment prob-away" style="width: ${awayProb}%">客 ${awayProb}%</div>
+            </div>
+            <div class="prob-labels"><span>主勝賠率: ${pred.odds?.home || '-'}</span><span>和賠率: ${pred.odds?.draw || '-'}</span><span>客勝賠率: ${pred.odds?.away || '-'}</span></div>
+        </div>
+        ${renderDetailBox('讓球盤', pred.handicap?.line, pred.handicap?.prob, pred.handicap?.expected, 'fa-exchange-alt')}
+        ${renderDetailBox('大小球', pred.ou?.line, pred.ou?.prob, pred.ou?.expected, 'fa-futbol')}
+        ${renderDetailBox('雙方入球', pred.btts?.line, pred.btts?.prob, pred.btts?.note, 'fa-check-circle')}
+        ${renderDetailBox('角球預測', pred.corners?.line, pred.corners?.prob, pred.corners?.expected, 'fa-flag')}
+        ${renderDetailBox('半場預測', pred.ht?.line, pred.ht?.prob, pred.ht?.note, 'fa-clock')}
+        <div class="detail-box full-width">
+            <h4><i class="fas fa-trophy"></i> 最高概率波膽 (Top 5)</h4>
+            <div class="score-predictions">
+                ${(pred.scores || []).map((s, i) => `<div class="score-chip ${i === 0 ? 'best' : ''}"><span>${s.score}</span><span class="prob">${s.prob}%</span></div>`).join('')}
+            </div>
+        </div>
+    </div>`;
+
+    // Score Analysis Section
+    const sa = pred.score_analysis;
+    if (sa) {
+        scoreSection.innerHTML = `
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title"><i class="fas fa-bullseye"></i> 波膽專業分析</div>
+                <div class="card-subtitle">基於 xG 模型與泊松分佈</div>
+            </div>
+
+            <div class="xg-display">
+                <div class="xg-item">
+                    <div class="xg-value">${sa.home_xg}</div>
+                    <div class="xg-label">${pred.home} xG</div>
+                </div>
+                <div class="xg-vs">VS</div>
+                <div class="xg-item">
+                    <div class="xg-value">${sa.away_xg}</div>
+                    <div class="xg-label">${pred.away} xG</div>
+                </div>
+            </div>
+
+            <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:15px;">
+                <div class="detail-box">
+                    <h4><i class="fas fa-list-ol"></i> 全場波膽 Top 10</h4>
+                    <table class="score-table">
+                        <thead><tr><th>波膽</th><th>概率</th><th>賠率</th></tr></thead>
                         <tbody>
-                            ${sorted.map((team, i) => `
-                                <tr class="${i < 2 ? 'qualified' : 'eliminated'}">
-                                    <td style="padding-left:15px;">
-                                        <div class="team-cell">
-                                            <img src="${team.flag || 'https://flagcdn.com/w160/xx.png'}" class="team-flag" alt="${team.team}">
-                                            <span class="team-name">${team.team}</span>
-                                        </div>
-                                    </td>
-                                    <td>${team.played || 0}</td>
-                                    <td>${team.won || 0}</td>
-                                    <td>${team.drawn || 0}</td>
-                                    <td>${team.lost || 0}</td>
-                                    <td>${team.gf || 0}</td>
-                                    <td>${team.ga || 0}</td>
-                                    <td class="points">${team.pts || 0}</td>
-                                </tr>
-                            `).join('')}
+                            ${(sa.all_scores || []).map(s => `<tr><td class="score-cell">${s.score}</td><td class="prob-cell">${s.prob}%</td><td class="odds-cell">${(100/s.prob).toFixed(2)}</td></tr>`).join('')}
                         </tbody>
                     </table>
                 </div>
-                `;
-            }).join('');
-        }
-
-        // ===================== PREDICTIONS =====================
-        function renderPredictions() {
-            const panel = document.getElementById('predictionPanel');
-            const pred = appData.predictions?.selected || appData.predictions?.matches?.[0];
-            if (!pred) {
-                panel.innerHTML = '<div class="card" style="text-align:center;padding:40px;">請選擇賽事查看預測</div>';
-                return;
-            }
-
-            const homeProb = pred.probabilities?.home || 50;
-            const drawProb = pred.probabilities?.draw || 25;
-            const awayProb = pred.probabilities?.away || 25;
-
-            panel.innerHTML = `
-            <div class="prediction-teams">
-                <div class="pred-team">
-                    <img src="${pred.home_flag}" alt="${pred.home}">
-                    <h2>${pred.home}</h2>
-                    <span>${pred.home_fifa || ''}</span>
-                </div>
-                <div class="pred-vs">
-                    <div class="pred-vs-text">勝率預測</div>
-                    <div class="pred-probability">${homeProb}%</div>
-                    <div class="pred-probability-label">主勝機率</div>
-                </div>
-                <div class="pred-team">
-                    <img src="${pred.away_flag}" alt="${pred.away}">
-                    <h2>${pred.away}</h2>
-                    <span>${pred.away_fifa || ''}</span>
+                <div class="detail-box">
+                    <h4><i class="fas fa-hourglass-half"></i> 半場波膽 (HT)</h4>
+                    <table class="score-table">
+                        <thead><tr><th>HT波膽</th><th>概率</th></tr></thead>
+                        <tbody>
+                            ${(pred.ht_scores || []).map(s => `<tr><td class="score-cell">${s.score}</td><td class="prob-cell">${s.prob}%</td></tr>`).join('')}
+                        </tbody>
+                    </table>
+                    <div style="margin-top:10px;padding:10px;background:var(--card-light);border-radius:8px;font-size:12px;">
+                        <div style="font-weight:700;color:var(--info);margin-bottom:5px;"><i class="fas fa-info-circle"></i> HT 預測</div>
+                        <div style="color:var(--text-muted);">${pred.ht?.prob || ''}</div>
+                    </div>
                 </div>
             </div>
-            <div class="prediction-details">
-                <div class="detail-box full-width">
-                    <h4><i class="fas fa-percentage"></i> 1X2 勝平負機率</h4>
-                    <div class="prob-bar">
-                        <div class="prob-bar-segment prob-home" style="width: ${homeProb}%">主 ${homeProb}%</div>
-                        <div class="prob-bar-segment prob-draw" style="width: ${drawProb}%">和 ${drawProb}%</div>
-                        <div class="prob-bar-segment prob-away" style="width: ${awayProb}%">客 ${awayProb}%</div>
-                    </div>
-                    <div class="prob-labels">
-                        <span>主勝賠率: ${pred.odds?.home || '-'}</span>
-                        <span>和賠率: ${pred.odds?.draw || '-'}</span>
-                        <span>客勝賠率: ${pred.odds?.away || '-'}</span>
-                    </div>
-                </div>
-                ${renderDetailBox('讓球盤', pred.handicap?.line, pred.handicap?.prob, pred.handicap?.expected, 'fa-exchange-alt')}
-                ${renderDetailBox('大小球', pred.ou?.line, pred.ou?.prob, pred.ou?.expected, 'fa-futbol')}
-                ${renderDetailBox('雙方入球', pred.btts?.line, pred.btts?.prob, pred.btts?.note, 'fa-check-circle')}
-                ${renderDetailBox('角球預測', pred.corners?.line, pred.corners?.prob, pred.corners?.expected, 'fa-flag')}
-                ${renderDetailBox('半場預測', pred.ht?.line, pred.ht?.prob, pred.ht?.note, 'fa-clock')}
-                <div class="detail-box full-width">
-                    <h4><i class="fas fa-trophy"></i> 最高概率波膽</h4>
+
+            <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:12px;">
+                <div class="detail-box">
+                    <h4><i class="fas fa-coins"></i> 精確比分賠率</h4>
                     <div class="score-predictions">
-                        ${(pred.scores || []).map((s, i) => `
-                            <div class="score-chip ${i === 0 ? 'best' : ''}">
-                                <span>${s.score}</span>
-                                <span class="prob">${s.prob}%</span>
-                            </div>
-                        `).join('')}
+                        ${(pred.exact_odds || []).map(eo => `<div class="score-chip"><span>${eo.score}</span><span class="prob" style="color:var(--accent);">@${eo.odds}</span></div>`).join('')}
                     </div>
+                </div>
+                <div class="detail-box">
+                    <h4><i class="fas fa-star"></i> 最高概率波膽</h4>
+                    <div style="font-size:32px;font-weight:900;color:var(--primary);text-align:center;margin:10px 0;">${sa.most_likely}</div>
+                    <div style="font-size:12px;color:var(--text-muted);text-align:center;">預期總入球: ${(parseFloat(sa.home_xg) + parseFloat(sa.away_xg)).toFixed(1)}</div>
                 </div>
             </div>
-            `;
 
-            // Motivation
-            const motivation = appData.motivation;
-            if (motivation) {
-                document.getElementById('motivationSection').innerHTML = `
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-title"><i class="fas fa-fire"></i> 戰意分析引擎 (${motivation.round || 'R3'})</div>
-                        <div class="card-subtitle">${motivation.subtitle || '小組賽關鍵戰意評分'}</div>
-                    </div>
-                    <div class="motivation-card">
-                        ${motivation.teams.map(t => `
-                            <div class="motivation-bar">
-                                <div class="motivation-team">${t.name}</div>
-                                <div class="motivation-track">
-                                    <div class="motivation-fill ${t.level}" style="width: ${t.score * 10}%">${t.label}</div>
-                                </div>
-                                <div class="motivation-score">${t.score}</div>
-                            </div>
-                        `).join('')}
-                    </div>
-                    <div style="font-size:12px;color:var(--text-muted);margin-top:10px;line-height:1.6;">
-                        <i class="fas fa-info-circle" style="color:var(--primary);margin-right:5px;"></i>
-                        ${motivation.note || ''}
-                    </div>
+            <div class="recommendation-box">
+                <div class="title"><i class="fas fa-lightbulb"></i> 波膽投注建議</div>
+                <div>${sa.recommendation || ''}</div>
+                <div style="margin-top:8px;color:var(--text-muted);">
+                    <i class="fas fa-chart-bar" style="color:var(--primary);margin-right:5px;"></i>
+                    建議投注組合: ${pred.scores?.slice(0,3).map(s => s.score).join(' / ') || ''}
                 </div>
-                `;
-            }
-
-            // Weather & Venue
-            const weather = appData.weather;
-            if (weather) {
-                document.getElementById('weatherSection').innerHTML = `
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-title"><i class="fas fa-cloud-sun"></i> 場地與天氣因素</div>
-                    </div>
-                    <div class="venue-card">
-                        <img src="${weather.venue_image}" alt="${weather.venue}" class="venue-image">
-                        <div class="venue-overlay">
-                            <h3>${weather.venue}</h3>
-                            <p>${weather.location} | 海拔: ${weather.altitude}</p>
-                            <div class="venue-tags">
-                                ${weather.tags.map(t => `<span class="venue-tag">${t}</span>`).join('')}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="weather-card">
-                        <div class="weather-icon"><i class="fas fa-${weather.icon}"></i></div>
-                        <div class="weather-info">
-                            <h4>${weather.location} - ${weather.condition}</h4>
-                            <p>${weather.forecast_time}</p>
-                            <div class="weather-stats">
-                                <div class="weather-stat"><i class="fas fa-thermometer-half"></i><span>${weather.temp}</span></div>
-                                <div class="weather-stat"><i class="fas fa-tint"></i><span>${weather.humidity}</span></div>
-                                <div class="weather-stat"><i class="fas fa-wind"></i><span>${weather.wind}</span></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div style="margin-top:15px;padding:15px;background:var(--card-light);border-radius:12px;font-size:13px;line-height:1.8;">
-                        <div style="font-weight:700;margin-bottom:8px;color:var(--primary);"><i class="fas fa-exclamation-triangle" style="margin-right:8px;"></i>場地影響分析</div>
-                        ${weather.analysis.map(a => `<div>• ${a}</div>`).join('')}
-                    </div>
-                </div>
-                `;
-            }
-        }
-
-        function renderDetailBox(title, line, prob, extra, icon) {
-            if (!line && !prob) return '';
-            return `
-            <div class="detail-box">
-                <h4><i class="fas ${icon}"></i> ${title} ${line || ''}</h4>
-                <div style="font-size:24px;font-weight:900;color:var(--primary);margin:10px 0;">${prob}</div>
-                <div style="font-size:12px;color:var(--text-muted);">${extra || ''}</div>
             </div>
-            `;
-        }
+        </div>`;
+    }
 
-        // ===================== LIVE BETTING =====================
-        function renderLiveBetting() {
-            const grid = document.getElementById('liveBettingGrid');
-            const alerts = document.getElementById('upsetAlertContainer');
-            const live = appData.live_betting;
-            
-            if (!live) {
-                grid.innerHTML = '<div class="card" style="text-align:center;padding:40px;">暫無滾球數據</div>';
-                return;
-            }
+    // Motivation
+    const motivation = appData.motivation;
+    if (motivation) {
+        document.getElementById('motivationSection').innerHTML = `
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title"><i class="fas fa-fire"></i> 戰意分析引擎 (${motivation.round || 'R3'})</div>
+                <div class="card-subtitle">${motivation.subtitle || '小組賽關鍵戰意評分'}</div>
+            </div>
+            <div class="motivation-card">
+                ${motivation.teams.map(t => `<div class="motivation-bar"><div class="motivation-team">${t.name}</div><div class="motivation-track"><div class="motivation-fill ${t.level}" style="width: ${t.score * 10}%">${t.label}</div></div><div class="motivation-score">${t.score}</div></div>`).join('')}
+            </div>
+            <div style="font-size:12px;color:var(--text-muted);margin-top:10px;line-height:1.6;"><i class="fas fa-info-circle" style="color:var(--primary);margin-right:5px;"></i>${motivation.note || ''}</div>
+        </div>`;
+    }
 
-            // Upset alerts
-            if (live.alerts && live.alerts.length > 0) {
-                alerts.innerHTML = live.alerts.map(a => `
-                    <div class="alert ${a.type}">
-                        <div class="alert-icon"><i class="fas ${a.icon}"></i></div>
-                        <div class="alert-content">
-                            <h4>${a.title}</h4>
-                            <p>${a.text}</p>
-                        </div>
-                    </div>
-                `).join('');
-            } else {
-                alerts.innerHTML = '';
-            }
+    // Weather
+    const weather = appData.weather;
+    if (weather) {
+        document.getElementById('weatherSection').innerHTML = `
+        <div class="card">
+            <div class="card-header"><div class="card-title"><i class="fas fa-cloud-sun"></i> 場地與天氣因素</div></div>
+            <div class="venue-card"><img src="${weather.venue_image}" alt="${weather.venue}" class="venue-image"><div class="venue-overlay"><h3>${weather.venue}</h3><p>${weather.location} | 海拔: ${weather.altitude}</p><div class="venue-tags">${weather.tags.map(t => `<span class="venue-tag">${t}</span>`).join('')}</div></div></div>
+            <div class="weather-card"><div class="weather-icon"><i class="fas fa-${weather.icon}"></i></div><div class="weather-info"><h4>${weather.location} - ${weather.condition}</h4><p>${weather.forecast_time}</p><div class="weather-stats"><div class="weather-stat"><i class="fas fa-thermometer-half"></i><span>${weather.temp}</span></div><div class="weather-stat"><i class="fas fa-tint"></i><span>${weather.humidity}</span></div><div class="weather-stat"><i class="fas fa-wind"></i><span>${weather.wind}</span></div></div></div></div>
+            <div style="margin-top:15px;padding:15px;background:var(--card-light);border-radius:12px;font-size:13px;line-height:1.8;"><div style="font-weight:700;margin-bottom:8px;color:var(--primary);"><i class="fas fa-exclamation-triangle" style="margin-right:8px;"></i>場地影響分析</div>${weather.analysis.map(a => `<div>• ${a}</div>`).join('')}</div>
+        </div>`;
+    }
+}
 
-            // Betting cards
-            grid.innerHTML = (live.strategies || []).map(s => `
-                <div class="betting-card ${s.highlight ? 'highlight' : ''}">
-                    <h4><i class="fas ${s.icon}"></i> ${s.title}</h4>
-                    <div style="font-size:13px;color:var(--text-muted);margin:10px 0;">${s.subtitle}</div>
-                    <div class="betting-odds">
-                        <div>
-                            <div style="font-size:12px;color:var(--text-muted);">${s.market}</div>
-                            <div class="odds-value">${s.odds}</div>
-                        </div>
-                        <div class="odds-trend ${s.trend}">
-                            <i class="fas fa-arrow-${s.trend}"></i> ${s.trend_value}
-                        </div>
-                    </div>
-                    <div class="confidence-meter">
-                        <div class="confidence-fill ${s.confidence_level}" style="width: ${s.confidence}%"></div>
-                    </div>
-                    <div style="font-size:11px;color:var(--text-muted);margin-top:5px;">信心指數: ${s.confidence}%</div>
-                </div>
-            `).join('');
+function renderDetailBox(title, line, prob, extra, icon) {
+    if (!line && !prob) return '';
+    return `<div class="detail-box"><h4><i class="fas ${icon}"></i> ${title} ${line || ''}</h4><div style="font-size:24px;font-weight:900;color:var(--primary);margin:10px 0;">${prob}</div><div style="font-size:12px;color:var(--text-muted);">${extra || ''}</div></div>`;
+}
 
-            // Time segments
-            const segments = live.time_segments;
-            if (segments) {
-                document.getElementById('timeSegmentSection').innerHTML = `
-                <div class="card" style="margin-top:15px;">
-                    <div class="card-header">
-                        <div class="card-title"><i class="fas fa-stopwatch"></i> 時間段進球概率</div>
-                    </div>
-                    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;">
-                        ${segments.map(s => `
-                            <div style="background:var(--card-light);border-radius:10px;padding:12px;text-align:center;">
-                                <div style="font-size:11px;color:var(--text-muted);">${s.time}</div>
-                                <div style="font-size:22px;font-weight:900;color:var(--primary);margin:5px 0;">${s.prob}%</div>
-                                <div style="font-size:11px;color:${s.highlight ? 'var(--success)' : 'var(--text-muted)'};">${s.note}</div>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-                `;
-            }
-        }
+function renderLiveBetting() {
+    const grid = document.getElementById('liveBettingGrid');
+    const alerts = document.getElementById('upsetAlertContainer');
+    const live = appData.live_betting;
+    if (!live) { grid.innerHTML = '<div class="card" style="text-align:center;padding:40px;">暫無滾球數據</div>'; return; }
+    if (live.alerts && live.alerts.length > 0) {
+        alerts.innerHTML = live.alerts.map(a => `<div class="alert ${a.type}"><div class="alert-icon"><i class="fas ${a.icon}"></i></div><div class="alert-content"><h4>${a.title}</h4><p>${a.text}</p></div></div>`).join('');
+    } else { alerts.innerHTML = ''; }
+    grid.innerHTML = (live.strategies || []).map(s => `
+        <div class="betting-card ${s.highlight ? 'highlight' : ''}">
+            <h4><i class="fas ${s.icon}"></i> ${s.title}</h4>
+            <div style="font-size:13px;color:var(--text-muted);margin:10px 0;">${s.subtitle}</div>
+            <div class="betting-odds"><div><div style="font-size:12px;color:var(--text-muted);">${s.market}</div><div class="odds-value">${s.odds}</div></div><div class="odds-trend ${s.trend}"><i class="fas fa-arrow-${s.trend}"></i> ${s.trend_value}</div></div>
+            <div class="confidence-meter"><div class="confidence-fill ${s.confidence_level}" style="width: ${s.confidence}%"></div></div>
+            <div style="font-size:11px;color:var(--text-muted);margin-top:5px;">信心指數: ${s.confidence}%</div>
+        </div>`).join('');
+    const segments = live.time_segments;
+    if (segments) {
+        document.getElementById('timeSegmentSection').innerHTML = `
+        <div class="card" style="margin-top:15px;">
+            <div class="card-header"><div class="card-title"><i class="fas fa-stopwatch"></i> 時間段進球概率</div></div>
+            <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;">
+                ${segments.map(s => `<div style="background:var(--card-light);border-radius:10px;padding:12px;text-align:center;"><div style="font-size:11px;color:var(--text-muted);">${s.time}</div><div style="font-size:22px;font-weight:900;color:var(--primary);margin:5px 0;">${s.prob}%</div><div style="font-size:11px;color:${s.highlight ? 'var(--success)' : 'var(--text-muted)'};">${s.note}</div></div>`).join('')}
+            </div>
+        </div>`;
+    }
+}
 
-        // ===================== ANALYSIS =====================
-        function renderAnalysis() {
-            const container = document.getElementById('analysisContent');
-            const analysis = appData.analysis;
-            if (!analysis) {
-                container.innerHTML = '<div class="card" style="text-align:center;padding:40px;">暫無分析數據</div>';
-                return;
-            }
+function renderAnalysis() {
+    const container = document.getElementById('analysisContent');
+    const analysis = appData.analysis;
+    if (!analysis) { container.innerHTML = '<div class="card" style="text-align:center;padding:40px;">暫無分析數據</div>'; return; }
+    let html = '';
+    if (analysis.corners) {
+        html += `<div class="card"><div class="card-header"><div class="card-title"><i class="fas fa-chart-line"></i> 角球專業分析</div><div class="card-subtitle">基於戰術風格與歷史數據</div></div>
+        <div class="corner-stats"><div class="corner-stat"><div class="corner-stat-value">${analysis.corners.total}</div><div class="corner-stat-label">預期角球</div></div><div class="corner-stat"><div class="corner-stat-value">${analysis.corners.home}</div><div class="corner-stat-label">主隊角球</div></div><div class="corner-stat"><div class="corner-stat-value">${analysis.corners.away}</div><div class="corner-stat-label">客隊角球</div></div></div>
+        <div style="margin-top:15px;padding:15px;background:var(--card-light);border-radius:12px;font-size:13px;line-height:1.8;"><div style="font-weight:700;margin-bottom:10px;color:var(--primary);"><i class="fas fa-lightbulb" style="margin-right:8px;"></i>角球策略建議</div>${analysis.corners.tips.map(t => `<div>• ${t}</div>`).join('')}</div></div>`;
+    }
+    if (analysis.teams) {
+        html += `<div class="card"><div class="card-header"><div class="card-title"><i class="fas fa-users"></i> 球隊狀態對比</div></div>
+        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:15px;">
+            ${analysis.teams.map(t => `<div style="text-align:center;padding:15px;background:var(--card-light);border-radius:12px;"><img src="${t.flag}" style="width:50px;height:50px;border-radius:50%;margin-bottom:10px;"><div style="font-weight:700;margin-bottom:10px;">${t.name}</div><div style="display:flex;flex-direction:column;gap:8px;font-size:12px;"><div style="display:flex;justify-content:space-between;"><span>近5場</span><span style="color:var(--success);font-weight:700;">${t.recent}</span></div><div style="display:flex;justify-content:space-between;"><span>平均入球</span><span style="color:var(--primary);font-weight:700;">${t.avg_goals}</span></div><div style="display:flex;justify-content:space-between;"><span>平均失球</span><span style="color:var(--success);font-weight:700;">${t.avg_conceded}</span></div><div style="display:flex;justify-content:space-between;"><span>平均角球</span><span style="color:var(--primary);font-weight:700;">${t.avg_corners}</span></div></div></div>`).join('')}
+        </div></div>`;
+    }
+    if (analysis.referee) {
+        html += `<div class="card"><div class="card-header"><div class="card-title"><i class="fas fa-gavel"></i> 裁判數據庫</div></div>
+        <div style="background:var(--card-light);border-radius:12px;padding:15px;">
+        <div style="display:flex;align-items:center;gap:15px;margin-bottom:15px;"><div style="width:50px;height:50px;background:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;"><i class="fas fa-user-tie" style="color:var(--dark);"></i></div><div><div style="font-weight:700;font-size:16px;">${analysis.referee.name}</div><div style="font-size:12px;color:var(--text-muted);">${analysis.referee.nationality} | ${analysis.referee.level}</div></div></div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;"><div style="text-align:center;padding:10px;background:var(--darker);border-radius:8px;"><div style="font-size:20px;font-weight:900;color:var(--accent);">${analysis.referee.yellow_avg}</div><div style="font-size:11px;color:var(--text-muted);">平均每場黃牌</div></div><div style="text-align:center;padding:10px;background:var(--darker);border-radius:8px;"><div style="font-size:20px;font-weight:900;color:var(--secondary);">${analysis.referee.red_avg}</div><div style="font-size:11px;color:var(--text-muted);">平均每場紅牌</div></div><div style="text-align:center;padding:10px;background:var(--darker);border-radius:8px;"><div style="font-size:20px;font-weight:900;color:var(--primary);">${analysis.referee.home_win_rate}</div><div style="font-size:11px;color:var(--text-muted);">主場勝率</div></div></div>
+        <div style="margin-top:15px;font-size:12px;color:var(--text-muted);line-height:1.6;"><i class="fas fa-info-circle" style="color:var(--primary);margin-right:5px;"></i>${analysis.referee.note}</div></div></div>`;
+    }
+    container.innerHTML = html;
+}
 
-            let html = '';
+function switchTab(tabId, topBtn = null, bottomBtn = null) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.getElementById(tabId).classList.add('active');
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+    if (topBtn) topBtn.classList.add('active');
+    else { const tabs = document.getElementById('topNav').querySelectorAll('.nav-tab'); const map = { 'today': 0, 'groups': 1, 'predictions': 2, 'live': 3, 'analysis': 4 }; if (tabs[map[tabId]]) tabs[map[tabId]].classList.add('active'); }
+    document.querySelectorAll('.bottom-nav-item').forEach(t => t.classList.remove('active'));
+    if (bottomBtn) bottomBtn.classList.add('active');
+    else { const items = document.querySelector('.bottom-nav').querySelectorAll('.bottom-nav-item'); const map = { 'today': 0, 'groups': 1, 'predictions': 2, 'live': 3, 'analysis': 4 }; if (items[map[tabId]]) items[map[tabId]].classList.add('active'); }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
 
-            // Corner analysis
-            if (analysis.corners) {
-                html += `
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-title"><i class="fas fa-chart-line"></i> 角球專業分析</div>
-                        <div class="card-subtitle">基於戰術風格與歷史數據</div>
-                    </div>
-                    <div class="corner-stats">
-                        <div class="corner-stat">
-                            <div class="corner-stat-value">${analysis.corners.total}</div>
-                            <div class="corner-stat-label">預期角球</div>
-                        </div>
-                        <div class="corner-stat">
-                            <div class="corner-stat-value">${analysis.corners.home}</div>
-                            <div class="corner-stat-label">主隊角球</div>
-                        </div>
-                        <div class="corner-stat">
-                            <div class="corner-stat-value">${analysis.corners.away}</div>
-                            <div class="corner-stat-label">客隊角球</div>
-                        </div>
-                    </div>
-                    <div style="margin-top:15px;padding:15px;background:var(--card-light);border-radius:12px;font-size:13px;line-height:1.8;">
-                        <div style="font-weight:700;margin-bottom:10px;color:var(--primary);"><i class="fas fa-lightbulb" style="margin-right:8px;"></i>角球策略建議</div>
-                        ${analysis.corners.tips.map(t => `<div>• ${t}</div>`).join('')}
-                    </div>
-                </div>
-                `;
-            }
+function selectMatch(matchId) {
+    selectedMatchId = matchId;
+    const match = appData.matches?.today?.find(m => m.id === matchId);
+    if (!match) return;
+    if (!appData.predictions) appData.predictions = {};
+    appData.predictions.selected = {
+        home: match.home, away: match.away,
+        home_flag: match.home_flag, away_flag: match.away_flag,
+        home_fifa: match.home_fifa, away_fifa: match.away_fifa,
+        probabilities: match.predictions, odds: match.odds,
+        handicap: match.handicap, ou: match.ou, btts: match.btts,
+        corners: match.corners, ht: match.ht,
+        scores: match.scores, ht_scores: match.ht_scores,
+        exact_odds: match.exact_odds, score_analysis: match.score_analysis
+    };
+    renderPredictions();
+    switchTab('predictions');
+}
 
-            // Team comparison
-            if (analysis.teams) {
-                html += `
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-title"><i class="fas fa-users"></i> 球隊狀態對比</div>
-                    </div>
-                    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:15px;">
-                        ${analysis.teams.map(t => `
-                            <div style="text-align:center;padding:15px;background:var(--card-light);border-radius:12px;">
-                                <img src="${t.flag}" style="width:50px;height:50px;border-radius:50%;margin-bottom:10px;">
-                                <div style="font-weight:700;margin-bottom:10px;">${t.name}</div>
-                                <div style="display:flex;flex-direction:column;gap:8px;font-size:12px;">
-                                    <div style="display:flex;justify-content:space-between;"><span>近5場</span><span style="color:var(--success);font-weight:700;">${t.recent}</span></div>
-                                    <div style="display:flex;justify-content:space-between;"><span>平均入球</span><span style="color:var(--primary);font-weight:700;">${t.avg_goals}</span></div>
-                                    <div style="display:flex;justify-content:space-between;"><span>平均失球</span><span style="color:var(--success);font-weight:700;">${t.avg_conceded}</span></div>
-                                    <div style="display:flex;justify-content:space-between;"><span>平均角球</span><span style="color:var(--primary);font-weight:700;">${t.avg_corners}</span></div>
-                                </div>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-                `;
-            }
+function checkLiveMatches() {
+    const matches = appData.matches?.today || [];
+    const hasLive = matches.some(m => m.status === 'live');
+    document.getElementById('liveBadge').style.display = hasLive ? 'inline' : 'none';
+    document.getElementById('bottomLiveBadge').style.display = hasLive ? 'block' : 'none';
+}
 
-            // Referee
-            if (analysis.referee) {
-                html += `
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-title"><i class="fas fa-gavel"></i> 裁判數據庫</div>
-                    </div>
-                    <div style="background:var(--card-light);border-radius:12px;padding:15px;">
-                        <div style="display:flex;align-items:center;gap:15px;margin-bottom:15px;">
-                            <div style="width:50px;height:50px;background:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;">
-                                <i class="fas fa-user-tie" style="color:var(--dark);"></i>
-                            </div>
-                            <div>
-                                <div style="font-weight:700;font-size:16px;">${analysis.referee.name}</div>
-                                <div style="font-size:12px;color:var(--text-muted);">${analysis.referee.nationality} | ${analysis.referee.level}</div>
-                            </div>
-                        </div>
-                        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;">
-                            <div style="text-align:center;padding:10px;background:var(--darker);border-radius:8px;">
-                                <div style="font-size:20px;font-weight:900;color:var(--accent);">${analysis.referee.yellow_avg}</div>
-                                <div style="font-size:11px;color:var(--text-muted);">平均每場黃牌</div>
-                            </div>
-                            <div style="text-align:center;padding:10px;background:var(--darker);border-radius:8px;">
-                                <div style="font-size:20px;font-weight:900;color:var(--secondary);">${analysis.referee.red_avg}</div>
-                                <div style="font-size:11px;color:var(--text-muted);">平均每場紅牌</div>
-                            </div>
-                            <div style="text-align:center;padding:10px;background:var(--darker);border-radius:8px;">
-                                <div style="font-size:20px;font-weight:900;color:var(--primary);">${analysis.referee.home_win_rate}</div>
-                                <div style="font-size:11px;color:var(--text-muted);">主場勝率</div>
-                            </div>
-                        </div>
-                        <div style="margin-top:15px;font-size:12px;color:var(--text-muted);line-height:1.6;">
-                            <i class="fas fa-info-circle" style="color:var(--primary);margin-right:5px;"></i>
-                            ${analysis.referee.note}
-                        </div>
-                    </div>
-                </div>
-                `;
-            }
+function updateStandingsTime() {
+    document.getElementById('standingsTime').textContent = new Date().toLocaleString('zh-HK', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+}
 
-            container.innerHTML = html;
-        }
+function getFallbackData() {
+    return {"last_updated": new Date().toISOString(), "meta": {"date_display": "2026年6月23日", "round_info": "世界盃小組賽第三輪", "round": "R3", "version": "3.3.42"}, "matches": {"today": [{"id": 1, "time": "13:00", "home": "阿根廷", "home_flag": "https://flagcdn.com/w160/ar.png", "home_fifa": "FIFA #1", "away": "奧地利", "away_flag": "https://flagcdn.com/w160/at.png", "away_fifa": "FIFA #25", "group": "J組", "status": "upcoming", "score": null, "venue": "AT&T Stadium, Arlington", "predictions": {"home": "68%", "draw": "18%", "away": "14%", "ou": "大2.5 65%"}, "odds": {"home": 1.45, "draw": 4.20, "away": 7.50}, "handicap": {"line": "(+1.5)", "prob": "主隊讓勝 72%", "expected": "預期淨勝球: +1.8"}, "ou": {"line": "(2.5)", "prob": "大球 65%", "expected": "預期總入球: 2.8"}, "btts": {"line": "", "prob": "是 58%", "note": "奧地利近期進攻穩定"}, "corners": {"line": "(9.5)", "prob": "大角 62%", "expected": "預期角球: 10.2"}, "ht": {"line": "", "prob": "主勝 55%", "note": "HT 大1: 48%"}, "scores": [{"score": "2-0", "prob": 12.5}, {"score": "2-1", "prob": 9.8}, {"score": "3-1", "prob": 7.2}, {"score": "1-0", "prob": 6.5}, {"score": "3-0", "prob": 5.8}], "ht_scores": [{"score": "1-0", "prob": 35.2}, {"score": "1-1", "prob": 18.5}, {"score": "0-0", "prob": 15.3}], "exact_odds": [{"score": "2-0", "odds": 8.50}, {"score": "2-1", "odds": 10.20}, {"score": "3-1", "odds": 13.80}], "score_analysis": {"home_xg": 2.8, "away_xg": 0.9, "most_likely": "2-0", "recommendation": "主勝波膽機會高，建議關注 2-0 及 2-1", "all_scores": [{"score": "2-0", "prob": 12.5}, {"score": "2-1", "prob": 9.8}, {"score": "3-1", "prob": 7.2}, {"score": "1-0", "prob": 6.5}, {"score": "3-0", "prob": 5.8}, {"score": "2-2", "prob": 4.5}, {"score": "1-1", "prob": 4.2}, {"score": "3-2", "prob": 3.8}, {"score": "1-2", "prob": 2.5}, {"score": "0-1", "prob": 1.8}]}}, {"id": 2, "time": "17:00", "home": "法國", "home_flag": "https://flagcdn.com/w160/fr.png", "home_fifa": "FIFA #3", "away": "伊拉克", "away_flag": "https://flagcdn.com/w160/iq.png", "away_fifa": "FIFA #68", "group": "I組", "status": "upcoming", "score": null, "venue": "Lincoln Financial Field, Philadelphia", "predictions": {"home": "75%", "draw": "15%", "away": "10%", "ou": "大2.5 70%"}, "odds": {"home": 1.25, "draw": 5.50, "away": 12.00}, "scores": [{"score": "2-0", "prob": 14.2}, {"score": "3-0", "prob": 11.5}, {"score": "2-1", "prob": 9.8}, {"score": "3-1", "prob": 8.2}, {"score": "1-0", "prob": 7.5}], "ht_scores": [{"score": "1-0", "prob": 38.5}, {"score": "2-0", "prob": 22.1}, {"score": "0-0", "prob": 12.3}], "exact_odds": [{"score": "2-0", "odds": 7.20}, {"score": "3-0", "odds": 8.80}, {"score": "2-1", "odds": 10.50}], "score_analysis": {"home_xg": 3.1, "away_xg": 0.6, "most_likely": "2-0", "recommendation": "主勝波膽機會高，建議關注 2-0 及 3-0", "all_scores": [{"score": "2-0", "prob": 14.2}, {"score": "3-0", "prob": 11.5}, {"score": "2-1", "prob": 9.8}, {"score": "3-1", "prob": 8.2}, {"score": "1-0", "prob": 7.5}, {"score": "3-0", "prob": 6.8}, {"score": "2-0", "prob": 5.5}, {"score": "1-1", "prob": 3.2}, {"score": "0-0", "prob": 2.1}, {"score": "1-2", "prob": 1.5}]}}, {"id": 3, "time": "20:00", "home": "挪威", "home_flag": "https://flagcdn.com/w160/no.png", "home_fifa": "FIFA #12", "away": "塞內加爾", "away_flag": "https://flagcdn.com/w160/sn.png", "away_fifa": "FIFA #22", "group": "I組", "status": "upcoming", "score": null, "venue": "MetLife Stadium, East Rutherford", "predictions": {"home": "55%", "draw": "25%", "away": "20%", "ou": "大2.5 52%"}, "odds": {"home": 1.85, "draw": 3.40, "away": 4.20}, "scores": [{"score": "1-0", "prob": 11.5}, {"score": "2-1", "prob": 10.2}, {"score": "1-1", "prob": 9.8}, {"score": "2-0", "prob": 8.5}, {"score": "0-0", "prob": 7.2}], "ht_scores": [{"score": "0-0", "prob": 32.5}, {"score": "1-0", "prob": 28.2}, {"score": "0-1", "prob": 15.8}], "exact_odds": [{"score": "1-0", "odds": 8.80}, {"score": "2-1", "odds": 9.80}, {"score": "1-1", "odds": 10.20}], "score_analysis": {"home_xg": 1.6, "away_xg": 1.2, "most_likely": "1-0", "recommendation": "和局機會不低，建議關注 1-0 及 1-1", "all_scores": [{"score": "1-0", "prob": 11.5}, {"score": "2-1", "prob": 10.2}, {"score": "1-1", "prob": 9.8}, {"score": "2-0", "prob": 8.5}, {"score": "0-0", "prob": 7.2}, {"score": "1-2", "prob": 6.8}, {"score": "2-2", "prob": 5.5}, {"score": "0-1", "prob": 4.8}, {"score": "3-1", "prob": 3.2}, {"score": "1-3", "prob": 2.1}]}}, {"id": 4, "time": "23:00", "home": "約旦", "home_flag": "https://flagcdn.com/w160/jo.png", "home_fifa": "FIFA #72", "away": "阿爾及利亞", "away_flag": "https://flagcdn.com/w160/dz.png", "away_fifa": "FIFA #35", "group": "J組", "status": "upcoming", "score": null, "venue": "Levi's Stadium, Santa Clara", "predictions": {"home": "42%", "draw": "28%", "away": "30%", "ou": "大2.5 48%"}, "odds": {"home": 2.30, "draw": 3.20, "away": 3.10}, "scores": [{"score": "1-1", "prob": 10.5}, {"score": "0-1", "prob": 9.8}, {"score": "1-0", "prob": 9.2}, {"score": "0-0", "prob": 8.5}, {"score": "1-2", "prob": 7.8}], "ht_scores": [{"score": "0-0", "prob": 35.2}, {"score": "0-1", "prob": 22.5}, {"score": "1-0", "prob": 18.8}], "exact_odds": [{"score": "1-1", "odds": 9.50}, {"score": "0-1", "odds": 10.20}, {"score": "1-0", "odds": 10.80}], "score_analysis": {"home_xg": 1.1, "away_xg": 1.5, "most_likely": "1-1", "recommendation": "和局機會不低，建議關注 1-1 及 0-1", "all_scores": [{"score": "1-1", "prob": 10.5}, {"score": "0-1", "prob": 9.8}, {"score": "1-0", "prob": 9.2}, {"score": "0-0", "prob": 8.5}, {"score": "1-2", "prob": 7.8}, {"score": "2-1", "prob": 6.5}, {"score": "0-2", "prob": 5.2}, {"score": "2-0", "prob": 4.1}, {"score": "1-3", "prob": 3.2}, {"score": "2-2", "prob": 2.8}]}}], "live": [], "upcoming": []}, "groups": {"A": [{"team": "墨西哥", "flag": "https://flagcdn.com/w160/mx.png", "played": 2, "won": 2, "drawn": 0, "lost": 0, "gf": 3, "ga": 0, "pts": 6}, {"team": "韓國", "flag": "https://flagcdn.com/w160/kr.png", "played": 2, "won": 1, "drawn": 0, "lost": 1, "gf": 2, "ga": 3, "pts": 3}, {"team": "捷克", "flag": "https://flagcdn.com/w160/cz.png", "played": 2, "won": 0, "drawn": 1, "lost": 1, "gf": 2, "ga": 3, "pts": 1}, {"team": "南非", "flag": "https://flagcdn.com/w160/za.png", "played": 2, "won": 0, "drawn": 1, "lost": 1, "gf": 1, "ga": 2, "pts": 1}], "I": [{"team": "法國", "flag": "https://flagcdn.com/w160/fr.png", "played": 2, "won": 2, "drawn": 0, "lost": 0, "gf": 5, "ga": 1, "pts": 6}, {"team": "挪威", "flag": "https://flagcdn.com/w160/no.png", "played": 2, "won": 1, "drawn": 0, "lost": 1, "gf": 3, "ga": 2, "pts": 3}, {"team": "塞內加爾", "flag": "https://flagcdn.com/w160/sn.png", "played": 2, "won": 0, "drawn": 0, "lost": 2, "gf": 1, "ga": 5, "pts": 0}, {"team": "伊拉克", "flag": "https://flagcdn.com/w160/iq.png", "played": 2, "won": 0, "drawn": 0, "lost": 2, "gf": 0, "ga": 3, "pts": 0}], "J": [{"team": "阿根廷", "flag": "https://flagcdn.com/w160/ar.png", "played": 2, "won": 2, "drawn": 0, "lost": 0, "gf": 6, "ga": 1, "pts": 6}, {"team": "奧地利", "flag": "https://flagcdn.com/w160/at.png", "played": 2, "won": 1, "drawn": 0, "lost": 1, "gf": 3, "ga": 3, "pts": 3}, {"team": "約旦", "flag": "https://flagcdn.com/w160/jo.png", "played": 2, "won": 0, "drawn": 0, "lost": 2, "gf": 1, "ga": 4, "pts": 0}, {"team": "阿爾及利亞", "flag": "https://flagcdn.com/w160/dz.png", "played": 2, "won": 0, "drawn": 0, "lost": 2, "gf": 1, "ga": 6, "pts": 0}]}, "predictions": {"selected": null, "matches": []}, "motivation": {"round": "R3", "subtitle": "小組賽第三輪關鍵戰意評分", "teams": [{"name": "阿根廷", "score": 8.5, "level": "high", "label": "必勝"}, {"name": "奧地利", "score": 6.0, "level": "medium", "label": "爭分"}], "note": "阿根廷已確保出線但爭取小組首名，奧地利需要至少1分確保晉級。主隊戰意略高，但已無生死壓力。"}, "weather": {"venue": "AT&T Stadium", "venue_image": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/AT%26T_Stadium_%28Arlington%2C_Texas%29.jpg/800px-AT%26T_Stadium_%28Arlington%2C_Texas%29.jpg", "location": "Arlington, Texas, USA", "altitude": "180m", "tags": ["<i class=\"fas fa-users\"></i> 80,000人", "<i class=\"fas fa-futbol\"></i> 天然草", "<i class=\"fas fa-temperature-high\"></i> 30°C"], "icon": "sun", "condition": "晴朗炎熱", "forecast_time": "比賽時間天氣預報", "temp": "30°C", "humidity": "55% 濕度", "wind": "15 km/h", "analysis": ["德州夏季炎熱，預期體能消耗較大，下半場換人頻率增加", "奧地利歐洲球隊適應高溫需時，建議關注下半場表現", "AT&T Stadium 為室內可開合球場，預計開啟屋頂", "高溫環境下皮球彈跳較高，遠射威脅增加"]}, "live_betting": {"alerts": [], "strategies": [{"title": "下一球預測", "subtitle": "預計未來15分鐘", "icon": "fa-futbol", "market": "主隊進球", "odds": "1.85", "trend": "up", "trend_value": "2.1%", "confidence": 78, "confidence_level": "high", "highlight": true}, {"title": "角球策略", "subtitle": "下一個角球時間", "icon": "fa-flag", "market": "5分鐘內角球", "odds": "2.10", "trend": "down", "trend_value": "1.5%", "confidence": 65, "confidence_level": "medium", "highlight": false}, {"title": "亞洲讓球", "subtitle": "即時讓球盤", "icon": "fa-exchange-alt", "market": "阿根廷 -1.25", "odds": "1.92", "trend": "up", "trend_value": "0.8%", "confidence": 82, "confidence_level": "high", "highlight": false}, {"title": "大小球滾球", "subtitle": "即時大小球盤", "icon": "fa-chart-bar", "market": "大 3.5", "odds": "1.75", "trend": "up", "trend_value": "3.2%", "confidence": 70, "confidence_level": "medium", "highlight": false}], "time_segments": [{"time": "46-60分鐘", "prob": 28, "note": "↑ 歷史高發時段", "highlight": true}, {"time": "61-75分鐘", "prob": 22, "note": "換人調整期", "highlight": false}, {"time": "76-90分鐘", "prob": 35, "note": "↑ 尾段進球高峰", "highlight": true}, {"time": "補時階段", "prob": 12, "note": "絕殺機會", "highlight": false}]}, "analysis": {"corners": {"total": 10.2, "home": 6.5, "away": 3.7, "tips": ["阿根廷控球圍攻型打法，預期主導角球(預期6.5個)", "奧地利反擊型球隊，角球數較少但質量高", "高溫環境下皮球運行快，角球直接得分機會+15%", "建議關注「角大9.5」及「主隊角球讓1.5」"]}, "teams": [{"name": "阿根廷", "flag": "https://flagcdn.com/w160/ar.png", "recent": "4勝1和", "avg_goals": "2.4", "avg_conceded": "0.6", "avg_corners": "6.8"}, {"name": "奧地利", "flag": "https://flagcdn.com/w160/at.png", "recent": "2勝2和1負", "avg_goals": "1.6", "avg_conceded": "1.2", "avg_corners": "4.2"}], "referee": {"name": "馬克基列 (Mark Clattenburg)", "nationality": "英格蘭", "level": "國際級裁判", "yellow_avg": "4.2", "red_avg": "0.3", "home_win_rate": "58%", "note": "執法風格偏向寬鬆，允許較多身體對抗。世界盃經驗豐富，判罰一致性高。預期本場黃牌數: 3-4張。"}}};
+}
 
-        // ===================== TAB SWITCHING =====================
-        function switchTab(tabId, topBtn = null, bottomBtn = null) {
-            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
-
-            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-            if (topBtn) topBtn.classList.add('active');
-            else {
-                const tabs = document.getElementById('topNav').querySelectorAll('.nav-tab');
-                const map = { 'today': 0, 'groups': 1, 'predictions': 2, 'live': 3, 'analysis': 4 };
-                if (tabs[map[tabId]]) tabs[map[tabId]].classList.add('active');
-            }
-
-            document.querySelectorAll('.bottom-nav-item').forEach(t => t.classList.remove('active'));
-            if (bottomBtn) bottomBtn.classList.add('active');
-            else {
-                const items = document.querySelector('.bottom-nav').querySelectorAll('.bottom-nav-item');
-                const map = { 'today': 0, 'groups': 1, 'predictions': 2, 'live': 3, 'analysis': 4 };
-                if (items[map[tabId]]) items[map[tabId]].classList.add('active');
-            }
-
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        // ===================== MATCH SELECTION =====================
-        function selectMatch(matchId) {
-            selectedMatchId = matchId;
-            const match = appData.matches?.today?.find(m => m.id === matchId);
-            if (!match) return;
-
-            // Update prediction data
-            if (!appData.predictions) appData.predictions = {};
-            appData.predictions.selected = {
-                home: match.home,
-                away: match.away,
-                home_flag: match.home_flag,
-                away_flag: match.away_flag,
-                home_fifa: match.home_fifa,
-                away_fifa: match.away_fifa,
-                probabilities: match.predictions,
-                odds: match.odds,
-                handicap: match.handicap,
-                ou: match.ou,
-                btts: match.btts,
-                corners: match.corners,
-                ht: match.ht,
-                scores: match.scores
-            };
-
-            renderPredictions();
-            switchTab('predictions');
-        }
-
-        // ===================== LIVE CHECK =====================
-        function checkLiveMatches() {
-            const matches = appData.matches?.today || [];
-            const hasLive = matches.some(m => m.status === 'live');
-            
-            document.getElementById('liveBadge').style.display = hasLive ? 'inline' : 'none';
-            document.getElementById('bottomLiveBadge').style.display = hasLive ? 'block' : 'none';
-        }
-
-        function updateStandingsTime() {
-            const now = new Date();
-            document.getElementById('standingsTime').textContent = 
-                now.toLocaleString('zh-HK', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
-        }
-
-        // ===================== FALLBACK DATA =====================
-        function getFallbackData() {
-            return {
-                last_updated: new Date().toISOString(),
-                meta: {
-                    date_display: '2026年6月23日',
-                    round_info: '世界盃小組賽第三輪',
-                    round: 'R3',
-                    version: '3.3.42'
-                },
-                matches: {
-                    today: [
-                        {
-                            id: 1, time: '20:00', home: '阿根廷', home_flag: 'https://flagcdn.com/w160/ar.png', away: '奧地利', away_flag: 'https://flagcdn.com/w160/at.png',
-                            group: 'C組', status: 'upcoming', score: null,
-                            predictions: { home: '68%', draw: '18%', away: '14%', ou: '大2.5 65%' },
-                            odds: { home: 1.45, draw: 4.20, away: 7.50 },
-                            home_fifa: 'FIFA #1', away_fifa: 'FIFA #25',
-                            handicap: { line: '(+1.5)', prob: '主隊讓勝 72%', expected: '預期淨勝球: +1.8' },
-                            ou: { line: '(2.5)', prob: '大球 65%', expected: '預期總入球: 2.8' },
-                            btts: { line: '', prob: '是 58%', note: '奧地利近期進攻穩定' },
-                            corners: { line: '(9.5)', prob: '大角 62%', expected: '預期角球: 10.2' },
-                            ht: { line: '', prob: '主勝 55%', note: 'HT 大1: 48%' },
-                            scores: [
-                                { score: '2-0', prob: 12.5 }, { score: '2-1', prob: 9.8 },
-                                { score: '3-1', prob: 7.2 }, { score: '1-0', prob: 6.5 },
-                                { score: '3-0', prob: 5.8 }
-                            ]
-                        },
-                        {
-                            id: 2, time: '20:00', home: '法國', home_flag: 'https://flagcdn.com/w160/fr.png', away: '伊拉克', away_flag: 'https://flagcdn.com/w160/iq.png',
-                            group: 'B組', status: 'upcoming', score: null,
-                            predictions: { home: '75%', draw: '15%', away: '10%', ou: '大2.5 70%' },
-                            odds: { home: 1.25, draw: 5.50, away: 12.00 }
-                        },
-                        {
-                            id: 3, time: '23:00', home: '挪威', home_flag: 'https://flagcdn.com/w160/no.png', away: '塞內加爾', away_flag: 'https://flagcdn.com/w160/sn.png',
-                            group: 'E組', status: 'upcoming', score: null,
-                            predictions: { home: '55%', draw: '25%', away: '20%', ou: '大2.5 52%' },
-                            odds: { home: 1.85, draw: 3.40, away: 4.20 }
-                        },
-                        {
-                            id: 4, time: '23:00', home: '約旦', home_flag: 'https://flagcdn.com/w160/jo.png', away: '阿爾及利亞', away_flag: 'https://flagcdn.com/w160/dz.png',
-                            group: 'G組', status: 'upcoming', score: null,
-                            predictions: { home: '42%', draw: '28%', away: '30%', ou: '大2.5 48%' },
-                            odds: { home: 2.30, draw: 3.20, away: 3.10 }
-                        }
-                    ]
-                },
-                groups: {
-                    'A': [
-                        { team: '墨西哥', flag: 'https://flagcdn.com/w160/mx.png', played: 2, won: 1, drawn: 1, lost: 0, gf: 4, ga: 2, pts: 4 },
-                        { team: '南非', flag: 'https://flagcdn.com/w160/za.png', played: 2, won: 1, drawn: 0, lost: 1, gf: 3, ga: 3, pts: 3 },
-                        { team: '芬蘭', flag: 'https://flagcdn.com/w160/fi.png', played: 2, won: 0, drawn: 1, lost: 1, gf: 2, ga: 4, pts: 1 }
-                    ],
-                    'B': [
-                        { team: '法國', flag: 'https://flagcdn.com/w160/fr.png', played: 2, won: 2, drawn: 0, lost: 0, gf: 5, ga: 1, pts: 6 },
-                        { team: '伊拉克', flag: 'https://flagcdn.com/w160/iq.png', played: 2, won: 0, drawn: 1, lost: 1, gf: 2, ga: 4, pts: 1 },
-                        { team: '巴拉圭', flag: 'https://flagcdn.com/w160/py.png', played: 2, won: 0, drawn: 1, lost: 1, gf: 2, ga: 4, pts: 1 }
-                    ],
-                    'C': [
-                        { team: '阿根廷', flag: 'https://flagcdn.com/w160/ar.png', played: 2, won: 2, drawn: 0, lost: 0, gf: 6, ga: 1, pts: 6 },
-                        { team: '奧地利', flag: 'https://flagcdn.com/w160/at.png', played: 2, won: 1, drawn: 0, lost: 1, gf: 3, ga: 3, pts: 3 },
-                        { team: '澳洲', flag: 'https://flagcdn.com/w160/au.png', played: 2, won: 0, drawn: 0, lost: 2, gf: 1, ga: 6, pts: 0 }
-                    ],
-                    'D': [
-                        { team: '美國', flag: 'https://flagcdn.com/w160/us.png', played: 2, won: 1, drawn: 1, lost: 0, gf: 4, ga: 2, pts: 4 },
-                        { team: '韓國', flag: 'https://flagcdn.com/w160/kr.png', played: 2, won: 1, drawn: 0, lost: 1, gf: 3, ga: 3, pts: 3 },
-                        { team: '捷克', flag: 'https://flagcdn.com/w160/cz.png', played: 2, won: 0, drawn: 1, lost: 1, gf: 2, ga: 4, pts: 1 }
-                    ],
-                    'E': [
-                        { team: '挪威', flag: 'https://flagcdn.com/w160/no.png', played: 2, won: 2, drawn: 0, lost: 0, gf: 5, ga: 1, pts: 6 },
-                        { team: '塞內加爾', flag: 'https://flagcdn.com/w160/sn.png', played: 2, won: 1, drawn: 0, lost: 1, gf: 3, ga: 3, pts: 3 },
-                        { team: '波黑', flag: 'https://flagcdn.com/w160/ba.png', played: 2, won: 0, drawn: 0, lost: 2, gf: 1, ga: 5, pts: 0 }
-                    ],
-                    'F': [
-                        { team: '西班牙', flag: 'https://flagcdn.com/w160/es.png', played: 2, won: 2, drawn: 0, lost: 0, gf: 5, ga: 1, pts: 6 },
-                        { team: '摩洛哥', flag: 'https://flagcdn.com/w160/ma.png', played: 2, won: 0, drawn: 1, lost: 1, gf: 2, ga: 3, pts: 1 },
-                        { team: '加拿大', flag: 'https://flagcdn.com/w160/ca.png', played: 2, won: 0, drawn: 1, lost: 1, gf: 2, ga: 5, pts: 1 }
-                    ],
-                    'G': [
-                        { team: '約旦', flag: 'https://flagcdn.com/w160/jo.png', played: 2, won: 1, drawn: 1, lost: 0, gf: 3, ga: 2, pts: 4 },
-                        { team: '阿爾及利亞', flag: 'https://flagcdn.com/w160/dz.png', played: 2, won: 1, drawn: 0, lost: 1, gf: 3, ga: 3, pts: 3 },
-                        { team: '瑞士', flag: 'https://flagcdn.com/w160/ch.png', played: 2, won: 0, drawn: 1, lost: 1, gf: 2, ga: 3, pts: 1 }
-                    ],
-                    'H': [
-                        { team: '英格蘭', flag: 'https://flagcdn.com/w160/gb.png', played: 2, won: 2, drawn: 0, lost: 0, gf: 6, ga: 1, pts: 6 },
-                        { team: '日本', flag: 'https://flagcdn.com/w160/jp.png', played: 2, won: 1, drawn: 0, lost: 1, gf: 3, ga: 3, pts: 3 },
-                        { team: '厄瓜多爾', flag: 'https://flagcdn.com/w160/ec.png', played: 2, won: 0, drawn: 0, lost: 2, gf: 1, ga: 6, pts: 0 }
-                    ]
-                },
-                predictions: {
-                    selected: null
-                },
-                motivation: {
-                    round: 'R3',
-                    subtitle: '小組賽第三輪關鍵戰意評分',
-                    teams: [
-                        { name: '阿根廷', score: 8.5, level: 'high', label: '必勝' },
-                        { name: '奧地利', score: 6.0, level: 'medium', label: '爭分' }
-                    ],
-                    note: '阿根廷已確保出線但爭取小組首名，奧地利需要至少1分確保晉級。主隊戰意略高，但已無生死壓力。'
-                },
-                weather: {
-                    venue: '阿茲特克體育場',
-                    venue_image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Estadio_Azteca_2018.jpg/800px-Estadio_Azteca_2018.jpg',
-                    location: '墨西哥城, 墨西哥',
-                    altitude: '2,240m',
-                    tags: ['<i class="fas fa-mountain"></i> 高海拔', '<i class="fas fa-users"></i> 87,523人', '<i class="fas fa-futbol"></i> 天然草'],
-                    icon: 'sun',
-                    condition: '晴朗',
-                    forecast_time: '比賽時間天氣預報',
-                    temp: '24°C',
-                    humidity: '45% 濕度',
-                    wind: '12 km/h',
-                    analysis: [
-                        '高海拔(2,240m)將加速皮球運行，預期遠射威脅增加15%',
-                        '歐洲球隊(奧地利)適應時間不足，下半場體能下降預期+20%',
-                        '晴朗天氣有利技術型球隊發揮，預期總入球上調0.3',
-                        '低濕度環境下皮球彈跳較高，頭球爭頂成功率預期下降'
-                    ]
-                },
-                live_betting: {
-                    alerts: [],
-                    strategies: [
-                        { title: '下一球預測', subtitle: '預計未來15分鐘', icon: 'fa-futbol', market: '主隊進球', odds: '1.85', trend: 'up', trend_value: '2.1%', confidence: 78, confidence_level: 'high', highlight: true },
-                        { title: '角球策略', subtitle: '下一個角球時間', icon: 'fa-flag', market: '5分鐘內角球', odds: '2.10', trend: 'down', trend_value: '1.5%', confidence: 65, confidence_level: 'medium', highlight: false },
-                        { title: '亞洲讓球', subtitle: '即時讓球盤', icon: 'fa-exchange-alt', market: '阿根廷 -1.25', odds: '1.92', trend: 'up', trend_value: '0.8%', confidence: 82, confidence_level: 'high', highlight: false },
-                        { title: '大小球滾球', subtitle: '即時大小球盤', icon: 'fa-chart-bar', market: '大 3.5', odds: '1.75', trend: 'up', trend_value: '3.2%', confidence: 70, confidence_level: 'medium', highlight: false }
-                    ],
-                    time_segments: [
-                        { time: '46-60分鐘', prob: 28, note: '↑ 歷史高發時段', highlight: true },
-                        { time: '61-75分鐘', prob: 22, note: '換人調整期', highlight: false },
-                        { time: '76-90分鐘', prob: 35, note: '↑ 尾段進球高峰', highlight: true },
-                        { time: '補時階段', prob: 12, note: '絕殺機會', highlight: false }
-                    ]
-                },
-                analysis: {
-                    corners: {
-                        total: 10.2, home: 6.5, away: 3.7,
-                        tips: [
-                            '阿根廷控球圍攻型打法，預期主導角球(預期6.5個)',
-                            '奧地利反擊型球隊，角球數較少但質量高',
-                            '高海拔場地皮球運行快，角球直接得分機會+15%',
-                            '建議關注「角大9.5」及「主隊角球讓1.5」'
-                        ]
-                    },
-                    teams: [
-                        { name: '阿根廷', flag: 'https://flagcdn.com/w160/ar.png', recent: '4勝1和', avg_goals: '2.4', avg_conceded: '0.6', avg_corners: '6.8' },
-                        { name: '奧地利', flag: 'https://flagcdn.com/w160/at.png', recent: '2勝2和1負', avg_goals: '1.6', avg_conceded: '1.2', avg_corners: '4.2' }
-                    ],
-                    referee: {
-                        name: '馬克基列 (Mark Clattenburg)',
-                        nationality: '英格蘭',
-                        level: '國際級裁判',
-                        yellow_avg: '4.2',
-                        red_avg: '0.3',
-                        home_win_rate: '58%',
-                        note: '執法風格偏向寬鬆，允許較多身體對抗。世界盃經驗豐富，判罰一致性高。預期本場黃牌數: 3-4張。'
-                    }
-                }
-            };
-        }
-
-        // Service Worker
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('data:text/javascript,' + encodeURIComponent(`
-                self.addEventListener('install', e => e.waitUntil(self.skipWaiting()));
-                self.addEventListener('activate', e => e.waitUntil(self.clients.claim()));
-                self.addEventListener('fetch', e => {
-                    if (e.request.url.includes('data.json')) {
-                        e.respondWith(fetch(e.request));
-                    } else {
-                        e.respondWith(fetch(e.request).catch(() => new Response('Offline')));
-                    }
-                });
-            `)).catch(() => {});
-        }
-    </script>
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('data:text/javascript,' + encodeURIComponent(`self.addEventListener('install', e => e.waitUntil(self.skipWaiting())); self.addEventListener('activate', e => e.waitUntil(self.clients.claim())); self.addEventListener('fetch', e => { if (e.request.url.includes('data.json')) { e.respondWith(fetch(e.request)); } else { e.respondWith(fetch(e.request).catch(() => new Response('Offline'))); } });`)).catch(() => {});
+}
+</script>
 </body>
 </html>
