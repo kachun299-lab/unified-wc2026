@@ -631,7 +631,16 @@ function renderPredictions() {
 
 function renderDetailBox(title, line, prob, extra, icon) {
     if (!line && !prob) return '';
-    return `<div class="detail-box"><h4><i class="fas ${icon}"></i> ${title} ${line || ''}</h4><div style="font-size:24px;font-weight:900;color:var(--primary);margin:10px 0;">${prob}</div><div style="font-size:12px;color:var(--text-muted);">${extra || ''}</div></div>`;
+    // Add % suffix if prob looks like a number without %
+    let displayProb = prob;
+    if (typeof prob === 'string' || typeof prob === 'number') {
+        const probStr = String(prob).trim();
+        // Check if it's a number (or ends with a number) without %
+        if (!probStr.includes('%') && !isNaN(parseFloat(probStr))) {
+            displayProb = probStr + '%';
+        }
+    }
+    return `<div class="detail-box"><h4><i class="fas ${icon}"></i> ${title} ${line || ''}</h4><div style="font-size:24px;font-weight:900;color:var(--primary);margin:10px 0;">${displayProb}</div><div style="font-size:12px;color:var(--text-muted);">${extra || ''}</div></div>`;
 }
 
 function renderLiveBetting() {
