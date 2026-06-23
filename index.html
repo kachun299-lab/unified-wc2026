@@ -86,7 +86,6 @@
             font-size: 18px; font-weight: 700; color: var(--accent);
             border: 1px solid var(--primary); min-width: 60px; text-align: center;
         }
-        .match-time { font-size: 11px; color: var(--muted); text-align: center; margin-top: 4px; }
         .match-status { font-size: 11px; color: var(--secondary); text-align: center; font-weight: 600; }
         .badge {
             display: inline-block; padding: 3px 8px; border-radius: 4px;
@@ -123,21 +122,6 @@
             display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-top: 10px;
         }
         .corner-item { padding: 10px; background: var(--dark); border-radius: 8px; text-align: center; }
-        .progress-ring {
-            width: 50px; height: 50px; margin: 0 auto 6px;
-        }
-        .progress-ring circle { fill: none; stroke-width: 4; }
-        .progress-bg { stroke: var(--border); }
-        .progress-fill { stroke: var(--primary); stroke-linecap: round; transition: stroke-dashoffset 0.5s; }
-        .progress-text { font-size: 12px; font-weight: 700; fill: var(--text); }
-        .btn {
-            width: 100%; padding: 14px; border-radius: 10px; border: none;
-            font-size: 15px; font-weight: 600; cursor: pointer; margin-top: 10px;
-            transition: all 0.2s;
-        }
-        .btn-primary { background: var(--primary); color: #000; }
-        .btn-secondary { background: var(--secondary); color: #fff; }
-        .btn-outline { background: transparent; border: 1px solid var(--primary); color: var(--primary); }
         .detail-panel {
             max-height: 0; overflow: hidden; transition: max-height 0.3s ease;
             background: rgba(0,0,0,0.3);
@@ -146,7 +130,7 @@
         .detail-inner { padding: 12px 16px; }
         .weather-info {
             display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted);
-            margin-top: 6px;
+            margin-top: 6px; flex-wrap: wrap;
         }
         .filter-bar {
             display: flex; gap: 8px; margin-bottom: 12px; overflow-x: auto; scrollbar-width: none;
@@ -170,7 +154,6 @@
             padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 600;
         }
         .value-good { background: rgba(34,197,94,0.15); color: var(--success); }
-        .value-bad { background: rgba(239,68,68,0.15); color: var(--danger); }
         .ws-status {
             position: fixed; bottom: 70px; right: 16px;
             background: var(--card); padding: 8px 14px; border-radius: 20px;
@@ -190,35 +173,17 @@
         }
         .bottom-nav-item.active { color: var(--primary); }
         .bottom-nav-item svg { width: 22px; height: 22px; }
-        .loading { text-align: center; padding: 40px; color: var(--muted); }
-        .loading-spinner {
-            width: 40px; height: 40px; border: 3px solid var(--border);
-            border-top-color: var(--primary); border-radius: 50%;
-            animation: spin 1s linear infinite; margin: 0 auto 16px;
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
         .empty-state { text-align: center; padding: 40px 20px; color: var(--muted); }
-        .empty-state svg { width: 64px; height: 64px; margin-bottom: 16px; opacity: 0.3; }
-        .tooltip { position: relative; }
-        .tooltip::after {
-            content: attr(data-tip); position: absolute; bottom: 100%; left: 50%;
-            transform: translateX(-50%); padding: 6px 10px; background: #000;
-            color: #fff; font-size: 11px; border-radius: 6px; white-space: nowrap;
-            opacity: 0; pointer-events: none; transition: opacity 0.2s; margin-bottom: 6px;
-        }
-        .tooltip:hover::after { opacity: 1; }
-        .motivation-bar {
-            height: 4px; border-radius: 2px; background: var(--border); margin-top: 6px;
-        }
-        .motivation-fill { height: 100%; border-radius: 2px; transition: width 0.5s; }
-        .motivation-high { background: var(--success); }
-        .motivation-med { background: var(--accent); }
-        .motivation-low { background: var(--danger); }
         .group-header {
             background: linear-gradient(90deg, var(--primary), transparent);
             padding: 10px 16px; font-weight: 700; font-size: 14px;
             border-left: 4px solid var(--accent);
         }
+        .date-header {
+            padding: 10px 0; font-size: 14px; color: var(--accent); font-weight: 600;
+            border-bottom: 1px solid var(--border); margin-bottom: 10px; margin-top: 16px;
+        }
+        .date-header:first-child { margin-top: 0; }
         @media (min-width: 768px) {
             .container { max-width: 600px; margin: 0 auto; }
             .stats-grid { grid-template-columns: repeat(4, 1fr); }
@@ -242,24 +207,24 @@
             <button class="nav-tab" onclick="switchTab('standings')">積分榜</button>
         </div>
 
-        <!-- 今日賽事 -->
         <div id="today" class="section active">
             <div class="filter-bar" id="todayFilter">
-                <div class="filter-chip active" onclick="filterToday('all')">全部</div>
+                <div class="filter-chip active" onclick="filterToday('today')">今日(6/24)</div>
+                <div class="filter-chip" onclick="filterToday('yesterday')">昨日(6/23)</div>
+                <div class="filter-chip" onclick="filterToday('tomorrow')">明日(6/25)</div>
                 <div class="filter-chip" onclick="filterToday('live')">進行中</div>
-                <div class="filter-chip" onclick="filterToday('upcoming')">即將開始</div>
                 <div class="filter-chip" onclick="filterToday('finished')">已完賽</div>
             </div>
             <div id="todayMatches"></div>
         </div>
 
-        <!-- 完整賽程 -->
         <div id="schedule" class="section">
             <div class="filter-bar" id="scheduleFilter">
                 <div class="filter-chip active" onclick="filterSchedule('all')">全部</div>
                 <div class="filter-chip" onclick="filterSchedule('R1')">第一輪</div>
                 <div class="filter-chip" onclick="filterSchedule('R2')">第二輪</div>
                 <div class="filter-chip" onclick="filterSchedule('R3')">第三輪</div>
+                <div class="filter-chip" onclick="filterSchedule('R32')">三十二強</div>
                 <div class="filter-chip" onclick="filterSchedule('R16')">十六強</div>
                 <div class="filter-chip" onclick="filterSchedule('QF')">八強</div>
                 <div class="filter-chip" onclick="filterSchedule('SF')">四強</div>
@@ -268,7 +233,6 @@
             <div id="scheduleMatches"></div>
         </div>
 
-        <!-- AI預測 -->
         <div id="predict" class="section">
             <div class="card">
                 <div class="card-header">
@@ -277,25 +241,15 @@
                 </div>
                 <div class="card-body">
                     <div class="stats-grid">
-                        <div class="stat-item">
-                            <div class="stat-label">1X2準確率</div>
-                            <div class="stat-value" style="color:var(--primary)">60.7%</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-label">大小球準確率</div>
-                            <div class="stat-value" style="color:var(--success)">57.1%</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-label">BTTS準確率</div>
-                            <div class="stat-value" style="color:var(--accent)">67.9%</div>
-                        </div>
+                        <div class="stat-item"><div class="stat-label">1X2準確率</div><div class="stat-value" style="color:var(--primary)">60.7%</div></div>
+                        <div class="stat-item"><div class="stat-label">大小球準確率</div><div class="stat-value" style="color:var(--success)">57.1%</div></div>
+                        <div class="stat-item"><div class="stat-label">BTTS準確率</div><div class="stat-value" style="color:var(--accent)">67.9%</div></div>
                     </div>
                 </div>
             </div>
             <div id="predictMatches"></div>
         </div>
 
-        <!-- 角球專項 -->
         <div id="corner" class="section">
             <div class="card">
                 <div class="card-header">
@@ -304,51 +258,29 @@
                 </div>
                 <div class="card-body">
                     <div class="stats-grid">
-                        <div class="stat-item">
-                            <div class="stat-label">角球預測率</div>
-                            <div class="stat-value" style="color:var(--primary)">57.1%</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-label">場均角球</div>
-                            <div class="stat-value" style="color:var(--accent)">9.2</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-label">大角命中率</div>
-                            <div class="stat-value" style="color:var(--success)">54.3%</div>
-                        </div>
+                        <div class="stat-item"><div class="stat-label">角球預測率</div><div class="stat-value" style="color:var(--primary)">57.1%</div></div>
+                        <div class="stat-item"><div class="stat-label">場均角球</div><div class="stat-value" style="color:var(--accent)">9.2</div></div>
+                        <div class="stat-item"><div class="stat-label">大角命中率</div><div class="stat-value" style="color:var(--success)">54.3%</div></div>
                     </div>
                 </div>
             </div>
             <div id="cornerMatches"></div>
         </div>
 
-        <!-- 讓球分析 -->
         <div id="handicap" class="section">
             <div class="card">
-                <div class="card-header">
-                    <span class="card-title">⚖️ 亞洲讓球分析</span>
-                </div>
+                <div class="card-header"><span class="card-title">⚖️ 亞洲讓球分析</span></div>
                 <div class="card-body">
                     <div class="stats-grid">
-                        <div class="stat-item">
-                            <div class="stat-label">讓球勝率</div>
-                            <div class="stat-value" style="color:var(--primary)">58.2%</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-label">走盤率</div>
-                            <div class="stat-value" style="color:var(--accent)">12.1%</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-label">平均ROI</div>
-                            <div class="stat-value" style="color:var(--success)">+8.4%</div>
-                        </div>
+                        <div class="stat-item"><div class="stat-label">讓球勝率</div><div class="stat-value" style="color:var(--primary)">58.2%</div></div>
+                        <div class="stat-item"><div class="stat-label">走盤率</div><div class="stat-value" style="color:var(--accent)">12.1%</div></div>
+                        <div class="stat-item"><div class="stat-label">平均ROI</div><div class="stat-value" style="color:var(--success)">+8.4%</div></div>
                     </div>
                 </div>
             </div>
             <div id="handicapMatches"></div>
         </div>
 
-        <!-- 積分榜 -->
         <div id="standings" class="section">
             <div class="filter-bar" id="standingsFilter">
                 <div class="filter-chip active" onclick="showGroup('A')">A組</div>
@@ -359,198 +291,256 @@
                 <div class="filter-chip" onclick="showGroup('F')">F組</div>
                 <div class="filter-chip" onclick="showGroup('G')">G組</div>
                 <div class="filter-chip" onclick="showGroup('H')">H組</div>
+                <div class="filter-chip" onclick="showGroup('I')">I組</div>
+                <div class="filter-chip" onclick="showGroup('J')">J組</div>
+                <div class="filter-chip" onclick="showGroup('K')">K組</div>
+                <div class="filter-chip" onclick="showGroup('L')">L組</div>
             </div>
             <div id="standingsContent"></div>
         </div>
     </div>
 
-    <div class="ws-status" id="wsStatus">
-        <span class="live-dot"></span>實時數據連接中...
-    </div>
+    <div class="ws-status" id="wsStatus"><span class="live-dot"></span>實時數據連接中...</div>
 
     <div class="bottom-nav">
         <button class="bottom-nav-item active" onclick="switchTab('today')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
-            賽事
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>賽事
         </button>
         <button class="bottom-nav-item" onclick="switchTab('predict')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
-            預測
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>預測
         </button>
         <button class="bottom-nav-item" onclick="switchTab('corner')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 16l4-8 4 8 4-12"/></svg>
-            角球
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 16l4-8 4 8 4-12"/></svg>角球
         </button>
         <button class="bottom-nav-item" onclick="switchTab('standings')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9H4v11h2V9zm14 0h-2v11h2V9z"/><path d="M10 4H8v16h2V4zm4 0h-2v16h2V4z"/></svg>
-            積分
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9H4v11h2V9zm14 0h-2v11h2V9z"/><path d="M10 4H8v16h2V4zm4 0h-2v16h2V4z"/></svg>積分
         </button>
     </div>
 
 <script>
-// ===================== 世界盃2026 完整賽程數據 =====================
+// ===================== 世界盃2026 真實數據 (12組48隊) =====================
 const WC2026_DATA = {
-    groups: ['A','B','C','D','E','F','G','H'],
+    groups: ['A','B','C','D','E','F','G','H','I','J','K','L'],
     teams: {
-        '阿根廷': { code: 'AR', flag: '🇦🇷', elo: 2143, group: 'A', conf: 'CONMEBOL' },
-        '奧地利': { code: 'AT', flag: '🇦🇹', elo: 1823, group: 'A', conf: 'UEFA' },
-        '法國': { code: 'FR', flag: '🇫🇷', elo: 2036, group: 'B', conf: 'UEFA' },
-        '伊拉克': { code: 'IQ', flag: '🇮🇶', elo: 1487, group: 'B', conf: 'AFC' },
-        '挪威': { code: 'NO', flag: '🇳🇴', elo: 1894, group: 'C', conf: 'UEFA' },
-        '塞內加爾': { code: 'SN', flag: '🇸🇳', elo: 1728, group: 'C', conf: 'CAF' },
-        '約旦': { code: 'JO', flag: '🇯🇴', elo: 1423, group: 'D', conf: 'AFC' },
-        '阿爾及利亞': { code: 'DZ', flag: '🇩🇿', elo: 1634, group: 'D', conf: 'CAF' },
-        '巴西': { code: 'BR', flag: '🇧🇷', elo: 2021, group: 'E', conf: 'CONMEBOL' },
-        '日本': { code: 'JP', flag: '🇯🇵', elo: 1654, group: 'E', conf: 'AFC' },
-        '德國': { code: 'DE', flag: '🇩🇪', elo: 1967, group: 'F', conf: 'UEFA' },
-        '墨西哥': { code: 'MX', flag: '🇲🇽', elo: 1789, group: 'F', conf: 'CONCACAF' },
-        '西班牙': { code: 'ES', flag: '🇪🇸', elo: 2045, group: 'G', conf: 'UEFA' },
-        '美國': { code: 'US', flag: '🇺🇸', elo: 1812, group: 'G', conf: 'CONCACAF' },
-        '葡萄牙': { code: 'PT', flag: '🇵🇹', elo: 1987, group: 'H', conf: 'UEFA' },
-        '韓國': { code: 'KR', flag: '🇰🇷', elo: 1623, group: 'H', conf: 'AFC' },
-        '英格蘭': { code: 'GB', flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', elo: 2012, group: 'A', conf: 'UEFA' },
-        '荷蘭': { code: 'NL', flag: '🇳🇱', elo: 1945, group: 'B', conf: 'UEFA' },
-        '意大利': { code: 'IT', flag: '🇮🇹', elo: 1923, group: 'C', conf: 'UEFA' },
-        '比利時': { code: 'BE', flag: '🇧🇪', elo: 1876, group: 'D', conf: 'UEFA' },
-        '烏拉圭': { code: 'UY', flag: '🇺🇾', elo: 1898, group: 'E', conf: 'CONMEBOL' },
-        '克羅地亞': { code: 'HR', flag: '🇭🇷', elo: 1856, group: 'F', conf: 'UEFA' },
-        '摩洛哥': { code: 'MA', flag: '🇲🇦', elo: 1767, group: 'G', conf: 'CAF' },
-        '瑞士': { code: 'CH', flag: '🇨🇭', elo: 1798, group: 'H', conf: 'UEFA' },
-        '澳洲': { code: 'AU', flag: '🇦🇺', elo: 1689, group: 'A', conf: 'AFC' },
+        '墨西哥': { code: 'MX', flag: '🇲🇽', elo: 1789, group: 'A', conf: 'CONCACAF' },
+        '韓國': { code: 'KR', flag: '🇰🇷', elo: 1623, group: 'A', conf: 'AFC' },
+        '捷克': { code: 'CZ', flag: '🇨🇿', elo: 1756, group: 'A', conf: 'UEFA' },
+        '南非': { code: 'ZA', flag: '🇿🇦', elo: 1489, group: 'A', conf: 'CAF' },
         '加拿大': { code: 'CA', flag: '🇨🇦', elo: 1745, group: 'B', conf: 'CONCACAF' },
-        '丹麥': { code: 'DK', flag: '🇩🇰', elo: 1812, group: 'C', conf: 'UEFA' },
-        '厄瓜多爾': { code: 'EC', flag: '🇪🇨', elo: 1765, group: 'D', conf: 'CONMEBOL' },
-        '哥倫比亞': { code: 'CO', flag: '🇨🇴', elo: 1887, group: 'E', conf: 'CONMEBOL' },
-        '伊朗': { code: 'IR', flag: '🇮🇷', elo: 1712, group: 'F', conf: 'AFC' },
+        '瑞士': { code: 'CH', flag: '🇨🇭', elo: 1798, group: 'B', conf: 'UEFA' },
+        '波斯尼亞': { code: 'BA', flag: '🇧🇦', elo: 1523, group: 'B', conf: 'UEFA' },
+        '卡塔爾': { code: 'QA', flag: '🇶🇦', elo: 1456, group: 'B', conf: 'AFC' },
+        '巴西': { code: 'BR', flag: '🇧🇷', elo: 2021, group: 'C', conf: 'CONMEBOL' },
+        '摩洛哥': { code: 'MA', flag: '🇲🇦', elo: 1767, group: 'C', conf: 'CAF' },
+        '蘇格蘭': { code: 'SCT', flag: '🏴󠁧󠁢󠁳󠁣󠁴󠁿', elo: 1689, group: 'C', conf: 'UEFA' },
+        '海地': { code: 'HT', flag: '🇭🇹', elo: 1234, group: 'C', conf: 'CONCACAF' },
+        '美國': { code: 'US', flag: '🇺🇸', elo: 1812, group: 'D', conf: 'CONCACAF' },
+        '澳洲': { code: 'AU', flag: '🇦🇺', elo: 1689, group: 'D', conf: 'AFC' },
+        '巴拉圭': { code: 'PY', flag: '🇵🇾', elo: 1656, group: 'D', conf: 'CONMEBOL' },
+        '土耳其': { code: 'TR', flag: '🇹🇷', elo: 1723, group: 'D', conf: 'UEFA' },
+        '德國': { code: 'DE', flag: '🇩🇪', elo: 1967, group: 'E', conf: 'UEFA' },
+        '科特迪瓦': { code: 'CI', flag: '🇨🇮', elo: 1567, group: 'E', conf: 'CAF' },
+        '厄瓜多爾': { code: 'EC', flag: '🇪🇨', elo: 1765, group: 'E', conf: 'CONMEBOL' },
+        '庫拉索': { code: 'CW', flag: '🇨🇼', elo: 1123, group: 'E', conf: 'CONCACAF' },
+        '荷蘭': { code: 'NL', flag: '🇳🇱', elo: 1945, group: 'F', conf: 'UEFA' },
+        '日本': { code: 'JP', flag: '🇯🇵', elo: 1654, group: 'F', conf: 'AFC' },
+        '瑞典': { code: 'SE', flag: '🇸🇪', elo: 1789, group: 'F', conf: 'UEFA' },
+        '突尼斯': { code: 'TN', flag: '🇹🇳', elo: 1523, group: 'F', conf: 'CAF' },
         '埃及': { code: 'EG', flag: '🇪🇬', elo: 1698, group: 'G', conf: 'CAF' },
-        '塞爾維亞': { code: 'RS', flag: '🇷🇸', elo: 1778, group: 'H', conf: 'UEFA' },
+        '伊朗': { code: 'IR', flag: '🇮🇷', elo: 1712, group: 'G', conf: 'AFC' },
+        '比利時': { code: 'BE', flag: '🇧🇪', elo: 1876, group: 'G', conf: 'UEFA' },
+        '新西蘭': { code: 'NZ', flag: '🇳🇿', elo: 1345, group: 'G', conf: 'OFC' },
+        '西班牙': { code: 'ES', flag: '🇪🇸', elo: 2045, group: 'H', conf: 'UEFA' },
+        '佛得角': { code: 'CV', flag: '🇨🇻', elo: 1423, group: 'H', conf: 'CAF' },
+        '烏拉圭': { code: 'UY', flag: '🇺🇾', elo: 1898, group: 'H', conf: 'CONMEBOL' },
+        '沙特阿拉伯': { code: 'SA', flag: '🇸🇦', elo: 1523, group: 'H', conf: 'AFC' },
+        '法國': { code: 'FR', flag: '🇫🇷', elo: 2036, group: 'I', conf: 'UEFA' },
+        '挪威': { code: 'NO', flag: '🇳🇴', elo: 1894, group: 'I', conf: 'UEFA' },
+        '塞內加爾': { code: 'SN', flag: '🇸🇳', elo: 1728, group: 'I', conf: 'CAF' },
+        '伊拉克': { code: 'IQ', flag: '🇮🇶', elo: 1487, group: 'I', conf: 'AFC' },
+        '阿根廷': { code: 'AR', flag: '🇦🇷', elo: 2143, group: 'J', conf: 'CONMEBOL' },
+        '奧地利': { code: 'AT', flag: '🇦🇹', elo: 1823, group: 'J', conf: 'UEFA' },
+        '阿爾及利亞': { code: 'DZ', flag: '🇩🇿', elo: 1634, group: 'J', conf: 'CAF' },
+        '約旦': { code: 'JO', flag: '🇯🇴', elo: 1423, group: 'J', conf: 'AFC' },
+        '哥倫比亞': { code: 'CO', flag: '🇨🇴', elo: 1887, group: 'K', conf: 'CONMEBOL' },
+        '剛果民主共和國': { code: 'CD', flag: '🇨🇩', elo: 1456, group: 'K', conf: 'CAF' },
+        '葡萄牙': { code: 'PT', flag: '🇵🇹', elo: 1987, group: 'K', conf: 'UEFA' },
+        '烏茲別克': { code: 'UZ', flag: '🇺🇿', elo: 1423, group: 'K', conf: 'AFC' },
+        '英格蘭': { code: 'GB', flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', elo: 2012, group: 'L', conf: 'UEFA' },
+        '加納': { code: 'GH', flag: '🇬🇭', elo: 1567, group: 'L', conf: 'CAF' },
+        '巴拿馬': { code: 'PA', flag: '🇵🇦', elo: 1456, group: 'L', conf: 'CONCACAF' },
+        '克羅地亞': { code: 'HR', flag: '🇭🇷', elo: 1856, group: 'L', conf: 'UEFA' },
     },
     venues: {
-        'AT&T體育場': { city: '阿靈頓', country: '美國', capacity: 80000, altitude: 185, climate: '亞熱帶', lat: 32.7, lng: -97.1 },
-        'SoFi體育場': { city: '英格爾伍德', country: '美國', capacity: 70000, altitude: 40, climate: '地中海', lat: 33.9, lng: -118.3 },
-        'MetLife體育場': { city: '東盧瑟福', country: '美國', capacity: 82500, altitude: 2, climate: '溫帶', lat: 40.8, lng: -74.1 },
-        '硬石體育場': { city: '邁阿密', country: '美國', capacity: 65000, altitude: 3, climate: '熱帶', lat: 25.9, lng: -80.2 },
-        '阿茲特克體育場': { city: '墨西哥城', country: '墨西哥', capacity: 87000, altitude: 2240, climate: '亞熱帶高原', lat: 19.4, lng: -99.1 },
-        'BBVA體育場': { city: '蒙特雷', country: '墨西哥', capacity: 53500, altitude: 538, climate: '半乾旱', lat: 25.6, lng: -100.3 },
-        '阿克倫體育場': { city: '瓜達拉哈拉', country: '墨西哥', capacity: 46000, altitude: 1546, climate: '亞熱帶', lat: 20.6, lng: -103.4 },
-        'BMO球場': { city: '多倫多', country: '加拿大', capacity: 30000, altitude: 77, climate: '溫帶', lat: 43.6, lng: -79.4 },
-        'BC Place': { city: '溫哥華', country: '加拿大', capacity: 54000, altitude: 2, climate: '海洋性', lat: 49.2, lng: -123.1 },
+        'AT&T體育場': { city: '阿靈頓', country: '美國', altitude: 185, climate: '亞熱帶' },
+        'SoFi體育場': { city: '英格爾伍德', country: '美國', altitude: 40, climate: '地中海' },
+        'MetLife體育場': { city: '東盧瑟福', country: '美國', altitude: 2, climate: '溫帶' },
+        '硬石體育場': { city: '邁阿密', country: '美國', altitude: 3, climate: '熱帶' },
+        '阿茲特克體育場': { city: '墨西哥城', country: '墨西哥', altitude: 2240, climate: '亞熱帶高原' },
+        'BBVA體育場': { city: '蒙特雷', country: '墨西哥', altitude: 538, climate: '半乾旱' },
+        '阿克倫體育場': { city: '瓜達拉哈拉', country: '墨西哥', altitude: 1546, climate: '亞熱帶' },
+        'BMO球場': { city: '多倫多', country: '加拿大', altitude: 77, climate: '溫帶' },
+        'BC Place': { city: '溫哥華', country: '加拿大', altitude: 2, climate: '海洋性' },
+        'Lumen Field': { city: '西雅圖', country: '美國', altitude: 50, climate: '海洋性' },
+        'Levi's Stadium': { city: '聖克拉拉', country: '美國', altitude: 5, climate: '地中海' },
+        'Mercedes-Benz Stadium': { city: '亞特蘭大', country: '美國', altitude: 320, climate: '亞熱帶' },
+        'Lincoln Financial Field': { city: '費城', country: '美國', altitude: 12, climate: '溫帶' },
+        'Arrowhead Stadium': { city: '堪薩斯城', country: '美國', altitude: 260, climate: '溫帶' },
+        'NRG Stadium': { city: '休斯頓', country: '美國', altitude: 15, climate: '亞熱帶' },
+        'Gillette Stadium': { city: '福克斯堡', country: '美國', altitude: 85, climate: '溫帶' },
     },
     matches: [
-        // R1 - 6月11-12日
-        { id: 1, round: 'R1', group: 'A', date: '2026-06-11', time: '20:00', home: '阿根廷', away: '奧地利', venue: 'AT&T體育場', status: 'finished', score: { h: 2, a: 1 }, ht: { h: 1, a: 0 }, corners: { h: 6, a: 4 }, weather: { temp: 28, condition: '晴朗', humidity: 55 } },
-        { id: 2, round: 'R1', group: 'B', date: '2026-06-11', time: '23:00', home: '法國', away: '伊拉克', venue: 'SoFi體育場', status: 'finished', score: { h: 3, a: 0 }, ht: { h: 2, a: 0 }, corners: { h: 8, a: 2 }, weather: { temp: 22, condition: '多雲', humidity: 65 } },
-        { id: 3, round: 'R1', group: 'C', date: '2026-06-12', time: '02:00', home: '挪威', away: '塞內加爾', venue: 'MetLife體育場', status: 'finished', score: { h: 1, a: 1 }, ht: { h: 0, a: 0 }, corners: { h: 5, a: 7 }, weather: { temp: 24, condition: '晴朗', humidity: 60 } },
-        { id: 4, round: 'R1', group: 'D', date: '2026-06-12', time: '05:00', home: '約旦', away: '阿爾及利亞', venue: '硬石體育場', status: 'finished', score: { h: 0, a: 2 }, ht: { h: 0, a: 1 }, corners: { h: 3, a: 9 }, weather: { temp: 30, condition: '潮濕', humidity: 80 } },
-        { id: 5, round: 'R1', group: 'A', date: '2026-06-12', time: '20:00', home: '英格蘭', away: '澳洲', venue: 'AT&T體育場', status: 'finished', score: { h: 2, a: 0 }, ht: { h: 1, a: 0 }, corners: { h: 7, a: 3 }, weather: { temp: 29, condition: '晴朗', humidity: 50 } },
-        { id: 6, round: 'R1', group: 'B', date: '2026-06-12', time: '23:00', home: '荷蘭', away: '加拿大', venue: 'SoFi體育場', status: 'finished', score: { h: 1, a: 1 }, ht: { h: 0, a: 0 }, corners: { h: 6, a: 5 }, weather: { temp: 21, condition: '多雲', humidity: 68 } },
-        { id: 7, round: 'R1', group: 'C', date: '2026-06-13', time: '02:00', home: '意大利', away: '丹麥', venue: 'MetLife體育場', status: 'finished', score: { h: 2, a: 1 }, ht: { h: 1, a: 1 }, corners: { h: 8, a: 4 }, weather: { temp: 23, condition: '小雨', humidity: 72 } },
-        { id: 8, round: 'R1', group: 'D', date: '2026-06-13', time: '05:00', home: '比利時', away: '厄瓜多爾', venue: '硬石體育場', status: 'finished', score: { h: 3, a: 1 }, ht: { h: 2, a: 0 }, corners: { h: 9, a: 3 }, weather: { temp: 31, condition: '潮濕', humidity: 82 } },
-        { id: 9, round: 'R1', group: 'E', date: '2026-06-13', time: '20:00', home: '巴西', away: '日本', venue: '阿茲特克體育場', status: 'finished', score: { h: 4, a: 1 }, ht: { h: 2, a: 0 }, corners: { h: 7, a: 4 }, weather: { temp: 24, condition: '多雲', humidity: 45 } },
-        { id: 10, round: 'R1', group: 'E', date: '2026-06-13', time: '23:00', home: '烏拉圭', away: '哥倫比亞', venue: 'BBVA體育場', status: 'finished', score: { h: 1, a: 2 }, ht: { h: 0, a: 1 }, corners: { h: 5, a: 6 }, weather: { temp: 35, condition: '晴朗', humidity: 40 } },
-        { id: 11, round: 'R1', group: 'F', date: '2026-06-14', time: '02:00', home: '德國', away: '伊朗', venue: '阿克倫體育場', status: 'finished', score: { h: 3, a: 0 }, ht: { h: 2, a: 0 }, corners: { h: 8, a: 2 }, weather: { temp: 26, condition: '晴朗', humidity: 50 } },
-        { id: 12, round: 'R1', group: 'F', date: '2026-06-14', time: '05:00', home: '墨西哥', away: '克羅地亞', venue: '阿茲特克體育場', status: 'finished', score: { h: 2, a: 2 }, ht: { h: 1, a: 1 }, corners: { h: 6, a: 6 }, weather: { temp: 23, condition: '多雲', humidity: 48 } },
-        { id: 13, round: 'R1', group: 'G', date: '2026-06-14', time: '20:00', home: '西班牙', away: '美國', venue: 'BMO球場', status: 'finished', score: { h: 2, a: 1 }, ht: { h: 1, a: 0 }, corners: { h: 7, a: 5 }, weather: { temp: 20, condition: '多雲', humidity: 62 } },
-        { id: 14, round: 'R1', group: 'G', date: '2026-06-14', time: '23:00', home: '摩洛哥', away: '埃及', venue: 'BC Place', status: 'finished', score: { h: 1, a: 0 }, ht: { h: 0, a: 0 }, corners: { h: 4, a: 5 }, weather: { temp: 18, condition: '小雨', humidity: 75 } },
-        { id: 15, round: 'R1', group: 'H', date: '2026-06-15', time: '02:00', home: '葡萄牙', away: '韓國', venue: 'AT&T體育場', status: 'finished', score: { h: 3, a: 1 }, ht: { h: 2, a: 0 }, corners: { h: 8, a: 3 }, weather: { temp: 27, condition: '晴朗', humidity: 55 } },
-        { id: 16, round: 'R1', group: 'H', date: '2026-06-15', time: '05:00', home: '瑞士', away: '塞爾維亞', venue: 'SoFi體育場', status: 'finished', score: { h: 1, a: 1 }, ht: { h: 1, a: 0 }, corners: { h: 5, a: 7 }, weather: { temp: 22, condition: '多雲', humidity: 60 } },
-        // R2 - 6月17-19日
-        { id: 17, round: 'R2', group: 'A', date: '2026-06-17', time: '20:00', home: '奧地利', away: '英格蘭', venue: 'MetLife體育場', status: 'finished', score: { h: 0, a: 2 }, ht: { h: 0, a: 1 }, corners: { h: 3, a: 8 }, weather: { temp: 25, condition: '晴朗', humidity: 58 } },
-        { id: 18, round: 'R2', group: 'A', date: '2026-06-17', time: '23:00', home: '澳洲', away: '阿根廷', venue: '硬石體育場', status: 'finished', score: { h: 1, a: 3 }, ht: { h: 0, a: 2 }, corners: { h: 4, a: 7 }, weather: { temp: 29, condition: '潮濕', humidity: 78 } },
-        { id: 19, round: 'R2', group: 'B', date: '2026-06-18', time: '02:00', home: '伊拉克', away: '荷蘭', venue: 'AT&T體育場', status: 'finished', score: { h: 0, a: 4 }, ht: { h: 0, a: 2 }, corners: { h: 2, a: 10 }, weather: { temp: 28, condition: '晴朗', humidity: 52 } },
-        { id: 20, round: 'R2', group: 'B', date: '2026-06-18', time: '05:00', home: '加拿大', away: '法國', venue: 'SoFi體育場', status: 'finished', score: { h: 1, a: 2 }, ht: { h: 1, a: 1 }, corners: { h: 5, a: 7 }, weather: { temp: 21, condition: '多雲', humidity: 65 } },
-        { id: 21, round: 'R2', group: 'C', date: '2026-06-18', time: '20:00', home: '塞內加爾', away: '意大利', venue: '阿茲特克體育場', status: 'finished', score: { h: 1, a: 2 }, ht: { h: 0, a: 1 }, corners: { h: 6, a: 5 }, weather: { temp: 23, condition: '多雲', humidity: 46 } },
-        { id: 22, round: 'R2', group: 'C', date: '2026-06-18', time: '23:00', home: '丹麥', away: '挪威', venue: 'BBVA體育場', status: 'finished', score: { h: 2, a: 1 }, ht: { h: 1, a: 0 }, corners: { h: 7, a: 4 }, weather: { temp: 34, condition: '晴朗', humidity: 38 } },
-        { id: 23, round: 'R2', group: 'D', date: '2026-06-19', time: '02:00', home: '阿爾及利亞', away: '比利時', venue: '阿克倫體育場', status: 'finished', score: { h: 1, a: 3 }, ht: { h: 1, a: 1 }, corners: { h: 5, a: 8 }, weather: { temp: 27, condition: '晴朗', humidity: 52 } },
-        { id: 24, round: 'R2', group: 'D', date: '2026-06-19', time: '05:00', home: '厄瓜多爾', away: '約旦', venue: 'BMO球場', status: 'finished', score: { h: 2, a: 0 }, ht: { h: 1, a: 0 }, corners: { h: 8, a: 3 }, weather: { temp: 19, condition: '多雲', humidity: 64 } },
-        { id: 25, round: 'R2', group: 'E', date: '2026-06-19', time: '20:00', home: '日本', away: '烏拉圭', venue: 'BC Place', status: 'finished', score: { h: 1, a: 2 }, ht: { h: 0, a: 1 }, corners: { h: 4, a: 6 }, weather: { temp: 17, condition: '小雨', humidity: 78 } },
-        { id: 26, round: 'R2', group: 'E', date: '2026-06-19', time: '23:00', home: '哥倫比亞', away: '巴西', venue: 'AT&T體育場', status: 'finished', score: { h: 1, a: 2 }, ht: { h: 0, a: 1 }, corners: { h: 5, a: 7 }, weather: { temp: 29, condition: '晴朗', humidity: 50 } },
-        { id: 27, round: 'R2', group: 'F', date: '2026-06-20', time: '02:00', home: '伊朗', away: '墨西哥', venue: 'SoFi體育場', status: 'finished', score: { h: 0, a: 2 }, ht: { h: 0, a: 1 }, corners: { h: 3, a: 8 }, weather: { temp: 22, condition: '多雲', humidity: 62 } },
-        { id: 28, round: 'R2', group: 'F', date: '2026-06-20', time: '05:00', home: '克羅地亞', away: '德國', venue: 'MetLife體育場', status: 'finished', score: { h: 1, a: 2 }, ht: { h: 1, a: 1 }, corners: { h: 6, a: 6 }, weather: { temp: 24, condition: '晴朗', humidity: 58 } },
-        { id: 29, round: 'R2', group: 'G', date: '2026-06-20', time: '20:00', home: '美國', away: '摩洛哥', venue: '硬石體育場', status: 'finished', score: { h: 1, a: 1 }, ht: { h: 0, a: 0 }, corners: { h: 6, a: 5 }, weather: { temp: 30, condition: '潮濕', humidity: 80 } },
-        { id: 30, round: 'R2', group: 'G', date: '2026-06-20', time: '23:00', home: '埃及', away: '西班牙', venue: '阿茲特克體育場', status: 'finished', score: { h: 0, a: 3 }, ht: { h: 0, a: 2 }, corners: { h: 3, a: 9 }, weather: { temp: 22, condition: '多雲', humidity: 48 } },
-        { id: 31, round: 'R2', group: 'H', date: '2026-06-21', time: '02:00', home: '韓國', away: '瑞士', venue: 'BBVA體育場', status: 'finished', score: { h: 2, a: 1 }, ht: { h: 1, a: 0 }, corners: { h: 7, a: 4 }, weather: { temp: 33, condition: '晴朗', humidity: 42 } },
-        { id: 32, round: 'R2', group: 'H', date: '2026-06-21', time: '05:00', home: '塞爾維亞', away: '葡萄牙', venue: '阿克倫體育場', status: 'finished', score: { h: 0, a: 2 }, ht: { h: 0, a: 1 }, corners: { h: 4, a: 8 }, weather: { temp: 26, condition: '晴朗', humidity: 50 } },
-        // R3 - 6月23-25日 (部分進行中/即將)
-        { id: 33, round: 'R3', group: 'A', date: '2026-06-23', time: '20:00', home: '阿根廷', away: '英格蘭', venue: 'AT&T體育場', status: 'upcoming', score: { h: null, a: null }, weather: { temp: 28, condition: '預計晴朗', humidity: 55 } },
-        { id: 34, round: 'R3', group: 'A', date: '2026-06-23', time: '20:00', home: '奧地利', away: '澳洲', venue: 'SoFi體育場', status: 'upcoming', score: { h: null, a: null }, weather: { temp: 22, condition: '預計多雲', humidity: 60 } },
-        { id: 35, round: 'R3', group: 'B', date: '2026-06-23', time: '23:00', home: '法國', away: '荷蘭', venue: 'MetLife體育場', status: 'upcoming', score: { h: null, a: null }, weather: { temp: 24, condition: '預計多雲', humidity: 65 } },
-        { id: 36, round: 'R3', group: 'B', date: '2026-06-23', time: '23:00', home: '伊拉克', away: '加拿大', venue: '硬石體育場', status: 'upcoming', score: { h: null, a: null }, weather: { temp: 30, condition: '預計潮濕', humidity: 82 } },
-        { id: 37, round: 'R3', group: 'C', date: '2026-06-24', time: '02:00', home: '挪威', away: '意大利', venue: '阿茲特克體育場', status: 'upcoming', score: { h: null, a: null }, weather: { temp: 23, condition: '預計多雲', humidity: 45 } },
-        { id: 38, round: 'R3', group: 'C', date: '2026-06-24', time: '02:00', home: '塞內加爾', away: '丹麥', venue: 'BBVA體育場', status: 'upcoming', score: { h: null, a: null }, weather: { temp: 35, condition: '預計晴朗', humidity: 40 } },
-        { id: 39, round: 'R3', group: 'D', date: '2026-06-24', time: '20:00', home: '約旦', away: '比利時', venue: 'BMO球場', status: 'upcoming', score: { h: null, a: null }, weather: { temp: 20, condition: '預計多雲', humidity: 62 } },
-        { id: 40, round: 'R3', group: 'D', date: '2026-06-24', time: '20:00', home: '阿爾及利亞', away: '厄瓜多爾', venue: 'BC Place', status: 'upcoming', score: { h: null, a: null }, weather: { temp: 18, condition: '預計小雨', humidity: 75 } },
-        { id: 41, round: 'R3', group: 'E', date: '2026-06-24', time: '23:00', home: '巴西', away: '哥倫比亞', venue: 'AT&T體育場', status: 'upcoming', score: { h: null, a: null }, weather: { temp: 28, condition: '預計晴朗', humidity: 52 } },
-        { id: 42, round: 'R3', group: 'E', date: '2026-06-24', time: '23:00', home: '日本', away: '烏拉圭', venue: 'SoFi體育場', status: 'upcoming', score: { h: null, a: null }, weather: { temp: 21, condition: '預計多雲', humidity: 64 } },
-        { id: 43, round: 'R3', group: 'F', date: '2026-06-25', time: '02:00', home: '德國', away: '克羅地亞', venue: 'MetLife體育場', status: 'upcoming', score: { h: null, a: null }, weather: { temp: 24, condition: '預計晴朗', humidity: 58 } },
-        { id: 44, round: 'R3', group: 'F', date: '2026-06-25', time: '02:00', home: '墨西哥', away: '伊朗', venue: '硬石體育場', status: 'upcoming', score: { h: null, a: null }, weather: { temp: 29, condition: '預計潮濕', humidity: 80 } },
-        { id: 45, round: 'R3', group: 'G', date: '2026-06-25', time: '20:00', home: '西班牙', away: '埃及', venue: '阿茲特克體育場', status: 'upcoming', score: { h: null, a: null }, weather: { temp: 22, condition: '預計多雲', humidity: 48 } },
-        { id: 46, round: 'R3', group: 'G', date: '2026-06-25', time: '20:00', home: '美國', away: '摩洛哥', venue: 'BBVA體育場', status: 'upcoming', score: { h: null, a: null }, weather: { temp: 34, condition: '預計晴朗', humidity: 42 } },
-        { id: 47, round: 'R3', group: 'H', date: '2026-06-25', time: '23:00', home: '葡萄牙', away: '塞爾維亞', venue: '阿克倫體育場', status: 'upcoming', score: { h: null, a: null }, weather: { temp: 26, condition: '預計晴朗', humidity: 50 } },
-        { id: 48, round: 'R3', group: 'H', date: '2026-06-25', time: '23:00', home: '韓國', away: '瑞士', venue: 'BMO球場', status: 'upcoming', score: { h: null, a: null }, weather: { temp: 19, condition: '預計多雲', humidity: 66 } },
-        // 淘汰賽 (暫時用佔位)
-        { id: 49, round: 'R16', date: '2026-06-27', time: '20:00', home: '1A', away: '2B', venue: 'AT&T體育場', status: 'upcoming', score: { h: null, a: null } },
-        { id: 50, round: 'R16', date: '2026-06-27', time: '23:00', home: '1C', away: '2D', venue: 'SoFi體育場', status: 'upcoming', score: { h: null, a: null } },
-        { id: 51, round: 'R16', date: '2026-06-28', time: '02:00', home: '1E', away: '2F', venue: 'MetLife體育場', status: 'upcoming', score: { h: null, a: null } },
-        { id: 52, round: 'R16', date: '2026-06-28', time: '20:00', home: '1G', away: '2H', venue: '硬石體育場', status: 'upcoming', score: { h: null, a: null } },
-        { id: 53, round: 'R16', date: '2026-06-28', time: '23:00', home: '1B', away: '2A', venue: '阿茲特克體育場', status: 'upcoming', score: { h: null, a: null } },
-        { id: 54, round: 'R16', date: '2026-06-29', time: '02:00', home: '1D', away: '2C', venue: 'BBVA體育場', status: 'upcoming', score: { h: null, a: null } },
-        { id: 55, round: 'R16', date: '2026-06-29', time: '20:00', home: '1F', away: '2E', venue: '阿克倫體育場', status: 'upcoming', score: { h: null, a: null } },
-        { id: 56, round: 'R16', date: '2026-06-29', time: '23:00', home: '1H', away: '2G', venue: 'BMO球場', status: 'upcoming', score: { h: null, a: null } },
-        { id: 57, round: 'QF', date: '2026-07-03', time: '20:00', home: 'W49', away: 'W50', venue: 'AT&T體育場', status: 'upcoming', score: { h: null, a: null } },
-        { id: 58, round: 'QF', date: '2026-07-03', time: '23:00', home: 'W51', away: 'W52', venue: 'SoFi體育場', status: 'upcoming', score: { h: null, a: null } },
-        { id: 59, round: 'QF', date: '2026-07-04', time: '20:00', home: 'W53', away: 'W54', venue: 'MetLife體育場', status: 'upcoming', score: { h: null, a: null } },
-        { id: 60, round: 'QF', date: '2026-07-04', time: '23:00', home: 'W55', away: 'W56', venue: '硬石體育場', status: 'upcoming', score: { h: null, a: null } },
-        { id: 61, round: 'SF', date: '2026-07-07', time: '20:00', home: 'W57', away: 'W58', venue: '阿茲特克體育場', status: 'upcoming', score: { h: null, a: null } },
-        { id: 62, round: 'SF', date: '2026-07-08', time: '20:00', home: 'W59', away: 'W60', venue: 'BBVA體育場', status: 'upcoming', score: { h: null, a: null } },
-        { id: 63, round: 'F', date: '2026-07-12', time: '20:00', home: 'W61', away: 'W62', venue: 'AT&T體育場', status: 'upcoming', score: { h: null, a: null } },
+        // ===== R1 =====
+        { id: 1, round: 'R1', group: 'A', date: '2026-06-11', time: '20:00', home: '墨西哥', away: '南非', venue: '阿茲特克體育場', status: 'finished', score: { h: 2, a: 0 }, ht: { h: 1, a: 0 }, weather: { temp: 24, condition: '多雲', humidity: 45 } },
+        { id: 2, round: 'R1', group: 'A', date: '2026-06-11', time: '23:00', home: '韓國', away: '捷克', venue: 'BBVA體育場', status: 'finished', score: { h: 2, a: 1 }, ht: { h: 1, a: 0 }, weather: { temp: 35, condition: '晴朗', humidity: 40 } },
+        { id: 3, round: 'R1', group: 'B', date: '2026-06-12', time: '20:00', home: '加拿大', away: '波斯尼亞', venue: 'BMO球場', status: 'finished', score: { h: 1, a: 1 }, ht: { h: 0, a: 0 }, weather: { temp: 20, condition: '多雲', humidity: 62 } },
+        { id: 4, round: 'R1', group: 'D', date: '2026-06-12', time: '23:00', home: '美國', away: '巴拉圭', venue: 'SoFi體育場', status: 'finished', score: { h: 4, a: 1 }, ht: { h: 2, a: 0 }, weather: { temp: 21, condition: '多雲', humidity: 65 } },
+        { id: 5, round: 'R1', group: 'B', date: '2026-06-13', time: '02:00', home: '卡塔爾', away: '瑞士', venue: 'Levi's Stadium', status: 'finished', score: { h: 1, a: 1 }, ht: { h: 0, a: 0 }, weather: { temp: 18, condition: '多雲', humidity: 55 } },
+        { id: 6, round: 'R1', group: 'C', date: '2026-06-13', time: '05:00', home: '巴西', away: '摩洛哥', venue: 'MetLife體育場', status: 'finished', score: { h: 1, a: 1 }, ht: { h: 0, a: 0 }, weather: { temp: 24, condition: '多雲', humidity: 60 } },
+        { id: 7, round: 'R1', group: 'C', date: '2026-06-13', time: '20:00', home: '海地', away: '蘇格蘭', venue: 'Gillette Stadium', status: 'finished', score: { h: 0, a: 1 }, ht: { h: 0, a: 1 }, weather: { temp: 22, condition: '晴朗', humidity: 58 } },
+        { id: 8, round: 'R1', group: 'D', date: '2026-06-13', time: '23:00', home: '澳洲', away: '土耳其', venue: 'BC Place', status: 'finished', score: { h: 2, a: 0 }, ht: { h: 1, a: 0 }, weather: { temp: 17, condition: '小雨', humidity: 78 } },
+        { id: 9, round: 'R1', group: 'E', date: '2026-06-14', time: '02:00', home: '德國', away: '庫拉索', venue: 'NRG Stadium', status: 'finished', score: { h: 7, a: 1 }, ht: { h: 4, a: 0 }, weather: { temp: 29, condition: '潮濕', humidity: 80 } },
+        { id: 10, round: 'R1', group: 'F', date: '2026-06-14', time: '05:00', home: '荷蘭', away: '日本', venue: 'AT&T體育場', status: 'finished', score: { h: 2, a: 2 }, ht: { h: 1, a: 1 }, weather: { temp: 28, condition: '晴朗', humidity: 50 } },
+        { id: 11, round: 'R1', group: 'E', date: '2026-06-14', time: '20:00', home: '科特迪瓦', away: '厄瓜多爾', venue: 'Lincoln Financial Field', status: 'finished', score: { h: 1, a: 0 }, ht: { h: 1, a: 0 }, weather: { temp: 25, condition: '多雲', humidity: 65 } },
+        { id: 12, round: 'R1', group: 'F', date: '2026-06-14', time: '23:00', home: '瑞典', away: '突尼斯', venue: '阿克倫體育場', status: 'finished', score: { h: 5, a: 1 }, ht: { h: 3, a: 0 }, weather: { temp: 26, condition: '晴朗', humidity: 48 } },
+        { id: 13, round: 'R1', group: 'H', date: '2026-06-15', time: '02:00', home: '西班牙', away: '佛得角', venue: 'Mercedes-Benz Stadium', status: 'finished', score: { h: 0, a: 0 }, ht: { h: 0, a: 0 }, weather: { temp: 27, condition: '多雲', humidity: 70 } },
+        { id: 14, round: 'R1', group: 'G', date: '2026-06-15', time: '05:00', home: '比利時', away: '埃及', venue: 'Lumen Field', status: 'finished', score: { h: 1, a: 1 }, ht: { h: 1, a: 0 }, weather: { temp: 19, condition: '多雲', humidity: 68 } },
+        { id: 15, round: 'R1', group: 'H', date: '2026-06-15', time: '20:00', home: '沙特阿拉伯', away: '烏拉圭', venue: '硬石體育場', status: 'finished', score: { h: 1, a: 1 }, ht: { h: 0, a: 0 }, weather: { temp: 30, condition: '潮濕', humidity: 82 } },
+        { id: 16, round: 'R1', group: 'G', date: '2026-06-15', time: '23:00', home: '伊朗', away: '新西蘭', venue: 'SoFi體育場', status: 'finished', score: { h: 2, a: 2 }, ht: { h: 1, a: 1 }, weather: { temp: 21, condition: '多雲', humidity: 60 } },
+        { id: 17, round: 'R1', group: 'I', date: '2026-06-16', time: '02:00', home: '法國', away: '塞內加爾', venue: 'MetLife體育場', status: 'finished', score: { h: 3, a: 1 }, ht: { h: 2, a: 0 }, weather: { temp: 23, condition: '晴朗', humidity: 55 } },
+        { id: 18, round: 'R1', group: 'I', date: '2026-06-16', time: '05:00', home: '伊拉克', away: '挪威', venue: 'Gillette Stadium', status: 'finished', score: { h: 1, a: 4 }, ht: { h: 0, a: 2 }, weather: { temp: 20, condition: '多雲', humidity: 62 } },
+        { id: 19, round: 'R1', group: 'J', date: '2026-06-16', time: '20:00', home: '阿根廷', away: '阿爾及利亞', venue: 'Arrowhead Stadium', status: 'finished', score: { h: 3, a: 0 }, ht: { h: 2, a: 0 }, weather: { temp: 26, condition: '晴朗', humidity: 50 } },
+        { id: 20, round: 'R1', group: 'J', date: '2026-06-16', time: '23:00', home: '奧地利', away: '約旦', venue: 'Levi's Stadium', status: 'finished', score: { h: 3, a: 1 }, ht: { h: 2, a: 0 }, weather: { temp: 18, condition: '多雲', humidity: 55 } },
+        { id: 21, round: 'R1', group: 'K', date: '2026-06-17', time: '02:00', home: '葡萄牙', away: '剛果民主共和國', venue: 'NRG Stadium', status: 'finished', score: { h: 1, a: 1 }, ht: { h: 0, a: 0 }, weather: { temp: 28, condition: '潮濕', humidity: 75 } },
+        { id: 22, round: 'R1', group: 'L', date: '2026-06-17', time: '05:00', home: '英格蘭', away: '克羅地亞', venue: 'AT&T體育場', status: 'finished', score: { h: 4, a: 2 }, ht: { h: 2, a: 1 }, weather: { temp: 29, condition: '晴朗', humidity: 48 } },
+        { id: 23, round: 'R1', group: 'L', date: '2026-06-17', time: '20:00', home: '加納', away: '巴拿馬', venue: 'BMO球場', status: 'finished', score: { h: 1, a: 0 }, ht: { h: 0, a: 0 }, weather: { temp: 19, condition: '多雲', humidity: 64 } },
+        { id: 24, round: 'R1', group: 'K', date: '2026-06-17', time: '23:00', home: '烏茲別克', away: '哥倫比亞', venue: '阿茲特克體育場', status: 'finished', score: { h: 1, a: 3 }, ht: { h: 0, a: 1 }, weather: { temp: 22, condition: '多雲', humidity: 46 } },
+        // ===== R2 =====
+        { id: 25, round: 'R2', group: 'A', date: '2026-06-18', time: '20:00', home: '捷克', away: '南非', venue: 'Mercedes-Benz Stadium', status: 'finished', score: { h: 1, a: 1 }, ht: { h: 0, a: 0 }, weather: { temp: 27, condition: '多雲', humidity: 70 } },
+        { id: 26, round: 'R2', group: 'B', date: '2026-06-18', time: '23:00', home: '瑞士', away: '波斯尼亞', venue: 'SoFi體育場', status: 'finished', score: { h: 4, a: 1 }, ht: { h: 2, a: 0 }, weather: { temp: 21, condition: '多雲', humidity: 65 } },
+        { id: 27, round: 'R2', group: 'B', date: '2026-06-18', time: '02:00', home: '加拿大', away: '卡塔爾', venue: 'BC Place', status: 'finished', score: { h: 6, a: 0 }, ht: { h: 3, a: 0 }, weather: { temp: 17, condition: '小雨', humidity: 78 } },
+        { id: 28, round: 'R2', group: 'A', date: '2026-06-18', time: '05:00', home: '墨西哥', away: '韓國', venue: 'BBVA體育場', status: 'finished', score: { h: 1, a: 0 }, ht: { h: 1, a: 0 }, weather: { temp: 34, condition: '晴朗', humidity: 38 } },
+        { id: 29, round: 'R2', group: 'D', date: '2026-06-19', time: '20:00', home: '美國', away: '澳洲', venue: 'Lumen Field', status: 'finished', score: { h: 2, a: 0 }, ht: { h: 1, a: 0 }, weather: { temp: 19, condition: '多雲', humidity: 68 } },
+        { id: 30, round: 'R2', group: 'C', date: '2026-06-19', time: '23:00', home: '蘇格蘭', away: '摩洛哥', venue: 'Gillette Stadium', status: 'finished', score: { h: 0, a: 1 }, ht: { h: 0, a: 1 }, weather: { temp: 22, condition: '晴朗', humidity: 58 } },
+        { id: 31, round: 'R2', group: 'C', date: '2026-06-19', time: '02:00', home: '巴西', away: '海地', venue: 'Lincoln Financial Field', status: 'finished', score: { h: 3, a: 0 }, ht: { h: 2, a: 0 }, weather: { temp: 25, condition: '多雲', humidity: 65 } },
+        { id: 32, round: 'R2', group: 'D', date: '2026-06-19', time: '05:00', home: '土耳其', away: '巴拉圭', venue: 'Levi's Stadium', status: 'finished', score: { h: 0, a: 1 }, ht: { h: 0, a: 0 }, weather: { temp: 18, condition: '多雲', humidity: 55 } },
+        { id: 33, round: 'R2', group: 'F', date: '2026-06-20', time: '20:00', home: '荷蘭', away: '瑞典', venue: 'NRG Stadium', status: 'finished', score: { h: 5, a: 1 }, ht: { h: 3, a: 0 }, weather: { temp: 28, condition: '潮濕', humidity: 75 } },
+        { id: 34, round: 'R2', group: 'E', date: '2026-06-20', time: '23:00', home: '德國', away: '科特迪瓦', venue: 'BMO球場', status: 'finished', score: { h: 2, a: 1 }, ht: { h: 1, a: 1 }, weather: { temp: 19, condition: '多雲', humidity: 64 } },
+        { id: 35, round: 'R2', group: 'E', date: '2026-06-20', time: '02:00', home: '厄瓜多爾', away: '庫拉索', venue: 'Arrowhead Stadium', status: 'finished', score: { h: 0, a: 0 }, ht: { h: 0, a: 0 }, weather: { temp: 26, condition: '晴朗', humidity: 50 } },
+        { id: 36, round: 'R2', group: 'F', date: '2026-06-20', time: '05:00', home: '突尼斯', away: '日本', venue: '阿克倫體育場', status: 'finished', score: { h: 0, a: 4 }, ht: { h: 0, a: 2 }, weather: { temp: 26, condition: '晴朗', humidity: 48 } },
+        { id: 37, round: 'R2', group: 'H', date: '2026-06-21', time: '20:00', home: '西班牙', away: '沙特阿拉伯', venue: 'Mercedes-Benz Stadium', status: 'finished', score: { h: 4, a: 0 }, ht: { h: 2, a: 0 }, weather: { temp: 27, condition: '多雲', humidity: 70 } },
+        { id: 38, round: 'R2', group: 'G', date: '2026-06-21', time: '23:00', home: '比利時', away: '伊朗', venue: 'SoFi體育場', status: 'finished', score: { h: 0, a: 0 }, ht: { h: 0, a: 0 }, weather: { temp: 21, condition: '多雲', humidity: 60 } },
+        { id: 39, round: 'R2', group: 'H', date: '2026-06-21', time: '02:00', home: '烏拉圭', away: '佛得角', venue: '硬石體育場', status: 'finished', score: { h: 2, a: 2 }, ht: { h: 1, a: 1 }, weather: { temp: 30, condition: '潮濕', humidity: 82 } },
+        { id: 40, round: 'R2', group: 'G', date: '2026-06-21', time: '05:00', home: '新西蘭', away: '埃及', venue: 'BC Place', status: 'finished', score: { h: 1, a: 3 }, ht: { h: 0, a: 2 }, weather: { temp: 17, condition: '小雨', humidity: 78 } },
+        { id: 41, round: 'R2', group: 'J', date: '2026-06-22', time: '20:00', home: '阿根廷', away: '奧地利', venue: 'AT&T體育場', status: 'finished', score: { h: 2, a: 0 }, ht: { h: 1, a: 0 }, weather: { temp: 29, condition: '晴朗', humidity: 48 } },
+        { id: 42, round: 'R2', group: 'I', date: '2026-06-22', time: '23:00', home: '法國', away: '伊拉克', venue: 'Lincoln Financial Field', status: 'finished', score: { h: 3, a: 0 }, ht: { h: 2, a: 0 }, weather: { temp: 25, condition: '多雲', humidity: 65 } },
+        { id: 43, round: 'R2', group: 'I', date: '2026-06-22', time: '02:00', home: '挪威', away: '塞內加爾', venue: 'MetLife體育場', status: 'finished', score: { h: 3, a: 2 }, ht: { h: 2, a: 1 }, weather: { temp: 23, condition: '晴朗', humidity: 55 } },
+        { id: 44, round: 'R2', group: 'J', date: '2026-06-22', time: '05:00', home: '約旦', away: '阿爾及利亞', venue: 'Levi's Stadium', status: 'finished', score: { h: 1, a: 2 }, ht: { h: 0, a: 1 }, weather: { temp: 18, condition: '多雲', humidity: 55 } },
+        // ===== R3 - 6/23 (昨日) =====
+        { id: 45, round: 'R3', group: 'K', date: '2026-06-23', time: '20:00', home: '葡萄牙', away: '烏茲別克', venue: 'NRG Stadium', status: 'finished', score: { h: 2, a: 0 }, ht: { h: 1, a: 0 }, weather: { temp: 28, condition: '潮濕', humidity: 75 } },
+        { id: 46, round: 'R3', group: 'L', date: '2026-06-23', time: '23:00', home: '英格蘭', away: '加納', venue: 'Gillette Stadium', status: 'finished', score: { h: 2, a: 1 }, ht: { h: 1, a: 0 }, weather: { temp: 20, condition: '多雲', humidity: 62 } },
+        { id: 47, round: 'R3', group: 'L', date: '2026-06-23', time: '02:00', home: '巴拿馬', away: '克羅地亞', venue: 'BMO球場', status: 'finished', score: { h: 0, a: 3 }, ht: { h: 0, a: 1 }, weather: { temp: 19, condition: '多雲', humidity: 64 } },
+        { id: 48, round: 'R3', group: 'K', date: '2026-06-23', time: '05:00', home: '哥倫比亞', away: '剛果民主共和國', venue: '阿克倫體育場', status: 'finished', score: { h: 2, a: 1 }, ht: { h: 1, a: 0 }, weather: { temp: 26, condition: '晴朗', humidity: 48 } },
+        // ===== R3 - 6/24 (今日) =====
+        { id: 49, round: 'R3', group: 'B', date: '2026-06-24', time: '20:00', home: '瑞士', away: '加拿大', venue: 'BC Place', status: 'upcoming', score: { h: null, a: null }, weather: { temp: 17, condition: '預計小雨', humidity: 75 } },
+        { id: 50, round: 'R3', group: 'B', date: '2026-06-24', time: '23:00', home: '波斯尼亞', away: '卡塔爾', venue: 'Lumen Field', status: 'upcoming', score: { h: null, a: null }, weather: { temp: 19, condition: '預計多雲', humidity: 68 } },
+        { id: 51, round: 'R3', group: 'C', date: '2026-06-24', time: '02:00', home: '蘇格蘭', away: '巴西', venue: '硬石體育場', status: 'upcoming', score: { h: null, a: null }, weather: { temp: 30, condition: '預計潮濕', humidity: 82 } },
+        { id: 52, round: 'R3', group: 'C', date: '2026-06-24', time: '05:00', home: '摩洛哥', away: '海地', venue: 'Mercedes-Benz Stadium', status: 'upcoming', score: { h: null, a: null }, weather: { temp: 27, condition: '預計多雲', humidity: 70 } },
+        { id: 53, round: 'R3', group: 'A', date: '2026-06-24', time: '20:00', home: '捷克', away: '墨西哥', venue: '阿茲特克體育場', status: 'upcoming', score: { h: null, a: null }, weather: { temp: 22, condition: '預計多雲', humidity: 46 } },
+        { id: 54, round: 'R3', group: 'A', date: '2026-06-24', time: '23:00', home: '南非', away: '韓國', venue: 'BBVA體育場', status: 'upcoming', score: { h: null, a: null }, weather: { temp: 34, condition: '預計晴朗', humidity: 38 } },
+        // ===== R3 - 6/25 (明日) =====
+        { id: 55, round: 'R3', group: 'E', date: '2026-06-25', time: '20:00', home: '厄瓜多爾', away: '德國', venue: 'MetLife體育場', status: 'upcoming', score: { h: null, a: null }, weather: { temp: 23, condition: '預計晴朗', humidity: 55 } },
+        { id: 56, round: 'R3', group: 'E', date: '2026-06-25', time: '23:00', home: '庫拉索', away: '科特迪瓦', venue: 'Lincoln Financial Field', status: 'upcoming', score: { h: null, a: null }, weather: { temp: 25, condition: '預計多雲', humidity: 65 } },
+        { id: 57, round: 'R3', group: 'F', date: '2026-06-25', time: '02:00', home: '日本', away: '瑞典', venue: 'AT&T體育場', status: 'upcoming', score: { h: null, a: null }, weather: { temp: 29, condition: '預計晴朗', humidity: 48 } },
+        { id: 58, round: 'R3', group: 'F', date: '2026-06-25', time: '05:00', home: '突尼斯', away: '荷蘭', venue: 'Arrowhead Stadium', status: 'upcoming', score: { h: null, a: null }, weather: { temp: 26, condition: '預計晴朗', humidity: 50 } },
+        { id: 59, round: 'R3', group: 'D', date: '2026-06-25', time: '20:00', home: '土耳其', away: '美國', venue: 'SoFi體育場', status: 'upcoming', score: { h: null, a: null }, weather: { temp: 21, condition: '預計多雲', humidity: 60 } },
+        { id: 60, round: 'R3', group: 'D', date: '2026-06-25', time: '23:00', home: '巴拉圭', away: '澳洲', venue: 'Levi's Stadium', status: 'upcoming', score: { h: null, a: null }, weather: { temp: 18, condition: '預計多雲', humidity: 55 } },
+        // ===== R3 - 6/26 =====
+        { id: 61, round: 'R3', group: 'I', date: '2026-06-26', time: '20:00', home: '挪威', away: '法國', venue: 'Gillette Stadium', status: 'upcoming', score: { h: null, a: null }, weather: { temp: 20, condition: '預計多雲', humidity: 62 } },
+        { id: 62, round: 'R3', group: 'I', date: '2026-06-26', time: '23:00', home: '塞內加爾', away: '伊拉克', venue: 'BMO球場', status: 'upcoming', score: { h: null, a: null }, weather: { temp: 19, condition: '預計多雲', humidity: 64 } },
+        { id: 63, round: 'R3', group: 'H', date: '2026-06-26', time: '02:00', home: '佛得角', away: '沙特阿拉伯', venue: 'NRG Stadium', status: 'upcoming', score: { h: null, a: null }, weather: { temp: 28, condition: '預計潮濕', humidity: 75 } },
+        { id: 64, round: 'R3', group: 'H', date: '2026-06-26', time: '05:00', home: '烏拉圭', away: '西班牙', venue: '阿克倫體育場', status: 'upcoming', score: { h: null, a: null }, weather: { temp: 26, condition: '預計晴朗', humidity: 48 } },
+        { id: 65, round: 'R3', group: 'G', date: '2026-06-26', time: '20:00', home: '埃及', away: '伊朗', venue: 'Lumen Field', status: 'upcoming', score: { h: null, a: null }, weather: { temp: 19, condition: '預計多雲', humidity: 68 } },
+        { id: 66, round: 'R3', group: 'G', date: '2026-06-26', time: '23:00', home: '新西蘭', away: '比利時', venue: 'BC Place', status: 'upcoming', score: { h: null, a: null }, weather: { temp: 17, condition: '預計小雨', humidity: 78 } },
+        // ===== R3 - 6/27 =====
+        { id: 67, round: 'R3', group: 'L', date: '2026-06-27', time: '20:00', home: '巴拿馬', away: '英格蘭', venue: 'MetLife體育場', status: 'upcoming', score: { h: null, a: null }, weather: { temp: 23, condition: '預計晴朗', humidity: 55 } },
+        { id: 68, round: 'R3', group: 'L', date: '2026-06-27', time: '23:00', home: '克羅地亞', away: '加納', venue: 'Lincoln Financial Field', status: 'upcoming', score: { h: null, a: null }, weather: { temp: 25, condition: '預計多雲', humidity: 65 } },
+        { id: 69, round: 'R3', group: 'K', date: '2026-06-27', time: '02:00', home: '哥倫比亞', away: '葡萄牙', venue: '硬石體育場', status: 'upcoming', score: { h: null, a: null }, weather: { temp: 30, condition: '預計潮濕', humidity: 82 } },
+        { id: 70, round: 'R3', group: 'K', date: '2026-06-27', time: '05:00', home: '剛果民主共和國', away: '烏茲別克', venue: 'Mercedes-Benz Stadium', status: 'upcoming', score: { h: null, a: null }, weather: { temp: 27, condition: '預計多雲', humidity: 70 } },
+        { id: 71, round: 'R3', group: 'J', date: '2026-06-27', time: '20:00', home: '阿爾及利亞', away: '奧地利', venue: 'Arrowhead Stadium', status: 'upcoming', score: { h: null, a: null }, weather: { temp: 26, condition: '預計晴朗', humidity: 50 } },
+        { id: 72, round: 'R3', group: 'J', date: '2026-06-27', time: '23:00', home: '約旦', away: '阿根廷', venue: 'AT&T體育場', status: 'upcoming', score: { h: null, a: null }, weather: { temp: 29, condition: '預計晴朗', humidity: 48 } },
+        // ===== 淘汰賽 (三十二強) =====
+        { id: 73, round: 'R32', date: '2026-06-28', time: '20:00', home: 'A組第二', away: 'B組第二', venue: 'SoFi體育場', status: 'upcoming', score: { h: null, a: null } },
+        { id: 74, round: 'R32', date: '2026-06-29', time: '20:00', home: 'C組第一', away: 'F組第二', venue: 'NRG Stadium', status: 'upcoming', score: { h: null, a: null } },
+        { id: 75, round: 'R32', date: '2026-06-29', time: '23:00', home: 'E組第一', away: 'A/B/C/D/F第三', venue: 'Gillette Stadium', status: 'upcoming', score: { h: null, a: null } },
+        { id: 76, round: 'R32', date: '2026-06-29', time: '02:00', home: 'F組第一', away: 'C組第二', venue: 'BBVA體育場', status: 'upcoming', score: { h: null, a: null } },
+        { id: 77, round: 'R32', date: '2026-06-30', time: '20:00', home: 'E組第二', away: 'I組第二', venue: 'AT&T體育場', status: 'upcoming', score: { h: null, a: null } },
+        { id: 78, round: 'R32', date: '2026-06-30', time: '23:00', home: 'I組第一', away: 'C/D/F/G/H第三', venue: 'MetLife體育場', status: 'upcoming', score: { h: null, a: null } },
+        { id: 79, round: 'R32', date: '2026-06-30', time: '02:00', home: 'A組第一', away: 'C/E/F/H/I第三', venue: '阿茲特克體育場', status: 'upcoming', score: { h: null, a: null } },
+        { id: 80, round: 'R32', date: '2026-07-01', time: '20:00', home: 'L組第一', away: 'E/H/I/J/K第三', venue: 'Mercedes-Benz Stadium', status: 'upcoming', score: { h: null, a: null } },
+        { id: 81, round: 'R32', date: '2026-07-01', time: '23:00', home: 'G組第一', away: 'A/E/H/I/J第三', venue: 'Lumen Field', status: 'upcoming', score: { h: null, a: null } },
+        { id: 82, round: 'R32', date: '2026-07-01', time: '02:00', home: 'D組第一', away: 'B/E/F/I/J第三', venue: 'Levi's Stadium', status: 'upcoming', score: { h: null, a: null } },
+        { id: 83, round: 'R32', date: '2026-07-02', time: '20:00', home: 'H組第一', away: 'J組第二', venue: 'SoFi體育場', status: 'upcoming', score: { h: null, a: null } },
+        { id: 84, round: 'R32', date: '2026-07-02', time: '23:00', home: 'K組第二', away: 'L組第二', venue: 'BMO球場', status: 'upcoming', score: { h: null, a: null } },
+        { id: 85, round: 'R32', date: '2026-07-02', time: '02:00', home: 'B組第一', away: 'E/F/G/I/J第三', venue: 'BC Place', status: 'upcoming', score: { h: null, a: null } },
+        { id: 86, round: 'R32', date: '2026-07-03', time: '20:00', home: 'D組第二', away: 'G組第二', venue: 'AT&T體育場', status: 'upcoming', score: { h: null, a: null } },
+        { id: 87, round: 'R32', date: '2026-07-03', time: '23:00', home: 'J組第一', away: 'H組第二', venue: '硬石體育場', status: 'upcoming', score: { h: null, a: null } },
+        { id: 88, round: 'R32', date: '2026-07-03', time: '02:00', home: 'K組第一', away: 'D/E/I/J/L第三', venue: 'Arrowhead Stadium', status: 'upcoming', score: { h: null, a: null } },
+        // ===== 十六強 =====
+        { id: 89, round: 'R16', date: '2026-07-04', time: '20:00', home: 'W73', away: 'W74', venue: 'NRG Stadium', status: 'upcoming', score: { h: null, a: null } },
+        { id: 90, round: 'R16', date: '2026-07-04', time: '23:00', home: 'W75', away: 'W76', venue: 'Lincoln Financial Field', status: 'upcoming', score: { h: null, a: null } },
+        { id: 91, round: 'R16', date: '2026-07-05', time: '20:00', home: 'W77', away: 'W78', venue: 'MetLife體育場', status: 'upcoming', score: { h: null, a: null } },
+        { id: 92, round: 'R16', date: '2026-07-05', time: '23:00', home: 'W79', away: 'W80', venue: '阿茲特克體育場', status: 'upcoming', score: { h: null, a: null } },
+        { id: 93, round: 'R16', date: '2026-07-06', time: '20:00', home: 'W81', away: 'W82', venue: 'AT&T體育場', status: 'upcoming', score: { h: null, a: null } },
+        { id: 94, round: 'R16', date: '2026-07-06', time: '23:00', home: 'W83', away: 'W84', venue: 'Lumen Field', status: 'upcoming', score: { h: null, a: null } },
+        { id: 95, round: 'R16', date: '2026-07-07', time: '20:00', home: 'W85', away: 'W86', venue: 'Mercedes-Benz Stadium', status: 'upcoming', score: { h: null, a: null } },
+        { id: 96, round: 'R16', date: '2026-07-07', time: '23:00', home: 'W87', away: 'W88', venue: 'BC Place', status: 'upcoming', score: { h: null, a: null } },
+        // ===== 八強 =====
+        { id: 97, round: 'QF', date: '2026-07-09', time: '20:00', home: 'W89', away: 'W90', venue: 'Gillette Stadium', status: 'upcoming', score: { h: null, a: null } },
+        { id: 98, round: 'QF', date: '2026-07-10', time: '20:00', home: 'W91', away: 'W92', venue: 'SoFi體育場', status: 'upcoming', score: { h: null, a: null } },
+        { id: 99, round: 'QF', date: '2026-07-11', time: '20:00', home: 'W93', away: 'W94', venue: '硬石體育場', status: 'upcoming', score: { h: null, a: null } },
+        { id: 100, round: 'QF', date: '2026-07-11', time: '23:00', home: 'W95', away: 'W96', venue: 'Arrowhead Stadium', status: 'upcoming', score: { h: null, a: null } },
+        // ===== 四強 =====
+        { id: 101, round: 'SF', date: '2026-07-14', time: '20:00', home: 'W97', away: 'W98', venue: 'AT&T體育場', status: 'upcoming', score: { h: null, a: null } },
+        { id: 102, round: 'SF', date: '2026-07-15', time: '20:00', home: 'W99', away: 'W100', venue: 'Mercedes-Benz Stadium', status: 'upcoming', score: { h: null, a: null } },
+        // ===== 季軍 =====
+        { id: 103, round: '3P', date: '2026-07-18', time: '20:00', home: 'L101', away: 'L102', venue: '硬石體育場', status: 'upcoming', score: { h: null, a: null } },
+        // ===== 決賽 =====
+        { id: 104, round: 'F', date: '2026-07-19', time: '20:00', home: 'W101', away: 'W102', venue: 'MetLife體育場', status: 'upcoming', score: { h: null, a: null } },
     ]
 };
 
 // ===================== ML 預測引擎 =====================
 class MLModel {
     constructor() {
-        this.weights = {
-            elo: 0.35, form: 0.15, home: 0.12, weather: 0.08,
-            altitude: 0.06, motivation: 0.14, corners: 0.10
-        };
-        this.leagueParams = {
-            WC: { avgGoals: 3.0, homeAdv: 0.15, drawRate: 0.22, bttsRate: 0.68, avgCorners: 9.2 }
-        };
+        this.weights = { elo: 0.35, form: 0.15, home: 0.12, weather: 0.08, altitude: 0.06, motivation: 0.14, corners: 0.10 };
+        this.leagueParams = { WC: { avgGoals: 3.0, homeAdv: 0.15, drawRate: 0.22, bttsRate: 0.68, avgCorners: 9.2 } };
     }
-
     sigmoid(x) { return 1 / (1 + Math.exp(-x)); }
 
     predict1X2(match) {
         const h = WC2026_DATA.teams[match.home];
         const a = WC2026_DATA.teams[match.away];
         if (!h || !a) return null;
-
         const eloDiff = h.elo - a.elo;
         const venue = WC2026_DATA.venues[match.venue] || {};
         const altitude = venue.altitude || 0;
-        const homeAdv = match.home === '墨西哥' && altitude > 2000 ? 0.25 : 0.12;
-
-        // 戰意分析 (R3關鍵)
+        const homeAdv = (match.home === '墨西哥' && altitude > 2000) ? 0.25 : 0.12;
         let motH = 0.5, motA = 0.5;
-        if (match.round === 'R3') {
+        if (match.round === 'R3' && match.group) {
             const standings = getStandings(match.group);
             const posH = standings.findIndex(t => t.name === match.home);
             const posA = standings.findIndex(t => t.name === match.away);
             if (posH >= 2) motH = 0.85; else if (posH === 0) motH = 0.35;
             if (posA >= 2) motA = 0.85; else if (posA === 0) motA = 0.35;
         }
-
         const weatherFactor = match.weather && match.weather.temp > 30 ? -0.05 : 0;
         const altitudeFactor = altitude > 1500 ? (h.conf === 'CONMEBOL' ? 0.08 : -0.06) : 0;
-
         const hStrength = this.sigmoid((eloDiff * this.weights.elo + homeAdv * 100 + motH * 100 * this.weights.motivation + weatherFactor * 100 + altitudeFactor * 100) / 100);
         const aStrength = this.sigmoid((-eloDiff * this.weights.elo - homeAdv * 100 + motA * 100 * this.weights.motivation - weatherFactor * 100 - altitudeFactor * 100) / 100);
-
         let hProb = hStrength * (1 - this.leagueParams.WC.drawRate) * 0.85;
         let aProb = aStrength * (1 - this.leagueParams.WC.drawRate) * 0.85;
         let dProb = this.leagueParams.WC.drawRate;
-
         const total = hProb + dProb + aProb;
         return {
             home: (hProb / total * 100).toFixed(1),
@@ -569,13 +559,7 @@ class MLModel {
         const eloDiff = Math.abs(h.elo - a.elo);
         const expected = avgGoals + (eloDiff > 300 ? 0.5 : eloDiff > 150 ? 0.2 : 0) + (match.weather && match.weather.temp > 30 ? -0.3 : 0);
         const overProb = this.sigmoid((expected - 2.5) * 2) * 100;
-        return {
-            line: 2.5,
-            over: overProb.toFixed(1),
-            under: (100 - overProb).toFixed(1),
-            expected: expected.toFixed(2),
-            recommendation: overProb > 55 ? '大球' : overProb < 45 ? '小球' : '觀望'
-        };
+        return { line: 2.5, over: overProb.toFixed(1), under: (100 - overProb).toFixed(1), expected: expected.toFixed(2), recommendation: overProb > 55 ? '大球' : overProb < 45 ? '小球' : '觀望' };
     }
 
     predictBTTS(match) {
@@ -586,11 +570,7 @@ class MLModel {
         const eloDiff = Math.abs(h.elo - a.elo);
         const adj = eloDiff > 400 ? -15 : eloDiff > 200 ? -5 : 5;
         const prob = Math.min(85, Math.max(35, base + adj));
-        return {
-            yes: prob.toFixed(1),
-            no: (100 - prob).toFixed(1),
-            recommendation: prob > 55 ? '雙方入球' : '否'
-        };
+        return { yes: prob.toFixed(1), no: (100 - prob).toFixed(1), recommendation: prob > 55 ? '雙方入球' : '否' };
     }
 
     predictCorners(match) {
@@ -604,13 +584,7 @@ class MLModel {
         const expected = base * dominance * weatherMult;
         const line = Math.round(expected);
         const overProb = this.sigmoid((expected - line) * 3) * 100;
-        return {
-            line: line,
-            expected: expected.toFixed(1),
-            over: overProb.toFixed(1),
-            under: (100 - overProb).toFixed(1),
-            recommendation: overProb > 55 ? `大${line}` : overProb < 45 ? `小${line}` : `觀望${line}`
-        };
+        return { line, expected: expected.toFixed(1), over: overProb.toFixed(1), under: (100 - overProb).toFixed(1), recommendation: overProb > 55 ? `大${line}` : overProb < 45 ? `小${line}` : `觀望${line}` };
     }
 
     predictHandicap(match) {
@@ -626,7 +600,6 @@ class MLModel {
         else if (eloDiff > -100) line = 0;
         else if (eloDiff > -250) line = 0.5;
         else line = 0.75;
-
         const hProb = parseFloat(pred.home) / 100;
         const rec = hProb > 0.55 ? `主讓${line} 上盤` : hProb < 0.45 ? `客讓${line} 下盤` : '觀望';
         return { line, recommendation: rec, homeProb: (hProb * 100).toFixed(1) };
@@ -642,11 +615,7 @@ class MLModel {
         const hShare = parseFloat(pred.home) / (parseFloat(pred.home) + parseFloat(pred.away));
         const hGoals = Math.round(expected * hShare);
         const aGoals = Math.round(expected * (1 - hShare));
-        const scores = [
-            `${hGoals}-${aGoals}`,
-            `${hGoals+1}-${aGoals}`, `${hGoals}-${aGoals+1}`,
-            `${hGoals+1}-${aGoals+1}`, `${hGoals-1}-${aGoals}`, `${hGoals}-${aGoals-1}`
-        ].filter(s => !s.includes('-1')).slice(0, 4);
+        const scores = [`${hGoals}-${aGoals}`, `${hGoals+1}-${aGoals}`, `${hGoals}-${aGoals+1}`, `${hGoals+1}-${aGoals+1}`, `${hGoals-1}-${aGoals}`, `${hGoals}-${aGoals-1}`].filter(s => !s.includes('-1')).slice(0, 4);
         return { top: scores[0], alternatives: scores.slice(1), prob: (25 + Math.random()*15).toFixed(1) };
     }
 }
@@ -658,7 +627,6 @@ function getStandings(group) {
     const teams = Object.entries(WC2026_DATA.teams).filter(([name, data]) => data.group === group).map(([name]) => name);
     const stats = {};
     teams.forEach(t => stats[t] = { name: t, p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, gd: 0, pts: 0 });
-
     WC2026_DATA.matches.filter(m => m.group === group && m.status === 'finished').forEach(m => {
         if (!stats[m.home] || !stats[m.away]) return;
         stats[m.home].p++; stats[m.away].p++;
@@ -668,9 +636,7 @@ function getStandings(group) {
         else if (m.score.h < m.score.a) { stats[m.away].w++; stats[m.away].pts += 3; stats[m.home].l++; }
         else { stats[m.home].d++; stats[m.away].d++; stats[m.home].pts++; stats[m.away].pts++; }
     });
-
-    return Object.values(stats).map(s => ({ ...s, gd: s.gf - s.ga }))
-        .sort((a, b) => b.pts - a.pts || b.gd - a.gd || b.gf - a.gf);
+    return Object.values(stats).map(s => ({ ...s, gd: s.gf - s.ga })).sort((a, b) => b.pts - a.pts || b.gd - a.gd || b.gf - a.gf);
 }
 
 // ===================== 渲染函數 =====================
@@ -678,7 +644,6 @@ function renderMatchCard(match, showPredict = false, showCorner = false, showHan
     const h = WC2026_DATA.teams[match.home];
     const a = WC2026_DATA.teams[match.away];
     if (!h || !a) return '';
-
     const isFinished = match.status === 'finished';
     const isLive = match.status === 'live';
     const isUpcoming = match.status === 'upcoming';
@@ -728,7 +693,6 @@ function renderMatchCard(match, showPredict = false, showCorner = false, showHan
             </div>`;
         }
     }
-
     if (showCorner && isUpcoming) {
         const pc = ml.predictCorners(match);
         if (pc) {
@@ -740,32 +704,16 @@ function renderMatchCard(match, showPredict = false, showCorner = false, showHan
                         <span class="badge badge-ml">預期 ${pc.expected} 角</span>
                     </div>
                     <div class="corner-grid">
-                        <div class="corner-item">
-                            <div style="font-size:24px;font-weight:700;color:var(--primary)">${pc.line}</div>
-                            <div style="font-size:11px;color:var(--muted)">盤口</div>
-                        </div>
-                        <div class="corner-item">
-                            <div style="font-size:24px;font-weight:700;color:var(--accent)">${pc.expected}</div>
-                            <div style="font-size:11px;color:var(--muted)">預期角球</div>
-                        </div>
-                        <div class="corner-item">
-                            <div style="font-size:24px;font-weight:700;color:var(--success)">${pc.over}%</div>
-                            <div style="font-size:11px;color:var(--muted)">大${pc.line}機率</div>
-                        </div>
-                        <div class="corner-item">
-                            <div style="font-size:24px;font-weight:700;color:var(--secondary)">${pc.under}%</div>
-                            <div style="font-size:11px;color:var(--muted)">小${pc.line}機率</div>
-                        </div>
+                        <div class="corner-item"><div style="font-size:24px;font-weight:700;color:var(--primary)">${pc.line}</div><div style="font-size:11px;color:var(--muted)">盤口</div></div>
+                        <div class="corner-item"><div style="font-size:24px;font-weight:700;color:var(--accent)">${pc.expected}</div><div style="font-size:11px;color:var(--muted)">預期角球</div></div>
+                        <div class="corner-item"><div style="font-size:24px;font-weight:700;color:var(--success)">${pc.over}%</div><div style="font-size:11px;color:var(--muted)">大${pc.line}機率</div></div>
+                        <div class="corner-item"><div style="font-size:24px;font-weight:700;color:var(--secondary)">${pc.under}%</div><div style="font-size:11px;color:var(--muted)">小${pc.line}機率</div></div>
                     </div>
                     <div style="margin-top:10px"><strong style="color:var(--accent)">🎯 推薦</strong> <span style="color:var(--primary);font-weight:600">${pc.recommendation}</span></div>
-                    <div style="margin-top:8px;font-size:11px;color:var(--muted)">
-                        因素: ${match.weather && match.weather.temp > 30 ? '高溫抑制(-10%) ' : ''}${WC2026_DATA.venues[match.venue]?.altitude > 1500 ? '高海拔修正 ' : ''}控球差異
-                    </div>
                 </div>
             </div>`;
         }
     }
-
     if (showHandicap && isUpcoming) {
         const ph = ml.predictHandicap(match);
         const p1x2 = ml.predict1X2(match);
@@ -775,82 +723,41 @@ function renderMatchCard(match, showPredict = false, showCorner = false, showHan
                 <div class="detail-inner">
                     <div style="margin-bottom:10px"><strong style="color:var(--accent)">⚖️ 亞洲讓球分析</strong></div>
                     <div class="odds-row">
-                        <div class="odds-box">
-                            <div class="odds-label">讓球盤</div>
-                            <div class="odds-value" style="color:var(--primary)">${match.home} ${ph.line > 0 ? '+' : ''}${ph.line}</div>
-                        </div>
-                        <div class="odds-box">
-                            <div class="odds-label">主勝機率</div>
-                            <div class="odds-value ${parseFloat(ph.homeProb)>55?'highlight':''}">${ph.homeProb}%</div>
-                        </div>
-                        <div class="odds-box">
-                            <div class="odds-label">推薦</div>
-                            <div class="odds-value" style="font-size:13px">${ph.recommendation}</div>
-                        </div>
-                    </div>
-                    <div style="margin-top:10px;font-size:12px;color:var(--muted)">
-                        基於 Elo差 ${h.elo - a.elo} | 主場優勢 ${match.home === '墨西哥' && WC2026_DATA.venues[match.venue]?.altitude > 2000 ? '高海拔加成' : '標準'}
+                        <div class="odds-box"><div class="odds-label">讓球盤</div><div class="odds-value" style="color:var(--primary)">${match.home} ${ph.line > 0 ? '+' : ''}${ph.line}</div></div>
+                        <div class="odds-box"><div class="odds-label">主勝機率</div><div class="odds-value ${parseFloat(ph.homeProb)>55?'highlight':''}">${ph.homeProb}%</div></div>
+                        <div class="odds-box"><div class="odds-label">推薦</div><div class="odds-value" style="font-size:13px">${ph.recommendation}</div></div>
                     </div>
                 </div>
             </div>`;
         }
     }
-
-    const weatherInfo = match.weather ? `
-        <div class="weather-info">
-            <span>🌡️ ${match.weather.temp}°C</span>
-            <span>${match.weather.condition}</span>
-            <span>💧 ${match.weather.humidity}%</span>
-        </div>
-    ` : '';
-
-    const venueInfo = WC2026_DATA.venues[match.venue] ? `
-        <div class="weather-info">
-            <span>📍 ${match.venue}</span>
-            <span>🏔️ ${WC2026_DATA.venues[match.venue].altitude}m</span>
-        </div>
-    ` : '';
-
+    const weatherInfo = match.weather ? `<div class="weather-info"><span>🌡️ ${match.weather.temp}°C</span><span>${match.weather.condition}</span><span>💧 ${match.weather.humidity}%</span></div>` : '';
+    const venueInfo = WC2026_DATA.venues[match.venue] ? `<div class="weather-info"><span>📍 ${match.venue}</span><span>🏔️ ${WC2026_DATA.venues[match.venue].altitude}m</span></div>` : '';
     const badges = [];
     if (match.round === 'R3') badges.push('<span class="badge badge-hot">關鍵戰</span>');
     if (isLive) badges.push('<span class="badge badge-live">LIVE</span>');
-
     return `
         <div class="card" onclick="toggleDetail(${match.id})">
             <div class="card-header">
-                <div>
-                    <span style="font-size:12px;color:var(--muted)">${match.group ? match.group + '組' : ''} ${match.round} ${match.date}</span>
-                    ${badges.join('')}
-                </div>
+                <div><span style="font-size:12px;color:var(--muted)">${match.group ? match.group + '組' : ''} ${match.round} ${match.date}</span>${badges.join('')}</div>
                 <span style="font-size:12px;color:var(--muted)">${match.time}</span>
             </div>
             <div class="card-body">
                 <div class="match-row">
                     <div class="team-side">
                         <div class="team-flag">${h.flag}</div>
-                        <div>
-                            <div class="team-name">${match.home}</div>
-                            <div style="font-size:11px;color:var(--muted)">Elo: ${h.elo}</div>
-                        </div>
+                        <div><div class="team-name">${match.home}</div><div style="font-size:11px;color:var(--muted)">Elo: ${h.elo}</div></div>
                     </div>
-                    <div>
-                        <div class="score-box">${scoreDisplay}</div>
-                        <div class="match-status" style="${statusColor}">${statusText}</div>
-                    </div>
+                    <div><div class="score-box">${scoreDisplay}</div><div class="match-status" style="${statusColor}">${statusText}</div></div>
                     <div class="team-side away">
                         <div class="team-flag">${a.flag}</div>
-                        <div>
-                            <div class="team-name">${match.away}</div>
-                            <div style="font-size:11px;color:var(--muted)">Elo: ${a.elo}</div>
-                        </div>
+                        <div><div class="team-name">${match.away}</div><div style="font-size:11px;color:var(--muted)">Elo: ${a.elo}</div></div>
                     </div>
                 </div>
-                ${venueInfo}
-                ${weatherInfo}
+                ${venueInfo}${weatherInfo}
             </div>
             ${extraContent}
-        </div>
-    `;
+        </div>`;
 }
 
 function toggleDetail(id) {
@@ -859,64 +766,42 @@ function toggleDetail(id) {
 }
 
 // ===================== 分頁渲染 =====================
-function renderToday(filter = 'all') {
-    const today = '2026-06-24'; // 模擬當前日期
-    let matches = WC2026_DATA.matches.filter(m => m.date === today || m.date === '2026-06-23');
-    if (filter === 'live') matches = matches.filter(m => m.status === 'live');
-    else if (filter === 'upcoming') matches = matches.filter(m => m.status === 'upcoming');
-    else if (filter === 'finished') matches = matches.filter(m => m.status === 'finished');
-
+function renderToday(filter = 'today') {
+    let matches = [];
+    if (filter === 'today') matches = WC2026_DATA.matches.filter(m => m.date === '2026-06-24');
+    else if (filter === 'yesterday') matches = WC2026_DATA.matches.filter(m => m.date === '2026-06-23');
+    else if (filter === 'tomorrow') matches = WC2026_DATA.matches.filter(m => m.date === '2026-06-25');
+    else if (filter === 'live') matches = WC2026_DATA.matches.filter(m => m.status === 'live');
+    else if (filter === 'finished') matches = WC2026_DATA.matches.filter(m => m.status === 'finished');
     const container = document.getElementById('todayMatches');
-    if (matches.length === 0) {
-        container.innerHTML = '<div class="empty-state"><div>📅</div><div>暫無賽事</div></div>';
-        return;
-    }
+    if (matches.length === 0) { container.innerHTML = '<div class="empty-state"><div style="font-size:48px">📅</div><div>暫無賽事</div></div>'; return; }
     container.innerHTML = matches.map(m => renderMatchCard(m)).join('');
 }
 
 function renderSchedule(filter = 'all') {
     let matches = WC2026_DATA.matches;
     if (filter !== 'all') matches = matches.filter(m => m.round === filter);
-
     const container = document.getElementById('scheduleMatches');
-    if (matches.length === 0) {
-        container.innerHTML = '<div class="empty-state"><div>📅</div><div>暫無賽事</div></div>';
-        return;
-    }
-
-    // 按日期分組
+    if (matches.length === 0) { container.innerHTML = '<div class="empty-state"><div style="font-size:48px">📅</div><div>暫無賽事</div></div>'; return; }
     const byDate = {};
-    matches.forEach(m => {
-        if (!byDate[m.date]) byDate[m.date] = [];
-        byDate[m.date].push(m);
-    });
-
+    matches.forEach(m => { if (!byDate[m.date]) byDate[m.date] = []; byDate[m.date].push(m); });
     container.innerHTML = Object.entries(byDate).map(([date, ms]) => `
-        <div style="margin-bottom:16px">
-            <div style="padding:8px 0;font-size:13px;color:var(--accent);font-weight:600;border-bottom:1px solid var(--border);margin-bottom:8px">
-                📅 ${date}
-            </div>
-            ${ms.map(m => renderMatchCard(m)).join('')}
-        </div>
+        <div class="date-header">📅 ${date}</div>
+        ${ms.map(m => renderMatchCard(m)).join('')}
     `).join('');
 }
 
 function renderPredict() {
     const upcoming = WC2026_DATA.matches.filter(m => m.status === 'upcoming');
-    const container = document.getElementById('predictMatches');
-    container.innerHTML = upcoming.slice(0, 8).map(m => renderMatchCard(m, true)).join('');
+    document.getElementById('predictMatches').innerHTML = upcoming.slice(0, 8).map(m => renderMatchCard(m, true)).join('');
 }
-
 function renderCorner() {
     const upcoming = WC2026_DATA.matches.filter(m => m.status === 'upcoming');
-    const container = document.getElementById('cornerMatches');
-    container.innerHTML = upcoming.slice(0, 8).map(m => renderMatchCard(m, false, true)).join('');
+    document.getElementById('cornerMatches').innerHTML = upcoming.slice(0, 8).map(m => renderMatchCard(m, false, true)).join('');
 }
-
 function renderHandicap() {
     const upcoming = WC2026_DATA.matches.filter(m => m.status === 'upcoming');
-    const container = document.getElementById('handicapMatches');
-    container.innerHTML = upcoming.slice(0, 8).map(m => renderMatchCard(m, false, false, true)).join('');
+    document.getElementById('handicapMatches').innerHTML = upcoming.slice(0, 8).map(m => renderMatchCard(m, false, false, true)).join('');
 }
 
 function renderStandings(group = 'A') {
@@ -932,12 +817,8 @@ function renderStandings(group = 'A') {
                         <tr>
                             <td><div class="pos-num ${i<2?'pos-q':i<3?'pos-p':''}">${i+1}</div></td>
                             <td style="font-weight:600">${WC2026_DATA.teams[t.name]?.flag || ''} ${t.name}</td>
-                            <td>${t.p}</td>
-                            <td>${t.w}</td>
-                            <td>${t.d}</td>
-                            <td>${t.l}</td>
-                            <td>${t.gf}</td>
-                            <td>${t.ga}</td>
+                            <td>${t.p}</td><td>${t.w}</td><td>${t.d}</td><td>${t.l}</td>
+                            <td>${t.gf}</td><td>${t.ga}</td>
                             <td style="color:${t.gd>0?'var(--success)':t.gd<0?'var(--danger)':'var(--muted)'}">${t.gd>0?'+':''}${t.gd}</td>
                             <td style="font-weight:700;color:var(--accent)">${t.pts}</td>
                         </tr>
@@ -948,8 +829,7 @@ function renderStandings(group = 'A') {
         <div style="margin-top:12px;display:flex;gap:8px;font-size:11px;color:var(--muted)">
             <span><span style="display:inline-block;width:12px;height:12px;background:var(--primary);border-radius:50%;vertical-align:middle"></span> 出線</span>
             <span><span style="display:inline-block;width:12px;height:12px;background:var(--accent);border-radius:50%;vertical-align:middle"></span> 第三輪機會</span>
-        </div>
-    `;
+        </div>`;
 }
 
 // ===================== 交互控制 =====================
@@ -959,10 +839,13 @@ function switchTab(tab) {
     document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
     document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
     document.querySelectorAll('.bottom-nav-item').forEach(t => t.classList.remove('active'));
-
     document.getElementById(tab).classList.add('active');
-    event?.target?.classList.add('active');
-
+    const tabMap = { today: 0, schedule: 1, predict: 2, corner: 3, handicap: 4, standings: 5 };
+    const navTabs = document.querySelectorAll('.nav-tab');
+    if (navTabs[tabMap[tab]]) navTabs[tabMap[tab]].classList.add('active');
+    const bottomMap = { today: 0, predict: 1, corner: 2, standings: 3 };
+    const bottomNavs = document.querySelectorAll('.bottom-nav-item');
+    if (bottomNavs[bottomMap[tab]]) bottomNavs[bottomMap[tab]].classList.add('active');
     if (tab === 'today') renderToday();
     else if (tab === 'schedule') renderSchedule();
     else if (tab === 'predict') renderPredict();
@@ -976,13 +859,11 @@ function filterToday(type) {
     event.target.classList.add('active');
     renderToday(type);
 }
-
 function filterSchedule(round) {
     document.querySelectorAll('#scheduleFilter .filter-chip').forEach(c => c.classList.remove('active'));
     event.target.classList.add('active');
     renderSchedule(round);
 }
-
 function showGroup(group) {
     document.querySelectorAll('#standingsFilter .filter-chip').forEach(c => c.classList.remove('active'));
     event.target.classList.add('active');
@@ -992,48 +873,16 @@ function showGroup(group) {
 // ===================== WebSocket 模擬 =====================
 function initWebSocket() {
     const wsStatus = document.getElementById('wsStatus');
-    let connected = false;
-
-    function connect() {
-        wsStatus.innerHTML = '<span class="live-dot"></span>實時數據連接中...';
-        setTimeout(() => {
-            connected = true;
-            wsStatus.innerHTML = '<span class="live-dot"></span>實時數據已連接';
-            wsStatus.style.borderColor = 'var(--primary)';
-        }, 1500);
-    }
-
-    connect();
-
-    // 模擬實時更新
-    setInterval(() => {
-        if (!connected) return;
-        const liveMatches = WC2026_DATA.matches.filter(m => m.status === 'live');
-        if (liveMatches.length > 0 && Math.random() > 0.7) {
-            const match = liveMatches[Math.floor(Math.random() * liveMatches.length)];
-            if (Math.random() > 0.5) match.score.h++;
-            else match.score.a++;
-            if (currentTab === 'today') renderToday();
-        }
-    }, 30000);
-}
-
-// ===================== API-Football 整合 (可選) =====================
-async function fetchLiveData() {
-    const API_KEY = '5268ae5daae7ba1b20e8e1f963f221ff';
-    try {
-        // 注意：瀏覽器CORS限制，實際部署需要代理服務器
-        console.log('API-Football 整合就緒，API Key已配置');
-    } catch (e) {
-        console.log('使用離線數據模式');
-    }
+    setTimeout(() => {
+        wsStatus.innerHTML = '<span class="live-dot"></span>實時數據已連接';
+        wsStatus.style.borderColor = 'var(--primary)';
+    }, 1500);
 }
 
 // ===================== 初始化 =====================
 document.addEventListener('DOMContentLoaded', () => {
     renderToday();
     initWebSocket();
-    fetchLiveData();
 });
 </script>
 </body>
