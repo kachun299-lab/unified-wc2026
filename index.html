@@ -209,26 +209,26 @@
 
         <div id="today" class="section active">
             <div class="filter-bar" id="todayFilter">
-                <div class="filter-chip active" onclick="filterToday('today')">今日(6/24)</div>
-                <div class="filter-chip" onclick="filterToday('yesterday')">昨日(6/23)</div>
-                <div class="filter-chip" onclick="filterToday('tomorrow')">明日(6/25)</div>
-                <div class="filter-chip" onclick="filterToday('live')">進行中</div>
-                <div class="filter-chip" onclick="filterToday('finished')">已完賽</div>
+                <div class="filter-chip active" onclick="filterToday('today', this)">今日(6/24)</div>
+                <div class="filter-chip" onclick="filterToday('yesterday', this)">昨日(6/23)</div>
+                <div class="filter-chip" onclick="filterToday('tomorrow', this)">明日(6/25)</div>
+                <div class="filter-chip" onclick="filterToday('live', this)">進行中</div>
+                <div class="filter-chip" onclick="filterToday('finished', this)">已完賽</div>
             </div>
             <div id="todayMatches"></div>
         </div>
 
         <div id="schedule" class="section">
             <div class="filter-bar" id="scheduleFilter">
-                <div class="filter-chip active" onclick="filterSchedule('all')">全部</div>
-                <div class="filter-chip" onclick="filterSchedule('R1')">第一輪</div>
-                <div class="filter-chip" onclick="filterSchedule('R2')">第二輪</div>
-                <div class="filter-chip" onclick="filterSchedule('R3')">第三輪</div>
-                <div class="filter-chip" onclick="filterSchedule('R32')">三十二強</div>
-                <div class="filter-chip" onclick="filterSchedule('R16')">十六強</div>
-                <div class="filter-chip" onclick="filterSchedule('QF')">八強</div>
-                <div class="filter-chip" onclick="filterSchedule('SF')">四強</div>
-                <div class="filter-chip" onclick="filterSchedule('F')">決賽</div>
+                <div class="filter-chip active" onclick="filterSchedule('all', this)">全部</div>
+                <div class="filter-chip" onclick="filterSchedule('R1', this)">第一輪</div>
+                <div class="filter-chip" onclick="filterSchedule('R2', this)">第二輪</div>
+                <div class="filter-chip" onclick="filterSchedule('R3', this)">第三輪</div>
+                <div class="filter-chip" onclick="filterSchedule('R32', this)">三十二強</div>
+                <div class="filter-chip" onclick="filterSchedule('R16', this)">十六強</div>
+                <div class="filter-chip" onclick="filterSchedule('QF', this)">八強</div>
+                <div class="filter-chip" onclick="filterSchedule('SF', this)">四強</div>
+                <div class="filter-chip" onclick="filterSchedule('F', this)">決賽</div>
             </div>
             <div id="scheduleMatches"></div>
         </div>
@@ -283,18 +283,18 @@
 
         <div id="standings" class="section">
             <div class="filter-bar" id="standingsFilter">
-                <div class="filter-chip active" onclick="showGroup('A')">A組</div>
-                <div class="filter-chip" onclick="showGroup('B')">B組</div>
-                <div class="filter-chip" onclick="showGroup('C')">C組</div>
-                <div class="filter-chip" onclick="showGroup('D')">D組</div>
-                <div class="filter-chip" onclick="showGroup('E')">E組</div>
-                <div class="filter-chip" onclick="showGroup('F')">F組</div>
-                <div class="filter-chip" onclick="showGroup('G')">G組</div>
-                <div class="filter-chip" onclick="showGroup('H')">H組</div>
-                <div class="filter-chip" onclick="showGroup('I')">I組</div>
-                <div class="filter-chip" onclick="showGroup('J')">J組</div>
-                <div class="filter-chip" onclick="showGroup('K')">K組</div>
-                <div class="filter-chip" onclick="showGroup('L')">L組</div>
+                <div class="filter-chip active" onclick="showGroup('A', this)">A組</div>
+                <div class="filter-chip" onclick="showGroup('B', this)">B組</div>
+                <div class="filter-chip" onclick="showGroup('C', this)">C組</div>
+                <div class="filter-chip" onclick="showGroup('D', this)">D組</div>
+                <div class="filter-chip" onclick="showGroup('E', this)">E組</div>
+                <div class="filter-chip" onclick="showGroup('F', this)">F組</div>
+                <div class="filter-chip" onclick="showGroup('G', this)">G組</div>
+                <div class="filter-chip" onclick="showGroup('H', this)">H組</div>
+                <div class="filter-chip" onclick="showGroup('I', this)">I組</div>
+                <div class="filter-chip" onclick="showGroup('J', this)">J組</div>
+                <div class="filter-chip" onclick="showGroup('K', this)">K組</div>
+                <div class="filter-chip" onclick="showGroup('L', this)">L組</div>
             </div>
             <div id="standingsContent"></div>
         </div>
@@ -640,14 +640,14 @@ function getStandings(group) {
 }
 
 // ===================== 渲染函數 =====================
-function renderMatchCard(match, showPredict = false, showCorner = false, showHandicap = false) {
+function renderMatchCard(match, showPredict, showCorner, showHandicap) {
     const h = WC2026_DATA.teams[match.home];
     const a = WC2026_DATA.teams[match.away];
     if (!h || !a) return '';
     const isFinished = match.status === 'finished';
     const isLive = match.status === 'live';
     const isUpcoming = match.status === 'upcoming';
-    const scoreDisplay = isFinished || isLive ? `${match.score.h} - ${match.score.a}` : 'VS';
+    const scoreDisplay = isFinished || isLive ? (match.score.h + ' - ' + match.score.a) : 'VS';
     const statusText = isLive ? '進行中' : isFinished ? '已完賽' : match.time;
     const statusColor = isLive ? 'color:var(--danger)' : isFinished ? '' : 'color:var(--accent)';
 
@@ -658,187 +658,144 @@ function renderMatchCard(match, showPredict = false, showCorner = false, showHan
         const pbtts = ml.predictBTTS(match);
         const pscore = ml.predictCorrectScore(match);
         if (p1x2 && pou && pbtts && pscore) {
-            extraContent = `
-            <div class="detail-panel" id="detail-${match.id}">
-                <div class="detail-inner">
-                    <div style="margin-bottom:10px"><strong style="color:var(--accent)">🎯 1X2 預測</strong></div>
-                    <div class="prediction-bar">
-                        <div class="pred-h" style="width:${p1x2.home}%"></div>
-                        <div class="pred-d" style="width:${p1x2.draw}%"></div>
-                        <div class="pred-a" style="width:${p1x2.away}%"></div>
-                    </div>
-                    <div style="display:flex;justify-content:space-between;font-size:11px;margin-top:4px;color:var(--muted)">
-                        <span>主 ${p1x2.home}%</span><span>和 ${p1x2.draw}%</span><span>客 ${p1x2.away}%</span>
-                    </div>
-                    <div style="margin-top:10px"><strong style="color:var(--accent)">⚽ 大小球</strong></div>
-                    <div class="odds-row">
-                        <div class="odds-box"><div class="odds-label">大${pou.line}</div><div class="odds-value ${parseFloat(pou.over)>55?'highlight':''}">${pou.over}%</div></div>
-                        <div class="odds-box"><div class="odds-label">預期入球</div><div class="odds-value">${pou.expected}</div></div>
-                        <div class="odds-box"><div class="odds-label">小${pou.line}</div><div class="odds-value">${pou.under}%</div></div>
-                    </div>
-                    <div style="margin-top:10px"><strong style="color:var(--accent)">🤝 BTTS</strong></div>
-                    <div class="odds-row">
-                        <div class="odds-box"><div class="odds-label">是</div><div class="odds-value ${parseFloat(pbtts.yes)>55?'highlight':''}">${pbtts.yes}%</div></div>
-                        <div class="odds-box"><div class="odds-label">否</div><div class="odds-value">${pbtts.no}%</div></div>
-                    </div>
-                    <div style="margin-top:10px"><strong style="color:var(--accent)">🎲 波膽首選</strong></div>
-                    <div style="display:flex;gap:8px;margin-top:6px;flex-wrap:wrap">
-                        <span class="value-tag value-good">${pscore.top} (${pscore.prob}%)</span>
-                        ${pscore.alternatives.map(s => `<span class="value-tag" style="background:var(--border);color:var(--muted)">${s}</span>`).join('')}
-                    </div>
-                    <div style="margin-top:10px;font-size:12px;color:var(--muted)">
-                        💡 <strong style="color:var(--primary)">${p1x2.recommendation}</strong> | 信心: ${p1x2.confidence}
-                    </div>
-                </div>
-            </div>`;
+            extraContent = '<div class="detail-panel" id="detail-' + match.id + '"><div class="detail-inner">' +
+                '<div style="margin-bottom:10px"><strong style="color:var(--accent)">🎯 1X2 預測</strong></div>' +
+                '<div class="prediction-bar">' +
+                '<div class="pred-h" style="width:' + p1x2.home + '%"></div>' +
+                '<div class="pred-d" style="width:' + p1x2.draw + '%"></div>' +
+                '<div class="pred-a" style="width:' + p1x2.away + '%"></div></div>' +
+                '<div style="display:flex;justify-content:space-between;font-size:11px;margin-top:4px;color:var(--muted)">' +
+                '<span>主 ' + p1x2.home + '%</span><span>和 ' + p1x2.draw + '%</span><span>客 ' + p1x2.away + '%</span></div>' +
+                '<div style="margin-top:10px"><strong style="color:var(--accent)">⚽ 大小球</strong></div>' +
+                '<div class="odds-row">' +
+                '<div class="odds-box"><div class="odds-label">大' + pou.line + '</div><div class="odds-value ' + (parseFloat(pou.over)>55?'highlight':'') + '">' + pou.over + '%</div></div>' +
+                '<div class="odds-box"><div class="odds-label">預期入球</div><div class="odds-value">' + pou.expected + '</div></div>' +
+                '<div class="odds-box"><div class="odds-label">小' + pou.line + '</div><div class="odds-value">' + pou.under + '%</div></div></div>' +
+                '<div style="margin-top:10px"><strong style="color:var(--accent)">🤝 BTTS</strong></div>' +
+                '<div class="odds-row">' +
+                '<div class="odds-box"><div class="odds-label">是</div><div class="odds-value ' + (parseFloat(pbtts.yes)>55?'highlight':'') + '">' + pbtts.yes + '%</div></div>' +
+                '<div class="odds-box"><div class="odds-label">否</div><div class="odds-value">' + pbtts.no + '%</div></div></div>' +
+                '<div style="margin-top:10px"><strong style="color:var(--accent)">🎲 波膽首選</strong></div>' +
+                '<div style="display:flex;gap:8px;margin-top:6px;flex-wrap:wrap">' +
+                '<span class="value-tag value-good">' + pscore.top + ' (' + pscore.prob + '%)</span>' +
+                pscore.alternatives.map(s => '<span class="value-tag" style="background:var(--border);color:var(--muted)">' + s + '</span>').join('') + '</div>' +
+                '<div style="margin-top:10px;font-size:12px;color:var(--muted)">' +
+                '💡 <strong style="color:var(--primary)">' + p1x2.recommendation + '</strong> | 信心: ' + p1x2.confidence + '</div></div></div>';
         }
     }
     if (showCorner && isUpcoming) {
         const pc = ml.predictCorners(match);
         if (pc) {
-            extraContent = `
-            <div class="detail-panel" id="detail-${match.id}">
-                <div class="detail-inner">
-                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-                        <strong style="color:var(--accent)">📐 角球預測</strong>
-                        <span class="badge badge-ml">預期 ${pc.expected} 角</span>
-                    </div>
-                    <div class="corner-grid">
-                        <div class="corner-item"><div style="font-size:24px;font-weight:700;color:var(--primary)">${pc.line}</div><div style="font-size:11px;color:var(--muted)">盤口</div></div>
-                        <div class="corner-item"><div style="font-size:24px;font-weight:700;color:var(--accent)">${pc.expected}</div><div style="font-size:11px;color:var(--muted)">預期角球</div></div>
-                        <div class="corner-item"><div style="font-size:24px;font-weight:700;color:var(--success)">${pc.over}%</div><div style="font-size:11px;color:var(--muted)">大${pc.line}機率</div></div>
-                        <div class="corner-item"><div style="font-size:24px;font-weight:700;color:var(--secondary)">${pc.under}%</div><div style="font-size:11px;color:var(--muted)">小${pc.line}機率</div></div>
-                    </div>
-                    <div style="margin-top:10px"><strong style="color:var(--accent)">🎯 推薦</strong> <span style="color:var(--primary);font-weight:600">${pc.recommendation}</span></div>
-                </div>
-            </div>`;
+            extraContent = '<div class="detail-panel" id="detail-' + match.id + '"><div class="detail-inner">' +
+                '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">' +
+                '<strong style="color:var(--accent)">📐 角球預測</strong>' +
+                '<span class="badge badge-ml">預期 ' + pc.expected + ' 角</span></div>' +
+                '<div class="corner-grid">' +
+                '<div class="corner-item"><div style="font-size:24px;font-weight:700;color:var(--primary)">' + pc.line + '</div><div style="font-size:11px;color:var(--muted)">盤口</div></div>' +
+                '<div class="corner-item"><div style="font-size:24px;font-weight:700;color:var(--accent)">' + pc.expected + '</div><div style="font-size:11px;color:var(--muted)">預期角球</div></div>' +
+                '<div class="corner-item"><div style="font-size:24px;font-weight:700;color:var(--success)">' + pc.over + '%</div><div style="font-size:11px;color:var(--muted)">大' + pc.line + '機率</div></div>' +
+                '<div class="corner-item"><div style="font-size:24px;font-weight:700;color:var(--secondary)">' + pc.under + '%</div><div style="font-size:11px;color:var(--muted)">小' + pc.line + '機率</div></div></div>' +
+                '<div style="margin-top:10px"><strong style="color:var(--accent)">🎯 推薦</strong> <span style="color:var(--primary);font-weight:600">' + pc.recommendation + '</span></div></div></div>';
         }
     }
     if (showHandicap && isUpcoming) {
         const ph = ml.predictHandicap(match);
         const p1x2 = ml.predict1X2(match);
         if (ph && p1x2) {
-            extraContent = `
-            <div class="detail-panel" id="detail-${match.id}">
-                <div class="detail-inner">
-                    <div style="margin-bottom:10px"><strong style="color:var(--accent)">⚖️ 亞洲讓球分析</strong></div>
-                    <div class="odds-row">
-                        <div class="odds-box"><div class="odds-label">讓球盤</div><div class="odds-value" style="color:var(--primary)">${match.home} ${ph.line > 0 ? '+' : ''}${ph.line}</div></div>
-                        <div class="odds-box"><div class="odds-label">主勝機率</div><div class="odds-value ${parseFloat(ph.homeProb)>55?'highlight':''}">${ph.homeProb}%</div></div>
-                        <div class="odds-box"><div class="odds-label">推薦</div><div class="odds-value" style="font-size:13px">${ph.recommendation}</div></div>
-                    </div>
-                </div>
-            </div>`;
+            extraContent = '<div class="detail-panel" id="detail-' + match.id + '"><div class="detail-inner">' +
+                '<div style="margin-bottom:10px"><strong style="color:var(--accent)">⚖️ 亞洲讓球分析</strong></div>' +
+                '<div class="odds-row">' +
+                '<div class="odds-box"><div class="odds-label">讓球盤</div><div class="odds-value" style="color:var(--primary)">' + match.home + ' ' + (ph.line > 0 ? '+' : '') + ph.line + '</div></div>' +
+                '<div class="odds-box"><div class="odds-label">主勝機率</div><div class="odds-value ' + (parseFloat(ph.homeProb)>55?'highlight':'') + '">' + ph.homeProb + '%</div></div>' +
+                '<div class="odds-box"><div class="odds-label">推薦</div><div class="odds-value" style="font-size:13px">' + ph.recommendation + '</div></div></div></div></div>';
         }
     }
-    const weatherInfo = match.weather ? `<div class="weather-info"><span>🌡️ ${match.weather.temp}°C</span><span>${match.weather.condition}</span><span>💧 ${match.weather.humidity}%</span></div>` : '';
-    const venueInfo = WC2026_DATA.venues[match.venue] ? `<div class="weather-info"><span>📍 ${match.venue}</span><span>🏔️ ${WC2026_DATA.venues[match.venue].altitude}m</span></div>` : '';
+    const weatherInfo = match.weather ? '<div class="weather-info"><span>🌡️ ' + match.weather.temp + '°C</span><span>' + match.weather.condition + '</span><span>💧 ' + match.weather.humidity + '%</span></div>' : '';
+    const venueInfo = WC2026_DATA.venues[match.venue] ? '<div class="weather-info"><span>📍 ' + match.venue + '</span><span>🏔️ ' + WC2026_DATA.venues[match.venue].altitude + 'm</span></div>' : '';
     const badges = [];
     if (match.round === 'R3') badges.push('<span class="badge badge-hot">關鍵戰</span>');
     if (isLive) badges.push('<span class="badge badge-live">LIVE</span>');
-    return `
-        <div class="card" onclick="toggleDetail(${match.id})">
-            <div class="card-header">
-                <div><span style="font-size:12px;color:var(--muted)">${match.group ? match.group + '組' : ''} ${match.round} ${match.date}</span>${badges.join('')}</div>
-                <span style="font-size:12px;color:var(--muted)">${match.time}</span>
-            </div>
-            <div class="card-body">
-                <div class="match-row">
-                    <div class="team-side">
-                        <div class="team-flag">${h.flag}</div>
-                        <div><div class="team-name">${match.home}</div><div style="font-size:11px;color:var(--muted)">Elo: ${h.elo}</div></div>
-                    </div>
-                    <div><div class="score-box">${scoreDisplay}</div><div class="match-status" style="${statusColor}">${statusText}</div></div>
-                    <div class="team-side away">
-                        <div class="team-flag">${a.flag}</div>
-                        <div><div class="team-name">${match.away}</div><div style="font-size:11px;color:var(--muted)">Elo: ${a.elo}</div></div>
-                    </div>
-                </div>
-                ${venueInfo}${weatherInfo}
-            </div>
-            ${extraContent}
-        </div>`;
+    return '<div class="card" onclick="toggleDetail(' + match.id + ')">' +
+        '<div class="card-header"><div><span style="font-size:12px;color:var(--muted)">' + (match.group ? match.group + '組' : '') + ' ' + match.round + ' ' + match.date + '</span>' + badges.join('') + '</div>' +
+        '<span style="font-size:12px;color:var(--muted)">' + match.time + '</span></div>' +
+        '<div class="card-body"><div class="match-row">' +
+        '<div class="team-side"><div class="team-flag">' + h.flag + '</div><div><div class="team-name">' + match.home + '</div><div style="font-size:11px;color:var(--muted)">Elo: ' + h.elo + '</div></div></div>' +
+        '<div><div class="score-box">' + scoreDisplay + '</div><div class="match-status" style="' + statusColor + '">' + statusText + '</div></div>' +
+        '<div class="team-side away"><div class="team-flag">' + a.flag + '</div><div><div class="team-name">' + match.away + '</div><div style="font-size:11px;color:var(--muted)">Elo: ' + a.elo + '</div></div></div></div>' +
+        venueInfo + weatherInfo + '</div>' + extraContent + '</div>';
 }
 
 function toggleDetail(id) {
-    const panel = document.getElementById(`detail-${id}`);
+    const panel = document.getElementById('detail-' + id);
     if (panel) panel.classList.toggle('open');
 }
 
 // ===================== 分頁渲染 =====================
-function renderToday(filter = 'today') {
+function renderToday(filter) {
+    filter = filter || 'today';
     let matches = [];
-    if (filter === 'today') matches = WC2026_DATA.matches.filter(m => m.date === '2026-06-24');
-    else if (filter === 'yesterday') matches = WC2026_DATA.matches.filter(m => m.date === '2026-06-23');
-    else if (filter === 'tomorrow') matches = WC2026_DATA.matches.filter(m => m.date === '2026-06-25');
-    else if (filter === 'live') matches = WC2026_DATA.matches.filter(m => m.status === 'live');
-    else if (filter === 'finished') matches = WC2026_DATA.matches.filter(m => m.status === 'finished');
+    if (filter === 'today') matches = WC2026_DATA.matches.filter(function(m) { return m.date === '2026-06-24'; });
+    else if (filter === 'yesterday') matches = WC2026_DATA.matches.filter(function(m) { return m.date === '2026-06-23'; });
+    else if (filter === 'tomorrow') matches = WC2026_DATA.matches.filter(function(m) { return m.date === '2026-06-25'; });
+    else if (filter === 'live') matches = WC2026_DATA.matches.filter(function(m) { return m.status === 'live'; });
+    else if (filter === 'finished') matches = WC2026_DATA.matches.filter(function(m) { return m.status === 'finished'; });
     const container = document.getElementById('todayMatches');
     if (matches.length === 0) { container.innerHTML = '<div class="empty-state"><div style="font-size:48px">📅</div><div>暫無賽事</div></div>'; return; }
-    container.innerHTML = matches.map(m => renderMatchCard(m)).join('');
+    container.innerHTML = matches.map(function(m) { return renderMatchCard(m, false, false, false); }).join('');
 }
 
-function renderSchedule(filter = 'all') {
+function renderSchedule(filter) {
+    filter = filter || 'all';
     let matches = WC2026_DATA.matches;
-    if (filter !== 'all') matches = matches.filter(m => m.round === filter);
+    if (filter !== 'all') matches = matches.filter(function(m) { return m.round === filter; });
     const container = document.getElementById('scheduleMatches');
     if (matches.length === 0) { container.innerHTML = '<div class="empty-state"><div style="font-size:48px">📅</div><div>暫無賽事</div></div>'; return; }
     const byDate = {};
-    matches.forEach(m => { if (!byDate[m.date]) byDate[m.date] = []; byDate[m.date].push(m); });
-    container.innerHTML = Object.entries(byDate).map(([date, ms]) => `
-        <div class="date-header">📅 ${date}</div>
-        ${ms.map(m => renderMatchCard(m)).join('')}
-    `).join('');
+    matches.forEach(function(m) { if (!byDate[m.date]) byDate[m.date] = []; byDate[m.date].push(m); });
+    container.innerHTML = Object.entries(byDate).map(function(entry) {
+        return '<div class="date-header">📅 ' + entry[0] + '</div>' + entry[1].map(function(m) { return renderMatchCard(m, false, false, false); }).join('');
+    }).join('');
 }
 
 function renderPredict() {
-    const upcoming = WC2026_DATA.matches.filter(m => m.status === 'upcoming');
-    document.getElementById('predictMatches').innerHTML = upcoming.slice(0, 8).map(m => renderMatchCard(m, true)).join('');
+    const upcoming = WC2026_DATA.matches.filter(function(m) { return m.status === 'upcoming'; });
+    document.getElementById('predictMatches').innerHTML = upcoming.slice(0, 8).map(function(m) { return renderMatchCard(m, true, false, false); }).join('');
 }
 function renderCorner() {
-    const upcoming = WC2026_DATA.matches.filter(m => m.status === 'upcoming');
-    document.getElementById('cornerMatches').innerHTML = upcoming.slice(0, 8).map(m => renderMatchCard(m, false, true)).join('');
+    const upcoming = WC2026_DATA.matches.filter(function(m) { return m.status === 'upcoming'; });
+    document.getElementById('cornerMatches').innerHTML = upcoming.slice(0, 8).map(function(m) { return renderMatchCard(m, false, true, false); }).join('');
 }
 function renderHandicap() {
-    const upcoming = WC2026_DATA.matches.filter(m => m.status === 'upcoming');
-    document.getElementById('handicapMatches').innerHTML = upcoming.slice(0, 8).map(m => renderMatchCard(m, false, false, true)).join('');
+    const upcoming = WC2026_DATA.matches.filter(function(m) { return m.status === 'upcoming'; });
+    document.getElementById('handicapMatches').innerHTML = upcoming.slice(0, 8).map(function(m) { return renderMatchCard(m, false, false, true); }).join('');
 }
 
-function renderStandings(group = 'A') {
+function renderStandings(group) {
+    group = group || 'A';
     const standings = getStandings(group);
     const container = document.getElementById('standingsContent');
-    container.innerHTML = `
-        <div class="card">
-            <div class="group-header">${group}組 積分榜</div>
-            <div style="padding:8px">
-                <table class="standing-table">
-                    <tr><th>#</th><th>球隊</th><th>賽</th><th>勝</th><th>和</th><th>負</th><th>得</th><th>失</th><th>差</th><th>分</th></tr>
-                    ${standings.map((t, i) => `
-                        <tr>
-                            <td><div class="pos-num ${i<2?'pos-q':i<3?'pos-p':''}">${i+1}</div></td>
-                            <td style="font-weight:600">${WC2026_DATA.teams[t.name]?.flag || ''} ${t.name}</td>
-                            <td>${t.p}</td><td>${t.w}</td><td>${t.d}</td><td>${t.l}</td>
-                            <td>${t.gf}</td><td>${t.ga}</td>
-                            <td style="color:${t.gd>0?'var(--success)':t.gd<0?'var(--danger)':'var(--muted)'}">${t.gd>0?'+':''}${t.gd}</td>
-                            <td style="font-weight:700;color:var(--accent)">${t.pts}</td>
-                        </tr>
-                    `).join('')}
-                </table>
-            </div>
-        </div>
-        <div style="margin-top:12px;display:flex;gap:8px;font-size:11px;color:var(--muted)">
-            <span><span style="display:inline-block;width:12px;height:12px;background:var(--primary);border-radius:50%;vertical-align:middle"></span> 出線</span>
-            <span><span style="display:inline-block;width:12px;height:12px;background:var(--accent);border-radius:50%;vertical-align:middle"></span> 第三輪機會</span>
-        </div>`;
+    container.innerHTML = '<div class="card"><div class="group-header">' + group + '組 積分榜</div><div style="padding:8px">' +
+        '<table class="standing-table"><tr><th>#</th><th>球隊</th><th>賽</th><th>勝</th><th>和</th><th>負</th><th>得</th><th>失</th><th>差</th><th>分</th></tr>' +
+        standings.map(function(t, i) {
+            return '<tr><td><div class="pos-num ' + (i<2?'pos-q':i<3?'pos-p':'') + '">' + (i+1) + '</div></td>' +
+                '<td style="font-weight:600">' + (WC2026_DATA.teams[t.name]?.flag || '') + ' ' + t.name + '</td>' +
+                '<td>' + t.p + '</td><td>' + t.w + '</td><td>' + t.d + '</td><td>' + t.l + '</td>' +
+                '<td>' + t.gf + '</td><td>' + t.ga + '</td>' +
+                '<td style="color:' + (t.gd>0?'var(--success)':t.gd<0?'var(--danger)':'var(--muted)') + '">' + (t.gd>0?'+':'') + t.gd + '</td>' +
+                '<td style="font-weight:700;color:var(--accent)">' + t.pts + '</td></tr>';
+        }).join('') + '</table></div></div>' +
+        '<div style="margin-top:12px;display:flex;gap:8px;font-size:11px;color:var(--muted)">' +
+        '<span><span style="display:inline-block;width:12px;height:12px;background:var(--primary);border-radius:50%;vertical-align:middle"></span> 出線</span>' +
+        '<span><span style="display:inline-block;width:12px;height:12px;background:var(--accent);border-radius:50%;vertical-align:middle"></span> 第三輪機會</span></div>';
 }
 
 // ===================== 交互控制 =====================
 let currentTab = 'today';
 function switchTab(tab) {
     currentTab = tab;
-    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.bottom-nav-item').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.section').forEach(function(s) { s.classList.remove('active'); });
+    document.querySelectorAll('.nav-tab').forEach(function(t) { t.classList.remove('active'); });
+    document.querySelectorAll('.bottom-nav-item').forEach(function(t) { t.classList.remove('active'); });
     document.getElementById(tab).classList.add('active');
     const tabMap = { today: 0, schedule: 1, predict: 2, corner: 3, handicap: 4, standings: 5 };
     const navTabs = document.querySelectorAll('.nav-tab');
@@ -854,33 +811,33 @@ function switchTab(tab) {
     else if (tab === 'standings') renderStandings('A');
 }
 
-function filterToday(type) {
-    document.querySelectorAll('#todayFilter .filter-chip').forEach(c => c.classList.remove('active'));
-    event.target.classList.add('active');
+function filterToday(type, el) {
+    document.querySelectorAll('#todayFilter .filter-chip').forEach(function(c) { c.classList.remove('active'); });
+    if (el) el.classList.add('active');
     renderToday(type);
 }
-function filterSchedule(round) {
-    document.querySelectorAll('#scheduleFilter .filter-chip').forEach(c => c.classList.remove('active'));
-    event.target.classList.add('active');
+function filterSchedule(round, el) {
+    document.querySelectorAll('#scheduleFilter .filter-chip').forEach(function(c) { c.classList.remove('active'); });
+    if (el) el.classList.add('active');
     renderSchedule(round);
 }
-function showGroup(group) {
-    document.querySelectorAll('#standingsFilter .filter-chip').forEach(c => c.classList.remove('active'));
-    event.target.classList.add('active');
+function showGroup(group, el) {
+    document.querySelectorAll('#standingsFilter .filter-chip').forEach(function(c) { c.classList.remove('active'); });
+    if (el) el.classList.add('active');
     renderStandings(group);
 }
 
 // ===================== WebSocket 模擬 =====================
 function initWebSocket() {
     const wsStatus = document.getElementById('wsStatus');
-    setTimeout(() => {
+    setTimeout(function() {
         wsStatus.innerHTML = '<span class="live-dot"></span>實時數據已連接';
         wsStatus.style.borderColor = 'var(--primary)';
     }, 1500);
 }
 
 // ===================== 初始化 =====================
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', function() {
     renderToday();
     initWebSocket();
 });
