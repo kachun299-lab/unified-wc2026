@@ -2367,14 +2367,26 @@ setInterval(() => {
   });
 }, 30000);
 
-// 觸摸優化
-let touchStartY = 0;
-document.addEventListener('touchstart', e => { touchStartY = e.touches[0].clientY; });
+// 觸摸優化 - 只阻止橫向導航欄的垂直滾動干擾，不阻止頁面整體滾動
+let touchStartX = 0, touchStartY = 0;
+document.addEventListener('touchstart', e => {
+  touchStartX = e.touches[0].clientX;
+  touchStartY = e.touches[0].clientY;
+}, { passive: true });
+
 document.addEventListener('touchmove', e => {
+  const nav = e.target.closest('.nav');
+  if (!nav) return; // 只有導航欄才需要特殊處理
+  const touchX = e.touches[0].clientX;
   const touchY = e.touches[0].clientY;
-  const diff = touchStartY - touchY;
-  if (Math.abs(diff) > 5) e.preventDefault();
-}, { passive: false });
+  const diffX = Math.abs(touchX - touchStartX);
+  const diffY = Math.abs(touchY - touchStartY);
+  if (diffX > diffY && diffX > 10) {
+    // 橫向滑動導航欄，允許
+  } else if (diffY > diffX && diffY > 10) {
+    // 垂直滑動在導航欄，不阻止（頁面正常滾動）
+  }
+}, { passive: true });
 </script>
 
 </body>
