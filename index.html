@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>UNIFIED WC2026 預測中心 v3.3.59</title>
+<title>UNIFIED WC2026 預測中心 v3.3.59 | 數據輸入版</title>
 <style>
 :root {
   --bg:#0a0e1a;--card:#111827;--card2:#1a2236;--accent:#00d4aa;--accent2:#ff6b35;
@@ -92,6 +92,20 @@ body {font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
 .btts-no {color:var(--red);font-weight:700}
 .stat-row {display:flex;justify-content:space-between;padding:6px 0;font-size:0.8rem;border-bottom:1px solid var(--border)}
 .stat-row:last-child {border-bottom:none}
+
+/* 數據輸入表單 */
+.input-form {display:flex;flex-direction:column;gap:10px}
+.input-row {display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.input-row label {font-size:0.8rem;color:var(--text2);min-width:60px}
+.input-row input, .input-row select {flex:1;min-width:80px;padding:8px 10px;background:var(--card2);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:0.85rem}
+.input-row input:focus, .input-row select:focus {outline:none;border-color:var(--accent)}
+.submit-btn {padding:10px 16px;background:var(--accent);color:#000;border:none;border-radius:8px;font-size:0.9rem;font-weight:700;cursor:pointer;margin-top:8px}
+.submit-btn:active {opacity:0.8}
+.result-list {margin-top:12px}
+.result-item {display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);font-size:0.8rem}
+.result-item:last-child {border-bottom:none}
+.delete-btn {color:var(--red);font-size:0.75rem;cursor:pointer;padding:2px 6px}
+.clear-btn {padding:8px 12px;background:var(--red);color:#fff;border:none;border-radius:6px;font-size:0.8rem;cursor:pointer;margin-top:8px}
 @media(min-width:768px){.container{max-width:720px;margin:0 auto}.pred-grid{grid-template-columns:repeat(4,1fr)}.score-grid{grid-template-columns:repeat(6,1fr)}}
 </style>
 <base target="_blank">
@@ -100,13 +114,15 @@ body {font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
 <div class="container">
   <div class="header">
     <h1>⚽ UNIFIED WC2026</h1>
-    <div class="version">預測中心 v3.3.59 | 72場完整賽程 | 52場回測校準</div>
+    <div class="version">預測中心 v3.3.59 | 72場完整賽程 | 數據輸入版</div>
   </div>
+
   <div class="nav" id="mainNav">
     <button class="nav-btn active" onclick="showSection('today')">今日賽事</button>
     <button class="nav-btn" onclick="showSection('schedule')">完整賽程</button>
     <button class="nav-btn" onclick="showSection('standings')">積分榜</button>
     <button class="nav-btn" onclick="showSection('predictions')">預測分析</button>
+    <button class="nav-btn" onclick="showSection('dataentry')">📥 數據輸入</button>
     <button class="nav-btn" onclick="showSection('live')">滾球監控</button>
     <button class="nav-btn" onclick="showSection('corners')">角球專項</button>
     <button class="nav-btn" onclick="showSection('handicap')">讓球分析</button>
@@ -152,6 +168,73 @@ body {font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
     <div id="predictionDetail"></div>
   </div>
 
+  <!-- DATA ENTRY SECTION -->
+  <div class="section" id="dataentry">
+    <div class="card">
+      <div class="card-title">📥 輸入真實賽事數據</div>
+      <div class="card-sub">手動輸入已完賽結果，自動更新積分榜。數據保存在本機。</div>
+      <form class="input-form" id="resultForm" onsubmit="return addResult(event)">
+        <div class="input-row">
+          <label>日期</label>
+          <input type="date" id="inputDate" required>
+        </div>
+        <div class="input-row">
+          <label>時間</label>
+          <input type="time" id="inputTime" value="20:00">
+        </div>
+        <div class="input-row">
+          <label>主隊</label>
+          <select id="inputHome" required>
+            <option value="">選擇主隊</option>
+          </select>
+        </div>
+        <div class="input-row">
+          <label>客隊</label>
+          <select id="inputAway" required>
+            <option value="">選擇客隊</option>
+          </select>
+        </div>
+        <div class="input-row">
+          <label>全場比分</label>
+          <input type="number" id="inputHG" placeholder="主隊入球" min="0" style="max-width:80px" required>
+          <span style="color:var(--text2)">-</span>
+          <input type="number" id="inputAG" placeholder="客隊入球" min="0" style="max-width:80px" required>
+        </div>
+        <div class="input-row">
+          <label>半場比分</label>
+          <input type="number" id="inputHTHG" placeholder="主隊" min="0" style="max-width:80px">
+          <span style="color:var(--text2)">-</span>
+          <input type="number" id="inputHTAG" placeholder="客隊" min="0" style="max-width:80px">
+        </div>
+        <div class="input-row">
+          <label>角球</label>
+          <input type="number" id="inputCH" placeholder="主隊角球" min="0" style="max-width:80px">
+          <span style="color:var(--text2)">-</span>
+          <input type="number" id="inputCA" placeholder="客隊角球" min="0" style="max-width:80px">
+        </div>
+        <div class="input-row">
+          <label>罰牌</label>
+          <input type="number" id="inputYCH" placeholder="主隊黃牌" min="0" style="max-width:80px">
+          <span style="color:var(--text2)">-</span>
+          <input type="number" id="inputYCA" placeholder="客隊黃牌" min="0" style="max-width:80px">
+        </div>
+        <button type="submit" class="submit-btn">➕ 添加賽果</button>
+      </form>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📋 已輸入賽果列表</div>
+      <div class="card-sub" id="resultCount">暫無數據</div>
+      <div id="resultList" class="result-list"></div>
+      <button class="clear-btn" onclick="clearAllResults()">🗑️ 清除所有數據</button>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📊 數據統計</div>
+      <div id="dataStats"></div>
+    </div>
+  </div>
+
   <!-- LIVE SECTION -->
   <div class="section" id="live">
     <div class="card">
@@ -188,64 +271,200 @@ body {font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
 <script>
 
 // ================= DATA LAYER =================
-const TEAM_NAMES = {"Mexico": "墨西哥", "South Africa": "南非", "Korea Republic": "韓國", "Czech Republic": "捷克", "USA": "美國", "Paraguay": "巴拉圭", "Canada": "加拿大", "Bosnia and Herzegovina": "波黑", "Australia": "澳洲", "Turkey": "土耳其", "Qatar": "卡塔爾", "Switzerland": "瑞士", "Brazil": "巴西", "Morocco": "摩洛哥", "Haiti": "海地", "Scotland": "蘇格蘭", "Germany": "德國", "Curacao": "庫拉索", "Netherlands": "荷蘭", "Japan": "日本", "Cote d'Ivoire": "科特迪瓦", "Ecuador": "厄瓜多爾", "Sweden": "瑞典", "Tunisia": "突尼斯", "Spain": "西班牙", "Cape Verde": "佛得角", "Belgium": "比利時", "Egypt": "埃及", "Iran": "伊朗", "New Zealand": "新西蘭", "Saudi Arabia": "沙特阿拉伯", "Uruguay": "烏拉圭", "France": "法國", "Senegal": "塞內加爾", "Iraq": "伊拉克", "Norway": "挪威", "Argentina": "阿根廷", "Algeria": "阿爾及利亞", "Austria": "奧地利", "Jordan": "約旦", "Portugal": "葡萄牙", "DR Congo": "剛果民主共和國", "England": "英格蘭", "Croatia": "克羅地亞", "Ghana": "加納", "Panama": "巴拿馬", "Uzbekistan": "烏茲別克斯坦", "Colombia": "哥倫比亞", "Italy": "意大利", "Ukraine": "烏克蘭", "Jamaica": "牙買加", "Finland": "芬蘭", "Chile": "智利", "Denmark": "丹麥", "Cameroon": "喀麥隆", "Poland": "波蘭", "Greece": "希臘", "Venezuela": "委內瑞拉", "Nigeria": "尼日利亞"};
-const MATCHES = [{"date": "2026-06-12", "time": "20:00", "home_en": "Mexico", "away_en": "South Africa", "home_cn": "墨西哥", "away_cn": "南非", "venue": "Estadio Azteca", "group": "A", "round": "R1"}, {"date": "2026-06-12", "time": "22:00", "home_en": "Korea Republic", "away_en": "Czech Republic", "home_cn": "韓國", "away_cn": "捷克", "venue": "Estadio Azteca", "group": "A", "round": "R1"}, {"date": "2026-06-13", "time": "16:00", "home_en": "USA", "away_en": "Paraguay", "home_cn": "美國", "away_cn": "巴拉圭", "venue": "Hard Rock Stadium", "group": "J", "round": "R1"}, {"date": "2026-06-13", "time": "19:00", "home_en": "Canada", "away_en": "Bosnia and Herzegovina", "home_cn": "加拿大", "away_cn": "波黑", "venue": "SoFi Stadium", "group": "B", "round": "R1"}, {"date": "2026-06-13", "time": "22:00", "home_en": "Australia", "away_en": "Turkey", "home_cn": "澳洲", "away_cn": "土耳其", "venue": "Hard Rock Stadium", "group": "J", "round": "R1"}, {"date": "2026-06-14", "time": "16:00", "home_en": "Qatar", "away_en": "Switzerland", "home_cn": "卡塔爾", "away_cn": "瑞士", "venue": "SoFi Stadium", "group": "B", "round": "R1"}, {"date": "2026-06-14", "time": "19:00", "home_en": "Brazil", "away_en": "Morocco", "home_cn": "巴西", "away_cn": "摩洛哥", "venue": "MetLife Stadium", "group": "C", "round": "R1"}, {"date": "2026-06-14", "time": "22:00", "home_en": "Haiti", "away_en": "Scotland", "home_cn": "海地", "away_cn": "蘇格蘭", "venue": "MetLife Stadium", "group": "C", "round": "R1"}, {"date": "2026-06-15", "time": "16:00", "home_en": "Germany", "away_en": "Curacao", "home_cn": "德國", "away_cn": "庫拉索", "venue": "AT&T Stadium", "group": "D", "round": "R1"}, {"date": "2026-06-15", "time": "19:00", "home_en": "Netherlands", "away_en": "Japan", "home_cn": "荷蘭", "away_cn": "日本", "venue": "Mercedes-Benz Stadium", "group": "E", "round": "R1"}, {"date": "2026-06-15", "time": "22:00", "home_en": "Cote d'Ivoire", "away_en": "Ecuador", "home_cn": "科特迪瓦", "away_cn": "厄瓜多爾", "venue": "AT&T Stadium", "group": "D", "round": "R1"}, {"date": "2026-06-16", "time": "16:00", "home_en": "Sweden", "away_en": "Tunisia", "home_cn": "瑞典", "away_cn": "突尼斯", "venue": "Mercedes-Benz Stadium", "group": "E", "round": "R1"}, {"date": "2026-06-16", "time": "19:00", "home_en": "Spain", "away_en": "Cape Verde", "home_cn": "西班牙", "away_cn": "佛得角", "venue": "BC Place", "group": "F", "round": "R1"}, {"date": "2026-06-16", "time": "22:00", "home_en": "Belgium", "away_en": "Egypt", "home_cn": "比利時", "away_cn": "埃及", "venue": "Levi's Stadium", "group": "G", "round": "R1"}, {"date": "2026-06-17", "time": "16:00", "home_en": "Iran", "away_en": "New Zealand", "home_cn": "伊朗", "away_cn": "新西蘭", "venue": "Levi's Stadium", "group": "G", "round": "R1"}, {"date": "2026-06-17", "time": "19:00", "home_en": "Saudi Arabia", "away_en": "Uruguay", "home_cn": "沙特阿拉伯", "away_cn": "烏拉圭", "venue": "BC Place", "group": "F", "round": "R1"}, {"date": "2026-06-17", "time": "22:00", "home_en": "France", "away_en": "Senegal", "home_cn": "法國", "away_cn": "塞內加爾", "venue": "Lumen Field", "group": "H", "round": "R1"}, {"date": "2026-06-18", "time": "16:00", "home_en": "Iraq", "away_en": "Norway", "home_cn": "伊拉克", "away_cn": "挪威", "venue": "Lumen Field", "group": "H", "round": "R1"}, {"date": "2026-06-18", "time": "19:00", "home_en": "Argentina", "away_en": "Algeria", "home_cn": "阿根廷", "away_cn": "阿爾及利亞", "venue": "BMO Field", "group": "I", "round": "R1"}, {"date": "2026-06-18", "time": "22:00", "home_en": "Austria", "away_en": "Jordan", "home_cn": "奧地利", "away_cn": "約旦", "venue": "BMO Field", "group": "I", "round": "R1"}, {"date": "2026-06-19", "time": "16:00", "home_en": "Portugal", "away_en": "DR Congo", "home_cn": "葡萄牙", "away_cn": "剛果民主共和國", "venue": "Estadio BBVA", "group": "K", "round": "R1"}, {"date": "2026-06-19", "time": "19:00", "home_en": "England", "away_en": "Croatia", "home_cn": "英格蘭", "away_cn": "克羅地亞", "venue": "Estadio Akron", "group": "L", "round": "R1"}, {"date": "2026-06-19", "time": "22:00", "home_en": "Ghana", "away_en": "Panama", "home_cn": "加納", "away_cn": "巴拿馬", "venue": "Estadio Akron", "group": "L", "round": "R1"}, {"date": "2026-06-20", "time": "16:00", "home_en": "Uzbekistan", "away_en": "Colombia", "home_cn": "烏茲別克斯坦", "away_cn": "哥倫比亞", "venue": "Estadio BBVA", "group": "K", "round": "R1"}, {"date": "2026-06-20", "time": "19:00", "home_en": "Mexico", "away_en": "Korea Republic", "home_cn": "墨西哥", "away_cn": "韓國", "venue": "Estadio Azteca", "group": "A", "round": "R2"}, {"date": "2026-06-20", "time": "22:00", "home_en": "Canada", "away_en": "Qatar", "home_cn": "加拿大", "away_cn": "卡塔爾", "venue": "SoFi Stadium", "group": "B", "round": "R2"}, {"date": "2026-06-21", "time": "16:00", "home_en": "Switzerland", "away_en": "Bosnia and Herzegovina", "home_cn": "瑞士", "away_cn": "波黑", "venue": "SoFi Stadium", "group": "B", "round": "R2"}, {"date": "2026-06-21", "time": "19:00", "home_en": "Czech Republic", "away_en": "South Africa", "home_cn": "捷克", "away_cn": "南非", "venue": "Estadio Azteca", "group": "A", "round": "R2"}, {"date": "2026-06-21", "time": "22:00", "home_en": "USA", "away_en": "Australia", "home_cn": "美國", "away_cn": "澳洲", "venue": "Hard Rock Stadium", "group": "J", "round": "R2"}, {"date": "2026-06-22", "time": "16:00", "home_en": "Turkey", "away_en": "Paraguay", "home_cn": "土耳其", "away_cn": "巴拉圭", "venue": "Hard Rock Stadium", "group": "J", "round": "R2"}, {"date": "2026-06-22", "time": "19:00", "home_en": "Scotland", "away_en": "Morocco", "home_cn": "蘇格蘭", "away_cn": "摩洛哥", "venue": "MetLife Stadium", "group": "C", "round": "R2"}, {"date": "2026-06-22", "time": "22:00", "home_en": "Brazil", "away_en": "Haiti", "home_cn": "巴西", "away_cn": "海地", "venue": "MetLife Stadium", "group": "C", "round": "R2"}, {"date": "2026-06-23", "time": "16:00", "home_en": "Netherlands", "away_en": "Sweden", "home_cn": "荷蘭", "away_cn": "瑞典", "venue": "Mercedes-Benz Stadium", "group": "E", "round": "R2"}, {"date": "2026-06-23", "time": "19:00", "home_en": "Germany", "away_en": "Cote d'Ivoire", "home_cn": "德國", "away_cn": "科特迪瓦", "venue": "AT&T Stadium", "group": "D", "round": "R2"}, {"date": "2026-06-23", "time": "22:00", "home_en": "Ecuador", "away_en": "Uruguay", "home_cn": "厄瓜多爾", "away_cn": "烏拉圭", "venue": "AT&T Stadium", "group": "D", "round": "R2"}, {"date": "2026-06-24", "time": "16:00", "home_en": "Tunisia", "away_en": "Japan", "home_cn": "突尼斯", "away_cn": "日本", "venue": "Mercedes-Benz Stadium", "group": "E", "round": "R2"}, {"date": "2026-06-24", "time": "19:00", "home_en": "Spain", "away_en": "Saudi Arabia", "home_cn": "西班牙", "away_cn": "沙特阿拉伯", "venue": "BC Place", "group": "F", "round": "R2"}, {"date": "2026-06-24", "time": "22:00", "home_en": "Belgium", "away_en": "Iran", "home_cn": "比利時", "away_cn": "伊朗", "venue": "Levi's Stadium", "group": "G", "round": "R2"}, {"date": "2026-06-25", "time": "16:00", "home_en": "Uruguay", "away_en": "Cape Verde", "home_cn": "烏拉圭", "away_cn": "佛得角", "venue": "BC Place", "group": "F", "round": "R2"}, {"date": "2026-06-25", "time": "19:00", "home_en": "New Zealand", "away_en": "Egypt", "home_cn": "新西蘭", "away_cn": "埃及", "venue": "Levi's Stadium", "group": "G", "round": "R2"}, {"date": "2026-06-25", "time": "22:00", "home_en": "Argentina", "away_en": "Austria", "home_cn": "阿根廷", "away_cn": "奧地利", "venue": "BMO Field", "group": "I", "round": "R2"}, {"date": "2026-06-26", "time": "16:00", "home_en": "Jordan", "away_en": "Algeria", "home_cn": "約旦", "away_cn": "阿爾及利亞", "venue": "BMO Field", "group": "I", "round": "R2"}, {"date": "2026-06-26", "time": "19:00", "home_en": "Portugal", "away_en": "Uzbekistan", "home_cn": "葡萄牙", "away_cn": "烏茲別克斯坦", "venue": "Estadio BBVA", "group": "K", "round": "R2"}, {"date": "2026-06-26", "time": "22:00", "home_en": "England", "away_en": "Ghana", "home_cn": "英格蘭", "away_cn": "加納", "venue": "Estadio Akron", "group": "L", "round": "R2"}, {"date": "2026-06-27", "time": "16:00", "home_en": "Panama", "away_en": "Croatia", "home_cn": "巴拿馬", "away_cn": "克羅地亞", "venue": "Estadio Akron", "group": "L", "round": "R2"}, {"date": "2026-06-27", "time": "19:00", "home_en": "Colombia", "away_en": "DR Congo", "home_cn": "哥倫比亞", "away_cn": "剛果民主共和國", "venue": "Estadio BBVA", "group": "K", "round": "R2"}, {"date": "2026-06-27", "time": "22:00", "home_en": "France", "away_en": "Iraq", "home_cn": "法國", "away_cn": "伊拉克", "venue": "Lumen Field", "group": "H", "round": "R2"}, {"date": "2026-06-28", "time": "16:00", "home_en": "Senegal", "away_en": "Norway", "home_cn": "塞內加爾", "away_cn": "挪威", "venue": "Lumen Field", "group": "H", "round": "R2"}, {"date": "2026-06-25", "time": "20:00", "home_en": "Bosnia and Herzegovina", "away_en": "Qatar", "home_cn": "波黑", "away_cn": "卡塔爾", "venue": "SoFi Stadium", "group": "B", "round": "R3"}, {"date": "2026-06-25", "time": "22:00", "home_en": "Switzerland", "away_en": "Canada", "home_cn": "瑞士", "away_cn": "加拿大", "venue": "SoFi Stadium", "group": "B", "round": "R3"}, {"date": "2026-06-25", "time": "20:00", "home_en": "Morocco", "away_en": "Haiti", "home_cn": "摩洛哥", "away_cn": "海地", "venue": "MetLife Stadium", "group": "C", "round": "R3"}, {"date": "2026-06-25", "time": "22:00", "home_en": "Scotland", "away_en": "Brazil", "home_cn": "蘇格蘭", "away_cn": "巴西", "venue": "MetLife Stadium", "group": "C", "round": "R3"}, {"date": "2026-06-25", "time": "20:00", "home_en": "Czech Republic", "away_en": "Mexico", "home_cn": "捷克", "away_cn": "墨西哥", "venue": "Estadio Azteca", "group": "A", "round": "R3"}, {"date": "2026-06-25", "time": "22:00", "home_en": "South Africa", "away_en": "Korea Republic", "home_cn": "南非", "away_cn": "韓國", "venue": "Estadio Azteca", "group": "A", "round": "R3"}, {"date": "2026-06-26", "time": "04:00", "home_en": "Curacao", "away_en": "Cote d'Ivoire", "home_cn": "庫拉索", "away_cn": "科特迪瓦", "venue": "AT&T Stadium", "group": "D", "round": "R3"}, {"date": "2026-06-26", "time": "04:00", "home_en": "Ecuador", "away_en": "Germany", "home_cn": "厄瓜多爾", "away_cn": "德國", "venue": "AT&T Stadium", "group": "D", "round": "R3"}, {"date": "2026-06-26", "time": "07:00", "home_en": "Tunisia", "away_en": "Netherlands", "home_cn": "突尼斯", "away_cn": "荷蘭", "venue": "Mercedes-Benz Stadium", "group": "E", "round": "R3"}, {"date": "2026-06-26", "time": "07:00", "home_en": "Japan", "away_en": "Sweden", "home_cn": "日本", "away_cn": "瑞典", "venue": "Mercedes-Benz Stadium", "group": "E", "round": "R3"}, {"date": "2026-06-26", "time": "10:00", "home_en": "Paraguay", "away_en": "Australia", "home_cn": "巴拉圭", "away_cn": "澳洲", "venue": "Hard Rock Stadium", "group": "J", "round": "R3"}, {"date": "2026-06-26", "time": "10:00", "home_en": "Turkey", "away_en": "USA", "home_cn": "土耳其", "away_cn": "美國", "venue": "Hard Rock Stadium", "group": "J", "round": "R3"}, {"date": "2026-06-27", "time": "03:00", "home_en": "Norway", "away_en": "France", "home_cn": "挪威", "away_cn": "法國", "venue": "Lumen Field", "group": "H", "round": "R3"}, {"date": "2026-06-27", "time": "03:00", "home_en": "Senegal", "away_en": "Iraq", "home_cn": "塞內加爾", "away_cn": "伊拉克", "venue": "Lumen Field", "group": "H", "round": "R3"}, {"date": "2026-06-27", "time": "08:00", "home_en": "Uruguay", "away_en": "Spain", "home_cn": "烏拉圭", "away_cn": "西班牙", "venue": "BC Place", "group": "F", "round": "R3"}, {"date": "2026-06-27", "time": "08:00", "home_en": "Cape Verde", "away_en": "Saudi Arabia", "home_cn": "佛得角", "away_cn": "沙特阿拉伯", "venue": "BC Place", "group": "F", "round": "R3"}, {"date": "2026-06-27", "time": "11:00", "home_en": "Egypt", "away_en": "Iran", "home_cn": "埃及", "away_cn": "伊朗", "venue": "Levi's Stadium", "group": "G", "round": "R3"}, {"date": "2026-06-27", "time": "11:00", "home_en": "New Zealand", "away_en": "Belgium", "home_cn": "新西蘭", "away_cn": "比利時", "venue": "Levi's Stadium", "group": "G", "round": "R3"}, {"date": "2026-06-28", "time": "05:00", "home_en": "Panama", "away_en": "England", "home_cn": "巴拿馬", "away_cn": "英格蘭", "venue": "Estadio Akron", "group": "L", "round": "R3"}, {"date": "2026-06-28", "time": "05:00", "home_en": "Croatia", "away_en": "Ghana", "home_cn": "克羅地亞", "away_cn": "加納", "venue": "Estadio Akron", "group": "L", "round": "R3"}, {"date": "2026-06-28", "time": "07:30", "home_en": "Colombia", "away_en": "Portugal", "home_cn": "哥倫比亞", "away_cn": "葡萄牙", "venue": "Estadio BBVA", "group": "K", "round": "R3"}, {"date": "2026-06-28", "time": "07:30", "home_en": "DR Congo", "away_en": "Uzbekistan", "home_cn": "剛果民主共和國", "away_cn": "烏茲別克斯坦", "venue": "Estadio BBVA", "group": "K", "round": "R3"}, {"date": "2026-06-28", "time": "10:00", "home_en": "Algeria", "away_en": "Austria", "home_cn": "阿爾及利亞", "away_cn": "奧地利", "venue": "BMO Field", "group": "I", "round": "R3"}, {"date": "2026-06-28", "time": "10:00", "home_en": "Jordan", "away_en": "Argentina", "home_cn": "約旦", "away_cn": "阿根廷", "venue": "BMO Field", "group": "I", "round": "R3"}];
-const GROUPS = {"A": ["墨西哥", "南非", "韓國", "捷克"], "B": ["加拿大", "波黑", "卡塔爾", "瑞士"], "C": ["巴西", "摩洛哥", "海地", "蘇格蘭"], "D": ["德國", "庫拉索", "科特迪瓦", "厄瓜多爾"], "E": ["荷蘭", "日本", "瑞典", "突尼斯"], "F": ["西班牙", "佛得角", "沙特阿拉伯", "烏拉圭"], "G": ["比利時", "埃及", "伊朗", "新西蘭"], "H": ["法國", "塞內加爾", "伊拉克", "挪威"], "I": ["阿根廷", "阿爾及利亞", "奧地利", "約旦"], "J": ["美國", "巴拉圭", "澳洲", "土耳其"], "K": ["葡萄牙", "剛果民主共和國", "烏茲別克斯坦", "哥倫比亞"], "L": ["英格蘭", "克羅地亞", "加納", "巴拿馬"]};
-const ELO_RATINGS = {"Mexico": 1563, "Brazil": 1552, "USA": 1551, "Argentina": 1551, "Germany": 1549, "Switzerland": 1544, "Colombia": 1538, "Morocco": 1536, "Netherlands": 1532, "Spain": 1530, "Portugal": 1529, "Norway": 1528, "Japan": 1527, "Egypt": 1524, "France": 1524, "England": 1523, "Canada": 1517, "Ghana": 1516, "Cote d'Ivoire": 1500, "Australia": 1500, "Austria": 1500, "Belgium": 1500, "Iran": 1500, "Jamaica": 1500, "Cape Verde": 1499, "Uruguay": 1499, "Sweden": 1497, "Bosnia and Herzegovina": 1495, "South Africa": 1493, "Croatia": 1492, "Paraguay": 1488, "Algeria": 1488, "DR Congo": 1485, "Ecuador": 1484, "Korea Republic": 1483, "New Zealand": 1476, "Senegal": 1476, "Scotland": 1473, "Iraq": 1472, "Saudi Arabia": 1470, "Panama": 1467, "Curacao": 1466, "Czech Republic": 1460, "Turkey": 1459, "Jordan": 1459, "Uzbekistan": 1446, "Tunisia": 1442, "Qatar": 1442, "Haiti": 1437};
-const HISTORICAL = [{"round": "R1", "date": "2026-06-12", "home_en": "Mexico", "away_en": "South Africa", "home_cn": "墨西哥", "away_cn": "南非", "hg": 2, "ag": 0, "ht_hg": 1, "ht_ag": 0, "ch": 0, "ca": 0}, {"round": "R1", "date": "2026-06-12", "home_en": "Korea Republic", "away_en": "Czech Republic", "home_cn": "韓國", "away_cn": "捷克", "hg": 2, "ag": 1, "ht_hg": 0, "ht_ag": 0, "ch": 0, "ca": 0}, {"round": "R1", "date": "2026-06-13", "home_en": "USA", "away_en": "Paraguay", "home_cn": "美國", "away_cn": "巴拉圭", "hg": 4, "ag": 1, "ht_hg": 3, "ht_ag": 0, "ch": 0, "ca": 0}, {"round": "R1", "date": "2026-06-13", "home_en": "Canada", "away_en": "Bosnia and Herzegovina", "home_cn": "加拿大", "away_cn": "波黑", "hg": 1, "ag": 1, "ht_hg": 0, "ht_ag": 1, "ch": 0, "ca": 0}, {"round": "R1", "date": "2026-06-14", "home_en": "Australia", "away_en": "Turkey", "home_cn": "澳洲", "away_cn": "土耳其", "hg": 2, "ag": 0, "ht_hg": 1, "ht_ag": 0, "ch": 0, "ca": 0}, {"round": "R1", "date": "2026-06-14", "home_en": "Qatar", "away_en": "Switzerland", "home_cn": "卡塔爾", "away_cn": "瑞士", "hg": 1, "ag": 1, "ht_hg": 0, "ht_ag": 1, "ch": 0, "ca": 0}, {"round": "R1", "date": "2026-06-14", "home_en": "Brazil", "away_en": "Morocco", "home_cn": "巴西", "away_cn": "摩洛哥", "hg": 1, "ag": 1, "ht_hg": 1, "ht_ag": 1, "ch": 0, "ca": 0}, {"round": "R1", "date": "2026-06-14", "home_en": "Haiti", "away_en": "Scotland", "home_cn": "海地", "away_cn": "蘇格蘭", "hg": 0, "ag": 1, "ht_hg": 0, "ht_ag": 1, "ch": 0, "ca": 0}, {"round": "R1", "date": "2026-06-15", "home_en": "Germany", "away_en": "Curacao", "home_cn": "德國", "away_cn": "庫拉索", "hg": 7, "ag": 1, "ht_hg": 3, "ht_ag": 1, "ch": 0, "ca": 0}, {"round": "R1", "date": "2026-06-15", "home_en": "Netherlands", "away_en": "Japan", "home_cn": "荷蘭", "away_cn": "日本", "hg": 2, "ag": 2, "ht_hg": 0, "ht_ag": 0, "ch": 0, "ca": 0}, {"round": "R1", "date": "2026-06-15", "home_en": "Cote d'Ivoire", "away_en": "Ecuador", "home_cn": "科特迪瓦", "away_cn": "厄瓜多爾", "hg": 1, "ag": 0, "ht_hg": 0, "ht_ag": 0, "ch": 0, "ca": 0}, {"round": "R1", "date": "2026-06-15", "home_en": "Sweden", "away_en": "Tunisia", "home_cn": "瑞典", "away_cn": "突尼斯", "hg": 5, "ag": 1, "ht_hg": 2, "ht_ag": 1, "ch": 0, "ca": 0}, {"round": "R1", "date": "2026-06-16", "home_en": "Spain", "away_en": "Cape Verde", "home_cn": "西班牙", "away_cn": "佛得角", "hg": 0, "ag": 0, "ht_hg": 0, "ht_ag": 0, "ch": 0, "ca": 0}, {"round": "R1", "date": "2026-06-16", "home_en": "Belgium", "away_en": "Egypt", "home_cn": "比利時", "away_cn": "埃及", "hg": 1, "ag": 1, "ht_hg": 0, "ht_ag": 1, "ch": 0, "ca": 0}, {"round": "R1", "date": "2026-06-16", "home_en": "Iran", "away_en": "New Zealand", "home_cn": "伊朗", "away_cn": "新西蘭", "hg": 2, "ag": 2, "ht_hg": 1, "ht_ag": 1, "ch": 0, "ca": 0}, {"round": "R1", "date": "2026-06-16", "home_en": "Saudi Arabia", "away_en": "Jamaica", "home_cn": "沙特阿拉伯", "away_cn": "牙買加", "hg": 1, "ag": 1, "ht_hg": 1, "ht_ag": 0, "ch": 0, "ca": 0}, {"round": "R1", "date": "2026-06-17", "home_en": "France", "away_en": "Senegal", "home_cn": "法國", "away_cn": "塞內加爾", "hg": 3, "ag": 1, "ht_hg": 0, "ht_ag": 0, "ch": 0, "ca": 0}, {"round": "R1", "date": "2026-06-17", "home_en": "Iraq", "away_en": "Norway", "home_cn": "伊拉克", "away_cn": "挪威", "hg": 1, "ag": 4, "ht_hg": 1, "ht_ag": 2, "ch": 0, "ca": 0}, {"round": "R1", "date": "2026-06-17", "home_en": "Argentina", "away_en": "Algeria", "home_cn": "阿根廷", "away_cn": "阿爾及利亞", "hg": 3, "ag": 0, "ht_hg": 1, "ht_ag": 0, "ch": 0, "ca": 0}, {"round": "R1", "date": "2026-06-17", "home_en": "Austria", "away_en": "Jordan", "home_cn": "奧地利", "away_cn": "約旦", "hg": 3, "ag": 1, "ht_hg": 1, "ht_ag": 0, "ch": 0, "ca": 0}, {"round": "R1", "date": "2026-06-18", "home_en": "Portugal", "away_en": "DR Congo", "home_cn": "葡萄牙", "away_cn": "剛果民主共和國", "hg": 1, "ag": 1, "ht_hg": 1, "ht_ag": 1, "ch": 0, "ca": 0}, {"round": "R1", "date": "2026-06-18", "home_en": "England", "away_en": "Croatia", "home_cn": "英格蘭", "away_cn": "克羅地亞", "hg": 4, "ag": 2, "ht_hg": 2, "ht_ag": 2, "ch": 0, "ca": 0}, {"round": "R1", "date": "2026-06-18", "home_en": "Ghana", "away_en": "Panama", "home_cn": "加納", "away_cn": "巴拿馬", "hg": 1, "ag": 0, "ht_hg": 0, "ht_ag": 0, "ch": 0, "ca": 0}, {"round": "R1", "date": "2026-06-18", "home_en": "Uzbekistan", "away_en": "Colombia", "home_cn": "烏茲別克斯坦", "away_cn": "哥倫比亞", "hg": 1, "ag": 3, "ht_hg": 0, "ht_ag": 1, "ch": 0, "ca": 0}, {"round": "R2", "date": "2026-06-19", "home_en": "Mexico", "away_en": "Korea Republic", "home_cn": "墨西哥", "away_cn": "韓國", "hg": 1, "ag": 0, "ht_hg": 0, "ht_ag": 0, "ch": 0, "ca": 0}, {"round": "R2", "date": "2026-06-19", "home_en": "Canada", "away_en": "Qatar", "home_cn": "加拿大", "away_cn": "卡塔爾", "hg": 6, "ag": 0, "ht_hg": 3, "ht_ag": 0, "ch": 0, "ca": 0}, {"round": "R2", "date": "2026-06-19", "home_en": "Switzerland", "away_en": "Bosnia and Herzegovina", "home_cn": "瑞士", "away_cn": "波黑", "hg": 4, "ag": 1, "ht_hg": 0, "ht_ag": 0, "ch": 0, "ca": 0}, {"round": "R2", "date": "2026-06-19", "home_en": "Czech Republic", "away_en": "South Africa", "home_cn": "捷克", "away_cn": "南非", "hg": 1, "ag": 1, "ht_hg": 1, "ht_ag": 0, "ch": 0, "ca": 0}, {"round": "R2", "date": "2026-06-20", "home_en": "USA", "away_en": "Australia", "home_cn": "美國", "away_cn": "澳洲", "hg": 2, "ag": 0, "ht_hg": 2, "ht_ag": 0, "ch": 0, "ca": 0}, {"round": "R2", "date": "2026-06-20", "home_en": "Turkey", "away_en": "Paraguay", "home_cn": "土耳其", "away_cn": "巴拉圭", "hg": 0, "ag": 1, "ht_hg": 0, "ht_ag": 1, "ch": 0, "ca": 0}, {"round": "R2", "date": "2026-06-20", "home_en": "Scotland", "away_en": "Morocco", "home_cn": "蘇格蘭", "away_cn": "摩洛哥", "hg": 0, "ag": 1, "ht_hg": 0, "ht_ag": 1, "ch": 0, "ca": 0}, {"round": "R2", "date": "2026-06-20", "home_en": "Brazil", "away_en": "Haiti", "home_cn": "巴西", "away_cn": "海地", "hg": 3, "ag": 0, "ht_hg": 3, "ht_ag": 0, "ch": 0, "ca": 0}, {"round": "R2", "date": "2026-06-21", "home_en": "Netherlands", "away_en": "Sweden", "home_cn": "荷蘭", "away_cn": "瑞典", "hg": 5, "ag": 1, "ht_hg": 2, "ht_ag": 0, "ch": 0, "ca": 0}, {"round": "R2", "date": "2026-06-21", "home_en": "Germany", "away_en": "Cote d'Ivoire", "home_cn": "德國", "away_cn": "科特迪瓦", "hg": 2, "ag": 1, "ht_hg": 0, "ht_ag": 1, "ch": 0, "ca": 0}, {"round": "R2", "date": "2026-06-21", "home_en": "Ecuador", "away_en": "Uruguay", "home_cn": "厄瓜多爾", "away_cn": "烏拉圭", "hg": 0, "ag": 0, "ht_hg": 0, "ht_ag": 0, "ch": 0, "ca": 0}, {"round": "R2", "date": "2026-06-21", "home_en": "Tunisia", "away_en": "Japan", "home_cn": "突尼斯", "away_cn": "日本", "hg": 0, "ag": 4, "ht_hg": 0, "ht_ag": 2, "ch": 0, "ca": 0}, {"round": "R2", "date": "2026-06-22", "home_en": "Spain", "away_en": "Saudi Arabia", "home_cn": "西班牙", "away_cn": "沙特阿拉伯", "hg": 4, "ag": 0, "ht_hg": 3, "ht_ag": 0, "ch": 0, "ca": 0}, {"round": "R2", "date": "2026-06-22", "home_en": "Belgium", "away_en": "Iran", "home_cn": "比利時", "away_cn": "伊朗", "hg": 0, "ag": 0, "ht_hg": 0, "ht_ag": 0, "ch": 0, "ca": 0}, {"round": "R2", "date": "2026-06-22", "home_en": "Uruguay", "away_en": "Cape Verde", "home_cn": "烏拉圭", "away_cn": "佛得角", "hg": 2, "ag": 2, "ht_hg": 2, "ht_ag": 1, "ch": 0, "ca": 0}, {"round": "R2", "date": "2026-06-22", "home_en": "New Zealand", "away_en": "Egypt", "home_cn": "新西蘭", "away_cn": "埃及", "hg": 1, "ag": 3, "ht_hg": 1, "ht_ag": 0, "ch": 0, "ca": 0}, {"round": "R2", "date": "2026-06-23", "home_en": "Argentina", "away_en": "Austria", "home_cn": "阿根廷", "away_cn": "奧地利", "hg": 2, "ag": 0, "ht_hg": 1, "ht_ag": 0, "ch": 0, "ca": 0}, {"round": "R2", "date": "2026-06-23", "home_en": "Jordan", "away_en": "Algeria", "home_cn": "約旦", "away_cn": "阿爾及利亞", "hg": 1, "ag": 2, "ht_hg": 1, "ht_ag": 0, "ch": 0, "ca": 0}, {"round": "R2", "date": "2026-06-24", "home_en": "Portugal", "away_en": "Uzbekistan", "home_cn": "葡萄牙", "away_cn": "烏茲別克斯坦", "hg": 5, "ag": 0, "ht_hg": 3, "ht_ag": 0, "ch": 0, "ca": 0}, {"round": "R2", "date": "2026-06-24", "home_en": "England", "away_en": "Ghana", "home_cn": "英格蘭", "away_cn": "加納", "hg": 0, "ag": 0, "ht_hg": 0, "ht_ag": 0, "ch": 0, "ca": 0}, {"round": "R2", "date": "2026-06-24", "home_en": "Panama", "away_en": "Croatia", "home_cn": "巴拿馬", "away_cn": "克羅地亞", "hg": 0, "ag": 1, "ht_hg": 0, "ht_ag": 0, "ch": 0, "ca": 0}, {"round": "R2", "date": "2026-06-24", "home_en": "Colombia", "away_en": "DR Congo", "home_cn": "哥倫比亞", "away_cn": "剛果民主共和國", "hg": 1, "ag": 0, "ht_hg": 0, "ht_ag": 0, "ch": 0, "ca": 0}, {"round": "R3", "date": "2026-06-25", "home_en": "Bosnia and Herzegovina", "away_en": "Qatar", "home_cn": "波黑", "away_cn": "卡塔爾", "hg": 3, "ag": 1, "ht_hg": 2, "ht_ag": 1, "ch": 0, "ca": 0}, {"round": "R3", "date": "2026-06-25", "home_en": "Switzerland", "away_en": "Canada", "home_cn": "瑞士", "away_cn": "加拿大", "hg": 2, "ag": 1, "ht_hg": 0, "ht_ag": 0, "ch": 0, "ca": 0}, {"round": "R3", "date": "2026-06-25", "home_en": "Morocco", "away_en": "Haiti", "home_cn": "摩洛哥", "away_cn": "海地", "hg": 4, "ag": 2, "ht_hg": 2, "ht_ag": 2, "ch": 0, "ca": 0}, {"round": "R3", "date": "2026-06-25", "home_en": "Scotland", "away_en": "Brazil", "home_cn": "蘇格蘭", "away_cn": "巴西", "hg": 0, "ag": 3, "ht_hg": 0, "ht_ag": 1, "ch": 0, "ca": 0}, {"round": "R3", "date": "2026-06-25", "home_en": "Czech Republic", "away_en": "Mexico", "home_cn": "捷克", "away_cn": "墨西哥", "hg": 0, "ag": 3, "ht_hg": 0, "ht_ag": 0, "ch": 0, "ca": 0}, {"round": "R3", "date": "2026-06-25", "home_en": "South Africa", "away_en": "Korea Republic", "home_cn": "南非", "away_cn": "韓國", "hg": 1, "ag": 0, "ht_hg": 0, "ht_ag": 0, "ch": 0, "ca": 0}];
-const VENUES = {"AT&T Stadium": {"city": "Arlington", "country": "USA", "capacity": 80000, "altitude": 180, "grass": "hybrid", "climate": "hot_humid"}, "SoFi Stadium": {"city": "Inglewood", "country": "USA", "capacity": 70000, "altitude": 30, "grass": "natural", "climate": "mediterranean"}, "MetLife Stadium": {"city": "East Rutherford", "country": "USA", "capacity": 82500, "altitude": 3, "grass": "natural", "climate": "continental"}, "Mercedes-Benz Stadium": {"city": "Atlanta", "country": "USA", "capacity": 71000, "altitude": 320, "grass": "hybrid", "climate": "hot_humid"}, "Hard Rock Stadium": {"city": "Miami", "country": "USA", "capacity": 64767, "altitude": 3, "grass": "natural", "climate": "tropical"}, "Levi's Stadium": {"city": "Santa Clara", "country": "USA", "capacity": 68500, "altitude": 10, "grass": "natural", "climate": "mediterranean"}, "Lumen Field": {"city": "Seattle", "country": "USA", "capacity": 72000, "altitude": 50, "grass": "natural", "climate": "oceanic"}, "BC Place": {"city": "Vancouver", "country": "CAN", "capacity": 54500, "altitude": 20, "grass": "artificial", "climate": "oceanic"}, "BMO Field": {"city": "Toronto", "country": "CAN", "capacity": 30000, "altitude": 80, "grass": "natural", "climate": "continental"}, "Estadio Azteca": {"city": "Mexico City", "country": "MEX", "capacity": 87523, "altitude": 2240, "grass": "natural", "climate": "high_altitude"}, "Estadio BBVA": {"city": "Monterrey", "country": "MEX", "capacity": 53500, "altitude": 512, "grass": "natural", "climate": "hot_dry"}, "Estadio Akron": {"city": "Guadalajara", "country": "MEX", "capacity": 46000, "altitude": 1566, "grass": "natural", "climate": "high_altitude"}, "Estadio Olímpico Universitario": {"city": "Mexico City", "country": "MEX", "capacity": 72000, "altitude": 2240, "grass": "natural", "climate": "high_altitude"}};
+const TEAM_NAMES = {"Mexico":"墨西哥","South Africa":"南非","Korea Republic":"韓國","Czech Republic":"捷克","USA":"美國","Paraguay":"巴拉圭","Canada":"加拿大","Bosnia and Herzegovina":"波黑","Australia":"澳洲","Turkey":"土耳其","Qatar":"卡塔爾","Switzerland":"瑞士","Brazil":"巴西","Morocco":"摩洛哥","Haiti":"海地","Scotland":"蘇格蘭","Germany":"德國","Curacao":"庫拉索","Netherlands":"荷蘭","Japan":"日本","Cote d'Ivoire":"科特迪瓦","Ecuador":"厄瓜多爾","Sweden":"瑞典","Tunisia":"突尼斯","Spain":"西班牙","Cape Verde":"佛得角","Belgium":"比利時","Egypt":"埃及","Iran":"伊朗","New Zealand":"新西蘭","Saudi Arabia":"沙特阿拉伯","Uruguay":"烏拉圭","France":"法國","Senegal":"塞內加爾","Iraq":"伊拉克","Norway":"挪威","Argentina":"阿根廷","Algeria":"阿爾及利亞","Austria":"奧地利","Jordan":"約旦","Portugal":"葡萄牙","DR Congo":"剛果民主共和國","England":"英格蘭","Croatia":"克羅地亞","Ghana":"加納","Panama":"巴拿馬","Uzbekistan":"烏茲別克斯坦","Colombia":"哥倫比亞","Italy":"意大利","Ukraine":"烏克蘭","Jamaica":"牙買加","Finland":"芬蘭","Chile":"智利","Denmark":"丹麥","Cameroon":"喀麥隆","Poland":"波蘭","Greece":"希臘","Venezuela":"委內瑞拉","Nigeria":"尼日利亞"};
 
-const WC_PARAMS = {
-  avg_goals: 2.94, home_adv: 0.15, draw_rate: 0.269, btts_rate: 0.519,
-  avg_corners: 9.2, avg_cards: 4.5, intensity: 1.15,
-  wc_actual_round1_goals: 3.12, wc_actual_round2_goals: 2.64, wc_actual_round3_goals: 3.33
+const ALL_TEAMS = Object.keys(TEAM_NAMES);
+
+const MATCHES = [
+  // R1
+  {"date":"2026-06-12","time":"20:00","home_en":"Mexico","away_en":"South Africa","group":"A","round":"R1"},
+  {"date":"2026-06-12","time":"22:00","home_en":"Korea Republic","away_en":"Czech Republic","group":"A","round":"R1"},
+  {"date":"2026-06-13","time":"16:00","home_en":"USA","away_en":"Paraguay","group":"J","round":"R1"},
+  {"date":"2026-06-13","time":"19:00","home_en":"Canada","away_en":"Bosnia and Herzegovina","group":"B","round":"R1"},
+  {"date":"2026-06-13","time":"22:00","home_en":"Australia","away_en":"Turkey","group":"J","round":"R1"},
+  {"date":"2026-06-14","time":"16:00","home_en":"Qatar","away_en":"Switzerland","group":"B","round":"R1"},
+  {"date":"2026-06-14","time":"19:00","home_en":"Brazil","away_en":"Morocco","group":"C","round":"R1"},
+  {"date":"2026-06-14","time":"22:00","home_en":"Haiti","away_en":"Scotland","group":"C","round":"R1"},
+  {"date":"2026-06-15","time":"16:00","home_en":"Germany","away_en":"Curacao","group":"D","round":"R1"},
+  {"date":"2026-06-15","time":"19:00","home_en":"Netherlands","away_en":"Japan","group":"E","round":"R1"},
+  {"date":"2026-06-15","time":"22:00","home_en":"Cote d'Ivoire","away_en":"Ecuador","group":"D","round":"R1"},
+  {"date":"2026-06-16","time":"16:00","home_en":"Sweden","away_en":"Tunisia","group":"E","round":"R1"},
+  {"date":"2026-06-16","time":"19:00","home_en":"Spain","away_en":"Cape Verde","group":"F","round":"R1"},
+  {"date":"2026-06-16","time":"22:00","home_en":"Belgium","away_en":"Egypt","group":"G","round":"R1"},
+  {"date":"2026-06-17","time":"16:00","home_en":"Iran","away_en":"New Zealand","group":"G","round":"R1"},
+  {"date":"2026-06-17","time":"19:00","home_en":"Saudi Arabia","away_en":"Uruguay","group":"F","round":"R1"},
+  {"date":"2026-06-17","time":"22:00","home_en":"France","away_en":"Senegal","group":"H","round":"R1"},
+  {"date":"2026-06-18","time":"16:00","home_en":"Iraq","away_en":"Norway","group":"H","round":"R1"},
+  {"date":"2026-06-18","time":"19:00","home_en":"Argentina","away_en":"Algeria","group":"I","round":"R1"},
+  {"date":"2026-06-18","time":"22:00","home_en":"Austria","away_en":"Jordan","group":"I","round":"R1"},
+  {"date":"2026-06-19","time":"16:00","home_en":"Portugal","away_en":"DR Congo","group":"K","round":"R1"},
+  {"date":"2026-06-19","time":"19:00","home_en":"England","away_en":"Croatia","group":"L","round":"R1"},
+  {"date":"2026-06-19","time":"22:00","home_en":"Ghana","away_en":"Panama","group":"L","round":"R1"},
+  {"date":"2026-06-20","time":"16:00","home_en":"Uzbekistan","away_en":"Colombia","group":"K","round":"R1"},
+  // R2
+  {"date":"2026-06-20","time":"19:00","home_en":"Mexico","away_en":"Korea Republic","group":"A","round":"R2"},
+  {"date":"2026-06-20","time":"22:00","home_en":"Canada","away_en":"Qatar","group":"B","round":"R2"},
+  {"date":"2026-06-21","time":"16:00","home_en":"Switzerland","away_en":"Bosnia and Herzegovina","group":"B","round":"R2"},
+  {"date":"2026-06-21","time":"19:00","home_en":"Czech Republic","away_en":"South Africa","group":"A","round":"R2"},
+  {"date":"2026-06-21","time":"22:00","home_en":"USA","away_en":"Australia","group":"J","round":"R2"},
+  {"date":"2026-06-22","time":"16:00","home_en":"Turkey","away_en":"Paraguay","group":"J","round":"R2"},
+  {"date":"2026-06-22","time":"19:00","home_en":"Scotland","away_en":"Morocco","group":"C","round":"R2"},
+  {"date":"2026-06-22","time":"22:00","home_en":"Brazil","away_en":"Haiti","group":"C","round":"R2"},
+  {"date":"2026-06-23","time":"16:00","home_en":"Netherlands","away_en":"Sweden","group":"E","round":"R2"},
+  {"date":"2026-06-23","time":"19:00","home_en":"Germany","away_en":"Cote d'Ivoire","group":"D","round":"R2"},
+  {"date":"2026-06-23","time":"22:00","home_en":"Ecuador","away_en":"Uruguay","group":"F","round":"R2"},
+  {"date":"2026-06-24","time":"16:00","home_en":"Tunisia","away_en":"Japan","group":"E","round":"R2"},
+  {"date":"2026-06-24","time":"19:00","home_en":"Spain","away_en":"Saudi Arabia","group":"F","round":"R2"},
+  {"date":"2026-06-24","time":"22:00","home_en":"Belgium","away_en":"Iran","group":"G","round":"R2"},
+  {"date":"2026-06-25","time":"16:00","home_en":"Uruguay","away_en":"Cape Verde","group":"F","round":"R2"},
+  {"date":"2026-06-25","time":"19:00","home_en":"New Zealand","away_en":"Egypt","group":"G","round":"R2"},
+  {"date":"2026-06-25","time":"22:00","home_en":"Argentina","away_en":"Austria","group":"I","round":"R2"},
+  {"date":"2026-06-26","time":"16:00","home_en":"Jordan","away_en":"Algeria","group":"I","round":"R2"},
+  {"date":"2026-06-26","time":"19:00","home_en":"Portugal","away_en":"Uzbekistan","group":"K","round":"R2"},
+  {"date":"2026-06-26","time":"22:00","home_en":"England","away_en":"Ghana","group":"L","round":"R2"},
+  {"date":"2026-06-27","time":"16:00","home_en":"Panama","away_en":"Croatia","group":"L","round":"R2"},
+  {"date":"2026-06-27","time":"19:00","home_en":"Colombia","away_en":"DR Congo","group":"K","round":"R2"},
+  {"date":"2026-06-27","time":"22:00","home_en":"France","away_en":"Iraq","group":"H","round":"R2"},
+  {"date":"2026-06-28","time":"16:00","home_en":"Senegal","away_en":"Norway","group":"H","round":"R2"},
+  // R3
+  {"date":"2026-06-25","time":"20:00","home_en":"Bosnia and Herzegovina","away_en":"Qatar","group":"B","round":"R3"},
+  {"date":"2026-06-25","time":"22:00","home_en":"Switzerland","away_en":"Canada","group":"B","round":"R3"},
+  {"date":"2026-06-25","time":"20:00","home_en":"Morocco","away_en":"Haiti","group":"C","round":"R3"},
+  {"date":"2026-06-25","time":"22:00","home_en":"Scotland","away_en":"Brazil","group":"C","round":"R3"},
+  {"date":"2026-06-25","time":"20:00","home_en":"Czech Republic","away_en":"Mexico","group":"A","round":"R3"},
+  {"date":"2026-06-25","time":"22:00","home_en":"South Africa","away_en":"Korea Republic","group":"A","round":"R3"},
+  {"date":"2026-06-26","time":"04:00","home_en":"Curacao","away_en":"Cote d'Ivoire","group":"D","round":"R3"},
+  {"date":"2026-06-26","time":"04:00","home_en":"Ecuador","away_en":"Germany","group":"D","round":"R3"},
+  {"date":"2026-06-26","time":"07:00","home_en":"Tunisia","away_en":"Netherlands","group":"E","round":"R3"},
+  {"date":"2026-06-26","time":"07:00","home_en":"Japan","away_en":"Sweden","group":"E","round":"R3"},
+  {"date":"2026-06-26","time":"10:00","home_en":"Paraguay","away_en":"Australia","group":"J","round":"R3"},
+  {"date":"2026-06-26","time":"10:00","home_en":"Turkey","away_en":"USA","group":"J","round":"R3"},
+  {"date":"2026-06-27","time":"03:00","home_en":"Norway","away_en":"France","group":"H","round":"R3"},
+  {"date":"2026-06-27","time":"03:00","home_en":"Senegal","away_en":"Iraq","group":"H","round":"R3"},
+  {"date":"2026-06-27","time":"08:00","home_en":"Uruguay","away_en":"Spain","group":"F","round":"R3"},
+  {"date":"2026-06-27","time":"08:00","home_en":"Cape Verde","away_en":"Saudi Arabia","group":"F","round":"R3"},
+  {"date":"2026-06-27","time":"11:00","home_en":"Egypt","away_en":"Iran","group":"G","round":"R3"},
+  {"date":"2026-06-27","time":"11:00","home_en":"New Zealand","away_en":"Belgium","group":"G","round":"R3"},
+  {"date":"2026-06-28","time":"05:00","home_en":"Panama","away_en":"England","group":"L","round":"R3"},
+  {"date":"2026-06-28","time":"05:00","home_en":"Croatia","away_en":"Ghana","group":"L","round":"R3"},
+  {"date":"2026-06-28","time":"07:30","home_en":"Colombia","away_en":"Portugal","group":"K","round":"R3"},
+  {"date":"2026-06-28","time":"07:30","home_en":"DR Congo","away_en":"Uzbekistan","group":"K","round":"R3"},
+  {"date":"2026-06-28","time":"10:00","home_en":"Algeria","away_en":"Austria","group":"I","round":"R3"},
+  {"date":"2026-06-28","time":"10:00","home_en":"Jordan","away_en":"Argentina","group":"I","round":"R3"}
+];
+
+MATCHES.forEach(m => {
+  m.home_cn = TEAM_NAMES[m.home_en] || m.home_en;
+  m.away_cn = TEAM_NAMES[m.away_en] || m.away_en;
+  m.venue = "";
+});
+
+const GROUPS = {
+  "A": ["墨西哥","南非","韓國","捷克"],
+  "B": ["加拿大","波黑","卡塔爾","瑞士"],
+  "C": ["巴西","摩洛哥","海地","蘇格蘭"],
+  "D": ["德國","庫拉索","科特迪瓦","厄瓜多爾"],
+  "E": ["荷蘭","日本","瑞典","突尼斯"],
+  "F": ["西班牙","佛得角","沙特阿拉伯","烏拉圭"],
+  "G": ["比利時","埃及","伊朗","新西蘭"],
+  "H": ["法國","塞內加爾","伊拉克","挪威"],
+  "I": ["阿根廷","阿爾及利亞","奧地利","約旦"],
+  "J": ["美國","巴拉圭","澳洲","土耳其"],
+  "K": ["葡萄牙","剛果民主共和國","烏茲別克斯坦","哥倫比亞"],
+  "L": ["英格蘭","克羅地亞","加納","巴拿馬"]
 };
 
-const WC_KO_PARAMS = {
-  avg_goals: 2.45, draw_rate: 0.35, btts_rate: 0.45,
-  avg_corners: 8.8, avg_cards: 5.2, intensity: 1.20, knockout: true
-};
+const ELO_RATINGS = {"Mexico":1563,"Brazil":1552,"USA":1551,"Argentina":1551,"Germany":1549,"Switzerland":1544,"Colombia":1538,"Morocco":1536,"Netherlands":1532,"Spain":1530,"Portugal":1529,"Norway":1528,"Japan":1527,"Egypt":1524,"France":1524,"England":1523,"Canada":1517,"Ghana":1516,"Cote d'Ivoire":1500,"Australia":1500,"Austria":1500,"Belgium":1500,"Iran":1500,"Cape Verde":1499,"Uruguay":1499,"Sweden":1497,"Bosnia and Herzegovina":1495,"South Africa":1493,"Croatia":1492,"Paraguay":1488,"Algeria":1488,"DR Congo":1485,"Ecuador":1484,"Korea Republic":1483,"New Zealand":1476,"Senegal":1476,"Scotland":1473,"Iraq":1472,"Saudi Arabia":1470,"Panama":1467,"Curacao":1466,"Czech Republic":1460,"Turkey":1459,"Jordan":1459,"Uzbekistan":1446,"Tunisia":1442,"Qatar":1442,"Haiti":1437};
 
-const STYLE_RATINGS = {
-  "Germany":{attack:3.06,defense:1.13,style:"attacking"},"Norway":{attack:2.72,defense:1.13,style:"attacking"},
-  "Netherlands":{attack:2.38,defense:0.82,style:"attacking"},"USA":{attack:2.04,defense:1.84,style:"attacking"},
-  "Japan":{attack:2.04,defense:1.13,style:"attacking"},"Sweden":{attack:2.04,defense:0.45,style:"attacking"},
-  "France":{attack:2.04,defense:1.13,style:"attacking"},"Portugal":{attack:2.04,defense:1.84,style:"attacking"},
-  "Canada":{attack:1.81,defense:1.13,style:"attacking"},"Argentina":{attack:1.70,defense:4.90,style:"attacking"},
-  "Switzerland":{attack:1.59,defense:1.13,style:"attacking"},"Brazil":{attack:1.59,defense:2.32,style:"attacking"},
-  "Mexico":{attack:1.36,defense:4.90,style:"attacking"},"Morocco":{attack:1.36,defense:1.13,style:"attacking"},
-  "Spain":{attack:1.36,defense:4.90,style:"attacking"},"Egypt":{attack:1.36,defense:1.13,style:"attacking"},
-  "England":{attack:1.36,defense:1.13,style:"attacking"},"Colombia":{attack:1.36,defense:1.84,style:"attacking"},
-  "Bosnia and Herzegovina":{attack:1.13,defense:0.64,style:"balanced"},"New Zealand":{attack:1.02,defense:0.53,style:"balanced"},
-  "Austria":{attack:1.02,defense:0.82,style:"balanced"},"Croatia":{attack:1.02,defense:0.64,style:"balanced"},
-  "Paraguay":{attack:0.68,defense:0.64,style:"defensive"},"Australia":{attack:0.68,defense:1.13,style:"defensive"},
-  "Curacao":{attack:0.68,defense:0.20,style:"defensive"},"Cote d'Ivoire":{attack:0.68,defense:1.13,style:"defensive"},
-  "Cape Verde":{attack:0.68,defense:1.13,style:"defensive"},"Iran":{attack:0.68,defense:1.13,style:"defensive"},
-  "Uruguay":{attack:0.68,defense:1.13,style:"defensive"},"Senegal":{attack:0.68,defense:0.45,style:"defensive"},
-  "Iraq":{attack:0.68,defense:0.34,style:"defensive"},"Algeria":{attack:0.68,defense:0.64,style:"defensive"},
-  "Jordan":{attack:0.68,defense:0.53,style:"defensive"},"South Africa":{attack:0.45,defense:1.13,style:"defensive"},
-  "Korea Republic":{attack:0.45,defense:1.13,style:"defensive"},"Czech Republic":{attack:0.45,defense:0.64,style:"defensive"},
-  "Qatar":{attack:0.45,defense:0.40,style:"defensive"},"Haiti":{attack:0.45,defense:0.50,style:"defensive"},
-  "Tunisia":{attack:0.34,defense:0.31,style:"defensive"},"Belgium":{attack:0.34,defense:1.84,style:"defensive"},
-  "Saudi Arabia":{attack:0.34,defense:0.53,style:"defensive"},"DR Congo":{attack:0.34,defense:1.13,style:"defensive"},
-  "Ghana":{attack:0.34,defense:4.90,style:"defensive"},"Uzbekistan":{attack:0.34,defense:0.34,style:"defensive"},
-  "Scotland":{attack:0.23,defense:0.90,style:"defensive"},"Turkey":{attack:0.00,defense:0.82,style:"defensive"},
-  "Ecuador":{attack:0.00,defense:1.84,style:"defensive"},"Panama":{attack:0.00,defense:1.13,style:"defensive"},
-};
+// 內建歷史數據 (52場)
+const BUILT_IN_HISTORICAL = [
+  {"round":"R1","date":"2026-06-12","home_en":"Mexico","away_en":"South Africa","hg":2,"ag":0,"ht_hg":1,"ht_ag":0},
+  {"round":"R1","date":"2026-06-12","home_en":"Korea Republic","away_en":"Czech Republic","hg":2,"ag":1,"ht_hg":0,"ht_ag":0},
+  {"round":"R1","date":"2026-06-13","home_en":"USA","away_en":"Paraguay","hg":4,"ag":1,"ht_hg":3,"ht_ag":0},
+  {"round":"R1","date":"2026-06-13","home_en":"Canada","away_en":"Bosnia and Herzegovina","hg":1,"ag":1,"ht_hg":0,"ht_ag":1},
+  {"round":"R1","date":"2026-06-14","home_en":"Australia","away_en":"Turkey","hg":2,"ag":0,"ht_hg":1,"ht_ag":0},
+  {"round":"R1","date":"2026-06-14","home_en":"Qatar","away_en":"Switzerland","hg":1,"ag":1,"ht_hg":0,"ht_ag":1},
+  {"round":"R1","date":"2026-06-14","home_en":"Brazil","away_en":"Morocco","hg":1,"ag":1,"ht_hg":1,"ht_ag":1},
+  {"round":"R1","date":"2026-06-14","home_en":"Haiti","away_en":"Scotland","hg":0,"ag":1,"ht_hg":0,"ht_ag":1},
+  {"round":"R1","date":"2026-06-15","home_en":"Germany","away_en":"Curacao","hg":7,"ag":1,"ht_hg":3,"ht_ag":1},
+  {"round":"R1","date":"2026-06-15","home_en":"Netherlands","away_en":"Japan","hg":2,"ag":2,"ht_hg":0,"ht_ag":0},
+  {"round":"R1","date":"2026-06-15","home_en":"Cote d'Ivoire","away_en":"Ecuador","hg":1,"ag":0,"ht_hg":0,"ht_ag":0},
+  {"round":"R1","date":"2026-06-16","home_en":"Sweden","away_en":"Tunisia","hg":5,"ag":1,"ht_hg":2,"ht_ag":1},
+  {"round":"R1","date":"2026-06-16","home_en":"Spain","away_en":"Cape Verde","hg":0,"ag":0,"ht_hg":0,"ht_ag":0},
+  {"round":"R1","date":"2026-06-16","home_en":"Belgium","away_en":"Egypt","hg":1,"ag":1,"ht_hg":0,"ht_ag":1},
+  {"round":"R1","date":"2026-06-17","home_en":"Iran","away_en":"New Zealand","hg":2,"ag":2,"ht_hg":1,"ht_ag":1},
+  {"round":"R1","date":"2026-06-17","home_en":"Saudi Arabia","away_en":"Uruguay","hg":1,"ag":1,"ht_hg":1,"ht_ag":0},
+  {"round":"R1","date":"2026-06-17","home_en":"France","away_en":"Senegal","hg":3,"ag":1,"ht_hg":0,"ht_ag":0},
+  {"round":"R1","date":"2026-06-18","home_en":"Iraq","away_en":"Norway","hg":1,"ag":4,"ht_hg":1,"ht_ag":2},
+  {"round":"R1","date":"2026-06-18","home_en":"Argentina","away_en":"Algeria","hg":3,"ag":0,"ht_hg":1,"ht_ag":0},
+  {"round":"R1","date":"2026-06-18","home_en":"Austria","away_en":"Jordan","hg":3,"ag":1,"ht_hg":1,"ht_ag":0},
+  {"round":"R1","date":"2026-06-19","home_en":"Portugal","away_en":"DR Congo","hg":1,"ag":1,"ht_hg":1,"ht_ag":1},
+  {"round":"R1","date":"2026-06-19","home_en":"England","away_en":"Croatia","hg":4,"ag":2,"ht_hg":2,"ht_ag":2},
+  {"round":"R1","date":"2026-06-19","home_en":"Ghana","away_en":"Panama","hg":1,"ag":0,"ht_hg":0,"ht_ag":0},
+  {"round":"R1","date":"2026-06-20","home_en":"Uzbekistan","away_en":"Colombia","hg":1,"ag":3,"ht_hg":0,"ht_ag":1},
+  {"round":"R2","date":"2026-06-20","home_en":"Mexico","away_en":"Korea Republic","hg":1,"ag":0,"ht_hg":0,"ht_ag":0},
+  {"round":"R2","date":"2026-06-20","home_en":"Canada","away_en":"Qatar","hg":6,"ag":0,"ht_hg":3,"ht_ag":0},
+  {"round":"R2","date":"2026-06-21","home_en":"Switzerland","away_en":"Bosnia and Herzegovina","hg":4,"ag":1,"ht_hg":0,"ht_ag":0},
+  {"round":"R2","date":"2026-06-21","home_en":"Czech Republic","away_en":"South Africa","hg":1,"ag":1,"ht_hg":1,"ht_ag":0},
+  {"round":"R2","date":"2026-06-21","home_en":"USA","away_en":"Australia","hg":2,"ag":0,"ht_hg":2,"ht_ag":0},
+  {"round":"R2","date":"2026-06-22","home_en":"Turkey","away_en":"Paraguay","hg":0,"ag":1,"ht_hg":0,"ht_ag":1},
+  {"round":"R2","date":"2026-06-22","home_en":"Scotland","away_en":"Morocco","hg":0,"ag":1,"ht_hg":0,"ht_ag":1},
+  {"round":"R2","date":"2026-06-22","home_en":"Brazil","away_en":"Haiti","hg":3,"ag":0,"ht_hg":3,"ht_ag":0},
+  {"round":"R2","date":"2026-06-23","home_en":"Netherlands","away_en":"Sweden","hg":5,"ag":1,"ht_hg":2,"ht_ag":1},
+  {"round":"R2","date":"2026-06-23","home_en":"Germany","away_en":"Cote d'Ivoire","hg":2,"ag":1,"ht_hg":0,"ht_ag":1},
+  {"round":"R2","date":"2026-06-23","home_en":"Ecuador","away_en":"Uruguay","hg":0,"ag":0,"ht_hg":0,"ht_ag":0},
+  {"round":"R2","date":"2026-06-24","home_en":"Tunisia","away_en":"Japan","hg":0,"ag":4,"ht_hg":0,"ht_ag":2},
+  {"round":"R2","date":"2026-06-24","home_en":"Spain","away_en":"Saudi Arabia","hg":4,"ag":0,"ht_hg":3,"ht_ag":0},
+  {"round":"R2","date":"2026-06-24","home_en":"Belgium","away_en":"Iran","hg":0,"ag":0,"ht_hg":0,"ht_ag":0},
+  {"round":"R2","date":"2026-06-25","home_en":"Uruguay","away_en":"Cape Verde","hg":2,"ag":2,"ht_hg":2,"ht_ag":1},
+  {"round":"R2","date":"2026-06-25","home_en":"New Zealand","away_en":"Egypt","hg":1,"ag":3,"ht_hg":1,"ht_ag":0},
+  {"round":"R2","date":"2026-06-25","home_en":"Argentina","away_en":"Austria","hg":2,"ag":0,"ht_hg":1,"ht_ag":0},
+  {"round":"R2","date":"2026-06-26","home_en":"Jordan","away_en":"Algeria","hg":1,"ag":2,"ht_hg":1,"ht_ag":0},
+  {"round":"R2","date":"2026-06-26","home_en":"Portugal","away_en":"Uzbekistan","hg":5,"ag":0,"ht_hg":3,"ht_ag":0},
+  {"round":"R2","date":"2026-06-26","home_en":"England","away_en":"Ghana","hg":0,"ag":0,"ht_hg":0,"ht_ag":0},
+  {"round":"R2","date":"2026-06-27","home_en":"Panama","away_en":"Croatia","hg":0,"ag":1,"ht_hg":0,"ht_ag":0},
+  {"round":"R2","date":"2026-06-27","home_en":"Colombia","away_en":"DR Congo","hg":1,"ag":0,"ht_hg":0,"ht_ag":0},
+  {"round":"R2","date":"2026-06-27","home_en":"France","away_en":"Iraq","hg":3,"ag":1,"ht_hg":0,"ht_ag":0},
+  {"round":"R2","date":"2026-06-28","home_en":"Senegal","away_en":"Norway","hg":1,"ag":4,"ht_hg":0,"ht_ag":2},
+  {"round":"R3","date":"2026-06-25","home_en":"Bosnia and Herzegovina","away_en":"Qatar","hg":3,"ag":1,"ht_hg":2,"ht_ag":1},
+  {"round":"R3","date":"2026-06-25","home_en":"Switzerland","away_en":"Canada","hg":2,"ag":1,"ht_hg":0,"ht_ag":0},
+  {"round":"R3","date":"2026-06-25","home_en":"Morocco","away_en":"Haiti","hg":4,"ag":2,"ht_hg":2,"ht_ag":2},
+  {"round":"R3","date":"2026-06-25","home_en":"Scotland","away_en":"Brazil","hg":0,"ag":3,"ht_hg":0,"ht_ag":1},
+  {"round":"R3","date":"2026-06-25","home_en":"Czech Republic","away_en":"Mexico","hg":0,"ag":3,"ht_hg":0,"ht_ag":0},
+  {"round":"R3","date":"2026-06-25","home_en":"South Africa","away_en":"Korea Republic","hg":1,"ag":0,"ht_hg":0,"ht_ag":0}
+];
+
+const STYLE_RATINGS = {"Germany":{attack:3.06,defense:1.13,style:"attacking"},"Norway":{attack:2.72,defense:1.13,style:"attacking"},"Netherlands":{attack:2.38,defense:0.82,style:"attacking"},"USA":{attack:2.04,defense:1.84,style:"attacking"},"Japan":{attack:2.04,defense:1.13,style:"attacking"},"Sweden":{attack:2.04,defense:0.45,style:"attacking"},"France":{attack:2.04,defense:1.13,style:"attacking"},"Portugal":{attack:2.04,defense:1.84,style:"attacking"},"Canada":{attack:1.81,defense:1.13,style:"attacking"},"Argentina":{attack:1.70,defense:4.90,style:"attacking"},"Switzerland":{attack:1.59,defense:1.13,style:"attacking"},"Brazil":{attack:1.59,defense:2.32,style:"attacking"},"Mexico":{attack:1.36,defense:4.90,style:"attacking"},"Morocco":{attack:1.36,defense:1.13,style:"attacking"},"Spain":{attack:1.36,defense:4.90,style:"attacking"},"Egypt":{attack:1.36,defense:1.13,style:"attacking"},"England":{attack:1.36,defense:1.13,style:"attacking"},"Colombia":{attack:1.36,defense:1.84,style:"attacking"},"Bosnia and Herzegovina":{attack:1.13,defense:0.64,style:"balanced"},"New Zealand":{attack:1.02,defense:0.53,style:"balanced"},"Austria":{attack:1.02,defense:0.82,style:"balanced"},"Croatia":{attack:1.02,defense:0.64,style:"balanced"},"Paraguay":{attack:0.68,defense:0.64,style:"defensive"},"Australia":{attack:0.68,defense:1.13,style:"defensive"},"Curacao":{attack:0.68,defense:0.20,style:"defensive"},"Cote d'Ivoire":{attack:0.68,defense:1.13,style:"defensive"},"Cape Verde":{attack:0.68,defense:1.13,style:"defensive"},"Iran":{attack:0.68,defense:1.13,style:"defensive"},"Uruguay":{attack:0.68,defense:1.13,style:"defensive"},"Senegal":{attack:0.68,defense:0.45,style:"defensive"},"Iraq":{attack:0.68,defense:0.34,style:"defensive"},"Algeria":{attack:0.68,defense:0.64,style:"defensive"},"Jordan":{attack:0.68,defense:0.53,style:"defensive"},"South Africa":{attack:0.45,defense:1.13,style:"defensive"},"Korea Republic":{attack:0.45,defense:1.13,style:"defensive"},"Czech Republic":{attack:0.45,defense:0.64,style:"defensive"},"Qatar":{attack:0.45,defense:0.40,style:"defensive"},"Haiti":{attack:0.45,defense:0.50,style:"defensive"},"Tunisia":{attack:0.34,defense:0.31,style:"defensive"},"Belgium":{attack:0.34,defense:1.84,style:"defensive"},"Saudi Arabia":{attack:0.34,defense:0.53,style:"defensive"},"DR Congo":{attack:0.34,defense:1.13,style:"defensive"},"Ghana":{attack:0.34,defense:4.90,style:"defensive"},"Uzbekistan":{attack:0.34,defense:0.34,style:"defensive"},"Scotland":{attack:0.23,defense:0.90,style:"defensive"},"Turkey":{attack:0.00,defense:0.82,style:"defensive"},"Ecuador":{attack:0.00,defense:1.84,style:"defensive"},"Panama":{attack:0.00,defense:1.13,style:"defensive"}};
 
 const CORNER_STYLE = {possession:1.08,counter_attack:0.92,direct:1.05,wing_play:1.12,set_piece:1.03,park_bus:0.85,high_press:1.10};
 const CARD_STYLE = {high_press:1.20,park_bus:1.10,direct:1.05,possession:0.90,counter_attack:0.95,wing_play:0.95,set_piece:1.00};
 
-const FLAG_MAP = {
-  "墨西哥":"🇲🇽","南非":"🇿🇦","韓國":"🇰🇷","捷克":"🇨🇿","美國":"🇺🇸","巴拉圭":"🇵🇾","加拿大":"🇨🇦","波黑":"🇧🇦",
-  "澳洲":"🇦🇺","土耳其":"🇹🇷","卡塔爾":"🇶🇦","瑞士":"🇨🇭","巴西":"🇧🇷","摩洛哥":"🇲🇦","海地":"🇭🇹","蘇格蘭":"🏴󠁧󠁢󠁳󠁣󠁴󠁿",
-  "德國":"🇩🇪","庫拉索":"🇨🇼","荷蘭":"🇳🇱","日本":"🇯🇵","科特迪瓦":"🇨🇮","厄瓜多爾":"🇪🇨","瑞典":"🇸🇪","突尼斯":"🇹🇳",
-  "西班牙":"🇪🇸","佛得角":"🇨🇻","比利時":"🇧🇪","埃及":"🇪🇬","伊朗":"🇮🇷","新西蘭":"🇳🇿","沙特阿拉伯":"🇸🇦","烏拉圭":"🇺🇾",
-  "法國":"🇫🇷","塞內加爾":"🇸🇳","伊拉克":"🇮🇶","挪威":"🇳🇴","阿根廷":"🇦🇷","阿爾及利亞":"🇩🇿","奧地利":"🇦🇹","約旦":"🇯🇴",
-  "葡萄牙":"🇵🇹","剛果民主共和國":"🇨🇩","英格蘭":"🏴󠁧󠁢󠁥󠁮󠁧󠁿","克羅地亞":"🇭🇷","加納":"🇬🇭","巴拿馬":"🇵🇦","烏茲別克斯坦":"🇺🇿","哥倫比亞":"🇨🇴",
-  "意大利":"🇮🇹","烏克蘭":"🇺🇦","牙買加":"🇯🇲","芬蘭":"🇫🇮","智利":"🇨🇱","丹麥":"🇩🇰","喀麥隆":"🇨🇲","波蘭":"🇵🇱",
-  "希臘":"🇬🇷","委內瑞拉":"🇻🇪","尼日利亞":"🇳🇬"
-};
+const FLAG_MAP = {"墨西哥":"🇲🇽","南非":"🇿🇦","韓國":"🇰🇷","捷克":"🇨🇿","美國":"🇺🇸","巴拉圭":"🇵🇾","加拿大":"🇨🇦","波黑":"🇧🇦","澳洲":"🇦🇺","土耳其":"🇹🇷","卡塔爾":"🇶🇦","瑞士":"🇨🇭","巴西":"🇧🇷","摩洛哥":"🇲🇦","海地":"🇭🇹","蘇格蘭":"🏴󠁧󠁢󠁳󠁣󠁴󠁿","德國":"🇩🇪","庫拉索":"🇨🇼","荷蘭":"🇳🇱","日本":"🇯🇵","科特迪瓦":"🇨🇮","厄瓜多爾":"🇪🇨","瑞典":"🇸🇪","突尼斯":"🇹🇳","西班牙":"🇪🇸","佛得角":"🇨🇻","比利時":"🇧🇪","埃及":"🇪🇬","伊朗":"🇮🇷","新西蘭":"🇳🇿","沙特阿拉伯":"🇸🇦","烏拉圭":"🇺🇾","法國":"🇫🇷","塞內加爾":"🇸🇳","伊拉克":"🇮🇶","挪威":"🇳🇴","阿根廷":"🇦🇷","阿爾及利亞":"🇩🇿","奧地利":"🇦🇹","約旦":"🇯🇴","葡萄牙":"🇵🇹","剛果民主共和國":"🇨🇩","英格蘭":"🏴󠁧󠁢󠁥󠁮󠁧󠁿","克羅地亞":"🇭🇷","加納":"🇬🇭","巴拿馬":"🇵🇦","烏茲別克斯坦":"🇺🇿","哥倫比亞":"🇨🇴","意大利":"🇮🇹","烏克蘭":"🇺🇦","牙買加":"🇯🇲","芬蘭":"🇫🇮","智利":"🇨🇱","丹麥":"🇩🇰","喀麥隆":"🇨🇲","波蘭":"🇵🇱","希臘":"🇬🇷","委內瑞拉":"🇻🇪","尼日利亞":"🇳🇬"};
+
+// ================= LOCAL STORAGE DATA =================
+let userResults = [];
+
+function loadUserResults() {
+  try {
+    const stored = localStorage.getItem('wc2026_results');
+    if (stored) userResults = JSON.parse(stored);
+  } catch(e) { userResults = []; }
+}
+
+function saveUserResults() {
+  localStorage.setItem('wc2026_results', JSON.stringify(userResults));
+}
+
+function getAllHistorical() {
+  // 合併內建數據 + 用戶輸入數據
+  const all = [...BUILT_IN_HISTORICAL];
+  userResults.forEach(ur => {
+    // 檢查是否已存在
+    const exists = all.some(h => h.date === ur.date && h.home_en === ur.home_en && h.away_en === ur.away_en);
+    if (!exists) all.push(ur);
+  });
+  return all;
+}
 
 // ================= ALGORITHM LAYER =================
 function getFlag(cnName) { return FLAG_MAP[cnName] || "🏳️"; }
@@ -255,9 +474,10 @@ function getStyle(team) { return STYLE_RATINGS[team] || {attack:1.0,defense:1.0,
 function calculateStandings() {
   const st = {};
   const allTeams = new Set();
-  HISTORICAL.forEach(m => { allTeams.add(m.home_en); allTeams.add(m.away_en); });
+  const allHist = getAllHistorical();
+  allHist.forEach(m => { allTeams.add(m.home_en); allTeams.add(m.away_en); });
   allTeams.forEach(t => { st[t] = {team:t,team_cn:TEAM_NAMES[t]||t,played:0,w:0,d:0,l:0,gf:0,ga:0,gd:0,pts:0}; });
-  HISTORICAL.forEach(m => {
+  allHist.forEach(m => {
     const h = st[m.home_en], a = st[m.away_en];
     if(!h||!a) return;
     h.played++; a.played++;
@@ -296,7 +516,6 @@ function formatProb(p) { return p>0.5?"high":p>0.35?"medium":"low"; }
 function predictMatch(home_en, away_en, round, isNeutral, isKnockout) {
   const home_elo = getElo(home_en), away_elo = getElo(away_en);
   const hStyle = getStyle(home_en), aStyle = getStyle(away_en);
-  const params = isKnockout ? WC_KO_PARAMS : WC_PARAMS;
   const roundNum = round === "R1" ? 1 : round === "R2" ? 2 : round === "R3" ? 3 : 4;
 
   const standings = calculateStandings();
@@ -361,10 +580,10 @@ function predictMatch(home_en, away_en, round, isNeutral, isKnockout) {
     else if(eloDiff > 250) bttsProb *= 0.65;
     bttsProb = Math.max(0.10, Math.min(0.90, bttsProb));
   }
-  bttsProb = (bttsProb + params.btts_rate) / 2;
+  bttsProb = (bttsProb + 0.519) / 2;
   bttsProb = Math.max(0.15, Math.min(0.85, bttsProb));
 
-  let cornerBase = params.avg_corners;
+  let cornerBase = 9.2;
   const cIntensity = 1.0 + (eloDiff/2000) * 0.15;
   const hCornerMult = CORNER_STYLE[hStyle.style] || 1.0;
   const aCornerMult = CORNER_STYLE[aStyle.style] || 1.0;
@@ -380,7 +599,7 @@ function predictMatch(home_en, away_en, round, isNeutral, isKnockout) {
   const homeCorners = totalCorners * (0.55 + (hCornerMult - aCornerMult) * 0.10);
   const awayCorners = totalCorners - homeCorners;
 
-  let cardBase = params.avg_cards;
+  let cardBase = 4.5;
   const hCardMult = CARD_STYLE[hStyle.style] || 1.0;
   const aCardMult = CARD_STYLE[aStyle.style] || 1.0;
   let totalCards = cardBase * ((hCardMult + aCardMult)/2) * (1 + eloDiff/1000 * 0.10);
@@ -400,12 +619,6 @@ function predictMatch(home_en, away_en, round, isNeutral, isKnockout) {
 
   const htGoals = expTotal * 0.42;
 
-  const periods = {
-    "0-15":{weight:0.18,pressure:0.8},"15-30":{weight:0.15,pressure:0.9},
-    "30-45":{weight:0.17,pressure:1.0},"45-60":{weight:0.16,pressure:1.1},
-    "60-75":{weight:0.17,pressure:1.2},"75-90":{weight:0.17,pressure:1.3},
-  };
-
   const upsetAlert = (eloDiff > 200 && hMot < 0.9 && aMot > 1.15) ? {
     alert:true, level:eloDiff>400?"HIGH":"MEDIUM",
     message:`爆冷預警: 強隊(Elo+${eloDiff.toFixed(0)}) 戰意低(${hMot.toFixed(2)}) vs 弱隊戰意高(${aMot.toFixed(2)})`
@@ -424,7 +637,7 @@ function predictMatch(home_en, away_en, round, isNeutral, isKnockout) {
     totalCards, homeCards:totalCards*0.48, awayCards:totalCards*0.52,
     top5Scores:top5, htGoals,
     hMot, aMot, upsetAlert, overallConf,
-    periods, eloDiff, roundNum, isKnockout
+    eloDiff, roundNum, isKnockout, hStand, aStand
   };
 }
 
@@ -439,6 +652,7 @@ function showSection(id) {
   if(id === "schedule") renderSchedule();
   if(id === "standings") renderStandings();
   if(id === "predictions") renderPredictionSelector();
+  if(id === "dataentry") initDataEntry();
   if(id === "live") renderLive();
   if(id === "corners") renderCorners();
   if(id === "handicap") renderHandicap();
@@ -455,7 +669,7 @@ function renderToday() {
     const confClass = pred.overallConf === "HIGH" ? "high" : pred.overallConf === "MEDIUM" ? "medium" : "low";
     const bestPick = pred.pHome > pred.pAway ? "主勝" : "客勝";
     const bestProb = Math.max(pred.pHome, pred.pAway);
-    const result = HISTORICAL.find(h => h.date === m.date && h.home_en === m.home_en && h.away_en === m.away_en);
+    const result = getAllHistorical().find(h => h.date === m.date && h.home_en === m.home_en && h.away_en === m.away_en);
     const status = result ? `<span style="color:var(--green)">${result.hg}-${result.ag}</span>` : `<span class="pred-tag ${confClass}">${bestPick}</span>`;
     html += `<div class="match-row" onclick="showMatchDetail('${m.home_en}','${m.away_en}','${m.round}','${m.date}','${m.time}','${m.venue}')">
       <div class="match-time">${m.date.slice(5)}<br>${m.time}</div>
@@ -470,7 +684,7 @@ function renderToday() {
   todayDiv.innerHTML = html || '<div class="empty-state">暫無近期賽事</div>';
 
   let hHtml = "";
-  todayMatches.filter(m => !HISTORICAL.some(h => h.date === m.date && h.home_en === m.home_en)).slice(0,4).forEach(m => {
+  todayMatches.filter(m => !getAllHistorical().some(h => h.date === m.date && h.home_en === m.home_en && h.away_en === m.away_en)).slice(0,4).forEach(m => {
     const pred = predictMatch(m.home_en, m.away_en, m.round, true, false);
     hHtml += `<div class="alert-box info">
       <strong>${m.home_cn} vs ${m.away_cn}</strong> (${m.date.slice(5)} ${m.time})<br>
@@ -490,7 +704,7 @@ function renderSchedule() {
     html += `<div class="group-header">📅 ${date} | ${roundLabel}</div>`;
     byDate[date].forEach(m => {
       const pred = predictMatch(m.home_en, m.away_en, m.round, true, false);
-      const result = HISTORICAL.find(h => h.date === m.date && h.home_en === m.home_en && h.away_en === m.away_en);
+      const result = getAllHistorical().find(h => h.date === m.date && h.home_en === m.home_en && h.away_en === m.away_en);
       const status = result ? `<span style="color:var(--green);font-weight:700">${result.hg}-${result.ag}</span>` : `<span class="pred-tag ${pred.overallConf === 'HIGH' ? 'high' : 'medium'}">${(Math.max(pred.pHome,pred.pAway)*100).toFixed(0)}%</span>`;
       html += `<div class="match-row" onclick="showMatchDetail('${m.home_en}','${m.away_en}','${m.round}','${m.date}','${m.time}','${m.venue}')">
         <div class="match-time">${m.time}</div>
@@ -525,14 +739,14 @@ function renderStandings() {
   });
   const allTeams = Object.values(standings).sort((a,b) => b.pts - a.pts || b.gd - a.gd);
   html += `<div class="group-header" style="margin-top:16px">📊 整體統計</div>`;
-  html += `<div class="card-sub">總場次: ${HISTORICAL.length} | 總入球: ${HISTORICAL.reduce((s,m)=>s+m.hg+m.ag,0)} | 平均: ${(HISTORICAL.reduce((s,m)=>s+m.hg+m.ag,0)/HISTORICAL.length).toFixed(2)}</div>`;
-  html += `<div class="card-sub">最佳第三球隊: ${allTeams.slice(24,30).map(t => getFlag(t.team_cn)+t.team_cn+"("+t.pts+"分)").join(", ")}</div>`;
+  const allHist = getAllHistorical();
+  html += `<div class="card-sub">總場次: ${allHist.length} | 總入球: ${allHist.reduce((s,m)=>s+m.hg+m.ag,0)} | 平均: ${(allHist.reduce((s,m)=>s+m.hg+m.ag,0)/allHist.length).toFixed(2)}</div>`;
   div.innerHTML = html;
 }
 
 function renderPredictionSelector() {
   const div = document.getElementById("predictionSelector");
-  const future = MATCHES.filter(m => !HISTORICAL.some(h => h.date === m.date && h.home_en === m.home_en && h.away_en === m.away_en));
+  const future = MATCHES.filter(m => !getAllHistorical().some(h => h.date === m.date && h.home_en === m.home_en && h.away_en === m.away_en));
   let html = `<div style="max-height:400px;overflow-y:auto">`;
   future.forEach(m => {
     const pred = predictMatch(m.home_en, m.away_en, m.round, true, false);
@@ -554,23 +768,13 @@ function showMatchDetail(home_en, away_en, round, date, time, venue) {
   document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
   document.getElementById("matchDetail").classList.add("active");
   const pred = predictMatch(home_en, away_en, round, true, false);
-  const vInfo = VENUES[venue] || {};
-  const result = HISTORICAL.find(h => h.date === date && h.home_en === home_en && h.away_en === away_en);
+  const result = getAllHistorical().find(h => h.date === date && h.home_en === home_en && h.away_en === away_en);
 
   let html = `<div class="detail-header">
     <div class="teams">${getFlag(pred.home_cn)} ${pred.home_cn} vs ${pred.away_cn} ${getFlag(pred.away_cn)}</div>
     <div class="meta">${date} ${time} | ${venue || "TBC"} | ${round} | 小組${getGroup(home_en)}</div>
-    ${result ? `<div class="meta" style="color:var(--green);font-weight:700">賽果: ${result.hg}-${result.ag} (半場 ${result.ht_hg}-${result.ht_ag}) | 角球: ${result.ch || "?"}-${result.ca || "?"}</div>` : ""}
+    ${result ? `<div class="meta" style="color:var(--green);font-weight:700">賽果: ${result.hg}-${result.ag} (半場 ${result.ht_hg || 0}-${result.ht_ag || 0}) ${result.ch ? '| 角球: '+result.ch+'-'+result.ca : ''}</div>` : ""}
   </div>`;
-
-  if(vInfo.city) {
-    html += `<div class="venue-info">
-      <span class="venue-tag">📍 ${vInfo.city}</span>
-      <span class="venue-tag">🏟️ ${vInfo.capacity ? vInfo.capacity.toLocaleString() : "N/A"}</span>
-      <span class="venue-tag">⛰️ ${vInfo.altitude || 0}m</span>
-      <span class="venue-tag">🌡️ ${vInfo.climate || "N/A"}</span>
-    </div>`;
-  }
 
   // 1X2
   html += `<div class="card"><div class="card-title">🎯 1X2 勝平負</div>
@@ -593,7 +797,7 @@ function showMatchDetail(home_en, away_en, round, date, time, venue) {
   html += `</div><div class="card-sub">預期入球: ${pred.expTotal.toFixed(2)} (主 ${pred.expHome.toFixed(2)} / 客 ${pred.expAway.toFixed(2)})</div></div>`;
 
   // BTTS
-  html += `<div class="card"><div class="card-title">⚽ 雙方入球 (BTTS)</div>
+  html += `<div class="card"><div class="card-title">⚽ BTTS 雙方入球</div>
     <div class="pred-grid">
       <div class="pred-box"><div class="label">是</div><div class="value btts-yes">${formatPct(pred.bttsProb)}</div></div>
       <div class="pred-box"><div class="label">否</div><div class="value btts-no">${formatPct(pred.bttsNoProb)}</div></div>
@@ -637,7 +841,8 @@ function showMatchDetail(home_en, away_en, round, date, time, venue) {
 
   // Time distribution
   html += `<div class="card"><div class="card-title">⏰ 入球時間分佈</div><div class="live-timeline">`;
-  Object.entries(pred.periods).forEach(([period,info]) => {
+  const periods = {"0-15":{weight:0.18,pressure:0.8},"15-30":{weight:0.15,pressure:0.9},"30-45":{weight:0.17,pressure:1.0},"45-60":{weight:0.16,pressure:1.1},"60-75":{weight:0.17,pressure:1.2},"75-90":{weight:0.17,pressure:1.3}};
+  Object.entries(periods).forEach(([period,info]) => {
     const prob = pred.expTotal * info.weight;
     html += `<div class="timeline-item"><div class="timeline-time">${period}'</div><div class="timeline-text">預期 ${prob.toFixed(2)} 球 | 壓力指數 ${info.pressure}</div></div>`;
   });
@@ -677,7 +882,7 @@ function getGroup(team) {
 
 function renderLive() {
   const div = document.getElementById("liveMonitor");
-  const upcoming = MATCHES.filter(m => !HISTORICAL.some(h => h.date === m.date && h.home_en === m.home_en && h.away_en === m.away_en)).slice(0,6);
+  const upcoming = MATCHES.filter(m => !getAllHistorical().some(h => h.date === m.date && h.home_en === m.home_en && h.away_en === m.away_en)).slice(0,6);
   let html = "";
   upcoming.forEach(m => {
     const pred = predictMatch(m.home_en, m.away_en, m.round, true, false);
@@ -693,7 +898,7 @@ function renderLive() {
 
 function renderCorners() {
   const div = document.getElementById("cornerAnalysis");
-  const allMatches = MATCHES.filter(m => !HISTORICAL.some(h => h.date === m.date && h.home_en === m.home_en && h.away_en === m.away_en));
+  const allMatches = MATCHES.filter(m => !getAllHistorical().some(h => h.date === m.date && h.home_en === m.home_en && h.away_en === m.away_en));
   let html = "";
   allMatches.forEach(m => {
     const pred = predictMatch(m.home_en, m.away_en, m.round, true, false);
@@ -714,7 +919,7 @@ function renderCorners() {
 
 function renderHandicap() {
   const div = document.getElementById("handicapAnalysis");
-  const allMatches = MATCHES.filter(m => !HISTORICAL.some(h => h.date === m.date && h.home_en === m.home_en && h.away_en === m.away_en));
+  const allMatches = MATCHES.filter(m => !getAllHistorical().some(h => h.date === m.date && h.home_en === m.home_en && h.away_en === m.away_en));
   let html = "";
   allMatches.forEach(m => {
     const pred = predictMatch(m.home_en, m.away_en, m.round, true, false);
@@ -740,8 +945,153 @@ function renderHandicap() {
   div.innerHTML = html;
 }
 
+// ================= DATA ENTRY FUNCTIONS =================
+function initDataEntry() {
+  // 填充球隊選擇器
+  const homeSelect = document.getElementById("inputHome");
+  const awaySelect = document.getElementById("inputAway");
+  if(homeSelect.options.length <= 1) {
+    ALL_TEAMS.forEach(t => {
+      const cn = TEAM_NAMES[t] || t;
+      homeSelect.innerHTML += `<option value="${t}">${getFlag(cn)} ${cn}</option>`;
+      awaySelect.innerHTML += `<option value="${t}">${getFlag(cn)} ${cn}</option>`;
+    });
+  }
+  renderResultList();
+  renderDataStats();
+}
+
+function addResult(e) {
+  e.preventDefault();
+  const date = document.getElementById("inputDate").value;
+  const home = document.getElementById("inputHome").value;
+  const away = document.getElementById("inputAway").value;
+  const hg = parseInt(document.getElementById("inputHG").value);
+  const ag = parseInt(document.getElementById("inputAG").value);
+  const hthg = parseInt(document.getElementById("inputHTHG").value) || 0;
+  const htag = parseInt(document.getElementById("inputHTAG").value) || 0;
+  const ch = parseInt(document.getElementById("inputCH").value) || 0;
+  const ca = parseInt(document.getElementById("inputCA").value) || 0;
+  const ych = parseInt(document.getElementById("inputYCH").value) || 0;
+  const yca = parseInt(document.getElementById("inputYCA").value) || 0;
+
+  if(!date || !home || !away || isNaN(hg) || isNaN(ag)) {
+    alert("請填寫完整數據");
+    return false;
+  }
+  if(home === away) {
+    alert("主隊和客隊不能相同");
+    return false;
+  }
+
+  // 查找對應的 round
+  const match = MATCHES.find(m => m.date === date && m.home_en === home && m.away_en === away);
+  const round = match ? match.round : "R1";
+
+  const result = {
+    round, date, home_en: home, away_en: away,
+    hg, ag, ht_hg: hthg, ht_ag: htag,
+    ch, ca, ych, yca
+  };
+
+  // 檢查是否已存在
+  const exists = userResults.find(r => r.date === date && r.home_en === home && r.away_en === away);
+  if(exists) {
+    if(!confirm("該場賽事已存在，是否覆蓋？")) return false;
+    const idx = userResults.indexOf(exists);
+    userResults[idx] = result;
+  } else {
+    userResults.push(result);
+  }
+
+  saveUserResults();
+  renderResultList();
+  renderDataStats();
+
+  // 重置表單（保留日期）
+  document.getElementById("inputHome").value = "";
+  document.getElementById("inputAway").value = "";
+  document.getElementById("inputHG").value = "";
+  document.getElementById("inputAG").value = "";
+  document.getElementById("inputHTHG").value = "";
+  document.getElementById("inputHTAG").value = "";
+  document.getElementById("inputCH").value = "";
+  document.getElementById("inputCA").value = "";
+  document.getElementById("inputYCH").value = "";
+  document.getElementById("inputYCA").value = "";
+
+  alert("賽果已保存！積分榜已更新。");
+  return false;
+}
+
+function renderResultList() {
+  const div = document.getElementById("resultList");
+  const countDiv = document.getElementById("resultCount");
+  if(userResults.length === 0) {
+    div.innerHTML = '<div class="empty-state">暫無手動輸入數據</div>';
+    countDiv.textContent = "暫無數據";
+    return;
+  }
+  countDiv.textContent = `已輸入 ${userResults.length} 場賽事`;
+  let html = "";
+  userResults.slice().reverse().forEach((r, idx) => {
+    const realIdx = userResults.length - 1 - idx;
+    html += `<div class="result-item">
+      <div>${r.date} ${TEAM_NAMES[r.home_en]||r.home_en} ${r.hg}-${r.ag} ${TEAM_NAMES[r.away_en]||r.away_en}</div>
+      <div>
+        <span style="color:var(--text2);font-size:0.7rem">${r.ch ? '角'+r.ch+'-'+r.ca+' ' : ''}${r.ht_hg ? '半'+r.ht_hg+'-'+r.ht_ag : ''}</span>
+        <span class="delete-btn" onclick="deleteResult(${realIdx})">刪除</span>
+      </div>
+    </div>`;
+  });
+  div.innerHTML = html;
+}
+
+function deleteResult(idx) {
+  if(!confirm("確定刪除此賽果？")) return;
+  userResults.splice(idx, 1);
+  saveUserResults();
+  renderResultList();
+  renderDataStats();
+}
+
+function clearAllResults() {
+  if(!confirm("確定清除所有手動輸入的數據？內建數據不會被刪除。")) return;
+  userResults = [];
+  saveUserResults();
+  renderResultList();
+  renderDataStats();
+}
+
+function renderDataStats() {
+  const div = document.getElementById("dataStats");
+  const allHist = getAllHistorical();
+  const totalGoals = allHist.reduce((s,m) => s + m.hg + m.ag, 0);
+  const avgGoals = (totalGoals / allHist.length).toFixed(2);
+  const totalCorners = allHist.reduce((s,m) => s + (m.ch || 0) + (m.ca || 0), 0);
+  const matchesWithCorners = allHist.filter(m => m.ch || m.ca).length;
+  const avgCorners = matchesWithCorners > 0 ? (totalCorners / matchesWithCorners).toFixed(1) : "N/A";
+
+  div.innerHTML = `
+    <div class="grid-3">
+      <div class="box"><div class="label">總場次</div><div class="value">${allHist.length}</div></div>
+      <div class="box"><div class="label">總入球</div><div class="value">${totalGoals}</div></div>
+      <div class="box"><div class="label">平均入球</div><div class="value">${avgGoals}</div></div>
+    </div>
+    <div class="grid-3">
+      <div class="box"><div class="label">有角球數據</div><div class="value">${matchesWithCorners}</div></div>
+      <div class="box"><div class="label">總角球</div><div class="value">${totalCorners}</div></div>
+      <div class="box"><div class="label">平均角球</div><div class="value">${avgCorners}</div></div>
+    </div>
+    <div class="alert-box success" style="margin-top:8px">✅ 數據已自動合併到積分榜和預測模型中</div>
+  `;
+}
+
 // Initialize
-document.addEventListener("DOMContentLoaded", () => { renderToday(); });
+document.addEventListener("DOMContentLoaded", () => {
+  loadUserResults();
+  renderToday();
+});
 </script>
 </body>
 </html>
