@@ -3,1094 +3,745 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>UNIFIED v3.3.52 | 2026世界盃智能預測 — 6月25-26日</title>
+<title>UNIFIED WC2026 預測中心 v3.3.59</title>
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-html, body { 
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; 
-    background: #0a0e1a; 
-    color: #e0e0e0; 
-    line-height: 1.5; 
-    min-height: 100%;
-    -webkit-overflow-scrolling: touch;
-    overflow-y: auto;
-    overflow-x: hidden;
+:root {
+  --bg:#0a0e1a;--card:#111827;--card2:#1a2236;--accent:#00d4aa;--accent2:#ff6b35;
+  --danger:#ef4444;--warning:#f59e0b;--text:#e5e7eb;--text2:#9ca3af;--border:#1f2937;
+  --green:#10b981;--red:#ef4444;--blue:#3b82f6;--purple:#8b5cf6;
 }
-.container { 
-    max-width: 800px; 
-    margin: 0 auto; 
-    padding: 12px; 
-    padding-bottom: 40px;
-}
-
-/* Header */
-.header { 
-    background: linear-gradient(135deg, #1a1f3a 0%, #0d1226 100%); 
-    padding: 20px 16px; 
-    border-radius: 12px; 
-    margin-bottom: 16px; 
-    text-align: center; 
-    border: 1px solid #2a3a6a; 
-}
-.header h1 { font-size: 1.4rem; color: #ffd700; margin-bottom: 6px; }
-.header .subtitle { font-size: 0.85rem; color: #8899bb; }
-.header .version { font-size: 0.75rem; color: #00d4aa; margin-top: 4px; }
-
-/* Date Section */
-.date-section { margin: 20px 0 12px; }
-.date-title { 
-    font-size: 1.1rem; 
-    color: #ffd700; 
-    padding: 10px 16px; 
-    background: linear-gradient(90deg, #1a1f3a, #0d1226); 
-    border-radius: 8px; 
-    border-left: 4px solid #ffd700; 
-}
-.date-subtitle { font-size: 0.8rem; color: #8899bb; padding: 4px 16px; }
-
-/* Match Card */
-.match-card { 
-    background: linear-gradient(135deg, #11152a 0%, #0d1120 100%); 
-    border: 1px solid #1e2a4a; 
-    border-radius: 12px; 
-    margin-bottom: 16px; 
-}
-.match-header { 
-    background: linear-gradient(90deg, #1a1f3a, #0d1226); 
-    padding: 12px 16px; 
-    border-bottom: 1px solid #1e2a4a; 
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center; 
-    flex-wrap: wrap; 
-    border-radius: 12px 12px 0 0;
-}
-.match-group { color: #00d4aa; font-size: 0.8rem; font-weight: bold; }
-.match-time { color: #ffd700; font-size: 0.85rem; }
-.match-venue { color: #8899bb; font-size: 0.75rem; width: 100%; margin-top: 4px; }
-
-/* Teams */
-.teams-row { 
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center; 
-    padding: 16px; 
-    border-bottom: 1px solid #1e2a4a; 
-}
-.team { text-align: center; flex: 1; }
-.team-name { font-size: 1rem; font-weight: bold; color: #fff; }
-.team-flag { font-size: 1.8rem; margin-bottom: 4px; }
-.team-fifa { font-size: 0.7rem; color: #8899bb; }
-.vs-center { text-align: center; padding: 0 12px; }
-.vs-text { font-size: 0.9rem; color: #ffd700; font-weight: bold; }
-
-/* Prediction Grid */
-.pred-grid { 
-    display: grid; 
-    grid-template-columns: repeat(3, 1fr); 
-    gap: 8px; 
-    padding: 12px 16px; 
-    border-bottom: 1px solid #1e2a4a; 
-}
-.pred-item { text-align: center; padding: 8px; background: rgba(255,255,255,0.03); border-radius: 8px; }
-.pred-label { font-size: 0.7rem; color: #8899bb; margin-bottom: 2px; }
-.pred-value { font-size: 1rem; font-weight: bold; color: #fff; }
-.pred-odds { font-size: 0.75rem; color: #00d4aa; }
-
-/* Score Prediction */
-.score-pred { 
-    display: flex; 
-    justify-content: space-around; 
-    padding: 12px 16px; 
-    border-bottom: 1px solid #1e2a4a; 
-    background: rgba(0,212,170,0.05); 
-}
-.score-box { text-align: center; }
-.score-label { font-size: 0.7rem; color: #8899bb; }
-.score-value { font-size: 1.3rem; font-weight: bold; color: #ffd700; }
-
-/* Weather & Motivation */
-.info-row { padding: 10px 16px; border-bottom: 1px solid #1e2a4a; font-size: 0.8rem; }
-.weather-info { color: #66ccff; }
-.motivation-info { color: #ffaa44; }
-.upset-alert { color: #ff4444; font-weight: bold; }
-
-/* Betting Tips */
-.tips-section { padding: 12px 16px; }
-.tips-title { font-size: 0.85rem; color: #ffd700; margin-bottom: 8px; font-weight: bold; }
-.tip-item { font-size: 0.8rem; color: #ccc; padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
-.tip-item:last-child { border-bottom: none; }
-.tip-highlight { color: #00d4aa; font-weight: bold; }
-.tip-risk { color: #ff6666; }
-
-/* Corner Section */
-.corner-section { 
-    padding: 10px 16px; 
-    border-bottom: 1px solid #1e2a4a; 
-    background: rgba(255,215,0,0.03); 
-}
-.corner-title { font-size: 0.8rem; color: #ffd700; margin-bottom: 4px; }
-.corner-value { font-size: 1.1rem; font-weight: bold; color: #fff; }
-.corner-rec { font-size: 0.8rem; }
-.corner-rec.over { color: #00d4aa; }
-.corner-rec.under { color: #ff6666; }
-
-/* Confidence Badge */
-.confidence { 
-    display: inline-block; 
-    padding: 2px 10px; 
-    border-radius: 12px; 
-    font-size: 0.75rem; 
-    font-weight: bold; 
-}
-.conf-high { background: rgba(0,212,170,0.2); color: #00d4aa; border: 1px solid #00d4aa; }
-.conf-med { background: rgba(255,170,68,0.2); color: #ffaa44; border: 1px solid #ffaa44; }
-.conf-low { background: rgba(255,68,68,0.2); color: #ff4444; border: 1px solid #ff4444; }
-
-/* Footer */
-.footer { 
-    text-align: center; 
-    padding: 20px; 
-    font-size: 0.75rem; 
-    color: #556688; 
-    border-top: 1px solid #1e2a4a; 
-    margin-top: 20px; 
-    margin-bottom: 30px;
-}
-
-/* Scrollbar */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: #0a0e1a; }
-::-webkit-scrollbar-thumb { background: #2a3a6a; border-radius: 3px; }
+* {box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body {font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.5;overflow-x:hidden}
+.container {max-width:100%;padding:12px}
+.header {text-align:center;padding:16px 0 8px;border-bottom:1px solid var(--border);margin-bottom:12px;position:sticky;top:0;background:var(--bg);z-index:100}
+.header h1 {font-size:1.3rem;color:var(--accent);letter-spacing:1px}
+.header .version {font-size:0.7rem;color:var(--text2);margin-top:2px}
+.nav {display:flex;overflow-x:auto;gap:6px;padding:8px 0;margin-bottom:12px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.nav::-webkit-scrollbar {display:none}
+.nav-btn {flex:0 0 auto;padding:8px 14px;background:var(--card);border:1px solid var(--border);border-radius:20px;color:var(--text2);font-size:0.8rem;cursor:pointer;white-space:nowrap;transition:all 0.2s}
+.nav-btn.active {background:var(--accent);color:#000;border-color:var(--accent);font-weight:700}
+.section {display:none;animation:fadeIn 0.3s ease}
+.section.active {display:block}
+@keyframes fadeIn {from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.card {background:var(--card);border-radius:12px;padding:14px;margin-bottom:10px;border:1px solid var(--border)}
+.card-title {font-size:0.95rem;font-weight:700;color:var(--accent);margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.card-sub {font-size:0.75rem;color:var(--text2);margin-bottom:8px}
+.match-row {display:flex;align-items:center;justify-content:space-between;padding:12px 10px;border-bottom:1px solid var(--border);cursor:pointer;transition:background 0.2s}
+.match-row:last-child {border-bottom:none}
+.match-row:active {background:var(--card2)}
+.match-time {font-size:0.7rem;color:var(--text2);min-width:40px;text-align:center}
+.match-teams {flex:1;padding:0 10px}
+.match-team {display:flex;align-items:center;gap:6px;font-size:0.85rem}
+.match-team .flag {font-size:1.1rem}
+.match-vs {font-size:0.65rem;color:var(--text2);margin:2px 0;padding-left:28px}
+.match-pred {text-align:right;min-width:60px}
+.pred-tag {display:inline-block;padding:3px 8px;border-radius:6px;font-size:0.7rem;font-weight:700}
+.pred-tag.high {background:rgba(16,185,129,0.2);color:var(--green)}
+.pred-tag.medium {background:rgba(245,158,11,0.2);color:var(--warning)}
+.pred-tag.low {background:rgba(156,163,175,0.2);color:var(--text2)}
+.pred-odds {font-size:0.65rem;color:var(--text2);margin-top:2px}
+.group-header {font-size:0.8rem;font-weight:700;color:var(--accent2);padding:8px 0;border-bottom:1px solid var(--border);margin-top:8px}
+.standings-table {width:100%;font-size:0.75rem;border-collapse:collapse}
+.standings-table th {text-align:left;padding:6px 4px;color:var(--text2);border-bottom:1px solid var(--border);font-weight:600}
+.standings-table td {padding:8px 4px;border-bottom:1px solid var(--border)}
+.standings-table .team-cell {display:flex;align-items:center;gap:4px}
+.pos {display:inline-block;width:20px;height:20px;border-radius:50%;text-align:center;line-height:20px;font-size:0.65rem;font-weight:700;background:var(--card2)}
+.pos.q {background:var(--green);color:#fff}
+.pos.e {background:var(--red);color:#fff}
+.pred-grid {display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0}
+.pred-box {background:var(--card2);border-radius:8px;padding:10px;text-align:center}
+.pred-box .label {font-size:0.65rem;color:var(--text2);margin-bottom:4px}
+.pred-box .value {font-size:1.1rem;font-weight:700}
+.pred-box .sub {font-size:0.6rem;color:var(--text2);margin-top:2px}
+.prob-bar {height:6px;background:var(--card2);border-radius:3px;margin-top:6px;overflow:hidden}
+.prob-bar-fill {height:100%;border-radius:3px;transition:width 0.5s ease}
+.score-grid {display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-top:8px}
+.score-cell {background:var(--card2);border-radius:6px;padding:6px 4px;text-align:center;font-size:0.7rem}
+.score-cell .prob {font-weight:700;color:var(--accent)}
+.score-cell.top {border:1px solid var(--accent)}
+.alert-box {background:rgba(239,68,68,0.1);border-left:3px solid var(--danger);padding:10px;border-radius:0 8px 8px 0;margin:8px 0;font-size:0.8rem}
+.alert-box.warn {background:rgba(245,158,11,0.1);border-left-color:var(--warning)}
+.alert-box.info {background:rgba(59,130,246,0.1);border-left-color:var(--blue)}
+.alert-box.success {background:rgba(16,185,129,0.1);border-left-color:var(--green)}
+.live-timeline {position:relative;padding-left:20px}
+.live-timeline::before {content:"";position:absolute;left:6px;top:0;bottom:0;width:2px;background:var(--border)}
+.timeline-item {position:relative;margin-bottom:12px;padding-left:12px}
+.timeline-item::before {content:"";position:absolute;left:-14px;top:6px;width:8px;height:8px;border-radius:50%;background:var(--accent)}
+.timeline-item.late::before {background:var(--danger)}
+.timeline-time {font-size:0.7rem;color:var(--accent);font-weight:700}
+.timeline-text {font-size:0.75rem;color:var(--text2);margin-top:2px}
+.venue-info {font-size:0.7rem;color:var(--text2);display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.venue-tag {background:var(--card2);padding:3px 8px;border-radius:4px}
+.tab-row {display:flex;gap:4px;margin-bottom:10px}
+.tab-btn {flex:1;padding:8px;background:var(--card2);border:none;border-radius:8px;color:var(--text2);font-size:0.75rem;cursor:pointer}
+.tab-btn.active {background:var(--accent);color:#000;font-weight:700}
+.detail-header {text-align:center;padding:16px 0;border-bottom:1px solid var(--border);margin-bottom:12px}
+.detail-header .teams {font-size:1.2rem;font-weight:700;margin-bottom:4px}
+.detail-header .meta {font-size:0.7rem;color:var(--text2)}
+.back-btn {display:inline-flex;align-items:center;gap:4px;padding:6px 12px;background:var(--card2);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:0.75rem;margin-bottom:10px;cursor:pointer}
+.confidence-high {color:var(--green)}
+.confidence-medium {color:var(--warning)}
+.confidence-low {color:var(--text2)}
+.value-bet {background:rgba(16,185,129,0.15);border:1px solid var(--green);border-radius:6px;padding:8px;margin:4px 0;font-size:0.8rem}
+.value-bet strong {color:var(--green)}
+.section-title {font-size:1rem;font-weight:700;margin:16px 0 8px;color:var(--text)}
+.empty-state {text-align:center;padding:40px 20px;color:var(--text2);font-size:0.85rem}
+.corner-stat {display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);font-size:0.8rem}
+.corner-stat:last-child {border-bottom:none}
+.btts-yes {color:var(--green);font-weight:700}
+.btts-no {color:var(--red);font-weight:700}
+.stat-row {display:flex;justify-content:space-between;padding:6px 0;font-size:0.8rem;border-bottom:1px solid var(--border)}
+.stat-row:last-child {border-bottom:none}
+@media(min-width:768px){.container{max-width:720px;margin:0 auto}.pred-grid{grid-template-columns:repeat(4,1fr)}.score-grid{grid-template-columns:repeat(6,1fr)}}
 </style>
 <base target="_blank">
 </head>
 <body>
 <div class="container">
+  <div class="header">
+    <h1>⚽ UNIFIED WC2026</h1>
+    <div class="version">預測中心 v3.3.59 | 72場完整賽程 | 52場回測校準</div>
+  </div>
+  <div class="nav" id="mainNav">
+    <button class="nav-btn active" onclick="showSection('today')">今日賽事</button>
+    <button class="nav-btn" onclick="showSection('schedule')">完整賽程</button>
+    <button class="nav-btn" onclick="showSection('standings')">積分榜</button>
+    <button class="nav-btn" onclick="showSection('predictions')">預測分析</button>
+    <button class="nav-btn" onclick="showSection('live')">滾球監控</button>
+    <button class="nav-btn" onclick="showSection('corners')">角球專項</button>
+    <button class="nav-btn" onclick="showSection('handicap')">讓球分析</button>
+  </div>
 
-<div class="header">
-  <h1>🏆 2026 世界盃智能預測</h1>
-  <div class="subtitle">UNIFIED 足球預測框架</div>
-  <div class="version">v3.3.52 | 6月25-26日 小組賽第三輪 | 12場賽事</div>
-</div>
+  <!-- TODAY SECTION -->
+  <div class="section active" id="today">
+    <div class="card">
+      <div class="card-title">📅 最近賽事</div>
+      <div id="todayMatches"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">📊 重點預測</div>
+      <div id="todayHighlights"></div>
+    </div>
+  </div>
 
-<!-- 6月25日 -->
-<div class="date-section">
-  <div class="date-title">📅 6月25日 (星期四) — 小組賽 R3</div>
-  <div class="date-subtitle">A組/B組/C組 生死戰</div>
-</div>
+  <!-- SCHEDULE SECTION -->
+  <div class="section" id="schedule">
+    <div class="card">
+      <div class="card-title">📋 世界盃2026 完整賽程 (72場)</div>
+      <div class="card-sub">R1: 6/12-6/20 | R2: 6/20-6/28 | R3: 6/25-6/28</div>
+      <div id="fullSchedule"></div>
+    </div>
+  </div>
 
-<!-- Match 1: 瑞士 vs 加拿大 -->
-<div class="match-card">
-  <div class="match-header">
-    <span class="match-group">B組 R3</span>
-    <span class="match-time">6月25日 03:00</span>
-    <span class="match-venue">📍 BC Place, 溫哥華, 加拿大</span>
-  </div>
-  <div class="teams-row">
-    <div class="team">
-      <div class="team-flag">🇨🇭</div>
-      <div class="team-name">瑞士</div>
-      <div class="team-fifa">FIFA #15</div>
-    </div>
-    <div class="vs-center">
-      <div class="vs-text">VS</div>
-    </div>
-    <div class="team">
-      <div class="team-flag">🇨🇦</div>
-      <div class="team-name">加拿大</div>
-      <div class="team-fifa">FIFA #48</div>
+  <!-- STANDINGS SECTION -->
+  <div class="section" id="standings">
+    <div class="card">
+      <div class="card-title">🏆 小組積分榜 (12組 × 4隊)</div>
+      <div class="card-sub">基於已完賽結果自動計算 | 前2名晉級</div>
+      <div id="standingsContent"></div>
     </div>
   </div>
-  <div class="pred-grid">
-    <div class="pred-item">
-      <div class="pred-label">主勝</div>
-      <div class="pred-value">35%</div>
-      <div class="pred-odds">@2.60</div>
-    </div>
-    <div class="pred-item">
-      <div class="pred-label">和局</div>
-      <div class="pred-value">30%</div>
-      <div class="pred-odds">@3.20</div>
-    </div>
-    <div class="pred-item">
-      <div class="pred-label">客勝</div>
-      <div class="pred-value">35%</div>
-      <div class="pred-odds">@2.80</div>
-    </div>
-  </div>
-  <div class="score-pred">
-    <div class="score-box">
-      <div class="score-label">預測比分</div>
-      <div class="score-value">1-1</div>
-    </div>
-    <div class="score-box">
-      <div class="score-label">半場</div>
-      <div class="score-value">0-0</div>
-    </div>
-    <div class="score-box">
-      <div class="score-label">信心</div>
-      <div class="score-value"><span class="confidence conf-low">低</span></div>
-    </div>
-  </div>
-  <div class="info-row">
-    <div class="weather-info">⛅ 20°C | 濕度 60% | 多雲 | 微風 10km/h</div>
-  </div>
-  <div class="info-row">
-    <div class="motivation-info">🔥 瑞士: 爭取首名 | 🔥 加拿大: 爭取首名</div>
-  </div>
-  <div class="corner-section">
-    <div class="corner-title">📐 角球預測</div>
-    <div class="corner-value">預期 8.5 角 | 盤口 9.0</div>
-    <div class="corner-rec under">推薦: 🟡 觀望</div>
-  </div>
-  <div class="tips-section">
-    <div class="tips-title">🎯 投注建議</div>
-    <div class="tip-item">• <span class="tip-highlight">和局</span> — 實力接近，雙方都可能接受平局</div>
-    <div class="tip-item">• <span class="tip-highlight">大小球小2.5</span> @1.80 — 關鍵戰易保守</div>
-    <div class="tip-item">• <span class="tip-highlight">半場和</span> @2.10 — 開局試探為主</div>
-    <div class="tip-item">• <span class="tip-highlight">雙進球 否</span> @1.90 — 可能一方零封</div>
-  </div>
-</div>
 
-<!-- Match 2: 波斯尼亞 vs 卡塔爾 -->
-<div class="match-card">
-  <div class="match-header">
-    <span class="match-group">B組 R3</span>
-    <span class="match-time">6月25日 03:00</span>
-    <span class="match-venue">📍 Lumen Field, 西雅圖, 美國</span>
+  <!-- PREDICTIONS SECTION -->
+  <div class="section" id="predictions">
+    <div class="card">
+      <div class="card-title">🔮 賽事預測分析</div>
+      <div class="card-sub">選擇場次查看詳細預測 (1X2 / 大小球 / BTTS / 波膽 / 半場)</div>
+      <div id="predictionSelector"></div>
+    </div>
+    <div id="predictionDetail"></div>
   </div>
-  <div class="teams-row">
-    <div class="team">
-      <div class="team-flag">🇧🇦</div>
-      <div class="team-name">波斯尼亞</div>
-      <div class="team-fifa">FIFA #74</div>
-    </div>
-    <div class="vs-center">
-      <div class="vs-text">VS</div>
-    </div>
-    <div class="team">
-      <div class="team-flag">🇶🇦</div>
-      <div class="team-name">卡塔爾</div>
-      <div class="team-fifa">FIFA #58</div>
+
+  <!-- LIVE SECTION -->
+  <div class="section" id="live">
+    <div class="card">
+      <div class="card-title">📡 滾球實時監控</div>
+      <div class="card-sub">模擬滾球時間節點預警 (30'/HT/60'/75')</div>
+      <div id="liveMonitor"></div>
     </div>
   </div>
-  <div class="pred-grid">
-    <div class="pred-item">
-      <div class="pred-label">主勝</div>
-      <div class="pred-value">38%</div>
-      <div class="pred-odds">@2.40</div>
-    </div>
-    <div class="pred-item">
-      <div class="pred-label">和局</div>
-      <div class="pred-value">28%</div>
-      <div class="pred-odds">@3.30</div>
-    </div>
-    <div class="pred-item">
-      <div class="pred-label">客勝</div>
-      <div class="pred-value">34%</div>
-      <div class="pred-odds">@3.00</div>
+
+  <!-- CORNERS SECTION -->
+  <div class="section" id="corners">
+    <div class="card">
+      <div class="card-title">🚩 角球專項分析</div>
+      <div class="card-sub">v3.3.55 校準 | 風格權重 + 場地因子 + 輪換修正</div>
+      <div id="cornerAnalysis"></div>
     </div>
   </div>
-  <div class="score-pred">
-    <div class="score-box">
-      <div class="score-label">預測比分</div>
-      <div class="score-value">1-1</div>
-    </div>
-    <div class="score-box">
-      <div class="score-label">半場</div>
-      <div class="score-value">0-0</div>
-    </div>
-    <div class="score-box">
-      <div class="score-label">信心</div>
-      <div class="score-value"><span class="confidence conf-low">低</span></div>
+
+  <!-- HANDICAP SECTION -->
+  <div class="section" id="handicap">
+    <div class="card">
+      <div class="card-title">📐 亞洲讓球分析</div>
+      <div id="handicapAnalysis"></div>
     </div>
   </div>
-  <div class="info-row">
-    <div class="weather-info">⛅ 19°C | 濕度 55% | 多雲 | 微風 11km/h</div>
-  </div>
-  <div class="info-row">
-    <div class="motivation-info">🔥 波斯尼亞: 必須取勝 | 🔥 卡塔爾: 必須取勝</div>
-  </div>
-  <div class="corner-section">
-    <div class="corner-title">📐 角球預測</div>
-    <div class="corner-value">預期 8.0 角 | 盤口 8.5</div>
-    <div class="corner-rec under">推薦: 🟡 觀望</div>
-  </div>
-  <div class="tips-section">
-    <div class="tips-title">🎯 投注建議</div>
-    <div class="tip-item">• <span class="tip-highlight">和局</span> — 實力接近，生死戰易保守</div>
-    <div class="tip-item">• <span class="tip-highlight">大小球小2.5</span> @1.75 — 雙方壓力大</div>
-    <div class="tip-item">• <span class="tip-highlight">半場和</span> @2.00</div>
-    <div class="tip-item">• <span class="tip-highlight">雙進球 否</span> @1.85</div>
+
+  <!-- MATCH DETAIL -->
+  <div class="section" id="matchDetail">
+    <button class="back-btn" onclick="backToList()">← 返回</button>
+    <div id="matchDetailContent"></div>
   </div>
 </div>
 
-<!-- Match 3: 蘇格蘭 vs 巴西 -->
-<div class="match-card">
-  <div class="match-header">
-    <span class="match-group">C組 R3</span>
-    <span class="match-time">6月25日 06:00</span>
-    <span class="match-venue">📍 Hard Rock Stadium, 邁阿密, 美國</span>
-  </div>
-  <div class="teams-row">
-    <div class="team">
-      <div class="team-flag">🏴󠁧󠁢󠁳󠁣󠁴󠁿</div>
-      <div class="team-name">蘇格蘭</div>
-      <div class="team-fifa">FIFA #44</div>
-    </div>
-    <div class="vs-center">
-      <div class="vs-text">VS</div>
-    </div>
-    <div class="team">
-      <div class="team-flag">🇧🇷</div>
-      <div class="team-name">巴西</div>
-      <div class="team-fifa">FIFA #5</div>
-    </div>
-  </div>
-  <div class="pred-grid">
-    <div class="pred-item">
-      <div class="pred-label">主勝</div>
-      <div class="pred-value">18%</div>
-      <div class="pred-odds">@5.50</div>
-    </div>
-    <div class="pred-item">
-      <div class="pred-label">和局</div>
-      <div class="pred-value">22%</div>
-      <div class="pred-odds">@3.80</div>
-    </div>
-    <div class="pred-item">
-      <div class="pred-label">客勝</div>
-      <div class="pred-value">60%</div>
-      <div class="pred-odds">@1.60</div>
-    </div>
-  </div>
-  <div class="score-pred">
-    <div class="score-box">
-      <div class="score-label">預測比分</div>
-      <div class="score-value">1-2</div>
-    </div>
-    <div class="score-box">
-      <div class="score-label">半場</div>
-      <div class="score-value">0-1</div>
-    </div>
-    <div class="score-box">
-      <div class="score-label">信心</div>
-      <div class="score-value"><span class="confidence conf-med">中高</span></div>
-    </div>
-  </div>
-  <div class="info-row">
-    <div class="weather-info">☀️ 31°C | 濕度 70% | 體感 37°C | 晴朗 | 微風 9km/h</div>
-  </div>
-  <div class="info-row">
-    <div class="motivation-info">🔥 蘇格蘭: 必須取勝 | ⚡ 巴西: 已穩出線(可能輪換)</div>
-  </div>
-  <div class="info-row">
-    <div class="upset-alert">⚠️ 爆冷預警: 巴西已出線可能輪換，蘇格蘭戰意極高</div>
-  </div>
-  <div class="corner-section">
-    <div class="corner-title">📐 角球預測</div>
-    <div class="corner-value">預期 10.0 角 | 盤口 9.5</div>
-    <div class="corner-rec over">推薦: 🟢 大角</div>
-  </div>
-  <div class="tips-section">
-    <div class="tips-title">🎯 投注建議</div>
-    <div class="tip-item">• <span class="tip-highlight">客勝</span> — 巴西實力明顯佔優，即使輪換仍強</div>
-    <div class="tip-item">• <span class="tip-highlight">大小球大2.5</span> @1.85 — 蘇格蘭必須進攻，後防空虛</div>
-    <div class="tip-item">• <span class="tip-highlight">BTTS 是</span> @1.70 — 蘇格蘭主場有進球能力</div>
-    <div class="tip-item">• <span class="tip-risk">角球大9.5</span> — 開放對攻預期高</div>
-  </div>
-</div>
+<script>
 
-<!-- Match 4: 摩洛哥 vs 海地 -->
-<div class="match-card">
-  <div class="match-header">
-    <span class="match-group">C組 R3</span>
-    <span class="match-time">6月25日 06:00</span>
-    <span class="match-venue">📍 Mercedes-Benz Stadium, 亞特蘭大, 美國</span>
-  </div>
-  <div class="teams-row">
-    <div class="team">
-      <div class="team-flag">🇲🇦</div>
-      <div class="team-name">摩洛哥</div>
-      <div class="team-fifa">FIFA #13</div>
-    </div>
-    <div class="vs-center">
-      <div class="vs-text">VS</div>
-    </div>
-    <div class="team">
-      <div class="team-flag">🇭🇹</div>
-      <div class="team-name">海地</div>
-      <div class="team-fifa">FIFA #89</div>
-    </div>
-  </div>
-  <div class="pred-grid">
-    <div class="pred-item">
-      <div class="pred-label">主勝</div>
-      <div class="pred-value">72%</div>
-      <div class="pred-odds">@1.35</div>
-    </div>
-    <div class="pred-item">
-      <div class="pred-label">和局</div>
-      <div class="pred-value">16%</div>
-      <div class="pred-odds">@4.50</div>
-    </div>
-    <div class="pred-item">
-      <div class="pred-label">客勝</div>
-      <div class="pred-value">12%</div>
-      <div class="pred-odds">@9.00</div>
-    </div>
-  </div>
-  <div class="score-pred">
-    <div class="score-box">
-      <div class="score-label">預測比分</div>
-      <div class="score-value">2-0</div>
-    </div>
-    <div class="score-box">
-      <div class="score-label">半場</div>
-      <div class="score-value">1-0</div>
-    </div>
-    <div class="score-box">
-      <div class="score-label">信心</div>
-      <div class="score-value"><span class="confidence conf-high">高</span></div>
-    </div>
-  </div>
-  <div class="info-row">
-    <div class="weather-info">🌧️ 28°C | 濕度 78% | 體感 33°C | 雷暴機率 40% | 微風 7km/h</div>
-  </div>
-  <div class="info-row">
-    <div class="motivation-info">🔥 摩洛哥: 爭取首名 | ❌ 海地: 已淘汰</div>
-  </div>
-  <div class="corner-section">
-    <div class="corner-title">📐 角球預測</div>
-    <div class="corner-value">預期 8.5 角 | 盤口 9.0</div>
-    <div class="corner-rec under">推薦: 🟡 觀望</div>
-  </div>
-  <div class="tips-section">
-    <div class="tips-title">🎯 投注建議</div>
-    <div class="tip-item">• <span class="tip-highlight">主勝</span> — 摩洛哥實力佔優，海地已無心戀戰</div>
-    <div class="tip-item">• <span class="tip-highlight">大小球小2.5</span> @1.90 — 海地可能死守，摩洛哥穩中求勝</div>
-    <div class="tip-item">• <span class="tip-highlight">半場主勝</span> — 摩洛哥早段破門預期高</div>
-    <div class="tip-item">• <span class="tip-highlight">BTTS 否</span> @1.55 — 海地進攻乏力</div>
-  </div>
-</div>
+// ================= DATA LAYER =================
+const TEAM_NAMES = {"Mexico": "墨西哥", "South Africa": "南非", "Korea Republic": "韓國", "Czech Republic": "捷克", "USA": "美國", "Paraguay": "巴拉圭", "Canada": "加拿大", "Bosnia and Herzegovina": "波黑", "Australia": "澳洲", "Turkey": "土耳其", "Qatar": "卡塔爾", "Switzerland": "瑞士", "Brazil": "巴西", "Morocco": "摩洛哥", "Haiti": "海地", "Scotland": "蘇格蘭", "Germany": "德國", "Curacao": "庫拉索", "Netherlands": "荷蘭", "Japan": "日本", "Cote d'Ivoire": "科特迪瓦", "Ecuador": "厄瓜多爾", "Sweden": "瑞典", "Tunisia": "突尼斯", "Spain": "西班牙", "Cape Verde": "佛得角", "Belgium": "比利時", "Egypt": "埃及", "Iran": "伊朗", "New Zealand": "新西蘭", "Saudi Arabia": "沙特阿拉伯", "Uruguay": "烏拉圭", "France": "法國", "Senegal": "塞內加爾", "Iraq": "伊拉克", "Norway": "挪威", "Argentina": "阿根廷", "Algeria": "阿爾及利亞", "Austria": "奧地利", "Jordan": "約旦", "Portugal": "葡萄牙", "DR Congo": "剛果民主共和國", "England": "英格蘭", "Croatia": "克羅地亞", "Ghana": "加納", "Panama": "巴拿馬", "Uzbekistan": "烏茲別克斯坦", "Colombia": "哥倫比亞", "Italy": "意大利", "Ukraine": "烏克蘭", "Jamaica": "牙買加", "Finland": "芬蘭", "Chile": "智利", "Denmark": "丹麥", "Cameroon": "喀麥隆", "Poland": "波蘭", "Greece": "希臘", "Venezuela": "委內瑞拉", "Nigeria": "尼日利亞"};
+const MATCHES = [{"date": "2026-06-12", "time": "20:00", "home_en": "Mexico", "away_en": "South Africa", "home_cn": "墨西哥", "away_cn": "南非", "venue": "Estadio Azteca", "group": "A", "round": "R1"}, {"date": "2026-06-12", "time": "22:00", "home_en": "Korea Republic", "away_en": "Czech Republic", "home_cn": "韓國", "away_cn": "捷克", "venue": "Estadio Azteca", "group": "A", "round": "R1"}, {"date": "2026-06-13", "time": "16:00", "home_en": "USA", "away_en": "Paraguay", "home_cn": "美國", "away_cn": "巴拉圭", "venue": "Hard Rock Stadium", "group": "J", "round": "R1"}, {"date": "2026-06-13", "time": "19:00", "home_en": "Canada", "away_en": "Bosnia and Herzegovina", "home_cn": "加拿大", "away_cn": "波黑", "venue": "SoFi Stadium", "group": "B", "round": "R1"}, {"date": "2026-06-13", "time": "22:00", "home_en": "Australia", "away_en": "Turkey", "home_cn": "澳洲", "away_cn": "土耳其", "venue": "Hard Rock Stadium", "group": "J", "round": "R1"}, {"date": "2026-06-14", "time": "16:00", "home_en": "Qatar", "away_en": "Switzerland", "home_cn": "卡塔爾", "away_cn": "瑞士", "venue": "SoFi Stadium", "group": "B", "round": "R1"}, {"date": "2026-06-14", "time": "19:00", "home_en": "Brazil", "away_en": "Morocco", "home_cn": "巴西", "away_cn": "摩洛哥", "venue": "MetLife Stadium", "group": "C", "round": "R1"}, {"date": "2026-06-14", "time": "22:00", "home_en": "Haiti", "away_en": "Scotland", "home_cn": "海地", "away_cn": "蘇格蘭", "venue": "MetLife Stadium", "group": "C", "round": "R1"}, {"date": "2026-06-15", "time": "16:00", "home_en": "Germany", "away_en": "Curacao", "home_cn": "德國", "away_cn": "庫拉索", "venue": "AT&T Stadium", "group": "D", "round": "R1"}, {"date": "2026-06-15", "time": "19:00", "home_en": "Netherlands", "away_en": "Japan", "home_cn": "荷蘭", "away_cn": "日本", "venue": "Mercedes-Benz Stadium", "group": "E", "round": "R1"}, {"date": "2026-06-15", "time": "22:00", "home_en": "Cote d'Ivoire", "away_en": "Ecuador", "home_cn": "科特迪瓦", "away_cn": "厄瓜多爾", "venue": "AT&T Stadium", "group": "D", "round": "R1"}, {"date": "2026-06-16", "time": "16:00", "home_en": "Sweden", "away_en": "Tunisia", "home_cn": "瑞典", "away_cn": "突尼斯", "venue": "Mercedes-Benz Stadium", "group": "E", "round": "R1"}, {"date": "2026-06-16", "time": "19:00", "home_en": "Spain", "away_en": "Cape Verde", "home_cn": "西班牙", "away_cn": "佛得角", "venue": "BC Place", "group": "F", "round": "R1"}, {"date": "2026-06-16", "time": "22:00", "home_en": "Belgium", "away_en": "Egypt", "home_cn": "比利時", "away_cn": "埃及", "venue": "Levi's Stadium", "group": "G", "round": "R1"}, {"date": "2026-06-17", "time": "16:00", "home_en": "Iran", "away_en": "New Zealand", "home_cn": "伊朗", "away_cn": "新西蘭", "venue": "Levi's Stadium", "group": "G", "round": "R1"}, {"date": "2026-06-17", "time": "19:00", "home_en": "Saudi Arabia", "away_en": "Uruguay", "home_cn": "沙特阿拉伯", "away_cn": "烏拉圭", "venue": "BC Place", "group": "F", "round": "R1"}, {"date": "2026-06-17", "time": "22:00", "home_en": "France", "away_en": "Senegal", "home_cn": "法國", "away_cn": "塞內加爾", "venue": "Lumen Field", "group": "H", "round": "R1"}, {"date": "2026-06-18", "time": "16:00", "home_en": "Iraq", "away_en": "Norway", "home_cn": "伊拉克", "away_cn": "挪威", "venue": "Lumen Field", "group": "H", "round": "R1"}, {"date": "2026-06-18", "time": "19:00", "home_en": "Argentina", "away_en": "Algeria", "home_cn": "阿根廷", "away_cn": "阿爾及利亞", "venue": "BMO Field", "group": "I", "round": "R1"}, {"date": "2026-06-18", "time": "22:00", "home_en": "Austria", "away_en": "Jordan", "home_cn": "奧地利", "away_cn": "約旦", "venue": "BMO Field", "group": "I", "round": "R1"}, {"date": "2026-06-19", "time": "16:00", "home_en": "Portugal", "away_en": "DR Congo", "home_cn": "葡萄牙", "away_cn": "剛果民主共和國", "venue": "Estadio BBVA", "group": "K", "round": "R1"}, {"date": "2026-06-19", "time": "19:00", "home_en": "England", "away_en": "Croatia", "home_cn": "英格蘭", "away_cn": "克羅地亞", "venue": "Estadio Akron", "group": "L", "round": "R1"}, {"date": "2026-06-19", "time": "22:00", "home_en": "Ghana", "away_en": "Panama", "home_cn": "加納", "away_cn": "巴拿馬", "venue": "Estadio Akron", "group": "L", "round": "R1"}, {"date": "2026-06-20", "time": "16:00", "home_en": "Uzbekistan", "away_en": "Colombia", "home_cn": "烏茲別克斯坦", "away_cn": "哥倫比亞", "venue": "Estadio BBVA", "group": "K", "round": "R1"}, {"date": "2026-06-20", "time": "19:00", "home_en": "Mexico", "away_en": "Korea Republic", "home_cn": "墨西哥", "away_cn": "韓國", "venue": "Estadio Azteca", "group": "A", "round": "R2"}, {"date": "2026-06-20", "time": "22:00", "home_en": "Canada", "away_en": "Qatar", "home_cn": "加拿大", "away_cn": "卡塔爾", "venue": "SoFi Stadium", "group": "B", "round": "R2"}, {"date": "2026-06-21", "time": "16:00", "home_en": "Switzerland", "away_en": "Bosnia and Herzegovina", "home_cn": "瑞士", "away_cn": "波黑", "venue": "SoFi Stadium", "group": "B", "round": "R2"}, {"date": "2026-06-21", "time": "19:00", "home_en": "Czech Republic", "away_en": "South Africa", "home_cn": "捷克", "away_cn": "南非", "venue": "Estadio Azteca", "group": "A", "round": "R2"}, {"date": "2026-06-21", "time": "22:00", "home_en": "USA", "away_en": "Australia", "home_cn": "美國", "away_cn": "澳洲", "venue": "Hard Rock Stadium", "group": "J", "round": "R2"}, {"date": "2026-06-22", "time": "16:00", "home_en": "Turkey", "away_en": "Paraguay", "home_cn": "土耳其", "away_cn": "巴拉圭", "venue": "Hard Rock Stadium", "group": "J", "round": "R2"}, {"date": "2026-06-22", "time": "19:00", "home_en": "Scotland", "away_en": "Morocco", "home_cn": "蘇格蘭", "away_cn": "摩洛哥", "venue": "MetLife Stadium", "group": "C", "round": "R2"}, {"date": "2026-06-22", "time": "22:00", "home_en": "Brazil", "away_en": "Haiti", "home_cn": "巴西", "away_cn": "海地", "venue": "MetLife Stadium", "group": "C", "round": "R2"}, {"date": "2026-06-23", "time": "16:00", "home_en": "Netherlands", "away_en": "Sweden", "home_cn": "荷蘭", "away_cn": "瑞典", "venue": "Mercedes-Benz Stadium", "group": "E", "round": "R2"}, {"date": "2026-06-23", "time": "19:00", "home_en": "Germany", "away_en": "Cote d'Ivoire", "home_cn": "德國", "away_cn": "科特迪瓦", "venue": "AT&T Stadium", "group": "D", "round": "R2"}, {"date": "2026-06-23", "time": "22:00", "home_en": "Ecuador", "away_en": "Uruguay", "home_cn": "厄瓜多爾", "away_cn": "烏拉圭", "venue": "AT&T Stadium", "group": "D", "round": "R2"}, {"date": "2026-06-24", "time": "16:00", "home_en": "Tunisia", "away_en": "Japan", "home_cn": "突尼斯", "away_cn": "日本", "venue": "Mercedes-Benz Stadium", "group": "E", "round": "R2"}, {"date": "2026-06-24", "time": "19:00", "home_en": "Spain", "away_en": "Saudi Arabia", "home_cn": "西班牙", "away_cn": "沙特阿拉伯", "venue": "BC Place", "group": "F", "round": "R2"}, {"date": "2026-06-24", "time": "22:00", "home_en": "Belgium", "away_en": "Iran", "home_cn": "比利時", "away_cn": "伊朗", "venue": "Levi's Stadium", "group": "G", "round": "R2"}, {"date": "2026-06-25", "time": "16:00", "home_en": "Uruguay", "away_en": "Cape Verde", "home_cn": "烏拉圭", "away_cn": "佛得角", "venue": "BC Place", "group": "F", "round": "R2"}, {"date": "2026-06-25", "time": "19:00", "home_en": "New Zealand", "away_en": "Egypt", "home_cn": "新西蘭", "away_cn": "埃及", "venue": "Levi's Stadium", "group": "G", "round": "R2"}, {"date": "2026-06-25", "time": "22:00", "home_en": "Argentina", "away_en": "Austria", "home_cn": "阿根廷", "away_cn": "奧地利", "venue": "BMO Field", "group": "I", "round": "R2"}, {"date": "2026-06-26", "time": "16:00", "home_en": "Jordan", "away_en": "Algeria", "home_cn": "約旦", "away_cn": "阿爾及利亞", "venue": "BMO Field", "group": "I", "round": "R2"}, {"date": "2026-06-26", "time": "19:00", "home_en": "Portugal", "away_en": "Uzbekistan", "home_cn": "葡萄牙", "away_cn": "烏茲別克斯坦", "venue": "Estadio BBVA", "group": "K", "round": "R2"}, {"date": "2026-06-26", "time": "22:00", "home_en": "England", "away_en": "Ghana", "home_cn": "英格蘭", "away_cn": "加納", "venue": "Estadio Akron", "group": "L", "round": "R2"}, {"date": "2026-06-27", "time": "16:00", "home_en": "Panama", "away_en": "Croatia", "home_cn": "巴拿馬", "away_cn": "克羅地亞", "venue": "Estadio Akron", "group": "L", "round": "R2"}, {"date": "2026-06-27", "time": "19:00", "home_en": "Colombia", "away_en": "DR Congo", "home_cn": "哥倫比亞", "away_cn": "剛果民主共和國", "venue": "Estadio BBVA", "group": "K", "round": "R2"}, {"date": "2026-06-27", "time": "22:00", "home_en": "France", "away_en": "Iraq", "home_cn": "法國", "away_cn": "伊拉克", "venue": "Lumen Field", "group": "H", "round": "R2"}, {"date": "2026-06-28", "time": "16:00", "home_en": "Senegal", "away_en": "Norway", "home_cn": "塞內加爾", "away_cn": "挪威", "venue": "Lumen Field", "group": "H", "round": "R2"}, {"date": "2026-06-25", "time": "20:00", "home_en": "Bosnia and Herzegovina", "away_en": "Qatar", "home_cn": "波黑", "away_cn": "卡塔爾", "venue": "SoFi Stadium", "group": "B", "round": "R3"}, {"date": "2026-06-25", "time": "22:00", "home_en": "Switzerland", "away_en": "Canada", "home_cn": "瑞士", "away_cn": "加拿大", "venue": "SoFi Stadium", "group": "B", "round": "R3"}, {"date": "2026-06-25", "time": "20:00", "home_en": "Morocco", "away_en": "Haiti", "home_cn": "摩洛哥", "away_cn": "海地", "venue": "MetLife Stadium", "group": "C", "round": "R3"}, {"date": "2026-06-25", "time": "22:00", "home_en": "Scotland", "away_en": "Brazil", "home_cn": "蘇格蘭", "away_cn": "巴西", "venue": "MetLife Stadium", "group": "C", "round": "R3"}, {"date": "2026-06-25", "time": "20:00", "home_en": "Czech Republic", "away_en": "Mexico", "home_cn": "捷克", "away_cn": "墨西哥", "venue": "Estadio Azteca", "group": "A", "round": "R3"}, {"date": "2026-06-25", "time": "22:00", "home_en": "South Africa", "away_en": "Korea Republic", "home_cn": "南非", "away_cn": "韓國", "venue": "Estadio Azteca", "group": "A", "round": "R3"}, {"date": "2026-06-26", "time": "04:00", "home_en": "Curacao", "away_en": "Cote d'Ivoire", "home_cn": "庫拉索", "away_cn": "科特迪瓦", "venue": "AT&T Stadium", "group": "D", "round": "R3"}, {"date": "2026-06-26", "time": "04:00", "home_en": "Ecuador", "away_en": "Germany", "home_cn": "厄瓜多爾", "away_cn": "德國", "venue": "AT&T Stadium", "group": "D", "round": "R3"}, {"date": "2026-06-26", "time": "07:00", "home_en": "Tunisia", "away_en": "Netherlands", "home_cn": "突尼斯", "away_cn": "荷蘭", "venue": "Mercedes-Benz Stadium", "group": "E", "round": "R3"}, {"date": "2026-06-26", "time": "07:00", "home_en": "Japan", "away_en": "Sweden", "home_cn": "日本", "away_cn": "瑞典", "venue": "Mercedes-Benz Stadium", "group": "E", "round": "R3"}, {"date": "2026-06-26", "time": "10:00", "home_en": "Paraguay", "away_en": "Australia", "home_cn": "巴拉圭", "away_cn": "澳洲", "venue": "Hard Rock Stadium", "group": "J", "round": "R3"}, {"date": "2026-06-26", "time": "10:00", "home_en": "Turkey", "away_en": "USA", "home_cn": "土耳其", "away_cn": "美國", "venue": "Hard Rock Stadium", "group": "J", "round": "R3"}, {"date": "2026-06-27", "time": "03:00", "home_en": "Norway", "away_en": "France", "home_cn": "挪威", "away_cn": "法國", "venue": "Lumen Field", "group": "H", "round": "R3"}, {"date": "2026-06-27", "time": "03:00", "home_en": "Senegal", "away_en": "Iraq", "home_cn": "塞內加爾", "away_cn": "伊拉克", "venue": "Lumen Field", "group": "H", "round": "R3"}, {"date": "2026-06-27", "time": "08:00", "home_en": "Uruguay", "away_en": "Spain", "home_cn": "烏拉圭", "away_cn": "西班牙", "venue": "BC Place", "group": "F", "round": "R3"}, {"date": "2026-06-27", "time": "08:00", "home_en": "Cape Verde", "away_en": "Saudi Arabia", "home_cn": "佛得角", "away_cn": "沙特阿拉伯", "venue": "BC Place", "group": "F", "round": "R3"}, {"date": "2026-06-27", "time": "11:00", "home_en": "Egypt", "away_en": "Iran", "home_cn": "埃及", "away_cn": "伊朗", "venue": "Levi's Stadium", "group": "G", "round": "R3"}, {"date": "2026-06-27", "time": "11:00", "home_en": "New Zealand", "away_en": "Belgium", "home_cn": "新西蘭", "away_cn": "比利時", "venue": "Levi's Stadium", "group": "G", "round": "R3"}, {"date": "2026-06-28", "time": "05:00", "home_en": "Panama", "away_en": "England", "home_cn": "巴拿馬", "away_cn": "英格蘭", "venue": "Estadio Akron", "group": "L", "round": "R3"}, {"date": "2026-06-28", "time": "05:00", "home_en": "Croatia", "away_en": "Ghana", "home_cn": "克羅地亞", "away_cn": "加納", "venue": "Estadio Akron", "group": "L", "round": "R3"}, {"date": "2026-06-28", "time": "07:30", "home_en": "Colombia", "away_en": "Portugal", "home_cn": "哥倫比亞", "away_cn": "葡萄牙", "venue": "Estadio BBVA", "group": "K", "round": "R3"}, {"date": "2026-06-28", "time": "07:30", "home_en": "DR Congo", "away_en": "Uzbekistan", "home_cn": "剛果民主共和國", "away_cn": "烏茲別克斯坦", "venue": "Estadio BBVA", "group": "K", "round": "R3"}, {"date": "2026-06-28", "time": "10:00", "home_en": "Algeria", "away_en": "Austria", "home_cn": "阿爾及利亞", "away_cn": "奧地利", "venue": "BMO Field", "group": "I", "round": "R3"}, {"date": "2026-06-28", "time": "10:00", "home_en": "Jordan", "away_en": "Argentina", "home_cn": "約旦", "away_cn": "阿根廷", "venue": "BMO Field", "group": "I", "round": "R3"}];
+const GROUPS = {"A": ["墨西哥", "南非", "韓國", "捷克"], "B": ["加拿大", "波黑", "卡塔爾", "瑞士"], "C": ["巴西", "摩洛哥", "海地", "蘇格蘭"], "D": ["德國", "庫拉索", "科特迪瓦", "厄瓜多爾"], "E": ["荷蘭", "日本", "瑞典", "突尼斯"], "F": ["西班牙", "佛得角", "沙特阿拉伯", "烏拉圭"], "G": ["比利時", "埃及", "伊朗", "新西蘭"], "H": ["法國", "塞內加爾", "伊拉克", "挪威"], "I": ["阿根廷", "阿爾及利亞", "奧地利", "約旦"], "J": ["美國", "巴拉圭", "澳洲", "土耳其"], "K": ["葡萄牙", "剛果民主共和國", "烏茲別克斯坦", "哥倫比亞"], "L": ["英格蘭", "克羅地亞", "加納", "巴拿馬"]};
+const ELO_RATINGS = {"Mexico": 1563, "Brazil": 1552, "USA": 1551, "Argentina": 1551, "Germany": 1549, "Switzerland": 1544, "Colombia": 1538, "Morocco": 1536, "Netherlands": 1532, "Spain": 1530, "Portugal": 1529, "Norway": 1528, "Japan": 1527, "Egypt": 1524, "France": 1524, "England": 1523, "Canada": 1517, "Ghana": 1516, "Cote d'Ivoire": 1500, "Australia": 1500, "Austria": 1500, "Belgium": 1500, "Iran": 1500, "Jamaica": 1500, "Cape Verde": 1499, "Uruguay": 1499, "Sweden": 1497, "Bosnia and Herzegovina": 1495, "South Africa": 1493, "Croatia": 1492, "Paraguay": 1488, "Algeria": 1488, "DR Congo": 1485, "Ecuador": 1484, "Korea Republic": 1483, "New Zealand": 1476, "Senegal": 1476, "Scotland": 1473, "Iraq": 1472, "Saudi Arabia": 1470, "Panama": 1467, "Curacao": 1466, "Czech Republic": 1460, "Turkey": 1459, "Jordan": 1459, "Uzbekistan": 1446, "Tunisia": 1442, "Qatar": 1442, "Haiti": 1437};
+const HISTORICAL = [{"round": "R1", "date": "2026-06-12", "home_en": "Mexico", "away_en": "South Africa", "home_cn": "墨西哥", "away_cn": "南非", "hg": 2, "ag": 0, "ht_hg": 1, "ht_ag": 0, "ch": 0, "ca": 0}, {"round": "R1", "date": "2026-06-12", "home_en": "Korea Republic", "away_en": "Czech Republic", "home_cn": "韓國", "away_cn": "捷克", "hg": 2, "ag": 1, "ht_hg": 0, "ht_ag": 0, "ch": 0, "ca": 0}, {"round": "R1", "date": "2026-06-13", "home_en": "USA", "away_en": "Paraguay", "home_cn": "美國", "away_cn": "巴拉圭", "hg": 4, "ag": 1, "ht_hg": 3, "ht_ag": 0, "ch": 0, "ca": 0}, {"round": "R1", "date": "2026-06-13", "home_en": "Canada", "away_en": "Bosnia and Herzegovina", "home_cn": "加拿大", "away_cn": "波黑", "hg": 1, "ag": 1, "ht_hg": 0, "ht_ag": 1, "ch": 0, "ca": 0}, {"round": "R1", "date": "2026-06-14", "home_en": "Australia", "away_en": "Turkey", "home_cn": "澳洲", "away_cn": "土耳其", "hg": 2, "ag": 0, "ht_hg": 1, "ht_ag": 0, "ch": 0, "ca": 0}, {"round": "R1", "date": "2026-06-14", "home_en": "Qatar", "away_en": "Switzerland", "home_cn": "卡塔爾", "away_cn": "瑞士", "hg": 1, "ag": 1, "ht_hg": 0, "ht_ag": 1, "ch": 0, "ca": 0}, {"round": "R1", "date": "2026-06-14", "home_en": "Brazil", "away_en": "Morocco", "home_cn": "巴西", "away_cn": "摩洛哥", "hg": 1, "ag": 1, "ht_hg": 1, "ht_ag": 1, "ch": 0, "ca": 0}, {"round": "R1", "date": "2026-06-14", "home_en": "Haiti", "away_en": "Scotland", "home_cn": "海地", "away_cn": "蘇格蘭", "hg": 0, "ag": 1, "ht_hg": 0, "ht_ag": 1, "ch": 0, "ca": 0}, {"round": "R1", "date": "2026-06-15", "home_en": "Germany", "away_en": "Curacao", "home_cn": "德國", "away_cn": "庫拉索", "hg": 7, "ag": 1, "ht_hg": 3, "ht_ag": 1, "ch": 0, "ca": 0}, {"round": "R1", "date": "2026-06-15", "home_en": "Netherlands", "away_en": "Japan", "home_cn": "荷蘭", "away_cn": "日本", "hg": 2, "ag": 2, "ht_hg": 0, "ht_ag": 0, "ch": 0, "ca": 0}, {"round": "R1", "date": "2026-06-15", "home_en": "Cote d'Ivoire", "away_en": "Ecuador", "home_cn": "科特迪瓦", "away_cn": "厄瓜多爾", "hg": 1, "ag": 0, "ht_hg": 0, "ht_ag": 0, "ch": 0, "ca": 0}, {"round": "R1", "date": "2026-06-15", "home_en": "Sweden", "away_en": "Tunisia", "home_cn": "瑞典", "away_cn": "突尼斯", "hg": 5, "ag": 1, "ht_hg": 2, "ht_ag": 1, "ch": 0, "ca": 0}, {"round": "R1", "date": "2026-06-16", "home_en": "Spain", "away_en": "Cape Verde", "home_cn": "西班牙", "away_cn": "佛得角", "hg": 0, "ag": 0, "ht_hg": 0, "ht_ag": 0, "ch": 0, "ca": 0}, {"round": "R1", "date": "2026-06-16", "home_en": "Belgium", "away_en": "Egypt", "home_cn": "比利時", "away_cn": "埃及", "hg": 1, "ag": 1, "ht_hg": 0, "ht_ag": 1, "ch": 0, "ca": 0}, {"round": "R1", "date": "2026-06-16", "home_en": "Iran", "away_en": "New Zealand", "home_cn": "伊朗", "away_cn": "新西蘭", "hg": 2, "ag": 2, "ht_hg": 1, "ht_ag": 1, "ch": 0, "ca": 0}, {"round": "R1", "date": "2026-06-16", "home_en": "Saudi Arabia", "away_en": "Jamaica", "home_cn": "沙特阿拉伯", "away_cn": "牙買加", "hg": 1, "ag": 1, "ht_hg": 1, "ht_ag": 0, "ch": 0, "ca": 0}, {"round": "R1", "date": "2026-06-17", "home_en": "France", "away_en": "Senegal", "home_cn": "法國", "away_cn": "塞內加爾", "hg": 3, "ag": 1, "ht_hg": 0, "ht_ag": 0, "ch": 0, "ca": 0}, {"round": "R1", "date": "2026-06-17", "home_en": "Iraq", "away_en": "Norway", "home_cn": "伊拉克", "away_cn": "挪威", "hg": 1, "ag": 4, "ht_hg": 1, "ht_ag": 2, "ch": 0, "ca": 0}, {"round": "R1", "date": "2026-06-17", "home_en": "Argentina", "away_en": "Algeria", "home_cn": "阿根廷", "away_cn": "阿爾及利亞", "hg": 3, "ag": 0, "ht_hg": 1, "ht_ag": 0, "ch": 0, "ca": 0}, {"round": "R1", "date": "2026-06-17", "home_en": "Austria", "away_en": "Jordan", "home_cn": "奧地利", "away_cn": "約旦", "hg": 3, "ag": 1, "ht_hg": 1, "ht_ag": 0, "ch": 0, "ca": 0}, {"round": "R1", "date": "2026-06-18", "home_en": "Portugal", "away_en": "DR Congo", "home_cn": "葡萄牙", "away_cn": "剛果民主共和國", "hg": 1, "ag": 1, "ht_hg": 1, "ht_ag": 1, "ch": 0, "ca": 0}, {"round": "R1", "date": "2026-06-18", "home_en": "England", "away_en": "Croatia", "home_cn": "英格蘭", "away_cn": "克羅地亞", "hg": 4, "ag": 2, "ht_hg": 2, "ht_ag": 2, "ch": 0, "ca": 0}, {"round": "R1", "date": "2026-06-18", "home_en": "Ghana", "away_en": "Panama", "home_cn": "加納", "away_cn": "巴拿馬", "hg": 1, "ag": 0, "ht_hg": 0, "ht_ag": 0, "ch": 0, "ca": 0}, {"round": "R1", "date": "2026-06-18", "home_en": "Uzbekistan", "away_en": "Colombia", "home_cn": "烏茲別克斯坦", "away_cn": "哥倫比亞", "hg": 1, "ag": 3, "ht_hg": 0, "ht_ag": 1, "ch": 0, "ca": 0}, {"round": "R2", "date": "2026-06-19", "home_en": "Mexico", "away_en": "Korea Republic", "home_cn": "墨西哥", "away_cn": "韓國", "hg": 1, "ag": 0, "ht_hg": 0, "ht_ag": 0, "ch": 0, "ca": 0}, {"round": "R2", "date": "2026-06-19", "home_en": "Canada", "away_en": "Qatar", "home_cn": "加拿大", "away_cn": "卡塔爾", "hg": 6, "ag": 0, "ht_hg": 3, "ht_ag": 0, "ch": 0, "ca": 0}, {"round": "R2", "date": "2026-06-19", "home_en": "Switzerland", "away_en": "Bosnia and Herzegovina", "home_cn": "瑞士", "away_cn": "波黑", "hg": 4, "ag": 1, "ht_hg": 0, "ht_ag": 0, "ch": 0, "ca": 0}, {"round": "R2", "date": "2026-06-19", "home_en": "Czech Republic", "away_en": "South Africa", "home_cn": "捷克", "away_cn": "南非", "hg": 1, "ag": 1, "ht_hg": 1, "ht_ag": 0, "ch": 0, "ca": 0}, {"round": "R2", "date": "2026-06-20", "home_en": "USA", "away_en": "Australia", "home_cn": "美國", "away_cn": "澳洲", "hg": 2, "ag": 0, "ht_hg": 2, "ht_ag": 0, "ch": 0, "ca": 0}, {"round": "R2", "date": "2026-06-20", "home_en": "Turkey", "away_en": "Paraguay", "home_cn": "土耳其", "away_cn": "巴拉圭", "hg": 0, "ag": 1, "ht_hg": 0, "ht_ag": 1, "ch": 0, "ca": 0}, {"round": "R2", "date": "2026-06-20", "home_en": "Scotland", "away_en": "Morocco", "home_cn": "蘇格蘭", "away_cn": "摩洛哥", "hg": 0, "ag": 1, "ht_hg": 0, "ht_ag": 1, "ch": 0, "ca": 0}, {"round": "R2", "date": "2026-06-20", "home_en": "Brazil", "away_en": "Haiti", "home_cn": "巴西", "away_cn": "海地", "hg": 3, "ag": 0, "ht_hg": 3, "ht_ag": 0, "ch": 0, "ca": 0}, {"round": "R2", "date": "2026-06-21", "home_en": "Netherlands", "away_en": "Sweden", "home_cn": "荷蘭", "away_cn": "瑞典", "hg": 5, "ag": 1, "ht_hg": 2, "ht_ag": 0, "ch": 0, "ca": 0}, {"round": "R2", "date": "2026-06-21", "home_en": "Germany", "away_en": "Cote d'Ivoire", "home_cn": "德國", "away_cn": "科特迪瓦", "hg": 2, "ag": 1, "ht_hg": 0, "ht_ag": 1, "ch": 0, "ca": 0}, {"round": "R2", "date": "2026-06-21", "home_en": "Ecuador", "away_en": "Uruguay", "home_cn": "厄瓜多爾", "away_cn": "烏拉圭", "hg": 0, "ag": 0, "ht_hg": 0, "ht_ag": 0, "ch": 0, "ca": 0}, {"round": "R2", "date": "2026-06-21", "home_en": "Tunisia", "away_en": "Japan", "home_cn": "突尼斯", "away_cn": "日本", "hg": 0, "ag": 4, "ht_hg": 0, "ht_ag": 2, "ch": 0, "ca": 0}, {"round": "R2", "date": "2026-06-22", "home_en": "Spain", "away_en": "Saudi Arabia", "home_cn": "西班牙", "away_cn": "沙特阿拉伯", "hg": 4, "ag": 0, "ht_hg": 3, "ht_ag": 0, "ch": 0, "ca": 0}, {"round": "R2", "date": "2026-06-22", "home_en": "Belgium", "away_en": "Iran", "home_cn": "比利時", "away_cn": "伊朗", "hg": 0, "ag": 0, "ht_hg": 0, "ht_ag": 0, "ch": 0, "ca": 0}, {"round": "R2", "date": "2026-06-22", "home_en": "Uruguay", "away_en": "Cape Verde", "home_cn": "烏拉圭", "away_cn": "佛得角", "hg": 2, "ag": 2, "ht_hg": 2, "ht_ag": 1, "ch": 0, "ca": 0}, {"round": "R2", "date": "2026-06-22", "home_en": "New Zealand", "away_en": "Egypt", "home_cn": "新西蘭", "away_cn": "埃及", "hg": 1, "ag": 3, "ht_hg": 1, "ht_ag": 0, "ch": 0, "ca": 0}, {"round": "R2", "date": "2026-06-23", "home_en": "Argentina", "away_en": "Austria", "home_cn": "阿根廷", "away_cn": "奧地利", "hg": 2, "ag": 0, "ht_hg": 1, "ht_ag": 0, "ch": 0, "ca": 0}, {"round": "R2", "date": "2026-06-23", "home_en": "Jordan", "away_en": "Algeria", "home_cn": "約旦", "away_cn": "阿爾及利亞", "hg": 1, "ag": 2, "ht_hg": 1, "ht_ag": 0, "ch": 0, "ca": 0}, {"round": "R2", "date": "2026-06-24", "home_en": "Portugal", "away_en": "Uzbekistan", "home_cn": "葡萄牙", "away_cn": "烏茲別克斯坦", "hg": 5, "ag": 0, "ht_hg": 3, "ht_ag": 0, "ch": 0, "ca": 0}, {"round": "R2", "date": "2026-06-24", "home_en": "England", "away_en": "Ghana", "home_cn": "英格蘭", "away_cn": "加納", "hg": 0, "ag": 0, "ht_hg": 0, "ht_ag": 0, "ch": 0, "ca": 0}, {"round": "R2", "date": "2026-06-24", "home_en": "Panama", "away_en": "Croatia", "home_cn": "巴拿馬", "away_cn": "克羅地亞", "hg": 0, "ag": 1, "ht_hg": 0, "ht_ag": 0, "ch": 0, "ca": 0}, {"round": "R2", "date": "2026-06-24", "home_en": "Colombia", "away_en": "DR Congo", "home_cn": "哥倫比亞", "away_cn": "剛果民主共和國", "hg": 1, "ag": 0, "ht_hg": 0, "ht_ag": 0, "ch": 0, "ca": 0}, {"round": "R3", "date": "2026-06-25", "home_en": "Bosnia and Herzegovina", "away_en": "Qatar", "home_cn": "波黑", "away_cn": "卡塔爾", "hg": 3, "ag": 1, "ht_hg": 2, "ht_ag": 1, "ch": 0, "ca": 0}, {"round": "R3", "date": "2026-06-25", "home_en": "Switzerland", "away_en": "Canada", "home_cn": "瑞士", "away_cn": "加拿大", "hg": 2, "ag": 1, "ht_hg": 0, "ht_ag": 0, "ch": 0, "ca": 0}, {"round": "R3", "date": "2026-06-25", "home_en": "Morocco", "away_en": "Haiti", "home_cn": "摩洛哥", "away_cn": "海地", "hg": 4, "ag": 2, "ht_hg": 2, "ht_ag": 2, "ch": 0, "ca": 0}, {"round": "R3", "date": "2026-06-25", "home_en": "Scotland", "away_en": "Brazil", "home_cn": "蘇格蘭", "away_cn": "巴西", "hg": 0, "ag": 3, "ht_hg": 0, "ht_ag": 1, "ch": 0, "ca": 0}, {"round": "R3", "date": "2026-06-25", "home_en": "Czech Republic", "away_en": "Mexico", "home_cn": "捷克", "away_cn": "墨西哥", "hg": 0, "ag": 3, "ht_hg": 0, "ht_ag": 0, "ch": 0, "ca": 0}, {"round": "R3", "date": "2026-06-25", "home_en": "South Africa", "away_en": "Korea Republic", "home_cn": "南非", "away_cn": "韓國", "hg": 1, "ag": 0, "ht_hg": 0, "ht_ag": 0, "ch": 0, "ca": 0}];
+const VENUES = {"AT&T Stadium": {"city": "Arlington", "country": "USA", "capacity": 80000, "altitude": 180, "grass": "hybrid", "climate": "hot_humid"}, "SoFi Stadium": {"city": "Inglewood", "country": "USA", "capacity": 70000, "altitude": 30, "grass": "natural", "climate": "mediterranean"}, "MetLife Stadium": {"city": "East Rutherford", "country": "USA", "capacity": 82500, "altitude": 3, "grass": "natural", "climate": "continental"}, "Mercedes-Benz Stadium": {"city": "Atlanta", "country": "USA", "capacity": 71000, "altitude": 320, "grass": "hybrid", "climate": "hot_humid"}, "Hard Rock Stadium": {"city": "Miami", "country": "USA", "capacity": 64767, "altitude": 3, "grass": "natural", "climate": "tropical"}, "Levi's Stadium": {"city": "Santa Clara", "country": "USA", "capacity": 68500, "altitude": 10, "grass": "natural", "climate": "mediterranean"}, "Lumen Field": {"city": "Seattle", "country": "USA", "capacity": 72000, "altitude": 50, "grass": "natural", "climate": "oceanic"}, "BC Place": {"city": "Vancouver", "country": "CAN", "capacity": 54500, "altitude": 20, "grass": "artificial", "climate": "oceanic"}, "BMO Field": {"city": "Toronto", "country": "CAN", "capacity": 30000, "altitude": 80, "grass": "natural", "climate": "continental"}, "Estadio Azteca": {"city": "Mexico City", "country": "MEX", "capacity": 87523, "altitude": 2240, "grass": "natural", "climate": "high_altitude"}, "Estadio BBVA": {"city": "Monterrey", "country": "MEX", "capacity": 53500, "altitude": 512, "grass": "natural", "climate": "hot_dry"}, "Estadio Akron": {"city": "Guadalajara", "country": "MEX", "capacity": 46000, "altitude": 1566, "grass": "natural", "climate": "high_altitude"}, "Estadio Olímpico Universitario": {"city": "Mexico City", "country": "MEX", "capacity": 72000, "altitude": 2240, "grass": "natural", "climate": "high_altitude"}};
 
-<!-- Match 5: 捷克 vs 墨西哥 -->
-<div class="match-card">
-  <div class="match-header">
-    <span class="match-group">A組 R3</span>
-    <span class="match-time">6月25日 09:00</span>
-    <span class="match-venue">📍 Estadio Azteca, 墨西哥城, 墨西哥 (海拔 2,240m)</span>
-  </div>
-  <div class="teams-row">
-    <div class="team">
-      <div class="team-flag">🇨🇿</div>
-      <div class="team-name">捷克</div>
-      <div class="team-fifa">FIFA #43</div>
-    </div>
-    <div class="vs-center">
-      <div class="vs-text">VS</div>
-    </div>
-    <div class="team">
-      <div class="team-flag">🇲🇽</div>
-      <div class="team-name">墨西哥</div>
-      <div class="team-fifa">FIFA #15</div>
-    </div>
-  </div>
-  <div class="pred-grid">
-    <div class="pred-item">
-      <div class="pred-label">主勝</div>
-      <div class="pred-value">25%</div>
-      <div class="pred-odds">@4.00</div>
-    </div>
-    <div class="pred-item">
-      <div class="pred-label">和局</div>
-      <div class="pred-value">25%</div>
-      <div class="pred-odds">@3.50</div>
-    </div>
-    <div class="pred-item">
-      <div class="pred-label">客勝</div>
-      <div class="pred-value">50%</div>
-      <div class="pred-odds">@1.90</div>
-    </div>
-  </div>
-  <div class="score-pred">
-    <div class="score-box">
-      <div class="score-label">預測比分</div>
-      <div class="score-value">1-1</div>
-    </div>
-    <div class="score-box">
-      <div class="score-label">半場</div>
-      <div class="score-value">0-0</div>
-    </div>
-    <div class="score-box">
-      <div class="score-label">信心</div>
-      <div class="score-value"><span class="confidence conf-med">中</span></div>
-    </div>
-  </div>
-  <div class="info-row">
-    <div class="weather-info">⛅ 22°C | 濕度 45% | 體感 21°C | 多雲 | 微風 8km/h</div>
-  </div>
-  <div class="info-row">
-    <div class="motivation-info">🔥 捷克: 必須取勝 | ✅ 墨西哥: 已出線(可能輪換)</div>
-  </div>
-  <div class="info-row">
-    <div class="upset-alert">⚠️ 爆冷預警: 墨西哥已出線可能輪換，捷克生死戰</div>
-  </div>
-  <div class="corner-section">
-    <div class="corner-title">📐 角球預測</div>
-    <div class="corner-value">預期 8.0 角 | 盤口 8.5</div>
-    <div class="corner-rec under">推薦: 🟡 觀望</div>
-  </div>
-  <div class="tips-section">
-    <div class="tips-title">🎯 投注建議</div>
-    <div class="tip-item">• <span class="tip-highlight">和局</span> — 墨西哥可能輪換，捷克死守求和</div>
-    <div class="tip-item">• <span class="tip-highlight">大小球小2.5</span> @1.80 — 高海拔影響進攻節奏</div>
-    <div class="tip-item">• <span class="tip-highlight">半場和</span> @2.10</div>
-    <div class="tip-item">• <span class="tip-highlight">雙進球 否</span> @1.90</div>
-  </div>
-</div>
+const WC_PARAMS = {
+  avg_goals: 2.94, home_adv: 0.15, draw_rate: 0.269, btts_rate: 0.519,
+  avg_corners: 9.2, avg_cards: 4.5, intensity: 1.15,
+  wc_actual_round1_goals: 3.12, wc_actual_round2_goals: 2.64, wc_actual_round3_goals: 3.33
+};
 
-<!-- Match 6: 南非 vs 韓國 -->
-<div class="match-card">
-  <div class="match-header">
-    <span class="match-group">A組 R3</span>
-    <span class="match-time">6月25日 09:00</span>
-    <span class="match-venue">📍 Estadio BBVA, 蒙特雷, 墨西哥</span>
-  </div>
-  <div class="teams-row">
-    <div class="team">
-      <div class="team-flag">🇿🇦</div>
-      <div class="team-name">南非</div>
-      <div class="team-fifa">FIFA #61</div>
-    </div>
-    <div class="vs-center">
-      <div class="vs-text">VS</div>
-    </div>
-    <div class="team">
-      <div class="team-flag">🇰🇷</div>
-      <div class="team-name">韓國</div>
-      <div class="team-fifa">FIFA #22</div>
-    </div>
-  </div>
-  <div class="pred-grid">
-    <div class="pred-item">
-      <div class="pred-label">主勝</div>
-      <div class="pred-value">20%</div>
-      <div class="pred-odds">@5.00</div>
-    </div>
-    <div class="pred-item">
-      <div class="pred-label">和局</div>
-      <div class="pred-value">28%</div>
-      <div class="pred-odds">@3.60</div>
-    </div>
-    <div class="pred-item">
-      <div class="pred-label">客勝</div>
-      <div class="pred-value">52%</div>
-      <div class="pred-odds">@1.70</div>
-    </div>
-  </div>
-  <div class="score-pred">
-    <div class="score-box">
-      <div class="score-label">預測比分</div>
-      <div class="score-value">1-2</div>
-    </div>
-    <div class="score-box">
-      <div class="score-label">半場</div>
-      <div class="score-value">0-1</div>
-    </div>
-    <div class="score-box">
-      <div class="score-label">信心</div>
-      <div class="score-value"><span class="confidence conf-med">中高</span></div>
-    </div>
-  </div>
-  <div class="info-row">
-    <div class="weather-info">☀️ 30°C | 濕度 55% | 體感 33°C | 晴朗 | 微風 10km/h</div>
-  </div>
-  <div class="info-row">
-    <div class="motivation-info">🔥 南非: 必須取勝 | ⚡ 韓國: 爭取出線</div>
-  </div>
-  <div class="corner-section">
-    <div class="corner-title">📐 角球預測</div>
-    <div class="corner-value">預期 9.5 角 | 盤口 9.0</div>
-    <div class="corner-rec over">推薦: 🟢 大角</div>
-  </div>
-  <div class="tips-section">
-    <div class="tips-title">🎯 投注建議</div>
-    <div class="tip-item">• <span class="tip-highlight">客勝</span> — 韓國整體實力佔優，孫興慜狀態佳</div>
-    <div class="tip-item">• <span class="tip-highlight">大小球大2.5</span> @1.90 — 南非必須進攻，後防空虛</div>
-    <div class="tip-item">• <span class="tip-highlight">BTTS 是</span> @1.70 — 雙方都有進球需求</div>
-    <div class="tip-item">• <span class="tip-highlight">角球大9.0</span> — 開放對攻預期</div>
-  </div>
-</div>
+const WC_KO_PARAMS = {
+  avg_goals: 2.45, draw_rate: 0.35, btts_rate: 0.45,
+  avg_corners: 8.8, avg_cards: 5.2, intensity: 1.20, knockout: true
+};
 
-<!-- 6月26日 -->
-<div class="date-section">
-  <div class="date-title">📅 6月26日 (星期五) — 小組賽 R3</div>
-  <div class="date-subtitle">D組/E組/F組 生死戰</div>
-</div>
+const STYLE_RATINGS = {
+  "Germany":{attack:3.06,defense:1.13,style:"attacking"},"Norway":{attack:2.72,defense:1.13,style:"attacking"},
+  "Netherlands":{attack:2.38,defense:0.82,style:"attacking"},"USA":{attack:2.04,defense:1.84,style:"attacking"},
+  "Japan":{attack:2.04,defense:1.13,style:"attacking"},"Sweden":{attack:2.04,defense:0.45,style:"attacking"},
+  "France":{attack:2.04,defense:1.13,style:"attacking"},"Portugal":{attack:2.04,defense:1.84,style:"attacking"},
+  "Canada":{attack:1.81,defense:1.13,style:"attacking"},"Argentina":{attack:1.70,defense:4.90,style:"attacking"},
+  "Switzerland":{attack:1.59,defense:1.13,style:"attacking"},"Brazil":{attack:1.59,defense:2.32,style:"attacking"},
+  "Mexico":{attack:1.36,defense:4.90,style:"attacking"},"Morocco":{attack:1.36,defense:1.13,style:"attacking"},
+  "Spain":{attack:1.36,defense:4.90,style:"attacking"},"Egypt":{attack:1.36,defense:1.13,style:"attacking"},
+  "England":{attack:1.36,defense:1.13,style:"attacking"},"Colombia":{attack:1.36,defense:1.84,style:"attacking"},
+  "Bosnia and Herzegovina":{attack:1.13,defense:0.64,style:"balanced"},"New Zealand":{attack:1.02,defense:0.53,style:"balanced"},
+  "Austria":{attack:1.02,defense:0.82,style:"balanced"},"Croatia":{attack:1.02,defense:0.64,style:"balanced"},
+  "Paraguay":{attack:0.68,defense:0.64,style:"defensive"},"Australia":{attack:0.68,defense:1.13,style:"defensive"},
+  "Curacao":{attack:0.68,defense:0.20,style:"defensive"},"Cote d'Ivoire":{attack:0.68,defense:1.13,style:"defensive"},
+  "Cape Verde":{attack:0.68,defense:1.13,style:"defensive"},"Iran":{attack:0.68,defense:1.13,style:"defensive"},
+  "Uruguay":{attack:0.68,defense:1.13,style:"defensive"},"Senegal":{attack:0.68,defense:0.45,style:"defensive"},
+  "Iraq":{attack:0.68,defense:0.34,style:"defensive"},"Algeria":{attack:0.68,defense:0.64,style:"defensive"},
+  "Jordan":{attack:0.68,defense:0.53,style:"defensive"},"South Africa":{attack:0.45,defense:1.13,style:"defensive"},
+  "Korea Republic":{attack:0.45,defense:1.13,style:"defensive"},"Czech Republic":{attack:0.45,defense:0.64,style:"defensive"},
+  "Qatar":{attack:0.45,defense:0.40,style:"defensive"},"Haiti":{attack:0.45,defense:0.50,style:"defensive"},
+  "Tunisia":{attack:0.34,defense:0.31,style:"defensive"},"Belgium":{attack:0.34,defense:1.84,style:"defensive"},
+  "Saudi Arabia":{attack:0.34,defense:0.53,style:"defensive"},"DR Congo":{attack:0.34,defense:1.13,style:"defensive"},
+  "Ghana":{attack:0.34,defense:4.90,style:"defensive"},"Uzbekistan":{attack:0.34,defense:0.34,style:"defensive"},
+  "Scotland":{attack:0.23,defense:0.90,style:"defensive"},"Turkey":{attack:0.00,defense:0.82,style:"defensive"},
+  "Ecuador":{attack:0.00,defense:1.84,style:"defensive"},"Panama":{attack:0.00,defense:1.13,style:"defensive"},
+};
 
-<!-- Match 7: 庫拉索 vs 科特迪瓦 -->
-<div class="match-card">
-  <div class="match-header">
-    <span class="match-group">E組 R3</span>
-    <span class="match-time">6月26日 04:00</span>
-    <span class="match-venue">📍 Lincoln Financial Field, 費城, 美國</span>
-  </div>
-  <div class="teams-row">
-    <div class="team">
-      <div class="team-flag">🇨🇼</div>
-      <div class="team-name">庫拉索</div>
-      <div class="team-fifa">FIFA #80</div>
-    </div>
-    <div class="vs-center">
-      <div class="vs-text">VS</div>
-    </div>
-    <div class="team">
-      <div class="team-flag">🇨🇮</div>
-      <div class="team-name">科特迪瓦</div>
-      <div class="team-fifa">FIFA #50</div>
-    </div>
-  </div>
-  <div class="pred-grid">
-    <div class="pred-item">
-      <div class="pred-label">主勝</div>
-      <div class="pred-value">4%</div>
-      <div class="pred-odds">@15.00</div>
-    </div>
-    <div class="pred-item">
-      <div class="pred-label">和局</div>
-      <div class="pred-value">12%</div>
-      <div class="pred-odds">@6.00</div>
-    </div>
-    <div class="pred-item">
-      <div class="pred-label">客勝</div>
-      <div class="pred-value">83%</div>
-      <div class="pred-odds">@1.20</div>
-    </div>
-  </div>
-  <div class="score-pred">
-    <div class="score-box">
-      <div class="score-label">預測比分</div>
-      <div class="score-value">0-2</div>
-    </div>
-    <div class="score-box">
-      <div class="score-label">半場</div>
-      <div class="score-value">0-1</div>
-    </div>
-    <div class="score-box">
-      <div class="score-label">信心</div>
-      <div class="score-value"><span class="confidence conf-high">高</span></div>
-    </div>
-  </div>
-  <div class="info-row">
-    <div class="weather-info">⛅ 24°C | 濕度 60% | 多雲 | 微風 10km/h</div>
-  </div>
-  <div class="info-row">
-    <div class="motivation-info">❌ 庫拉索: 已淘汰 | 🔥 科特迪瓦: 爭取出線</div>
-  </div>
-  <div class="corner-section">
-    <div class="corner-title">📐 角球預測</div>
-    <div class="corner-value">預期 7.3 角 | 盤口 8.5</div>
-    <div class="corner-rec under">推薦: 🔴 小角</div>
-  </div>
-  <div class="tips-section">
-    <div class="tips-title">🎯 投注建議</div>
-    <div class="tip-item">• <span class="tip-highlight">客勝</span> — 科特迪瓦實力明顯佔優</div>
-    <div class="tip-item">• <span class="tip-highlight">大小球小2.5</span> @1.85 — 庫拉索已淘汰可能保守</div>
-    <div class="tip-item">• <span class="tip-highlight">BTTS 否</span> @1.70 — 庫拉索進攻乏力</div>
-    <div class="tip-item">• <span class="tip-highlight">角球小8.5</span> @1.90</div>
-  </div>
-</div>
+const CORNER_STYLE = {possession:1.08,counter_attack:0.92,direct:1.05,wing_play:1.12,set_piece:1.03,park_bus:0.85,high_press:1.10};
+const CARD_STYLE = {high_press:1.20,park_bus:1.10,direct:1.05,possession:0.90,counter_attack:0.95,wing_play:0.95,set_piece:1.00};
 
-<!-- Match 8: 厄瓜多爾 vs 德國 -->
-<div class="match-card">
-  <div class="match-header">
-    <span class="match-group">E組 R3</span>
-    <span class="match-time">6月26日 04:00</span>
-    <span class="match-venue">📍 MetLife Stadium, 東盧瑟福, 新澤西, 美國</span>
-  </div>
-  <div class="teams-row">
-    <div class="team">
-      <div class="team-flag">🇪🇨</div>
-      <div class="team-name">厄瓜多爾</div>
-      <div class="team-fifa">FIFA #32</div>
-    </div>
-    <div class="vs-center">
-      <div class="vs-text">VS</div>
-    </div>
-    <div class="team">
-      <div class="team-flag">🇩🇪</div>
-      <div class="team-name">德國</div>
-      <div class="team-fifa">FIFA #16</div>
-    </div>
-  </div>
-  <div class="pred-grid">
-    <div class="pred-item">
-      <div class="pred-label">主勝</div>
-      <div class="pred-value">36%</div>
-      <div class="pred-odds">@2.60</div>
-    </div>
-    <div class="pred-item">
-      <div class="pred-label">和局</div>
-      <div class="pred-value">24%</div>
-      <div class="pred-odds">@3.80</div>
-    </div>
-    <div class="pred-item">
-      <div class="pred-label">客勝</div>
-      <div class="pred-value">40%</div>
-      <div class="pred-odds">@2.40</div>
-    </div>
-  </div>
-  <div class="score-pred">
-    <div class="score-box">
-      <div class="score-label">預測比分</div>
-      <div class="score-value">1-2</div>
-    </div>
-    <div class="score-box">
-      <div class="score-label">半場</div>
-      <div class="score-value">0-1</div>
-    </div>
-    <div class="score-box">
-      <div class="score-label">信心</div>
-      <div class="score-value"><span class="confidence conf-med">中</span></div>
-    </div>
-  </div>
-  <div class="info-row">
-    <div class="weather-info">⛅ 25°C | 濕度 55% | 多雲 | 微風 10km/h</div>
-  </div>
-  <div class="info-row">
-    <div class="motivation-info">🔥 厄瓜多爾: 必須取勝 | ✅ 德國: 已出線(可能輪換)</div>
-  </div>
-  <div class="corner-section">
-    <div class="corner-title">📐 角球預測</div>
-    <div class="corner-value">預期 8.3 角 | 盤口 9.0</div>
-    <div class="corner-rec under">推薦: 🟡 觀望</div>
-  </div>
-  <div class="tips-section">
-    <div class="tips-title">🎯 投注建議</div>
-    <div class="tip-item">• <span class="tip-highlight">客勝</span> — 德國整體實力佔優</div>
-    <div class="tip-item">• <span class="tip-highlight">大小球大2.5</span> @1.85 — 厄瓜多爾必須進攻</div>
-    <div class="tip-item">• <span class="tip-highlight">BTTS 是</span> @1.75 — 雙方都有進球能力</div>
-    <div class="tip-item">• <span class="tip-risk">注意德國輪換風險</span></div>
-  </div>
-</div>
+const FLAG_MAP = {
+  "墨西哥":"🇲🇽","南非":"🇿🇦","韓國":"🇰🇷","捷克":"🇨🇿","美國":"🇺🇸","巴拉圭":"🇵🇾","加拿大":"🇨🇦","波黑":"🇧🇦",
+  "澳洲":"🇦🇺","土耳其":"🇹🇷","卡塔爾":"🇶🇦","瑞士":"🇨🇭","巴西":"🇧🇷","摩洛哥":"🇲🇦","海地":"🇭🇹","蘇格蘭":"🏴󠁧󠁢󠁳󠁣󠁴󠁿",
+  "德國":"🇩🇪","庫拉索":"🇨🇼","荷蘭":"🇳🇱","日本":"🇯🇵","科特迪瓦":"🇨🇮","厄瓜多爾":"🇪🇨","瑞典":"🇸🇪","突尼斯":"🇹🇳",
+  "西班牙":"🇪🇸","佛得角":"🇨🇻","比利時":"🇧🇪","埃及":"🇪🇬","伊朗":"🇮🇷","新西蘭":"🇳🇿","沙特阿拉伯":"🇸🇦","烏拉圭":"🇺🇾",
+  "法國":"🇫🇷","塞內加爾":"🇸🇳","伊拉克":"🇮🇶","挪威":"🇳🇴","阿根廷":"🇦🇷","阿爾及利亞":"🇩🇿","奧地利":"🇦🇹","約旦":"🇯🇴",
+  "葡萄牙":"🇵🇹","剛果民主共和國":"🇨🇩","英格蘭":"🏴󠁧󠁢󠁥󠁮󠁧󠁿","克羅地亞":"🇭🇷","加納":"🇬🇭","巴拿馬":"🇵🇦","烏茲別克斯坦":"🇺🇿","哥倫比亞":"🇨🇴",
+  "意大利":"🇮🇹","烏克蘭":"🇺🇦","牙買加":"🇯🇲","芬蘭":"🇫🇮","智利":"🇨🇱","丹麥":"🇩🇰","喀麥隆":"🇨🇲","波蘭":"🇵🇱",
+  "希臘":"🇬🇷","委內瑞拉":"🇻🇪","尼日利亞":"🇳🇬"
+};
 
-<!-- Match 9: 突尼斯 vs 荷蘭 -->
-<div class="match-card">
-  <div class="match-header">
-    <span class="match-group">F組 R3</span>
-    <span class="match-time">6月26日 07:00</span>
-    <span class="match-venue">📍 Arrowhead Stadium, 堪薩斯城, 美國</span>
-  </div>
-  <div class="teams-row">
-    <div class="team">
-      <div class="team-flag">🇹🇳</div>
-      <div class="team-name">突尼斯</div>
-      <div class="team-fifa">FIFA #41</div>
-    </div>
-    <div class="vs-center">
-      <div class="vs-text">VS</div>
-    </div>
-    <div class="team">
-      <div class="team-flag">🇳🇱</div>
-      <div class="team-name">荷蘭</div>
-      <div class="team-fifa">FIFA #7</div>
-    </div>
-  </div>
-  <div class="pred-grid">
-    <div class="pred-item">
-      <div class="pred-label">主勝</div>
-      <div class="pred-value">4%</div>
-      <div class="pred-odds">@18.00</div>
-    </div>
-    <div class="pred-item">
-      <div class="pred-label">和局</div>
-      <div class="pred-value">9%</div>
-      <div class="pred-odds">@8.00</div>
-    </div>
-    <div class="pred-item">
-      <div class="pred-label">客勝</div>
-      <div class="pred-value">87%</div>
-      <div class="pred-odds">@1.15</div>
-    </div>
-  </div>
-  <div class="score-pred">
-    <div class="score-box">
-      <div class="score-label">預測比分</div>
-      <div class="score-value">0-3</div>
-    </div>
-    <div class="score-box">
-      <div class="score-label">半場</div>
-      <div class="score-value">0-1</div>
-    </div>
-    <div class="score-box">
-      <div class="score-label">信心</div>
-      <div class="score-value"><span class="confidence conf-high">高</span></div>
-    </div>
-  </div>
-  <div class="info-row">
-    <div class="weather-info">⛅ 28°C | 濕度 65% | 多雲 | 微風 10km/h</div>
-  </div>
-  <div class="info-row">
-    <div class="motivation-info">❌ 突尼斯: 已淘汰 | 🔥 荷蘭: 爭取首名</div>
-  </div>
-  <div class="corner-section">
-    <div class="corner-title">📐 角球預測</div>
-    <div class="corner-value">預期 8.1 角 | 盤口 9.0</div>
-    <div class="corner-rec under">推薦: 🟡 觀望</div>
-  </div>
-  <div class="tips-section">
-    <div class="tips-title">🎯 投注建議</div>
-    <div class="tip-item">• <span class="tip-highlight">客勝</span> — 荷蘭實力明顯佔優</div>
-    <div class="tip-item">• <span class="tip-highlight">大小球大2.5</span> @1.80 — 荷蘭進攻火力強</div>
-    <div class="tip-item">• <span class="tip-highlight">BTTS 否</span> @1.55 — 突尼斯進攻乏力</div>
-    <div class="tip-item">• <span class="tip-highlight">讓球主勝</span> — 荷蘭大勝可期</div>
-  </div>
-</div>
+// ================= ALGORITHM LAYER =================
+function getFlag(cnName) { return FLAG_MAP[cnName] || "🏳️"; }
+function getElo(team) { return ELO_RATINGS[team] || 1500; }
+function getStyle(team) { return STYLE_RATINGS[team] || {attack:1.0,defense:1.0,style:"balanced"}; }
 
-<!-- Match 10: 日本 vs 瑞典 -->
-<div class="match-card">
-  <div class="match-header">
-    <span class="match-group">F組 R3</span>
-    <span class="match-time">6月26日 07:00</span>
-    <span class="match-venue">📍 AT&T Stadium, 阿靈頓, 德州, 美國</span>
-  </div>
-  <div class="teams-row">
-    <div class="team">
-      <div class="team-flag">🇯🇵</div>
-      <div class="team-name">日本</div>
-      <div class="team-fifa">FIFA #18</div>
-    </div>
-    <div class="vs-center">
-      <div class="vs-text">VS</div>
-    </div>
-    <div class="team">
-      <div class="team-flag">🇸🇪</div>
-      <div class="team-name">瑞典</div>
-      <div class="team-fifa">FIFA #27</div>
-    </div>
-  </div>
-  <div class="pred-grid">
-    <div class="pred-item">
-      <div class="pred-label">主勝</div>
-      <div class="pred-value">56%</div>
-      <div class="pred-odds">@1.75</div>
-    </div>
-    <div class="pred-item">
-      <div class="pred-label">和局</div>
-      <div class="pred-value">20%</div>
-      <div class="pred-odds">@4.20</div>
-    </div>
-    <div class="pred-item">
-      <div class="pred-label">客勝</div>
-      <div class="pred-value">24%</div>
-      <div class="pred-odds">@3.80</div>
-    </div>
-  </div>
-  <div class="score-pred">
-    <div class="score-box">
-      <div class="score-label">預測比分</div>
-      <div class="score-value">2-1</div>
-    </div>
-    <div class="score-box">
-      <div class="score-label">半場</div>
-      <div class="score-value">1-0</div>
-    </div>
-    <div class="score-box">
-      <div class="score-label">信心</div>
-      <div class="score-value"><span class="confidence conf-med">中高</span></div>
-    </div>
-  </div>
-  <div class="info-row">
-    <div class="weather-info">☀️ 30°C | 濕度 55% | 晴朗 | 微風 10km/h</div>
-  </div>
-  <div class="info-row">
-    <div class="motivation-info">🔥 日本: 爭取首名 | 🔥 瑞典: 爭取出線</div>
-  </div>
-  <div class="corner-section">
-    <div class="corner-title">📐 角球預測</div>
-    <div class="corner-value">預期 8.2 角 | 盤口 9.0</div>
-    <div class="corner-rec under">推薦: 🟡 觀望</div>
-  </div>
-  <div class="tips-section">
-    <div class="tips-title">🎯 投注建議</div>
-    <div class="tip-item">• <span class="tip-highlight">主勝</span> — 日本整體實力佔優，技術流剋制北歐</div>
-    <div class="tip-item">• <span class="tip-highlight">大小球大2.5</span> @1.85 — 雙方進攻積極</div>
-    <div class="tip-item">• <span class="tip-highlight">BTTS 是</span> @1.70 — 雙方都有進球能力</div>
-    <div class="tip-item">• <span class="tip-highlight">日本不敗</span> @1.30 — 穩健選擇</div>
-  </div>
-</div>
+function calculateStandings() {
+  const st = {};
+  const allTeams = new Set();
+  HISTORICAL.forEach(m => { allTeams.add(m.home_en); allTeams.add(m.away_en); });
+  allTeams.forEach(t => { st[t] = {team:t,team_cn:TEAM_NAMES[t]||t,played:0,w:0,d:0,l:0,gf:0,ga:0,gd:0,pts:0}; });
+  HISTORICAL.forEach(m => {
+    const h = st[m.home_en], a = st[m.away_en];
+    if(!h||!a) return;
+    h.played++; a.played++;
+    h.gf += m.hg; h.ga += m.ag; a.gf += m.ag; a.ga += m.hg;
+    if(m.hg > m.ag) { h.w++; a.l++; h.pts += 3; }
+    else if(m.hg < m.ag) { a.w++; h.l++; a.pts += 3; }
+    else { h.d++; a.d++; h.pts += 1; a.pts += 1; }
+  });
+  Object.values(st).forEach(s => s.gd = s.gf - s.ga);
+  return st;
+}
 
-<!-- Match 11: 土耳其 vs 美國 -->
-<div class="match-card">
-  <div class="match-header">
-    <span class="match-group">D組 R3</span>
-    <span class="match-time">6月26日 10:00</span>
-    <span class="match-venue">📍 SoFi Stadium, 英格伍德, 加州, 美國</span>
-  </div>
-  <div class="teams-row">
-    <div class="team">
-      <div class="team-flag">🇹🇷</div>
-      <div class="team-name">土耳其</div>
-      <div class="team-fifa">FIFA #42</div>
-    </div>
-    <div class="vs-center">
-      <div class="vs-text">VS</div>
-    </div>
-    <div class="team">
-      <div class="team-flag">🇺🇸</div>
-      <div class="team-name">美國</div>
-      <div class="team-fifa">FIFA #11</div>
-    </div>
-  </div>
-  <div class="pred-grid">
-    <div class="pred-item">
-      <div class="pred-label">主勝</div>
-      <div class="pred-value">21%</div>
-      <div class="pred-odds">@4.20</div>
-    </div>
-    <div class="pred-item">
-      <div class="pred-label">和局</div>
-      <div class="pred-value">28%</div>
-      <div class="pred-odds">@3.40</div>
-    </div>
-    <div class="pred-item">
-      <div class="pred-label">客勝</div>
-      <div class="pred-value">51%</div>
-      <div class="pred-odds">@1.95</div>
-    </div>
-  </div>
-  <div class="score-pred">
-    <div class="score-box">
-      <div class="score-label">預測比分</div>
-      <div class="score-value">1-1</div>
-    </div>
-    <div class="score-box">
-      <div class="score-label">半場</div>
-      <div class="score-value">0-0</div>
-    </div>
-    <div class="score-box">
-      <div class="score-label">信心</div>
-      <div class="score-value"><span class="confidence conf-med">中</span></div>
-    </div>
-  </div>
-  <div class="info-row">
-    <div class="weather-info">☀️ 26°C | 濕度 50% | 晴朗 | 微風 10km/h</div>
-  </div>
-  <div class="info-row">
-    <div class="motivation-info">🔥 土耳其: 必須取勝 | ✅ 美國: 已出線(可能輪換)</div>
-  </div>
-  <div class="info-row">
-    <div class="upset-alert">⚠️ 爆冷預警: 美國已出線可能輪換，土耳其主場(中北美)有優勢</div>
-  </div>
-  <div class="corner-section">
-    <div class="corner-title">📐 角球預測</div>
-    <div class="corner-value">預期 7.9 角 | 盤口 8.5</div>
-    <div class="corner-rec under">推薦: 🟡 觀望</div>
-  </div>
-  <div class="tips-section">
-    <div class="tips-title">🎯 投注建議</div>
-    <div class="tip-item">• <span class="tip-highlight">和局</span> — 美國可能輪換，土耳其死守</div>
-    <div class="tip-item">• <span class="tip-highlight">大小球小2.5</span> @1.80 — 關鍵戰易保守</div>
-    <div class="tip-item">• <span class="tip-highlight">半場和</span> @2.10</div>
-    <div class="tip-item">• <span class="tip-risk">注意美國輪換風險</span></div>
-  </div>
-</div>
+function getGroupStandings(groupTeams, standings) {
+  const teams = groupTeams.map(t => {
+    const en = Object.keys(TEAM_NAMES).find(k => TEAM_NAMES[k] === t) || t;
+    return standings[en] || {team:en,team_cn:t,played:0,w:0,d:0,l:0,gf:0,ga:0,gd:0,pts:0};
+  });
+  return teams.sort((a,b) => b.pts - a.pts || b.gd - a.gd || b.gf - a.gf);
+}
 
-<!-- Match 12: 巴拉圭 vs 澳洲 -->
-<div class="match-card">
-  <div class="match-header">
-    <span class="match-group">D組 R3</span>
-    <span class="match-time">6月26日 10:00</span>
-    <span class="match-venue">📍 Levi's Stadium, 聖塔克拉拉, 加州, 美國</span>
-  </div>
-  <div class="teams-row">
-    <div class="team">
-      <div class="team-flag">🇵🇾</div>
-      <div class="team-name">巴拉圭</div>
-      <div class="team-fifa">FIFA #35</div>
-    </div>
-    <div class="vs-center">
-      <div class="vs-text">VS</div>
-    </div>
-    <div class="team">
-      <div class="team-flag">🇦🇺</div>
-      <div class="team-name">澳洲</div>
-      <div class="team-fifa">FIFA #24</div>
-    </div>
-  </div>
-  <div class="pred-grid">
-    <div class="pred-item">
-      <div class="pred-label">主勝</div>
-      <div class="pred-value">29%</div>
-      <div class="pred-odds">@3.20</div>
-    </div>
-    <div class="pred-item">
-      <div class="pred-label">和局</div>
-      <div class="pred-value">23%</div>
-      <div class="pred-odds">@4.00</div>
-    </div>
-    <div class="pred-item">
-      <div class="pred-label">客勝</div>
-      <div class="pred-value">49%</div>
-      <div class="pred-odds">@2.00</div>
-    </div>
-  </div>
-  <div class="score-pred">
-    <div class="score-box">
-      <div class="score-label">預測比分</div>
-      <div class="score-value">1-2</div>
-    </div>
-    <div class="score-box">
-      <div class="score-label">半場</div>
-      <div class="score-value">0-1</div>
-    </div>
-    <div class="score-box">
-      <div class="score-label">信心</div>
-      <div class="score-value"><span class="confidence conf-med">中</span></div>
-    </div>
-  </div>
-  <div class="info-row">
-    <div class="weather-info">⛅ 25°C | 濕度 50% | 多雲 | 微風 10km/h</div>
-  </div>
-  <div class="info-row">
-    <div class="motivation-info">🔥 巴拉圭: 爭取出線 | 🔥 澳洲: 爭取出線</div>
-  </div>
-  <div class="corner-section">
-    <div class="corner-title">📐 角球預測</div>
-    <div class="corner-value">預期 7.6 角 | 盤口 8.5</div>
-    <div class="corner-rec under">推薦: 🟡 觀望</div>
-  </div>
-  <div class="tips-section">
-    <div class="tips-title">🎯 投注建議</div>
-    <div class="tip-item">• <span class="tip-highlight">客勝</span> — 澳洲整體實力略佔優</div>
-    <div class="tip-item">• <span class="tip-highlight">大小球大2.5</span> @1.85 — 雙方進攻積極</div>
-    <div class="tip-item">• <span class="tip-highlight">BTTS 是</span> @1.70 — 雙方都有進球需求</div>
-    <div class="tip-item">• <span class="tip-highlight">澳洲不敗</span> @1.45 — 穩健選擇</div>
-  </div>
-</div>
+function eloProb(ra, rb, neutral) {
+  if(!neutral) ra += 65;
+  return 1 / (1 + Math.pow(10, (rb - ra) / 400));
+}
 
-<!-- Summary -->
-<div class="match-card" style="margin-top: 24px;">
-  <div class="match-header">
-    <span class="match-group">📊 戰意分析總結</span>
-  </div>
-  <div class="tips-section">
-    <div class="tip-item">🔥 <span class="tip-highlight">必須取勝</span>: 波斯尼亞、卡塔爾、蘇格蘭、南非、捷克、厄瓜多爾、土耳其、巴拉圭、澳洲</div>
-    <div class="tip-item">⚡ <span class="tip-highlight">爭取首名/出線</span>: 瑞士、加拿大、摩洛哥、韓國、科特迪瓦、日本、瑞典</div>
-    <div class="tip-item">✅ <span class="tip-highlight">已出線(可能輪換)</span>: 巴西、墨西哥、德國、美國</div>
-    <div class="tip-item">❌ <span class="tip-highlight">已淘汰</span>: 海地、庫拉索、突尼斯</div>
-  </div>
-</div>
+function factorial(n) { return n <= 1 ? 1 : n * factorial(n-1); }
+function poissonProb(lambda, line) {
+  let prob = 1.0;
+  const k = Math.floor(line);
+  for(let i=0;i<=k;i++) prob -= Math.exp(-lambda) * Math.pow(lambda,i) / factorial(i);
+  return prob;
+}
+function formatPct(p) { return (p*100).toFixed(1)+"%"; }
+function formatProb(p) { return p>0.5?"high":p>0.35?"medium":"low"; }
 
-<div class="footer">
-  <div>UNIFIED v3.3.52 | 2026 FIFA World Cup 智能預測系統</div>
-  <div style="margin-top: 6px;">模型準確率: 1X2 67.9% | 大小球 67.9% | BTTS 50.0% | 角球 67.9%</div>
-  <div style="margin-top: 6px; color: #ff6666;">⚠️ 僅供參考，投注有風險</div>
-  <div style="margin-top: 10px; font-size: 0.7rem;">更新時間: 2026-06-24 | 數據來源: UNIFIED v3.3.52 框架</div>
-</div>
+function predictMatch(home_en, away_en, round, isNeutral, isKnockout) {
+  const home_elo = getElo(home_en), away_elo = getElo(away_en);
+  const hStyle = getStyle(home_en), aStyle = getStyle(away_en);
+  const params = isKnockout ? WC_KO_PARAMS : WC_PARAMS;
+  const roundNum = round === "R1" ? 1 : round === "R2" ? 2 : round === "R3" ? 3 : 4;
 
-</div>
+  const standings = calculateStandings();
+  const hStand = standings[home_en] || {pts:0,played:0};
+  const aStand = standings[away_en] || {pts:0,played:0};
+
+  let hMot = 1.0, aMot = 1.0;
+  if(!isKnockout) {
+    if(roundNum === 1) { hMot = 1.0; aMot = 1.0; }
+    else if(roundNum === 2) {
+      if(hStand.pts === 0) hMot = 1.15; else if(hStand.pts >= 3) hMot = 1.05;
+      if(aStand.pts === 0) aMot = 1.15; else if(aStand.pts >= 3) aMot = 1.05;
+    } else if(roundNum === 3) {
+      if(hStand.pts >= 4) hMot = 0.85; else if(hStand.pts === 3 && hStand.played === 2) hMot = 1.20;
+      else if(hStand.pts <= 1) hMot = 0.70;
+      if(aStand.pts >= 4) aMot = 0.85; else if(aStand.pts === 3 && aStand.played === 2) aMot = 1.20;
+      else if(aStand.pts <= 1) aMot = 0.70;
+    }
+  } else { hMot = 1.15; aMot = 1.15; }
+
+  let pHome = eloProb(home_elo, away_elo, isNeutral);
+  let pAway = 1 - pHome;
+
+  const eloDiff = Math.abs(home_elo - away_elo);
+  const styleWeight = Math.max(0, 1 - eloDiff/100) * 0.15;
+
+  if(hStyle.attack > 1.2 && aStyle.attack < 0.8) { pHome += styleWeight*0.5; pAway -= styleWeight*0.3; }
+  else if(aStyle.attack > 1.2 && hStyle.attack < 0.8) { pAway += styleWeight*0.5; pHome -= styleWeight*0.3; }
+  else if(hStyle.attack > 1.2 && aStyle.attack > 1.2) { pHome -= styleWeight*0.2; pAway -= styleWeight*0.2; }
+  else if(hStyle.attack < 0.8 && aStyle.attack < 0.8) { pHome -= styleWeight*0.3; pAway -= styleWeight*0.3; }
+
+  pHome *= Math.pow(hMot, 0.3); pAway *= Math.pow(aMot, 0.3);
+
+  let drawBase = 0.25;
+  if(hStyle.style === "defensive" && aStyle.style === "defensive") drawBase *= 1.30;
+  if(hStyle.style === "attacking" && aStyle.style === "attacking") drawBase *= 0.85;
+  if(roundNum === 2) drawBase *= 1.05;
+  if(isKnockout) drawBase *= 1.35;
+
+  let pDraw = drawBase * Math.sqrt(pHome * pAway) * 2;
+
+  const total = pHome + pDraw + pAway;
+  pHome /= total; pDraw /= total; pAway /= total;
+
+  let expHome = (hStyle.attack + aStyle.defense) / 2;
+  let expAway = (aStyle.attack + hStyle.defense) / 2;
+
+  if(roundNum === 2) { expHome *= 0.82; expAway *= 0.82; }
+  if(hStyle.attack > 1.5 && aStyle.attack > 1.5) { expHome *= 1.05; expAway *= 1.05; }
+  if(isKnockout) { expHome *= 0.92; expAway *= 0.92; }
+
+  const expTotal = expHome + expAway;
+
+  let bttsProb = Math.min(0.95, expHome/(aStyle.defense+0.5)) * Math.min(0.95, expAway/(hStyle.defense+0.5));
+  bttsProb *= (1 - eloDiff/2000 * 0.15);
+  if(isKnockout) bttsProb *= 1.15;
+  if(!isKnockout && roundNum === 2) {
+    if(hStand.pts === 0 && aStand.pts === 0) bttsProb *= 1.50;
+    else if(hStand.pts >= 3 && aStand.pts >= 3) bttsProb *= 0.60;
+    else if((hStand.pts >= 3 && aStand.pts <= 1) || (aStand.pts >= 3 && hStand.pts <= 1)) bttsProb *= 0.50;
+    if(eloDiff < 50) bttsProb *= 1.25;
+    else if(eloDiff > 250) bttsProb *= 0.65;
+    bttsProb = Math.max(0.10, Math.min(0.90, bttsProb));
+  }
+  bttsProb = (bttsProb + params.btts_rate) / 2;
+  bttsProb = Math.max(0.15, Math.min(0.85, bttsProb));
+
+  let cornerBase = params.avg_corners;
+  const cIntensity = 1.0 + (eloDiff/2000) * 0.15;
+  const hCornerMult = CORNER_STYLE[hStyle.style] || 1.0;
+  const aCornerMult = CORNER_STYLE[aStyle.style] || 1.0;
+  let totalCorners = cornerBase * cIntensity * ((hCornerMult + aCornerMult)/2);
+  if(eloDiff > 200) totalCorners *= 1.10;
+  if(eloDiff > 150) totalCorners *= (1 + eloDiff/1000) * 1.08;
+  if(!isKnockout && roundNum >= 2) {
+    if(hStand.pts >= 4 || aStand.pts >= 4) totalCorners *= 0.88;
+  }
+  if(isKnockout) totalCorners *= 0.95;
+  totalCorners *= 0.98;
+
+  const homeCorners = totalCorners * (0.55 + (hCornerMult - aCornerMult) * 0.10);
+  const awayCorners = totalCorners - homeCorners;
+
+  let cardBase = params.avg_cards;
+  const hCardMult = CARD_STYLE[hStyle.style] || 1.0;
+  const aCardMult = CARD_STYLE[aStyle.style] || 1.0;
+  let totalCards = cardBase * ((hCardMult + aCardMult)/2) * (1 + eloDiff/1000 * 0.10);
+  if(isKnockout) totalCards *= 1.15;
+
+  const scores = {};
+  for(let h=0;h<=5;h++) {
+    for(let a=0;a<=5;a++) {
+      const ph = Math.exp(-expHome) * Math.pow(expHome,h) / factorial(h);
+      const pa = Math.exp(-expAway) * Math.pow(expAway,a) / factorial(a);
+      scores[h+"-"+a] = ph * pa;
+    }
+  }
+  const scoreTotal = Object.values(scores).reduce((a,b)=>a+b,0);
+  Object.keys(scores).forEach(k => scores[k] /= scoreTotal);
+  const top5 = Object.entries(scores).sort((a,b)=>b[1]-a[1]).slice(0,5);
+
+  const htGoals = expTotal * 0.42;
+
+  const periods = {
+    "0-15":{weight:0.18,pressure:0.8},"15-30":{weight:0.15,pressure:0.9},
+    "30-45":{weight:0.17,pressure:1.0},"45-60":{weight:0.16,pressure:1.1},
+    "60-75":{weight:0.17,pressure:1.2},"75-90":{weight:0.17,pressure:1.3},
+  };
+
+  const upsetAlert = (eloDiff > 200 && hMot < 0.9 && aMot > 1.15) ? {
+    alert:true, level:eloDiff>400?"HIGH":"MEDIUM",
+    message:`爆冷預警: 強隊(Elo+${eloDiff.toFixed(0)}) 戰意低(${hMot.toFixed(2)}) vs 弱隊戰意高(${aMot.toFixed(2)})`
+  } : {alert:false,level:"NONE",message:""};
+
+  const max1x2 = Math.max(pHome, pDraw, pAway);
+  const conf1x2 = max1x2 > 0.55 ? "HIGH" : max1x2 > 0.45 ? "MEDIUM" : "LOW";
+  const confCorner = (eloDiff > 300) ? "HIGH" : (eloDiff > 150) ? "MEDIUM" : "LOW";
+  const overallConf = (conf1x2 === "HIGH" || confCorner === "HIGH") ? "HIGH" : "MEDIUM";
+
+  return {
+    home_en, away_en, home_cn:TEAM_NAMES[home_en]||home_en, away_cn:TEAM_NAMES[away_en]||away_en,
+    pHome, pDraw, pAway, expHome, expAway, expTotal,
+    bttsProb, bttsNoProb:1-bttsProb,
+    totalCorners, homeCorners, awayCorners,
+    totalCards, homeCards:totalCards*0.48, awayCards:totalCards*0.52,
+    top5Scores:top5, htGoals,
+    hMot, aMot, upsetAlert, overallConf,
+    periods, eloDiff, roundNum, isKnockout
+  };
+}
+
+// ================= UI RENDERERS =================
+function showSection(id) {
+  document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
+  document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active"));
+  const sec = document.getElementById(id);
+  if(sec) sec.classList.add("active");
+  event.target.classList.add("active");
+  if(id === "today") renderToday();
+  if(id === "schedule") renderSchedule();
+  if(id === "standings") renderStandings();
+  if(id === "predictions") renderPredictionSelector();
+  if(id === "live") renderLive();
+  if(id === "corners") renderCorners();
+  if(id === "handicap") renderHandicap();
+}
+
+function renderToday() {
+  const todayDiv = document.getElementById("todayMatches");
+  const highDiv = document.getElementById("todayHighlights");
+  const todayDates = ["2026-06-25","2026-06-26","2026-06-27","2026-06-28"];
+  const todayMatches = MATCHES.filter(m => todayDates.includes(m.date));
+  let html = "";
+  todayMatches.forEach(m => {
+    const pred = predictMatch(m.home_en, m.away_en, m.round, true, false);
+    const confClass = pred.overallConf === "HIGH" ? "high" : pred.overallConf === "MEDIUM" ? "medium" : "low";
+    const bestPick = pred.pHome > pred.pAway ? "主勝" : "客勝";
+    const bestProb = Math.max(pred.pHome, pred.pAway);
+    const result = HISTORICAL.find(h => h.date === m.date && h.home_en === m.home_en && h.away_en === m.away_en);
+    const status = result ? `<span style="color:var(--green)">${result.hg}-${result.ag}</span>` : `<span class="pred-tag ${confClass}">${bestPick}</span>`;
+    html += `<div class="match-row" onclick="showMatchDetail('${m.home_en}','${m.away_en}','${m.round}','${m.date}','${m.time}','${m.venue}')">
+      <div class="match-time">${m.date.slice(5)}<br>${m.time}</div>
+      <div class="match-teams">
+        <div class="match-team"><span class="flag">${getFlag(m.home_cn)}</span> ${m.home_cn}</div>
+        <div class="match-vs">vs ${m.group ? "小組"+m.group : ""} ${result ? "✅已完賽" : ""}</div>
+        <div class="match-team"><span class="flag">${getFlag(m.away_cn)}</span> ${m.away_cn}</div>
+      </div>
+      <div class="match-pred">${status}<div class="pred-odds">${result ? "" : (bestProb*100).toFixed(0)+"%"}</div></div>
+    </div>`;
+  });
+  todayDiv.innerHTML = html || '<div class="empty-state">暫無近期賽事</div>';
+
+  let hHtml = "";
+  todayMatches.filter(m => !HISTORICAL.some(h => h.date === m.date && h.home_en === m.home_en)).slice(0,4).forEach(m => {
+    const pred = predictMatch(m.home_en, m.away_en, m.round, true, false);
+    hHtml += `<div class="alert-box info">
+      <strong>${m.home_cn} vs ${m.away_cn}</strong> (${m.date.slice(5)} ${m.time})<br>
+      預期入球: ${pred.expTotal.toFixed(2)} | 角球: ${pred.totalCorners.toFixed(1)} | BTTS: ${(pred.bttsProb*100).toFixed(0)}% | 信心: ${pred.overallConf}
+    </div>`;
+  });
+  highDiv.innerHTML = hHtml || '';
+}
+
+function renderSchedule() {
+  const div = document.getElementById("fullSchedule");
+  const byDate = {};
+  MATCHES.forEach(m => { if(!byDate[m.date]) byDate[m.date]=[]; byDate[m.date].push(m); });
+  let html = "";
+  Object.keys(byDate).sort().forEach(date => {
+    const roundLabel = byDate[date][0].round;
+    html += `<div class="group-header">📅 ${date} | ${roundLabel}</div>`;
+    byDate[date].forEach(m => {
+      const pred = predictMatch(m.home_en, m.away_en, m.round, true, false);
+      const result = HISTORICAL.find(h => h.date === m.date && h.home_en === m.home_en && h.away_en === m.away_en);
+      const status = result ? `<span style="color:var(--green);font-weight:700">${result.hg}-${result.ag}</span>` : `<span class="pred-tag ${pred.overallConf === 'HIGH' ? 'high' : 'medium'}">${(Math.max(pred.pHome,pred.pAway)*100).toFixed(0)}%</span>`;
+      html += `<div class="match-row" onclick="showMatchDetail('${m.home_en}','${m.away_en}','${m.round}','${m.date}','${m.time}','${m.venue}')">
+        <div class="match-time">${m.time}</div>
+        <div class="match-teams">
+          <div class="match-team"><span class="flag">${getFlag(m.home_cn)}</span> ${m.home_cn}</div>
+          <div class="match-vs">${m.group ? "小組"+m.group : ""} ${m.venue || ""} ${result ? "✅" : ""}</div>
+          <div class="match-team"><span class="flag">${getFlag(m.away_cn)}</span> ${m.away_cn}</div>
+        </div>
+        <div class="match-pred">${status}</div>
+      </div>`;
+    });
+  });
+  div.innerHTML = html;
+}
+
+function renderStandings() {
+  const div = document.getElementById("standingsContent");
+  const standings = calculateStandings();
+  let html = "";
+  Object.keys(GROUPS).forEach(gid => {
+    const gs = getGroupStandings(GROUPS[gid], standings);
+    html += `<div class="group-header">🌍 小組 ${gid}</div>`;
+    html += `<table class="standings-table"><tr><th>#</th><th>球隊</th><th>賽</th><th>勝</th><th>和</th><th>負</th><th>得</th><th>失</th><th>差</th><th>分</th></tr>`;
+    gs.forEach((t,i) => {
+      const posClass = i < 2 ? "q" : (i === 2 ? "" : "e");
+      html += `<tr><td><span class="pos ${posClass}">${i+1}</span></td>
+        <td><div class="team-cell"><span class="flag">${getFlag(t.team_cn)}</span> ${t.team_cn}</div></td>
+        <td>${t.played}</td><td>${t.w}</td><td>${t.d}</td><td>${t.l}</td>
+        <td>${t.gf}</td><td>${t.ga}</td><td>${t.gd>0?'+'+t.gd:t.gd}</td><td><strong>${t.pts}</strong></td></tr>`;
+    });
+    html += `</table>`;
+  });
+  const allTeams = Object.values(standings).sort((a,b) => b.pts - a.pts || b.gd - a.gd);
+  html += `<div class="group-header" style="margin-top:16px">📊 整體統計</div>`;
+  html += `<div class="card-sub">總場次: ${HISTORICAL.length} | 總入球: ${HISTORICAL.reduce((s,m)=>s+m.hg+m.ag,0)} | 平均: ${(HISTORICAL.reduce((s,m)=>s+m.hg+m.ag,0)/HISTORICAL.length).toFixed(2)}</div>`;
+  html += `<div class="card-sub">最佳第三球隊: ${allTeams.slice(24,30).map(t => getFlag(t.team_cn)+t.team_cn+"("+t.pts+"分)").join(", ")}</div>`;
+  div.innerHTML = html;
+}
+
+function renderPredictionSelector() {
+  const div = document.getElementById("predictionSelector");
+  const future = MATCHES.filter(m => !HISTORICAL.some(h => h.date === m.date && h.home_en === m.home_en && h.away_en === m.away_en));
+  let html = `<div style="max-height:400px;overflow-y:auto">`;
+  future.forEach(m => {
+    const pred = predictMatch(m.home_en, m.away_en, m.round, true, false);
+    const confClass = pred.overallConf === "HIGH" ? "high" : "medium";
+    html += `<div class="match-row" onclick="showMatchDetail('${m.home_en}','${m.away_en}','${m.round}','${m.date}','${m.time}','${m.venue}')">
+      <div class="match-time">${m.date.slice(5)}<br>${m.time}</div>
+      <div class="match-teams">
+        <div class="match-team">${getFlag(m.home_cn)} ${m.home_cn}</div>
+        <div class="match-vs">vs ${getFlag(m.away_cn)} ${m.away_cn} | ${m.round}</div>
+      </div>
+      <div class="match-pred"><span class="pred-tag ${confClass}">${pred.overallConf}</span></div>
+    </div>`;
+  });
+  html += `</div>`;
+  div.innerHTML = html;
+}
+
+function showMatchDetail(home_en, away_en, round, date, time, venue) {
+  document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
+  document.getElementById("matchDetail").classList.add("active");
+  const pred = predictMatch(home_en, away_en, round, true, false);
+  const vInfo = VENUES[venue] || {};
+  const result = HISTORICAL.find(h => h.date === date && h.home_en === home_en && h.away_en === away_en);
+
+  let html = `<div class="detail-header">
+    <div class="teams">${getFlag(pred.home_cn)} ${pred.home_cn} vs ${pred.away_cn} ${getFlag(pred.away_cn)}</div>
+    <div class="meta">${date} ${time} | ${venue || "TBC"} | ${round} | 小組${getGroup(home_en)}</div>
+    ${result ? `<div class="meta" style="color:var(--green);font-weight:700">賽果: ${result.hg}-${result.ag} (半場 ${result.ht_hg}-${result.ht_ag}) | 角球: ${result.ch || "?"}-${result.ca || "?"}</div>` : ""}
+  </div>`;
+
+  if(vInfo.city) {
+    html += `<div class="venue-info">
+      <span class="venue-tag">📍 ${vInfo.city}</span>
+      <span class="venue-tag">🏟️ ${vInfo.capacity ? vInfo.capacity.toLocaleString() : "N/A"}</span>
+      <span class="venue-tag">⛰️ ${vInfo.altitude || 0}m</span>
+      <span class="venue-tag">🌡️ ${vInfo.climate || "N/A"}</span>
+    </div>`;
+  }
+
+  // 1X2
+  html += `<div class="card"><div class="card-title">🎯 1X2 勝平負</div>
+    <div class="pred-grid">
+      <div class="pred-box"><div class="label">主勝 ${pred.home_cn}</div><div class="value ${formatProb(pred.pHome)}">${formatPct(pred.pHome)}</div><div class="sub">Elo ${getElo(home_en)}</div><div class="prob-bar"><div class="prob-bar-fill" style="width:${pred.pHome*100}%;background:var(--green)"></div></div></div>
+      <div class="pred-box"><div class="label">平局</div><div class="value ${formatProb(pred.pDraw)}">${formatPct(pred.pDraw)}</div><div class="sub">風格因子</div><div class="prob-bar"><div class="prob-bar-fill" style="width:${pred.pDraw*100}%;background:var(--warning)"></div></div></div>
+      <div class="pred-box"><div class="label">客勝 ${pred.away_cn}</div><div class="value ${formatProb(pred.pAway)}">${formatPct(pred.pAway)}</div><div class="sub">Elo ${getElo(away_en)}</div><div class="prob-bar"><div class="prob-bar-fill" style="width:${pred.pAway*100}%;background:var(--red)"></div></div></div>
+    </div>
+    <div class="card-sub">整體信心: <span class="confidence-${pred.overallConf.toLowerCase()}">${pred.overallConf}</span> | Elo差: ${pred.eloDiff.toFixed(0)} | 主戰意: ${pred.hMot.toFixed(2)} | 客戰意: ${pred.aMot.toFixed(2)}</div>
+  </div>`;
+
+  // Over/Under
+  html += `<div class="card"><div class="card-title">📊 大小球預測</div><div class="pred-grid">`;
+  [1.5,2.0,2.5,3.0,3.5].forEach(line => {
+    const pOver = poissonProb(pred.expTotal, line);
+    const pUnder = 1 - pOver;
+    const rec = pOver > 0.55 ? "大" : pUnder > 0.55 ? "細" : "均衡";
+    html += `<div class="pred-box"><div class="label">${line}球</div><div class="value">${rec}</div><div class="sub">大 ${(pOver*100).toFixed(0)}% / 細 ${(pUnder*100).toFixed(0)}%</div></div>`;
+  });
+  html += `</div><div class="card-sub">預期入球: ${pred.expTotal.toFixed(2)} (主 ${pred.expHome.toFixed(2)} / 客 ${pred.expAway.toFixed(2)})</div></div>`;
+
+  // BTTS
+  html += `<div class="card"><div class="card-title">⚽ 雙方入球 (BTTS)</div>
+    <div class="pred-grid">
+      <div class="pred-box"><div class="label">是</div><div class="value btts-yes">${formatPct(pred.bttsProb)}</div></div>
+      <div class="pred-box"><div class="label">否</div><div class="value btts-no">${formatPct(pred.bttsNoProb)}</div></div>
+    </div>
+  </div>`;
+
+  // Correct Score
+  html += `<div class="card"><div class="card-title">🎲 波膽預測 (Top 5)</div><div class="score-grid">`;
+  pred.top5Scores.forEach((s,i) => {
+    html += `<div class="score-cell ${i===0?'top':''}"><div>${s[0]}</div><div class="prob">${(s[1]*100).toFixed(1)}%</div></div>`;
+  });
+  html += `</div></div>`;
+
+  // Corners
+  html += `<div class="card"><div class="card-title">🚩 角球預測</div>
+    <div class="pred-grid">
+      <div class="pred-box"><div class="label">總角球</div><div class="value">${pred.totalCorners.toFixed(1)}</div></div>
+      <div class="pred-box"><div class="label">${pred.home_cn}</div><div class="value">${pred.homeCorners.toFixed(1)}</div></div>
+      <div class="pred-box"><div class="label">${pred.away_cn}</div><div class="value">${pred.awayCorners.toFixed(1)}</div></div>
+    </div>
+    <div class="card-sub">角大8.5: ${pred.totalCorners > 8.5 ? "✅ 機會高" : "❌ 機會低"} | 角大9.5: ${pred.totalCorners > 9.5 ? "✅" : "❌"} | 信心: ${pred.overallConf}</div>
+  </div>`;
+
+  // Cards
+  html += `<div class="card"><div class="card-title">🟨 罰牌預測</div>
+    <div class="pred-grid">
+      <div class="pred-box"><div class="label">總罰牌</div><div class="value">${pred.totalCards.toFixed(1)}</div></div>
+      <div class="pred-box"><div class="label">${pred.home_cn}</div><div class="value">${pred.homeCards.toFixed(1)}</div></div>
+      <div class="pred-box"><div class="label">${pred.away_cn}</div><div class="value">${pred.awayCards.toFixed(1)}</div></div>
+    </div>
+  </div>`;
+
+  // Half-time
+  html += `<div class="card"><div class="card-title">⏱️ 半場分析</div>
+    <div class="pred-grid">
+      <div class="pred-box"><div class="label">半場預期入球</div><div class="value">${pred.htGoals.toFixed(2)}</div></div>
+      <div class="pred-box"><div class="label">半場大0.5</div><div class="value">${poissonProb(pred.htGoals,0.5)>0.5?"✅":"❌"}</div></div>
+      <div class="pred-box"><div class="label">半場大1.5</div><div class="value">${poissonProb(pred.htGoals,1.5)>0.5?"✅":"❌"}</div></div>
+    </div>
+  </div>`;
+
+  // Time distribution
+  html += `<div class="card"><div class="card-title">⏰ 入球時間分佈</div><div class="live-timeline">`;
+  Object.entries(pred.periods).forEach(([period,info]) => {
+    const prob = pred.expTotal * info.weight;
+    html += `<div class="timeline-item"><div class="timeline-time">${period}'</div><div class="timeline-text">預期 ${prob.toFixed(2)} 球 | 壓力指數 ${info.pressure}</div></div>`;
+  });
+  html += `</div></div>`;
+
+  // Upset alert
+  if(pred.upsetAlert.alert) {
+    html += `<div class="alert-box ${pred.upsetAlert.level==='HIGH'?'':'warn'}">⚠️ ${pred.upsetAlert.level} 爆冷預警<br>${pred.upsetAlert.message}</div>`;
+  }
+
+  // Match script
+  html += `<div class="card"><div class="card-title">📜 賽事劇本</div>
+    <div style="font-size:0.8rem;color:var(--text2)">
+      <p>🎬 開場 (0-15'): ${pred.expTotal*0.18>0.3?"積極進攻，早段有波":"試探階段，較為謹慎"}</p>
+      <p>⚡ 上半場 (30-45'): ${pred.htGoals>1.2?"上半場活躍，預期有入球":"上半場膠著，防守為主"}</p>
+      <p>🔥 下半場 (60-75'): ${pred.expTotal-pred.htGoals>1.2?"下半場開放，入球機會高":"下半場保守，保護領先"}</p>
+      <p>⏳ 尾段 (75-90'): ${pred.bttsProb>0.55?"雙方互有入球機會":"單方面控制局面"}</p>
+    </div>
+  </div>`;
+
+  document.getElementById("matchDetailContent").innerHTML = html;
+  window.scrollTo(0,0);
+}
+
+function backToList() {
+  document.getElementById("matchDetail").classList.remove("active");
+  document.getElementById("predictions").classList.add("active");
+  document.querySelectorAll(".nav-btn")[3].classList.add("active");
+}
+
+function getGroup(team) {
+  for(const [g,teams] of Object.entries(GROUPS)) {
+    if(teams.includes(TEAM_NAMES[team] || team)) return g;
+  }
+  return "?";
+}
+
+function renderLive() {
+  const div = document.getElementById("liveMonitor");
+  const upcoming = MATCHES.filter(m => !HISTORICAL.some(h => h.date === m.date && h.home_en === m.home_en && h.away_en === m.away_en)).slice(0,6);
+  let html = "";
+  upcoming.forEach(m => {
+    const pred = predictMatch(m.home_en, m.away_en, m.round, true, false);
+    html += `<div class="card"><div class="card-title">📡 ${m.home_cn} vs ${m.away_cn} (模擬滾球)</div><div class="live-timeline">`;
+    html += `<div class="timeline-item"><div class="timeline-time">30'</div><div class="timeline-text">壓力峰值: 若仍 0-0，半場前突破機會上升。預期上半場 ${pred.htGoals.toFixed(1)} 球</div></div>`;
+    html += `<div class="timeline-item"><div class="timeline-time">半場</div><div class="timeline-text">若 0-0: 下半場入球機率 ${(poissonProb(pred.expTotal*0.58,0.5)*100).toFixed(0)}% | 角球預期: ${(pred.totalCorners*0.45).toFixed(0)}</div></div>`;
+    html += `<div class="timeline-item"><div class="timeline-time">60'</div><div class="timeline-text">時間壓力: 落後一方需要進攻，BTTS 機會 ${(pred.bttsProb*100).toFixed(0)}%</div></div>`;
+    html += `<div class="timeline-item late"><div class="timeline-time">75'</div><div class="timeline-text">最後階段預警: 預期剩餘入球 ${(pred.expTotal*0.17*1.2).toFixed(2)} | 角球機會增加 15%</div></div>`;
+    html += `</div></div>`;
+  });
+  div.innerHTML = html;
+}
+
+function renderCorners() {
+  const div = document.getElementById("cornerAnalysis");
+  const allMatches = MATCHES.filter(m => !HISTORICAL.some(h => h.date === m.date && h.home_en === m.home_en && h.away_en === m.away_en));
+  let html = "";
+  allMatches.forEach(m => {
+    const pred = predictMatch(m.home_en, m.away_en, m.round, true, false);
+    const hStyle = getStyle(m.home_en), aStyle = getStyle(m.away_en);
+    html += `<div class="match-row" onclick="showMatchDetail('${m.home_en}','${m.away_en}','${m.round}','${m.date}','${m.time}','${m.venue}')">
+      <div class="match-teams">
+        <div class="match-team">${getFlag(m.home_cn)} ${m.home_cn}</div>
+        <div class="match-vs">vs ${getFlag(m.away_cn)} ${m.away_cn}</div>
+      </div>
+      <div class="match-pred">
+        <div class="pred-tag ${pred.totalCorners>9.5?'high':pred.totalCorners>8.5?'medium':'low'}">${pred.totalCorners.toFixed(1)} 角</div>
+        <div class="pred-odds">${hStyle.style} vs ${aStyle.style}</div>
+      </div>
+    </div>`;
+  });
+  div.innerHTML = html;
+}
+
+function renderHandicap() {
+  const div = document.getElementById("handicapAnalysis");
+  const allMatches = MATCHES.filter(m => !HISTORICAL.some(h => h.date === m.date && h.home_en === m.home_en && h.away_en === m.away_en));
+  let html = "";
+  allMatches.forEach(m => {
+    const pred = predictMatch(m.home_en, m.away_en, m.round, true, false);
+    const ah0 = pred.pHome + pred.pDraw * 0.5;
+    const ah05 = pred.pHome;
+    const ah_05 = pred.pHome + pred.pDraw;
+    let rec = "";
+    if(ah0 > 0.55) rec = `${m.home_cn} 平手盤`;
+    else if(ah05 > 0.55) rec = `${m.home_cn} -0.5`;
+    else if(ah_05 > 0.55) rec = `${m.home_cn} +0.5`;
+    else rec = `${m.away_cn} 受讓`;
+    html += `<div class="match-row" onclick="showMatchDetail('${m.home_en}','${m.away_en}','${m.round}','${m.date}','${m.time}','${m.venue}')">
+      <div class="match-teams">
+        <div class="match-team">${getFlag(m.home_cn)} ${m.home_cn}</div>
+        <div class="match-vs">vs ${getFlag(m.away_cn)} ${m.away_cn}</div>
+      </div>
+      <div class="match-pred">
+        <div class="pred-tag ${ah0>0.55||ah05>0.55?'high':'medium'}">${rec}</div>
+        <div class="pred-odds">主勝 ${(pred.pHome*100).toFixed(0)}%</div>
+      </div>
+    </div>`;
+  });
+  div.innerHTML = html;
+}
+
+// Initialize
+document.addEventListener("DOMContentLoaded", () => { renderToday(); });
+</script>
 </body>
 </html>
