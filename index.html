@@ -1397,10 +1397,10 @@ function renderCorner(filter) {
   scheduleData.forEach(d => d.matches.forEach(m => {
     if (m.status !== 'finished') {
       const h = teamsData[m.home], a = teamsData[m.away];
-      const totalCorners = (h.corner.avg + a.corner.avg).toFixed(1);
-      const line = Math.round(totalCorners * 0.85);
-      const pred = totalCorners > 9.5 ? '大' + line + '角球' : totalCorners < 8.5 ? '小' + line + '角球' : '接近' + line;
-      const type = totalCorners > 9.5 ? 'high' : totalCorners < 8.5 ? 'low' : 'mid';
+      const totalCorners = ((h.corner.avg + a.corner.avg) * 0.75).toFixed(1);
+      const line = Math.round(totalCorners);
+      const pred = totalCorners > 8.5 ? '大' + line + '角球' : totalCorners < 6.5 ? '小' + line + '角球' : '接近' + line;
+      const type = totalCorners > 8.5 ? 'high' : totalCorners < 6.5 ? 'low' : 'mid';
       matches.push({ ...m, h, a, totalCorners, line, pred, type });
     }
   }));
@@ -1505,13 +1505,13 @@ function renderHT() {
   scheduleData.forEach(d => d.matches.forEach(m => {
     if (m.status !== 'finished') {
       const h = teamsData[m.home], a = teamsData[m.away];
-      const ht1 = Math.max(0, Math.round((h.stats.atk * 0.6 - a.stats.def * 0.3) / 25));
-      const ht2 = Math.max(0, Math.round((a.stats.atk * 0.6 - h.stats.def * 0.3) / 25));
+      const ht1 = Math.max(0, Math.round((h.stats.atk * 0.45 - a.stats.def * 0.35 + h.stats.mid * 0.15) / 35 + (Math.random() * 1.6 - 0.8)));
+      const ht2 = Math.max(0, Math.round((a.stats.atk * 0.45 - h.stats.def * 0.35 + a.stats.mid * 0.15) / 35 + (Math.random() * 1.6 - 0.8)));
       const htTotal = ht1 + ht2;
       const htLine = htTotal >= 1.5 ? '大1.5' : '小1.5';
       const htBtts = ht1 > 0 && ht2 > 0 ? '雙方進球' : '單方進球';
-      const ft1 = Math.round(ht1 * 1.6 + Math.random());
-      const ft2 = Math.round(ht2 * 1.6 + Math.random());
+      const ft1 = Math.round(ht1 * 1.8 + Math.random());
+      const ft2 = Math.round(ht2 * 1.8 + Math.random());
       matches.push({ m, h, a, ht1, ht2, htTotal, htLine, htBtts, ft1, ft2 });
     }
   }));
@@ -1572,8 +1572,8 @@ function renderFull() {
 
       const base1 = Math.max(0, (h.stats.atk * 1.1 - a.stats.def * 0.6 + h.stats.mid * 0.3) / 32 * 0.85);
       const base2 = Math.max(0, (a.stats.atk * 1.1 - h.stats.def * 0.6 + a.stats.mid * 0.3) / 32 * 0.85);
-      let s1 = Math.min(Math.round(base1 + (Math.random() * 0.8 - 0.3)), 3);
-      let s2 = Math.min(Math.round(base2 + (Math.random() * 0.8 - 0.3)), 3);
+      let s1 = Math.round(base1 + (Math.random() * 0.8 - 0.3));
+      let s2 = Math.round(base2 + (Math.random() * 0.8 - 0.3));
       if (s1 < 0) s1 = 0; if (s2 < 0) s2 = 0;
       if (s1 === 0 && s2 === 0) { s1 = 1; }
 
@@ -1581,12 +1581,13 @@ function renderFull() {
       const o25 = totalGoals >= 3 ? '大2.5' : '小2.5';
       const btts = s1 > 0 && s2 > 0 ? '雙方進球' : '單方進球';
       const win = s1 > s2 ? '主勝' : s1 < s2 ? '客勝' : '平局';
-      const totalCorners = (h.corner.avg + a.corner.avg).toFixed(1);
-      const cornerPred = totalCorners > 9.5 ? '大' + Math.round(totalCorners*0.85) : '小' + Math.round(totalCorners*0.85);
-      const totalCards = (h.card.yellow + a.card.yellow).toFixed(1);
+      const over3Alert = (s1 >= 3 || s2 >= 3) ? '<span class="full-tag tag-red">⚠️ 單隊大3球預警</span>' : '';
+      const totalCorners = ((h.corner.avg + a.corner.avg) * 0.75).toFixed(1);
+      const cornerPred = totalCorners > 8.5 ? '大' + Math.round(totalCorners) : totalCorners < 6.5 ? '小' + Math.round(totalCorners) : '接近' + Math.round(totalCorners);
+      const totalCards = ((h.card.yellow + a.card.yellow) * 0.80 * 1.15 * (1 + Math.abs(h.card.aggression - a.card.aggression) / 100 * 0.2)).toFixed(1);
       const cardPred = totalCards > 3.5 ? '大3.5罰牌' : '小3.5罰牌';
 
-      matches.push({ m, h, a, s1, s2, hProb, aProb, o25, btts, win, totalCorners, cornerPred, totalCards, cardPred });
+      matches.push({ m, h, a, s1, s2, hProb, aProb, o25, btts, win, totalCorners, cornerPred, totalCards, cardPred, over3Alert });
     }
   }));
 
@@ -1615,7 +1616,8 @@ function renderFull() {
         <div class="full-tag ${m.win === '主勝' ? 'tag-green' : m.win === '客勝' ? 'tag-red' : 'tag-yellow'}">${m.win}</div>
         <div class="full-tag tag-blue">${m.o25}</div>
         <div class="full-tag tag-purple">${m.btts}</div>
-        <div class="full-tag ${m.totalCards > 3.5 ? 'tag-red' : 'tag-green'}">${m.cardPred}</div>
+        <div class="full-tag ${m.totalCards > 3.0 ? 'tag-red' : 'tag-green'}">${m.cardPred}</div>
+        ${m.over3Alert}
       </div>
     </div>
   `).join('');
@@ -1628,12 +1630,12 @@ function renderCard(filter) {
   scheduleData.forEach(d => d.matches.forEach(m => {
     if (m.status !== 'finished') {
       const h = teamsData[m.home], a = teamsData[m.away];
-      const knockoutFactor = 1.25;
+      const knockoutFactor = 1.15;
       const styleClash = Math.abs(h.card.aggression - a.card.aggression) / 100;
-      const totalYellow = ((h.card.yellow + a.card.yellow) * knockoutFactor * (1 + styleClash * 0.3)).toFixed(1);
-      const totalRed = ((h.card.red + a.card.red) * knockoutFactor).toFixed(2);
+      const totalYellow = ((h.card.yellow + a.card.yellow) * 0.75 * knockoutFactor * (1 + styleClash * 0.2)).toFixed(1);
+      const totalRed = ((h.card.red + a.card.red) * 0.6 * knockoutFactor).toFixed(2);
       const totalCards = (parseFloat(totalYellow) + parseFloat(totalRed) * 2).toFixed(1);
-      const cardType = totalCards > 4.5 ? 'high' : totalCards > 3.0 ? 'mid' : 'low';
+      const cardType = totalCards > 3.6 ? 'high' : totalCards > 2.9 ? 'mid' : 'low';
       const predText = cardType === 'high' ? '高罰牌' : cardType === 'mid' ? '中等罰牌' : '低罰牌';
       matches.push({ m, h, a, totalYellow, totalRed, totalCards, cardType, predText });
     }
