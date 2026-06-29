@@ -1,652 +1,975 @@
 <!DOCTYPE html>
-<html lang="zh-HK">
+<html lang="zh-Hant">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>UNIFIED v3.3.67c 世界盃2026 淘汰賽預測</title>
+<title>世界盃2026 淘汰賽 - UNIFIED v3.3.67c</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:#0a1628;color:#fff;line-height:1.5}
-.container{max-width:1200px;margin:0 auto;padding:10px}
-header{background:#1e3a5f;padding:20px;text-align:center;border-bottom:3px solid #ffd700}
-h1{color:#ffd700;font-size:1.4rem;margin-bottom:5px}
-.subtitle{color:#8ab4f8;font-size:.8rem}
-.version-badge{display:inline-block;background:#ffd700;color:#0a1628;padding:3px 12px;border-radius:12px;font-size:.75rem;font-weight:bold;margin-top:8px}
+  :root {
+    --bg-primary: #0f172a;
+    --bg-secondary: #1e293b;
+    --bg-card: #27354f;
+    --bg-card-hover: #334155;
+    --accent: #facc15;
+    --accent-dark: #eab308;
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --text-gold: #fde047;
+    --border: #334155;
+    --success: #22c55e;
+    --danger: #ef4444;
+    --info: #3b82f6;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    min-height: 100vh;
+    padding-bottom: 80px;
+  }
+  .header {
+    background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+    padding: 24px 16px 16px;
+    text-align: center;
+    border-bottom: 2px solid var(--accent);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header h1 { font-size: 1.5rem; color: var(--text-gold); margin-bottom: 4px; letter-spacing: 1px; }
+  .header .subtitle { font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 12px; }
+  .badge {
+    display: inline-block;
+    background: var(--accent);
+    color: #0f172a;
+    padding: 6px 20px;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 0.9rem;
+  }
+  .nav-tabs {
+    display: flex;
+    gap: 8px;
+    padding: 12px 16px;
+    overflow-x: auto;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border);
+    scrollbar-width: none;
+  }
+  .nav-tabs::-webkit-scrollbar { display: none; }
+  .nav-tab {
+    flex: 0 0 auto;
+    padding: 10px 18px;
+    border-radius: 24px;
+    background: var(--bg-card);
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .nav-tab.active {
+    background: var(--accent);
+    color: #0f172a;
+    box-shadow: 0 0 12px rgba(250, 204, 21, 0.3);
+  }
+  .section { display: none; padding: 16px; }
+  .section.active { display: block; }
 
-.nav{display:flex;overflow-x:auto;background:#1a2744;padding:10px;gap:8px;border-bottom:1px solid #2a3f5f;scrollbar-width:none}
-.nav::-webkit-scrollbar{display:none}
-.nav-btn{flex-shrink:0;padding:10px 18px;background:#2a3f5f;border:none;border-radius:20px;color:#fff;font-size:.85rem;cursor:pointer;transition:all .3s;white-space:nowrap}
-.nav-btn.active{background:#ffd700;color:#0a1628;font-weight:bold}
-.nav-btn:hover{background:#3a5080}
+  .section-title {
+    font-size: 1.1rem;
+    color: var(--text-gold);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .team-list { display: flex; flex-direction: column; gap: 10px; }
+  .team-card {
+    background: var(--bg-card);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.2s;
+    border: 1px solid transparent;
+  }
+  .team-card:active { transform: scale(0.98); }
+  .team-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    cursor: pointer;
+  }
+  .team-info { display: flex; align-items: center; gap: 12px; }
+  .team-flag {
+    width: 32px; height: 24px; border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem; background: var(--bg-secondary);
+  }
+  .team-name { font-weight: 600; font-size: 1rem; color: var(--text-gold); }
+  .team-group {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    background: var(--bg-secondary);
+    padding: 2px 8px;
+    border-radius: 8px;
+    margin-left: 8px;
+  }
+  .team-arrow {
+    color: var(--accent);
+    font-size: 0.8rem;
+    transition: transform 0.3s;
+  }
+  .team-card.expanded .team-arrow { transform: rotate(90deg); }
+  .team-detail {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+    background: rgba(15, 23, 42, 0.5);
+  }
+  .team-card.expanded .team-detail { max-height: 800px; }
+  .detail-inner { padding: 16px; }
+  .formation-title {
+    font-size: 0.8rem; color: var(--accent); margin-bottom: 10px;
+    text-align: center; letter-spacing: 2px;
+  }
+  .pitch {
+    background: linear-gradient(180deg, #166534 0%, #14532d 100%);
+    border-radius: 12px;
+    padding: 16px 12px;
+    position: relative;
+    min-height: 320px;
+    border: 2px solid rgba(255,255,255,0.1);
+  }
+  .pos-row {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    position: relative;
+    z-index: 2;
+  }
+  .player-dot {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+  .dot {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #0f172a;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 0.75rem;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  }
+  .dot.gk { background: #ef4444; color: #fff; }
+  .player-name {
+    font-size: 0.65rem;
+    color: #fff;
+    text-align: center;
+    max-width: 70px;
+    line-height: 1.2;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+  }
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .stat-box {
+    background: var(--bg-secondary);
+    padding: 10px;
+    border-radius: 8px;
+    text-align: center;
+  }
+  .stat-value { font-size: 1.1rem; font-weight: 700; color: var(--accent); }
+  .stat-label { font-size: 0.65rem; color: var(--text-secondary); margin-top: 2px; }
 
-.page{display:none;padding:15px 0;animation:fadeIn .3s ease}
-.page.active{display:block}
-@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+  .compare-selectors {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .select-wrap { flex: 1; }
+  .select-wrap label {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    margin-bottom: 4px;
+  }
+  select {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23facc15' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+  }
+  .vs-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--accent);
+    padding-top: 18px;
+  }
+  .compare-btn {
+    width: 100%;
+    padding: 14px;
+    margin: 16px 0;
+    background: linear-gradient(90deg, var(--accent), var(--accent-dark));
+    color: #0f172a;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(250, 204, 21, 0.3);
+  }
+  .compare-result {
+    background: var(--bg-card);
+    border-radius: 16px;
+    padding: 20px;
+    margin-top: 8px;
+    border: 1px solid var(--border);
+  }
+  .score-display {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+  .score-team {
+    text-align: center;
+    flex: 1;
+  }
+  .score-team .flag { font-size: 2.5rem; }
+  .score-team .name { font-size: 0.85rem; color: var(--text-secondary); margin-top: 4px; }
+  .score-box {
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+    border: 2px solid var(--accent);
+    border-radius: 16px;
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .score-num {
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: var(--text-gold);
+    font-variant-numeric: tabular-nums;
+  }
+  .score-sep { font-size: 1.5rem; color: var(--text-secondary); }
+  .prediction-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-top: 12px;
+  }
+  .pred-tag {
+    background: rgba(250, 204, 21, 0.15);
+    border: 1px solid rgba(250, 204, 21, 0.3);
+    color: var(--text-gold);
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+  .radar-wrap {
+    position: relative;
+    height: 260px;
+    margin: 16px 0;
+  }
+  .stats-compare {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-top: 12px;
+  }
+  .compare-stat-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--bg-secondary);
+    padding: 10px 12px;
+    border-radius: 8px;
+  }
+  .compare-stat-row .bar-wrap {
+    flex: 1;
+    height: 6px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 3px;
+    overflow: hidden;
+    position: relative;
+  }
+  .compare-stat-row .bar {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.5s ease;
+  }
+  .bar-team1 { background: var(--accent); }
+  .bar-team2 { background: var(--info); }
+  .compare-label {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    min-width: 50px;
+    text-align: center;
+  }
+  .compare-val {
+    font-size: 0.8rem;
+    font-weight: 700;
+    min-width: 28px;
+    text-align: center;
+  }
+  .val-team1 { color: var(--accent); }
+  .val-team2 { color: var(--info); }
 
-.card{background:#1a2744;border-radius:12px;padding:15px;margin-bottom:12px;border:1px solid #2a3f5f}
-.card-title{color:#ffd700;font-size:1.05rem;font-weight:600;margin-bottom:12px;display:flex;align-items:center;gap:8px}
-
-.match-card{background:#1e3a5f;border-radius:10px;padding:12px;border-left:4px solid #ffd700;margin-bottom:10px;transition:all .3s}
-.match-card:hover{background:#254a6f}
-.match-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
-.match-teams{display:flex;align-items:center;gap:8px;flex:1}
-.team{display:flex;align-items:center;gap:6px;flex:1}
-.team.home{justify-content:flex-end;text-align:right}
-.team.away{justify-content:flex-start;text-align:left}
-.team-flag{width:32px;height:24px;background:#2a3f5f;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:.75rem;border:1px solid #3a5080}
-.team-name{font-size:.85rem;font-weight:500}
-.vs{color:#8ab4f8;font-size:.75rem;margin:0 5px}
-.match-meta{display:flex;justify-content:space-between;font-size:.75rem;color:#8ab4f8;margin-top:8px;padding-top:8px;border-top:1px solid #2a3f5f}
-.match-status{padding:3px 10px;border-radius:12px;font-size:.7rem;font-weight:bold}
-.status-upcoming{background:#92400e;color:#fbbf24}
-.status-finished{background:#065f46;color:#4ade80}
-
-.prediction-bars{margin-top:10px}
-.pred-row{display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:.75rem}
-.pred-label{width:60px;color:#8ab4f8}
-.pred-bar-bg{flex:1;height:20px;background:#2a3f5f;border-radius:10px;overflow:hidden}
-.pred-bar-fill{height:100%;border-radius:10px;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.7rem;font-weight:bold}
-.bar-home{background:#3b82f6}
-.bar-draw{background:#8b5cf6}
-.bar-away{background:#ef4444}
-
-.corner-card{background:#1e3a5f;border-radius:10px;padding:12px;margin-bottom:10px}
-.corner-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
-.corner-teams{font-size:.85rem;color:#ffd700}
-.corner-prediction{font-size:1.1rem;font-weight:bold;color:#4ade80}
-.corner-details{display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:.75rem;color:#8ab4f8}
-.corner-detail-item{background:#2a3f5f;padding:8px;border-radius:6px;text-align:center}
-.corner-detail-value{color:#ffd700;font-weight:bold;font-size:.9rem}
-
-.odds-table{width:100%;border-collapse:collapse;font-size:.8rem}
-.odds-table th,.odds-table td{padding:10px 8px;text-align:center;border-bottom:1px solid #2a3f5f}
-.odds-table th{color:#ffd700;background:#1e3a5f}
-.odds-table tr:hover{background:#254a6f}
-.odds-value{font-weight:bold;color:#4ade80}
-
-.value-tag{display:inline-block;padding:2px 8px;border-radius:10px;font-size:.7rem;font-weight:bold;margin-left:5px}
-.value-high{background:#065f46;color:#4ade80}
-.value-medium{background:#92400e;color:#fbbf24}
-.value-low{background:#1e3a5f;color:#8ab4f8}
-
-.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-.stat-item{background:#1e3a5f;padding:12px;border-radius:10px;text-align:center}
-.stat-value{font-size:1.3rem;font-weight:bold;color:#ffd700}
-.stat-label{font-size:.75rem;color:#8ab4f8;margin-top:4px}
-
-.expand-btn{width:100%;padding:12px;background:#2a3f5f;border:none;border-radius:8px;color:#ffd700;font-size:.9rem;cursor:pointer;display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
-.expand-btn::after{content:"▼";font-size:.8rem;transition:transform .3s}
-.expand-btn.collapsed::after{transform:rotate(-90deg)}
-.expand-content{display:none;padding:10px 0}
-.expand-content.show{display:block;animation:fadeIn .3s ease}
-
-.confidence-meter{display:flex;align-items:center;gap:10px;margin-top:10px}
-.confidence-label{font-size:.75rem;color:#8ab4f8;width:50px}
-.confidence-bar{flex:1;height:8px;background:#2a3f5f;border-radius:4px;overflow:hidden}
-.confidence-fill{height:100%;border-radius:4px}
-.confidence-high{background:#4ade80}
-.confidence-medium{background:#fbbf24}
-.confidence-low{background:#ef4444}
-.confidence-value{font-size:.8rem;font-weight:bold;min-width:35px;text-align:right}
-
-.tips-list{list-style:none}
-.tips-list li{padding:8px 0;border-bottom:1px solid #2a3f5f;font-size:.85rem;display:flex;align-items:flex-start;gap:8px}
-.tips-list li::before{content:"▸";color:#ffd700;font-weight:bold}
-.tip-highlight{color:#4ade80;font-weight:600}
-.tip-warning{color:#fbbf24}
-
-.round-label{background:#1e3a5f;color:#ffd700;padding:8px;border-radius:8px;font-size:.85rem;font-weight:bold;margin-bottom:10px;text-align:center}
-
-footer{text-align:center;padding:20px;color:#8ab4f8;font-size:.75rem;border-top:1px solid #2a3f5f;margin-top:20px}
-
-.refresh-btn{position:fixed;bottom:20px;right:20px;width:50px;height:50px;background:#ffd700;border:none;border-radius:50%;color:#0a1628;font-size:1.2rem;cursor:pointer;box-shadow:0 4px 12px rgba(255,215,0,.3);z-index:1000}
-
-@media(max-width:768px){h1{font-size:1.2rem}.team-name{font-size:.75rem}}
-::-webkit-scrollbar{width:6px;height:6px}
-::-webkit-scrollbar-track{background:#0a1628}
-::-webkit-scrollbar-thumb{background:#2a3f5f;border-radius:3px}
-
-/* 半場分析專用樣式 */
-.ht-card{background:#1e3a5f;border-radius:10px;padding:12px;margin-bottom:10px;border-left:4px solid #10b981}
-.ht-header{color:#10b981;font-size:.9rem;font-weight:bold;margin-bottom:10px}
-.ht-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center;font-size:.75rem}
-.ht-item{background:#2a3f5f;padding:8px;border-radius:6px}
-.ht-value{color:#ffd700;font-weight:bold;font-size:1rem}
-.ht-label{color:#8ab4f8}
-.time-window{display:flex;gap:10px;margin-top:10px;overflow-x:auto;padding-bottom:5px}
-.time-window-item{flex-shrink:0;background:#2a3f5f;padding:8px 12px;border-radius:8px;text-align:center;font-size:.75rem;min-width:90px}
-.time-window-item.hot{border:1px solid #ef4444}
-.time-window-label{color:#8ab4f8}
-.time-window-value{color:#ffd700;font-weight:bold}
+  .refresh-btn {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #0f172a;
+    border: none;
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 20px rgba(250, 204, 21, 0.4);
+    cursor: pointer;
+    z-index: 99;
+  }
+  .footer {
+    text-align: center;
+    padding: 16px;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    margin-top: 24px;
+  }
 </style>
 </head>
 <body>
-<header>
-<h1>🏆 世界盃2026 淘汰賽</h1>
-<div class="subtitle">UNIFIED v3.3.67c 智能預測系統</div>
-<span class="version-badge">32強至決賽</span>
-</header>
 
-<nav class="nav">
-<button class="nav-btn active" onclick="showPage('knockout')">淘汰賽程</button>
-<button class="nav-btn" onclick="showPage('predictions')">AI預測</button>
-<button class="nav-btn" onclick="showPage('halftime')">半場分析</button>
-<button class="nav-btn" onclick="showPage('corners')">角球專項</button>
-<button class="nav-btn" onclick="showPage('odds')">賠率對比</button>
-<button class="nav-btn" onclick="showPage('live')">滾球監控</button>
-<button class="nav-btn" onclick="showPage('stats')">球隊數據</button>
-</nav>
-
-<div class="container">
-
-<!-- ==================== KNOCKOUT ==================== -->
-<div id="knockout" class="page active">
-<div class="card">
-<div class="card-title">⚔️ 三十二強 (1/16決賽)</div>
-<div class="round-label">6月29日 - 7月4日</div>
-
-<div class="match-card"><div class="match-header"><div class="match-teams"><div class="team home"><span class="team-name">南非</span><span class="team-flag">🇿🇦</span></div><span class="vs">VS</span><div class="team away"><span class="team-flag">🇨🇦</span><span class="team-name">加拿大</span></div></div></div><div class="match-meta"><span>6月29日 03:00 | 英格爾伍德</span><span class="match-status status-upcoming">未開始</span></div></div>
-<div class="match-card"><div class="match-header"><div class="match-teams"><div class="team home"><span class="team-name">巴西</span><span class="team-flag">🇧🇷</span></div><span class="vs">VS</span><div class="team away"><span class="team-flag">🇯🇵</span><span class="team-name">日本</span></div></div></div><div class="match-meta"><span>6月30日 01:00 | 休斯頓 NRG體育場</span><span class="match-status status-upcoming">未開始</span></div></div>
-<div class="match-card"><div class="match-header"><div class="match-teams"><div class="team home"><span class="team-name">德國</span><span class="team-flag">🇩🇪</span></div><span class="vs">VS</span><div class="team away"><span class="team-flag">🇵🇾</span><span class="team-name">巴拉圭</span></div></div></div><div class="match-meta"><span>6月30日 04:30 | 福克斯伯勒 吉列體育場</span><span class="match-status status-upcoming">未開始</span></div></div>
-<div class="match-card"><div class="match-header"><div class="match-teams"><div class="team home"><span class="team-name">荷蘭</span><span class="team-flag">🇳🇱</span></div><span class="vs">VS</span><div class="team away"><span class="team-flag">🇲🇦</span><span class="team-name">摩洛哥</span></div></div></div><div class="match-meta"><span>6月30日 09:00 | 瓜達盧佩 BBVA體育場</span><span class="match-status status-upcoming">未開始</span></div></div>
-<div class="match-card"><div class="match-header"><div class="match-teams"><div class="team home"><span class="team-name">科特迪瓦</span><span class="team-flag">🇨🇮</span></div><span class="vs">VS</span><div class="team away"><span class="team-flag">🇳🇴</span><span class="team-name">挪威</span></div></div></div><div class="match-meta"><span>7月1日 01:00 | 待定</span><span class="match-status status-upcoming">未開始</span></div></div>
-<div class="match-card"><div class="match-header"><div class="match-teams"><div class="team home"><span class="team-name">法國</span><span class="team-flag">🇫🇷</span></div><span class="vs">VS</span><div class="team away"><span class="team-flag">🇸🇪</span><span class="team-name">瑞典</span></div></div></div><div class="match-meta"><span>7月1日 05:00 | 東盧瑟福 大都會人壽體育場</span><span class="match-status status-upcoming">未開始</span></div></div>
-<div class="match-card"><div class="match-header"><div class="match-teams"><div class="team home"><span class="team-name">墨西哥</span><span class="team-flag">🇲🇽</span></div><span class="vs">VS</span><div class="team away"><span class="team-flag">🇪🇨</span><span class="team-name">厄瓜多爾</span></div></div></div><div class="match-meta"><span>7月1日 09:00 | 待定</span><span class="match-status status-upcoming">未開始</span></div></div>
-<div class="match-card"><div class="match-header"><div class="match-teams"><div class="team home"><span class="team-name">英格蘭</span><span class="team-flag">🏴󠁧󠁢󠁥󠁮󠁧󠁿</span></div><span class="vs">VS</span><div class="team away"><span class="team-flag">🇨🇩</span><span class="team-name">剛果(金)</span></div></div></div><div class="match-meta"><span>7月2日 00:00 | 多倫多</span><span class="match-status status-upcoming">未開始</span></div></div>
-<div class="match-card"><div class="match-header"><div class="match-teams"><div class="team home"><span class="team-name">比利時</span><span class="team-flag">🇧🇪</span></div><span class="vs">VS</span><div class="team away"><span class="team-flag">🇸🇳</span><span class="team-name">塞內加爾</span></div></div></div><div class="match-meta"><span>7月2日 04:00 | 待定</span><span class="match-status status-upcoming">未開始</span></div></div>
-<div class="match-card"><div class="match-header"><div class="match-teams"><div class="team home"><span class="team-name">美國</span><span class="team-flag">🇺🇸</span></div><span class="vs">VS</span><div class="team away"><span class="team-flag">🇧🇦</span><span class="team-name">波黑</span></div></div></div><div class="match-meta"><span>7月2日 08:00 | 英格爾伍德</span><span class="match-status status-upcoming">未開始</span></div></div>
-<div class="match-card"><div class="match-header"><div class="match-teams"><div class="team home"><span class="team-name">西班牙</span><span class="team-flag">🇪🇸</span></div><span class="vs">VS</span><div class="team away"><span class="team-flag">🇦🇹</span><span class="team-name">奧地利</span></div></div></div><div class="match-meta"><span>7月3日 03:00 | 亞特蘭大</span><span class="match-status status-upcoming">未開始</span></div></div>
-<div class="match-card"><div class="match-header"><div class="match-teams"><div class="team home"><span class="team-name">葡萄牙</span><span class="team-flag">🇵🇹</span></div><span class="vs">VS</span><div class="team away"><span class="team-flag">🇭🇷</span><span class="team-name">克羅地亞</span></div></div></div><div class="match-meta"><span>7月3日 07:00 | 待定</span><span class="match-status status-upcoming">未開始</span></div></div>
-<div class="match-card"><div class="match-header"><div class="match-teams"><div class="team home"><span class="team-name">瑞士</span><span class="team-flag">🇨🇭</span></div><span class="vs">VS</span><div class="team away"><span class="team-flag">🇩🇿</span><span class="team-name">阿爾及利亞</span></div></div></div><div class="match-meta"><span>7月3日 11:00 | 溫哥華</span><span class="match-status status-upcoming">未開始</span></div></div>
-<div class="match-card"><div class="match-header"><div class="match-teams"><div class="team home"><span class="team-name">澳洲</span><span class="team-flag">🇦🇺</span></div><span class="vs">VS</span><div class="team away"><span class="team-flag">🇪🇬</span><span class="team-name">埃及</span></div></div></div><div class="match-meta"><span>7月4日 02:00 | 待定</span><span class="match-status status-upcoming">未開始</span></div></div>
-<div class="match-card"><div class="match-header"><div class="match-teams"><div class="team home"><span class="team-name">阿根廷</span><span class="team-flag">🇦🇷</span></div><span class="vs">VS</span><div class="team away"><span class="team-flag">🇨🇻</span><span class="team-name">佛得角</span></div></div></div><div class="match-meta"><span>7月4日 06:00 | 休斯頓</span><span class="match-status status-upcoming">未開始</span></div></div>
-<div class="match-card"><div class="match-header"><div class="match-teams"><div class="team home"><span class="team-name">哥倫比亞</span><span class="team-flag">🇨🇴</span></div><span class="vs">VS</span><div class="team away"><span class="team-flag">🇬🇭</span><span class="team-name">迦納</span></div></div></div><div class="match-meta"><span>7月4日 09:30 | 堪薩斯城</span><span class="match-status status-upcoming">未開始</span></div></div>
+<div class="header">
+  <h1>🏆 世界盃2026 淘汰賽</h1>
+  <div class="subtitle">UNIFIED v3.3.67c 智能預測系統</div>
+  <div class="badge">32強至決賽</div>
 </div>
 
-<div class="card">
-<div class="card-title">🏆 十六強至決賽</div>
-<div class="round-label">十六強 | 7月5日 - 7月8日</div>
-<div class="match-card"><div class="match-header"><div class="match-teams"><div class="team home"><span class="team-name">TBD</span><span class="team-flag">❓</span></div><span class="vs">VS</span><div class="team away"><span class="team-flag">❓</span><span class="team-name">TBD</span></div></div></div><div class="match-meta"><span>7月5日 01:00 | 休士頓</span><span class="match-status status-upcoming">待定</span></div></div>
-<div class="match-card"><div class="match-header"><div class="match-teams"><div class="team home"><span class="team-name">TBD</span><span class="team-flag">❓</span></div><span class="vs">VS</span><div class="team away"><span class="team-flag">❓</span><span class="team-name">TBD</span></div></div></div><div class="match-meta"><span>7月5日 05:00 | 費城</span><span class="match-status status-upcoming">待定</span></div></div>
-<div class="match-card"><div class="match-header"><div class="match-teams"><div class="team home"><span class="team-name">TBD</span><span class="team-flag">❓</span></div><span class="vs">VS</span><div class="team away"><span class="team-flag">❓</span><span class="team-name">TBD</span></div></div></div><div class="match-meta"><span>7月6日 04:00 | 東盧瑟福</span><span class="match-status status-upcoming">待定</span></div></div>
-<div class="match-card"><div class="match-header"><div class="match-teams"><div class="team home"><span class="team-name">TBD</span><span class="team-flag">❓</span></div><span class="vs">VS</span><div class="team away"><span class="team-flag">❓</span><span class="team-name">TBD</span></div></div></div><div class="match-meta"><span>7月6日 08:00 | 墨西哥城</span><span class="match-status status-upcoming">待定</span></div></div>
-<div class="match-card"><div class="match-header"><div class="match-teams"><div class="team home"><span class="team-name">TBD</span><span class="team-flag">❓</span></div><span class="vs">VS</span><div class="team away"><span class="team-flag">❓</span><span class="team-name">TBD</span></div></div></div><div class="match-meta"><span>7月7日 03:00 | 達拉斯</span><span class="match-status status-upcoming">待定</span></div></div>
-<div class="match-card"><div class="match-header"><div class="match-teams"><div class="team home"><span class="team-name">TBD</span><span class="team-flag">❓</span></div><span class="vs">VS</span><div class="team away"><span class="team-flag">❓</span><span class="team-name">TBD</span></div></div></div><div class="match-meta"><span>7月7日 08:00 | 西雅圖</span><span class="match-status status-upcoming">待定</span></div></div>
-<div class="match-card"><div class="match-header"><div class="match-teams"><div class="team home"><span class="team-name">TBD</span><span class="team-flag">❓</span></div><span class="vs">VS</span><div class="team away"><span class="team-flag">❓</span><span class="team-name">TBD</span></div></div></div><div class="match-meta"><span>7月8日 00:00 | 亞特蘭大</span><span class="match-status status-upcoming">待定</span></div></div>
-<div class="match-card"><div class="match-header"><div class="match-teams"><div class="team home"><span class="team-name">TBD</span><span class="team-flag">❓</span></div><span class="vs">VS</span><div class="team away"><span class="team-flag">❓</span><span class="team-name">TBD</span></div></div></div><div class="match-meta"><span>7月8日 04:00 | 溫哥華</span><span class="match-status status-upcoming">待定</span></div></div>
-
-<div class="round-label">八強 | 7月10日 - 7月12日</div>
-<div class="match-card"><div class="match-header"><div class="match-teams"><div class="team home"><span class="team-name">TBD</span><span class="team-flag">❓</span></div><span class="vs">VS</span><div class="team away"><span class="team-flag">❓</span><span class="team-name">TBD</span></div></div></div><div class="match-meta"><span>7月10日 04:00 | 福克斯伯勒</span><span class="match-status status-upcoming">待定</span></div></div>
-<div class="match-card"><div class="match-header"><div class="match-teams"><div class="team home"><span class="team-name">TBD</span><span class="team-flag">❓</span></div><span class="vs">VS</span><div class="team away"><span class="team-flag">❓</span><span class="team-name">TBD</span></div></div></div><div class="match-meta"><span>7月11日 03:00 | 待定</span><span class="match-status status-upcoming">待定</span></div></div>
-<div class="match-card"><div class="match-header"><div class="match-teams"><div class="team home"><span class="team-name">TBD</span><span class="team-flag">❓</span></div><span class="vs">VS</span><div class="team away"><span class="team-flag">❓</span><span class="team-name">TBD</span></div></div></div><div class="match-meta"><span>7月12日 05:00 | 待定</span><span class="match-status status-upcoming">待定</span></div></div>
-<div class="match-card"><div class="match-header"><div class="match-teams"><div class="team home"><span class="team-name">TBD</span><span class="team-flag">❓</span></div><span class="vs">VS</span><div class="team away"><span class="team-flag">❓</span><span class="team-name">TBD</span></div></div></div><div class="match-meta"><span>7月12日 09:00 | 待定</span><span class="match-status status-upcoming">待定</span></div></div>
-
-<div class="round-label">四強 | 7月15日 - 7月16日</div>
-<div class="match-card"><div class="match-header"><div class="match-teams"><div class="team home"><span class="team-name">TBD</span><span class="team-flag">❓</span></div><span class="vs">VS</span><div class="team away"><span class="team-flag">❓</span><span class="team-name">TBD</span></div></div></div><div class="match-meta"><span>7月15日 03:00 | 阿靈頓 AT&T體育場</span><span class="match-status status-upcoming">待定</span></div></div>
-<div class="match-card"><div class="match-header"><div class="match-teams"><div class="team home"><span class="team-name">TBD</span><span class="team-flag">❓</span></div><span class="vs">VS</span><div class="team away"><span class="team-flag">❓</span><span class="team-name">TBD</span></div></div></div><div class="match-meta"><span>7月16日 03:00 | 亞特蘭大</span><span class="match-status status-upcoming">待定</span></div></div>
-
-<div class="round-label">季軍戰 & 決賽</div>
-<div class="match-card"><div class="match-header"><div class="match-teams"><div class="team home"><span class="team-name">TBD</span><span class="team-flag">❓</span></div><span class="vs">VS</span><div class="team away"><span class="team-flag">❓</span><span class="team-name">TBD</span></div></div></div><div class="match-meta"><span>7月19日 05:00 | 邁阿密 | 季軍戰</span><span class="match-status status-upcoming">待定</span></div></div>
-<div class="match-card" style="border-left-color:#ffd700;background:#1a2744"><div class="match-header"><div class="match-teams"><div class="team home"><span class="team-name">TBD</span><span class="team-flag">❓</span></div><span class="vs">VS</span><div class="team away"><span class="team-flag">❓</span><span class="team-name">TBD</span></div></div></div><div class="match-meta"><span>7月20日 03:00 | 東盧瑟福 大都會人壽體育場 | 決賽 🏆</span><span class="match-status status-upcoming">待定</span></div></div>
-</div>
+<div class="nav-tabs">
+  <button class="nav-tab" onclick="switchTab('corner')">角球專項</button>
+  <button class="nav-tab" onclick="switchTab('odds')">賠率對比</button>
+  <button class="nav-tab" onclick="switchTab('live')">滾球監控</button>
+  <button class="nav-tab active" onclick="switchTab('teams')">球隊數據</button>
+  <button class="nav-tab" onclick="switchTab('compare')">兩隊對比</button>
 </div>
 
-<!-- ==================== PREDICTIONS ==================== -->
-<div id="predictions" class="page">
-<div class="card">
-<div class="card-title">🤖 AI 勝率預測</div>
-
-<div class="match-card">
-<div class="match-header"><div class="match-teams"><div class="team home"><span class="team-name">巴西</span><span class="team-flag">🇧🇷</span></div><span class="vs">VS</span><div class="team away"><span class="team-flag">🇯🇵</span><span class="team-name">日本</span></div></div></div>
-<div class="prediction-bars">
-<div class="pred-row"><span class="pred-label">主勝</span><div class="pred-bar-bg"><div class="pred-bar-fill bar-home" style="width:55%">55%</div></div></div>
-<div class="pred-row"><span class="pred-label">和局</span><div class="pred-bar-bg"><div class="pred-bar-fill bar-draw" style="width:25%">25%</div></div></div>
-<div class="pred-row"><span class="pred-label">客勝</span><div class="pred-bar-bg"><div class="pred-bar-fill bar-away" style="width:20%">20%</div></div></div>
-</div>
-<div class="confidence-meter"><span class="confidence-label">信心</span><div class="confidence-bar"><div class="confidence-fill confidence-medium" style="width:68%"></div></div><span class="confidence-value">68%</span></div>
-<div style="margin-top:10px;font-size:.8rem;color:#8ab4f8">預期比分: <strong style="color:#ffd700">2-1</strong> | 大小球: <strong style="color:#4ade80">大2.5</strong> <span class="value-tag value-high">高價值</span></div>
+<div id="corner" class="section">
+  <div class="section-title">📐 角球專項分析</div>
+  <p style="color:var(--text-secondary);text-align:center;padding:40px 0;">角球數據模組載入中...</p>
 </div>
 
-<div class="match-card">
-<div class="match-header"><div class="match-teams"><div class="team home"><span class="team-name">德國</span><span class="team-flag">🇩🇪</span></div><span class="vs">VS</span><div class="team away"><span class="team-flag">🇵🇾</span><span class="team-name">巴拉圭</span></div></div></div>
-<div class="prediction-bars">
-<div class="pred-row"><span class="pred-label">主勝</span><div class="pred-bar-bg"><div class="pred-bar-fill bar-home" style="width:62%">62%</div></div></div>
-<div class="pred-row"><span class="pred-label">和局</span><div class="pred-bar-bg"><div class="pred-bar-fill bar-draw" style="width:22%">22%</div></div></div>
-<div class="pred-row"><span class="pred-label">客勝</span><div class="pred-bar-bg"><div class="pred-bar-fill bar-away" style="width:16%">16%</div></div></div>
-</div>
-<div class="confidence-meter"><span class="confidence-label">信心</span><div class="confidence-bar"><div class="confidence-fill confidence-high" style="width:78%"></div></div><span class="confidence-value">78%</span></div>
-<div style="margin-top:10px;font-size:.8rem;color:#8ab4f8">預期比分: <strong style="color:#ffd700">2-0</strong> | 大小球: <strong style="color:#fbbf24">細2.5</strong> <span class="value-tag value-high">高價值</span></div>
+<div id="odds" class="section">
+  <div class="section-title">📊 賠率對比</div>
+  <p style="color:var(--text-secondary);text-align:center;padding:40px 0;">實時賠率數據載入中...</p>
 </div>
 
-<div class="match-card">
-<div class="match-header"><div class="match-teams"><div class="team home"><span class="team-name">荷蘭</span><span class="team-flag">🇳🇱</span></div><span class="vs">VS</span><div class="team away"><span class="team-flag">🇲🇦</span><span class="team-name">摩洛哥</span></div></div></div>
-<div class="prediction-bars">
-<div class="pred-row"><span class="pred-label">主勝</span><div class="pred-bar-bg"><div class="pred-bar-fill bar-home" style="width:52%">52%</div></div></div>
-<div class="pred-row"><span class="pred-label">和局</span><div class="pred-bar-bg"><div class="pred-bar-fill bar-draw" style="width:26%">26%</div></div></div>
-<div class="pred-row"><span class="pred-label">客勝</span><div class="pred-bar-bg"><div class="pred-bar-fill bar-away" style="width:22%">22%</div></div></div>
-</div>
-<div class="confidence-meter"><span class="confidence-label">信心</span><div class="confidence-bar"><div class="confidence-fill confidence-medium" style="width:65%"></div></div><span class="confidence-value">65%</span></div>
-<div style="margin-top:10px;font-size:.8rem;color:#8ab4f8">預期比分: <strong style="color:#ffd700">2-1</strong> | 大小球: <strong style="color:#4ade80">大2.5</strong> <span class="value-tag value-medium">中價值</span></div>
+<div id="live" class="section">
+  <div class="section-title">⚡ 滾球監控</div>
+  <p style="color:var(--text-secondary);text-align:center;padding:40px 0;">滾球實時戰意監控載入中...</p>
 </div>
 
-<div class="match-card">
-<div class="match-header"><div class="match-teams"><div class="team home"><span class="team-name">法國</span><span class="team-flag">🇫🇷</span></div><span class="vs">VS</span><div class="team away"><span class="team-flag">🇸🇪</span><span class="team-name">瑞典</span></div></div></div>
-<div class="prediction-bars">
-<div class="pred-row"><span class="pred-label">主勝</span><div class="pred-bar-bg"><div class="pred-bar-fill bar-home" style="width:58%">58%</div></div></div>
-<div class="pred-row"><span class="pred-label">和局</span><div class="pred-bar-bg"><div class="pred-bar-fill bar-draw" style="width:23%">23%</div></div></div>
-<div class="pred-row"><span class="pred-label">客勝</span><div class="pred-bar-bg"><div class="pred-bar-fill bar-away" style="width:19%">19%</div></div></div>
-</div>
-<div class="confidence-meter"><span class="confidence-label">信心</span><div class="confidence-bar"><div class="confidence-fill confidence-high" style="width:75%"></div></div><span class="confidence-value">75%</span></div>
-<div style="margin-top:10px;font-size:.8rem;color:#8ab4f8">預期比分: <strong style="color:#ffd700">2-0</strong> | 大小球: <strong style="color:#fbbf24">細2.5</strong> <span class="value-tag value-high">高價值</span></div>
+<div id="teams" class="section active">
+  <div class="section-title">📈 32強球隊數據</div>
+  <div class="team-list" id="teamList"></div>
 </div>
 
-<div class="match-card">
-<div class="match-header"><div class="match-teams"><div class="team home"><span class="team-name">英格蘭</span><span class="team-flag">🏴󠁧󠁢󠁥󠁮󠁧󠁿</span></div><span class="vs">VS</span><div class="team away"><span class="team-flag">🇨🇩</span><span class="team-name">剛果(金)</span></div></div></div>
-<div class="prediction-bars">
-<div class="pred-row"><span class="pred-label">主勝</span><div class="pred-bar-bg"><div class="pred-bar-fill bar-home" style="width:68%">68%</div></div></div>
-<div class="pred-row"><span class="pred-label">和局</span><div class="pred-bar-bg"><div class="pred-bar-fill bar-draw" style="width:20%">20%</div></div></div>
-<div class="pred-row"><span class="pred-label">客勝</span><div class="pred-bar-bg"><div class="pred-bar-fill bar-away" style="width:12%">12%</div></div></div>
-</div>
-<div class="confidence-meter"><span class="confidence-label">信心</span><div class="confidence-bar"><div class="confidence-fill confidence-high" style="width:82%"></div></div><span class="confidence-value">82%</span></div>
-<div style="margin-top:10px;font-size:.8rem;color:#8ab4f8">預期比分: <strong style="color:#ffd700">2-0</strong> | 大小球: <strong style="color:#fbbf24">細2.5</strong> <span class="value-tag value-high">高價值</span></div>
-</div>
-
-<div class="match-card">
-<div class="match-header"><div class="match-teams"><div class="team home"><span class="team-name">阿根廷</span><span class="team-flag">🇦🇷</span></div><span class="vs">VS</span><div class="team away"><span class="team-flag">🇨🇻</span><span class="team-name">佛得角</span></div></div></div>
-<div class="prediction-bars">
-<div class="pred-row"><span class="pred-label">主勝</span><div class="pred-bar-bg"><div class="pred-bar-fill bar-home" style="width:72%">72%</div></div></div>
-<div class="pred-row"><span class="pred-label">和局</span><div class="pred-bar-bg"><div class="pred-bar-fill bar-draw" style="width:18%">18%</div></div></div>
-<div class="pred-row"><span class="pred-label">客勝</span><div class="pred-bar-bg"><div class="pred-bar-fill bar-away" style="width:10%">10%</div></div></div>
-</div>
-<div class="confidence-meter"><span class="confidence-label">信心</span><div class="confidence-bar"><div class="confidence-fill confidence-high" style="width:88%"></div></div><span class="confidence-value">88%</span></div>
-<div style="margin-top:10px;font-size:.8rem;color:#8ab4f8">預期比分: <strong style="color:#ffd700">2-0</strong> | 大小球: <strong style="color:#fbbf24">細2.5</strong> <span class="value-tag value-high">高價值</span></div>
+<div id="compare" class="section">
+  <div class="section-title">⚔️ 兩隊對比比分</div>
+  <div class="compare-selectors">
+    <div class="select-wrap">
+      <label>主隊 / 球隊 A</label>
+      <select id="teamA"></select>
+    </div>
+    <div class="vs-divider">VS</div>
+    <div class="select-wrap">
+      <label>客隊 / 球隊 B</label>
+      <select id="teamB"></select>
+    </div>
+  </div>
+  <button class="compare-btn" onclick="runCompare()">🎯 生成對比與預測比分</button>
+  <div id="compareResult"></div>
 </div>
 
-<div class="match-card">
-<div class="match-header"><div class="match-teams"><div class="team home"><span class="team-name">西班牙</span><span class="team-flag">🇪🇸</span></div><span class="vs">VS</span><div class="team away"><span class="team-flag">🇦🇹</span><span class="team-name">奧地利</span></div></div></div>
-<div class="prediction-bars">
-<div class="pred-row"><span class="pred-label">主勝</span><div class="pred-bar-bg"><div class="pred-bar-fill bar-home" style="width:55%">55%</div></div></div>
-<div class="pred-row"><span class="pred-label">和局</span><div class="pred-bar-bg"><div class="pred-bar-fill bar-draw" style="width:25%">25%</div></div></div>
-<div class="pred-row"><span class="pred-label">客勝</span><div class="pred-bar-bg"><div class="pred-bar-fill bar-away" style="width:20%">20%</div></div></div>
-</div>
-<div class="confidence-meter"><span class="confidence-label">信心</span><div class="confidence-bar"><div class="confidence-fill confidence-medium" style="width:70%"></div></div><span class="confidence-value">70%</span></div>
-<div style="margin-top:10px;font-size:.8rem;color:#8ab4f8">預期比分: <strong style="color:#ffd700">2-1</strong> | 大小球: <strong style="color:#4ade80">大2.5</strong> <span class="value-tag value-medium">中價值</span></div>
-</div>
-</div>
+<button class="refresh-btn" onclick="location.reload()">🔄</button>
 
-<div class="card">
-<div class="card-title">💡 投注建議總結</div>
-<ul class="tips-list">
-<li><span class="tip-highlight">高信心場次:</span> 阿根廷勝 (88%)、英格蘭勝 (82%)、德國勝 (78%)</li>
-<li><span class="tip-highlight">價值投注:</span> 巴西大2.5、荷蘭大2.5、西班牙大2.5</li>
-<li><span class="tip-warning">謹慎場次:</span> 南非vs加拿大 (實力接近)、科特迪瓦vs挪威</li>
-<li><span class="tip-highlight">半場策略:</span> 淘汰賽上半場保守，HT 和局概率高，HT 細1.5 價值高</li>
-<li><span class="tip-highlight">角球策略:</span> 巴西vs日本、荷蘭vs摩洛哥預期高角球數</li>
-</ul>
-</div>
-</div>
-
-<!-- ==================== HALFTIME ANALYSIS ==================== -->
-<div id="halftime" class="page">
-<div class="card">
-<div class="card-title">⏱️ 半場分析 (HT)</div>
-<div style="font-size:.8rem;color:#8ab4f8;margin-bottom:12px">基於 UNIFIED v3.3.67c 半場模型：淘汰賽上半場入球佔全場 42%，和局概率比全場高 15%</div>
-
-<div class="ht-card">
-<div class="ht-header">🇧🇷 巴西 vs 日本 🇯🇵</div>
-<div class="ht-grid">
-<div class="ht-item"><div class="ht-value">42%</div><div class="ht-label">HT 主勝</div></div>
-<div class="ht-item"><div class="ht-value">38%</div><div class="ht-label">HT 和局</div></div>
-<div class="ht-item"><div class="ht-value">20%</div><div class="ht-label">HT 客勝</div></div>
-</div>
-<div style="margin-top:10px;font-size:.8rem;color:#8ab4f8">HT 大小球1.5: <strong style="color:#4ade80">大</strong> (58%) | HT 角球: <strong>4.5</strong> 角 | 預期 HT 比分: <strong style="color:#ffd700">1-0</strong></div>
-<div class="time-window">
-<div class="time-window-item hot"><div class="time-window-label">15-30分鐘</div><div class="time-window-value">入球窗口 🔥</div></div>
-<div class="time-window-item"><div class="time-window-label">30-45分鐘</div><div class="time-window-value">角球高峰</div></div>
-<div class="time-window-item"><div class="time-window-label">0-15分鐘</div><div class="time-window-value">試探期</div></div>
-</div>
-<div style="margin-top:8px;font-size:.75rem"><span class="value-tag value-high">推薦: HT 和局 + HT 大角球4.5</span></div>
-</div>
-
-<div class="ht-card">
-<div class="ht-header">🇩🇪 德國 vs 巴拉圭 🇵🇾</div>
-<div class="ht-grid">
-<div class="ht-item"><div class="ht-value">48%</div><div class="ht-label">HT 主勝</div></div>
-<div class="ht-item"><div class="ht-value">40%</div><div class="ht-label">HT 和局</div></div>
-<div class="ht-item"><div class="ht-value">12%</div><div class="ht-label">HT 客勝</div></div>
-</div>
-<div style="margin-top:10px;font-size:.8rem;color:#8ab4f8">HT 大小球1.5: <strong style="color:#fbbf24">細</strong> (62%) | HT 角球: <strong>3.8</strong> 角 | 預期 HT 比分: <strong style="color:#ffd700">1-0</strong></div>
-<div class="time-window">
-<div class="time-window-item hot"><div class="time-window-label">30-45分鐘</div><div class="time-window-value">入球窗口 🔥</div></div>
-<div class="time-window-item"><div class="time-window-label">15-30分鐘</div><div class="time-window-value">圍攻期</div></div>
-<div class="time-window-item"><div class="time-window-label">0-15分鐘</div><div class="time-window-value">試探期</div></div>
-</div>
-<div style="margin-top:8px;font-size:.75rem"><span class="value-tag value-high">推薦: HT 細1.5 + HT 細角球4.5</span></div>
-</div>
-
-<div class="ht-card">
-<div class="ht-header">🇳🇱 荷蘭 vs 摩洛哥 🇲🇦</div>
-<div class="ht-grid">
-<div class="ht-item"><div class="ht-value">45%</div><div class="ht-label">HT 主勝</div></div>
-<div class="ht-item"><div class="ht-value">37%</div><div class="ht-label">HT 和局</div></div>
-<div class="ht-item"><div class="ht-value">18%</div><div class="ht-label">HT 客勝</div></div>
-</div>
-<div style="margin-top:10px;font-size:.8rem;color:#8ab4f8">HT 大小球1.5: <strong style="color:#4ade80">大</strong> (55%) | HT 角球: <strong>4.2</strong> 角 | 預期 HT 比分: <strong style="color:#ffd700">1-0</strong></div>
-<div class="time-window">
-<div class="time-window-item hot"><div class="time-window-label">15-30分鐘</div><div class="time-window-value">入球窗口 🔥</div></div>
-<div class="time-window-item"><div class="time-window-label">30-45分鐘</div><div class="time-window-value">反擊期</div></div>
-<div class="time-window-item"><div class="time-window-label">0-15分鐘</div><div class="time-window-value">試探期</div></div>
-</div>
-<div style="margin-top:8px;font-size:.75rem"><span class="value-tag value-medium">推薦: HT 大1.5 + HT 大角球4.5</span></div>
-</div>
-
-<div class="ht-card">
-<div class="ht-header">🇫🇷 法國 vs 瑞典 🇸🇪</div>
-<div class="ht-grid">
-<div class="ht-item"><div class="ht-value">46%</div><div class="ht-label">HT 主勝</div></div>
-<div class="ht-item"><div class="ht-value">39%</div><div class="ht-label">HT 和局</div></div>
-<div class="ht-item"><div class="ht-value">15%</div><div class="ht-label">HT 客勝</div></div>
-</div>
-<div style="margin-top:10px;font-size:.8rem;color:#8ab4f8">HT 大小球1.5: <strong style="color:#fbbf24">細</strong> (60%) | HT 角球: <strong>3.9</strong> 角 | 預期 HT 比分: <strong style="color:#ffd700">1-0</strong></div>
-<div class="time-window">
-<div class="time-window-item hot"><div class="time-window-label">30-45分鐘</div><div class="time-window-value">入球窗口 🔥</div></div>
-<div class="time-window-item"><div class="time-window-label">15-30分鐘</div><div class="time-window-value">控制期</div></div>
-<div class="time-window-item"><div class="time-window-label">0-15分鐘</div><div class="time-window-value">試探期</div></div>
-</div>
-<div style="margin-top:8px;font-size:.75rem"><span class="value-tag value-high">推薦: HT 細1.5 + HT 細角球4.5</span></div>
-</div>
-
-<div class="ht-card">
-<div class="ht-header">🏴󠁧󠁢󠁥󠁮󠁧󠁿 英格蘭 vs 剛果(金) 🇨🇩</div>
-<div class="ht-grid">
-<div class="ht-item"><div class="ht-value">52%</div><div class="ht-label">HT 主勝</div></div>
-<div class="ht-item"><div class="ht-value">38%</div><div class="ht-label">HT 和局</div></div>
-<div class="ht-item"><div class="ht-value">10%</div><div class="ht-label">HT 客勝</div></div>
-</div>
-<div style="margin-top:10px;font-size:.8rem;color:#8ab4f8">HT 大小球1.5: <strong style="color:#fbbf24">細</strong> (65%) | HT 角球: <strong>3.5</strong> 角 | 預期 HT 比分: <strong style="color:#ffd700">1-0</strong></div>
-<div class="time-window">
-<div class="time-window-item hot"><div class="time-window-label">30-45分鐘</div><div class="time-window-value">入球窗口 🔥</div></div>
-<div class="time-window-item"><div class="time-window-label">15-30分鐘</div><div class="time-window-value">圍攻期</div></div>
-<div class="time-window-item"><div class="time-window-label">0-15分鐘</div><div class="time-window-value">試探期</div></div>
-</div>
-<div style="margin-top:8px;font-size:.75rem"><span class="value-tag value-high">推薦: HT 主勝 + HT 細1.5</span></div>
-</div>
-
-<div class="ht-card">
-<div class="ht-header">🇦🇷 阿根廷 vs 佛得角 🇨🇻</div>
-<div class="ht-grid">
-<div class="ht-item"><div class="ht-value">55%</div><div class="ht-label">HT 主勝</div></div>
-<div class="ht-item"><div class="ht-value">35%</div><div class="ht-label">HT 和局</div></div>
-<div class="ht-item"><div class="ht-value">10%</div><div class="ht-label">HT 客勝</div></div>
-</div>
-<div style="margin-top:10px;font-size:.8rem;color:#8ab4f8">HT 大小球1.5: <strong style="color:#fbbf24">細</strong> (68%) | HT 角球: <strong>3.2</strong> 角 | 預期 HT 比分: <strong style="color:#ffd700">1-0</strong></div>
-<div class="time-window">
-<div class="time-window-item hot"><div class="time-window-label">30-45分鐘</div><div class="time-window-value">入球窗口 🔥</div></div>
-<div class="time-window-item"><div class="time-window-label">15-30分鐘</div><div class="time-window-value">控制期</div></div>
-<div class="time-window-item"><div class="time-window-label">0-15分鐘</div><div class="time-window-value">試探期</div></div>
-</div>
-<div style="margin-top:8px;font-size:.75rem"><span class="value-tag value-high">推薦: HT 主勝 + HT 細1.5</span></div>
-</div>
-</div>
-
-<div class="card">
-<div class="card-title">📋 半場投注策略</div>
-<ul class="tips-list">
-<li><span class="tip-highlight">HT 和局:</span> 淘汰賽上半場和局概率 35-40%，高於聯賽平均 28%</li>
-<li><span class="tip-highlight">HT 細1.5:</span> 32強賽事 HT 入球佔全場 42%，細1.5 命中率約 60%</li>
-<li><span class="tip-highlight">HT 角球:</span> 上半場角球佔全場 43%，圍攻型球隊上半場角球更多</li>
-<li><span class="tip-warning">入球窗口:</span> 30-45分鐘是上半場入球高峰（體力下降+戰術調整）</li>
-<li><span class="tip-highlight">滾球機會:</span> 若上半場0-0到30分鐘，可追 HT 細1.5 或 HT 和局</li>
-</ul>
-</div>
-</div>
-
-<!-- ==================== CORNERS ==================== -->
-<div id="corners" class="page">
-<div class="card">
-<div class="card-title">🚩 角球專項分析</div>
-
-<div class="corner-card">
-<div class="corner-header"><span class="corner-teams">🇧🇷 巴西 vs 日本 🇯🇵</span><span class="corner-prediction">11.0 角</span></div>
-<div class="corner-details">
-<div class="corner-detail-item"><div class="corner-detail-value">6.5</div><div>巴西預期</div></div>
-<div class="corner-detail-item"><div class="corner-detail-value">4.5</div><div>日本預期</div></div>
-<div class="corner-detail-item"><div class="corner-detail-value">大10.5</div><div>推薦盤口</div></div>
-<div class="corner-detail-item"><div class="corner-detail-value">72%</div><div>大角信心</div></div>
-</div>
-<div style="margin-top:8px;font-size:.75rem;color:#8ab4f8">巴西邊路爆破 + 日本快速攻防 = 高角球預期 <span class="value-tag value-high">強推大角</span></div>
-</div>
-
-<div class="corner-card">
-<div class="corner-header"><span class="corner-teams">🇳🇱 荷蘭 vs 摩洛哥 🇲🇦</span><span class="corner-prediction">9.5 角</span></div>
-<div class="corner-details">
-<div class="corner-detail-item"><div class="corner-detail-value">5.5</div><div>荷蘭預期</div></div>
-<div class="corner-detail-item"><div class="corner-detail-value">4.0</div><div>摩洛哥預期</div></div>
-<div class="corner-detail-item"><div class="corner-detail-value">大9.5</div><div>推薦盤口</div></div>
-<div class="corner-detail-item"><div class="corner-detail-value">60%</div><div>大角信心</div></div>
-</div>
-<div style="margin-top:8px;font-size:.75rem;color:#8ab4f8">荷蘭圍攻型打法 + 摩洛哥反擊速度 <span class="value-tag value-medium">推薦大角</span></div>
-</div>
-
-<div class="corner-card">
-<div class="corner-header"><span class="corner-teams">🇩🇪 德國 vs 巴拉圭 🇵🇾</span><span class="corner-prediction">8.5 角</span></div>
-<div class="corner-details">
-<div class="corner-detail-item"><div class="corner-detail-value">5.5</div><div>德國預期</div></div>
-<div class="corner-detail-item"><div class="corner-detail-value">3.0</div><div>巴拉圭預期</div></div>
-<div class="corner-detail-item"><div class="corner-detail-value">細9.5</div><div>推薦盤口</div></div>
-<div class="corner-detail-item"><div class="corner-detail-value">62%</div><div>細角信心</div></div>
-</div>
-<div style="margin-top:8px;font-size:.75rem;color:#8ab4f8">德國控球主導 + 巴拉圭低位防守 = 角球偏少 <span class="value-tag value-medium">推薦細角</span></div>
-</div>
-
-<div class="corner-card">
-<div class="corner-header"><span class="corner-teams">🇫🇷 法國 vs 瑞典 🇸🇪</span><span class="corner-prediction">9.0 角</span></div>
-<div class="corner-details">
-<div class="corner-detail-item"><div class="corner-detail-value">5.0</div><div>法國預期</div></div>
-<div class="corner-detail-item"><div class="corner-detail-value">4.0</div><div>瑞典預期</div></div>
-<div class="corner-detail-item"><div class="corner-detail-value">大8.5</div><div>推薦盤口</div></div>
-<div class="corner-detail-item"><div class="corner-detail-value">58%</div><div>大角信心</div></div>
-</div>
-<div style="margin-top:8px;font-size:.75rem;color:#8ab4f8">高強度對抗，兩隊均擅長定位球 <span class="value-tag value-medium">推薦大角</span></div>
-</div>
-
-<div class="corner-card">
-<div class="corner-header"><span class="corner-teams">🇪🇸 西班牙 vs 奧地利 🇦🇹</span><span class="corner-prediction">8.0 角</span></div>
-<div class="corner-details">
-<div class="corner-detail-item"><div class="corner-detail-value">4.5</div><div>西班牙預期</div></div>
-<div class="corner-detail-item"><div class="corner-detail-value">3.5</div><div>奧地利預期</div></div>
-<div class="corner-detail-item"><div class="corner-detail-value">細8.5</div><div>推薦盤口</div></div>
-<div class="corner-detail-item"><div class="corner-detail-value">60%</div><div>細角信心</div></div>
-</div>
-<div style="margin-top:8px;font-size:.75rem;color:#8ab4f8">技術流對決，地面傳控為主 <span class="value-tag value-medium">推薦細角</span></div>
-</div>
-
-<div class="corner-card">
-<div class="corner-header"><span class="corner-teams">🇵🇹 葡萄牙 vs 克羅地亞 🇭🇷</span><span class="corner-prediction">9.5 角</span></div>
-<div class="corner-details">
-<div class="corner-detail-item"><div class="corner-detail-value">5.0</div><div>葡萄牙預期</div></div>
-<div class="corner-detail-item"><div class="corner-detail-value">4.5</div><div>克羅地亞預期</div></div>
-<div class="corner-detail-item"><div class="corner-detail-value">大9.5</div><div>推薦盤口</div></div>
-<div class="corner-detail-item"><div class="corner-detail-value">55%</div><div>大角信心</div></div>
-</div>
-<div style="margin-top:8px;font-size:.75rem;color:#8ab4f8">歐洲技術流對碰，邊路進攻活躍 <span class="value-tag value-medium">推薦大角</span></div>
-</div>
-</div>
-</div>
-
-<!-- ==================== ODDS ==================== -->
-<div id="odds" class="page">
-<div class="card">
-<div class="card-title">📊 賠率對比分析</div>
-<div style="overflow-x:auto">
-<table class="odds-table">
-<thead><tr><th>賽事</th><th>主勝</th><th>和</th><th>客勝</th><th>大2.5</th><th>細2.5</th><th>推薦</th></tr></thead>
-<tbody>
-<tr><td style="text-align:left;font-size:.75rem">🇿🇦 南非 vs 加拿大 🇨🇦</td><td>2.80</td><td>3.20</td><td class="odds-value">2.50</td><td>2.20</td><td class="odds-value">1.65</td><td><span class="value-tag value-medium">細球</span></td></tr>
-<tr><td style="text-align:left;font-size:.75rem">🇧🇷 巴西 vs 日本 🇯🇵</td><td class="odds-value">1.75</td><td>3.60</td><td>4.50</td><td class="odds-value">1.80</td><td>2.00</td><td><span class="value-tag value-high">主勝+大球</span></td></tr>
-<tr><td style="text-align:left;font-size:.75rem">🇩🇪 德國 vs 巴拉圭 🇵🇾</td><td class="odds-value">1.45</td><td>4.20</td><td>7.00</td><td>2.10</td><td class="odds-value">1.70</td><td><span class="value-tag value-high">主勝+細球</span></td></tr>
-<tr><td style="text-align:left;font-size:.75rem">🇳🇱 荷蘭 vs 摩洛哥 🇲🇦</td><td class="odds-value">1.85</td><td>3.40</td><td>4.20</td><td class="odds-value">1.85</td><td>1.95</td><td><span class="value-tag value-high">主勝+大球</span></td></tr>
-<tr><td style="text-align:left;font-size:.75rem">🇫🇷 法國 vs 瑞典 🇸🇪</td><td class="odds-value">1.60</td><td>3.80</td><td>5.20</td><td>1.95</td><td class="odds-value">1.80</td><td><span class="value-tag value-high">主勝+細球</span></td></tr>
-<tr><td style="text-align:left;font-size:.75rem">🏴󠁧󠁢󠁥󠁮󠁧󠁿 英格蘭 vs 剛果(金) 🇨🇩</td><td class="odds-value">1.35</td><td>4.80</td><td>8.50</td><td>2.20</td><td class="odds-value">1.65</td><td><span class="value-tag value-high">主勝+細球</span></td></tr>
-<tr><td style="text-align:left;font-size:.75rem">🇦🇷 阿根廷 vs 佛得角 🇨🇻</td><td class="odds-value">1.25</td><td>5.50</td><td>10.00</td><td>2.40</td><td class="odds-value">1.55</td><td><span class="value-tag value-high">主勝+細球</span></td></tr>
-<tr><td style="text-align:left;font-size:.75rem">🇪🇸 西班牙 vs 奧地利 🇦🇹</td><td class="odds-value">1.70</td><td>3.60</td><td>4.80</td><td class="odds-value">1.90</td><td>1.90</td><td><span class="value-tag value-medium">主勝+大球</span></td></tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-
-<!-- ==================== LIVE ==================== -->
-<div id="live" class="page">
-<div class="card">
-<div class="card-title">📡 滾球監控中心</div>
-<div style="text-align:center;padding:40px;color:#8ab4f8">
-<div style="font-size:2rem;margin-bottom:15px">📡</div>
-<div style="font-size:1rem;color:#ffd700;margin-bottom:8px">滾球分析就緒</div>
-<div style="font-size:.8rem">32強賽事開始後自動激活實時分析</div>
-<div style="margin-top:20px;font-size:.75rem;color:#8ab4f8">
-滾球功能將提供:<br>
-• 實時入球機會預警<br>
-• 角球動態預測<br>
-• 下半場入球機會<br>
-• 戰意變化監控
-</div>
-</div>
-</div>
-<div class="card">
-<div class="card-title">⏱️ 滾球策略模板</div>
-<ul class="tips-list">
-<li><span class="tip-highlight">0-15分鐘:</span> 觀察陣型，避免過早入場。高強度開局可考慮「上半場大1」</li>
-<li><span class="tip-highlight">15-30分鐘:</span> 角球開始累積，若開局節奏快可追大角球盤</li>
-<li><span class="tip-highlight">30-45分鐘:</span> 體力下降，犯規增多，關注黃牌大盤</li>
-<li><span class="tip-highlight">半場休息:</span> 評估戰術調整，落後方下半場必攻，可考慮「下半場大1」</li>
-<li><span class="tip-highlight">60-75分鐘:</span> 換人調整期，節奏可能改變，注意入球機會窗口</li>
-<li><span class="tip-highlight">75-90分鐘:</span> 時間壓力峰值，落後方全攻，角球+入球機會雙升</li>
-<li><span class="tip-highlight">加時賽:</span> 體力極限，空間增大，「加時大0.5」價值提升</li>
-</ul>
-</div>
-</div>
-
-<!-- ==================== STATS ==================== -->
-<div id="stats" class="page">
-<div class="card">
-<div class="card-title">📈 32強球隊數據</div>
-
-<button class="expand-btn" onclick="toggleExpand(this)">🇧🇷 巴西</button>
-<div class="expand-content">
-<div class="stats-grid">
-<div class="stat-item"><div class="stat-value">7</div><div class="stat-label">小組賽入球</div></div>
-<div class="stat-item"><div class="stat-value">1</div><div class="stat-label">小組賽失球</div></div>
-<div class="stat-item"><div class="stat-value">7</div><div class="stat-label">小組賽積分</div></div>
-<div class="stat-item"><div class="stat-value">C組第1</div><div class="stat-label">排名</div></div>
-</div>
-<div style="margin-top:10px;font-size:.8rem;color:#8ab4f8">戰術: 4-3-3 進攻型 | 狀態: 🔥🔥🔥🔥</div>
-</div>
-
-<button class="expand-btn" onclick="toggleExpand(this)">🇯🇵 日本</button>
-<div class="expand-content">
-<div class="stats-grid">
-<div class="stat-item"><div class="stat-value">7</div><div class="stat-label">小組賽入球</div></div>
-<div class="stat-item"><div class="stat-value">3</div><div class="stat-label">小組賽失球</div></div>
-<div class="stat-item"><div class="stat-value">5</div><div class="stat-label">小組賽積分</div></div>
-<div class="stat-item"><div class="stat-value">F組第3</div><div class="stat-label">排名</div></div>
-</div>
-<div style="margin-top:10px;font-size:.8rem;color:#8ab4f8">戰術: 4-2-3-1 快速型 | 狀態: 🔥🔥🔥</div>
-</div>
-
-<button class="expand-btn" onclick="toggleExpand(this)">🇩🇪 德國</button>
-<div class="expand-content">
-<div class="stats-grid">
-<div class="stat-item"><div class="stat-value">10</div><div class="stat-label">小組賽入球</div></div>
-<div class="stat-item"><div class="stat-value">4</div><div class="stat-label">小組賽失球</div></div>
-<div class="stat-item"><div class="stat-value">6</div><div class="stat-label">小組賽積分</div></div>
-<div class="stat-item"><div class="stat-value">E組第2</div><div class="stat-label">排名</div></div>
-</div>
-<div style="margin-top:10px;font-size:.8rem;color:#8ab4f8">戰術: 高位壓迫型 | 狀態: 🔥🔥🔥</div>
-</div>
-
-<button class="expand-btn" onclick="toggleExpand(this)">🇳🇱 荷蘭</button>
-<div class="expand-content">
-<div class="stats-grid">
-<div class="stat-item"><div class="stat-value">10</div><div class="stat-label">小組賽入球</div></div>
-<div class="stat-item"><div class="stat-value">4</div><div class="stat-label">小組賽失球</div></div>
-<div class="stat-item"><div class="stat-value">7</div><div class="stat-label">小組賽積分</div></div>
-<div class="stat-item"><div class="stat-value">F組第1</div><div class="stat-label">排名</div></div>
-</div>
-<div style="margin-top:10px;font-size:.8rem;color:#8ab4f8">戰術: 4-3-3 圍攻型 | 狀態: 🔥🔥🔥🔥</div>
-</div>
-
-<button class="expand-btn" onclick="toggleExpand(this)">🇫🇷 法國</button>
-<div class="expand-content">
-<div class="stats-grid">
-<div class="stat-item"><div class="stat-value">10</div><div class="stat-label">小組賽入球</div></div>
-<div class="stat-item"><div class="stat-value">2</div><div class="stat-label">小組賽失球</div></div>
-<div class="stat-item"><div class="stat-value">9</div><div class="stat-label">小組賽積分</div></div>
-<div class="stat-item"><div class="stat-value">I組第1</div><div class="stat-label">排名</div></div>
-</div>
-<div style="margin-top:10px;font-size:.8rem;color:#8ab4f8">戰術: 4-3-3 平衡型 | 狀態: 🔥🔥🔥🔥</div>
-</div>
-
-<button class="expand-btn" onclick="toggleExpand(this)">🇦🇷 阿根廷</button>
-<div class="expand-content">
-<div class="stats-grid">
-<div class="stat-item"><div class="stat-value">8</div><div class="stat-label">小組賽入球</div></div>
-<div class="stat-item"><div class="stat-value">1</div><div class="stat-label">小組賽失球</div></div>
-<div class="stat-item"><div class="stat-value">9</div><div class="stat-label">小組賽積分</div></div>
-<div class="stat-item"><div class="stat-value">J組第1</div><div class="stat-label">排名</div></div>
-</div>
-<div style="margin-top:10px;font-size:.8rem;color:#8ab4f8">戰術: 4-3-3 控球型 | 狀態: 🔥🔥🔥🔥</div>
-</div>
-
-<button class="expand-btn" onclick="toggleExpand(this)">🇪🇸 西班牙</button>
-<div class="expand-content">
-<div class="stats-grid">
-<div class="stat-item"><div class="stat-value">5</div><div class="stat-label">小組賽入球</div></div>
-<div class="stat-item"><div class="stat-value">0</div><div class="stat-label">小組賽失球</div></div>
-<div class="stat-item"><div class="stat-value">7</div><div class="stat-label">小組賽積分</div></div>
-<div class="stat-item"><div class="stat-value">H組第1</div><div class="stat-label">排名</div></div>
-</div>
-<div style="margin-top:10px;font-size:.8rem;color:#8ab4f8">戰術: 傳控型 | 狀態: 🔥🔥🔥🔥</div>
-</div>
-
-<button class="expand-btn" onclick="toggleExpand(this)">🇵🇹 葡萄牙</button>
-<div class="expand-content">
-<div class="stats-grid">
-<div class="stat-item"><div class="stat-value">7</div><div class="stat-label">小組賽入球</div></div>
-<div class="stat-item"><div class="stat-value">2</div><div class="stat-label">小組賽失球</div></div>
-<div class="stat-item"><div class="stat-value">7</div><div class="stat-label">小組賽積分</div></div>
-<div class="stat-item"><div class="stat-value">K組第2</div><div class="stat-label">排名</div></div>
-</div>
-<div style="margin-top:10px;font-size:.8rem;color:#8ab4f8">戰術: 4-3-3 進攻型 | 狀態: 🔥🔥🔥</div>
-</div>
-</div>
-</div>
-
-</div>
-
-<footer>
-<div>UNIFIED v3.3.67c World Cup 2026 Knockout Stage</div>
-<div style="margin-top:5px">數據僅供參考 | 理性投注 | 18+</div>
-</footer>
-
-<button class="refresh-btn" onclick="location.reload()" title="刷新">🔄</button>
+<div class="footer">UNIFIED v3.3.67c World Cup 2026 Knockout Stage</div>
 
 <script>
-function showPage(pageId){
-document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
-document.getElementById(pageId).classList.add('active');
-event.target.classList.add('active');
+const teamsData = {
+  "bra": { name: "巴西", group: "C組", flag: "\uD83C\uDDE7\uD83C\uDDF7", formation: "4-3-3", 
+    lineup: [
+      {pos:"GK", name:"阿利森", num:"1"},
+      {pos:"DF", name:"達尼洛", num:"2"}, {pos:"DF", name:"馬基尼奧斯", num:"4"}, {pos:"DF", name:"加布里埃爾", num:"3"}, {pos:"DF", name:"阿拉納", num:"6"},
+      {pos:"MF", name:"吉馬良斯", num:"5"}, {pos:"MF", name:"帕奎塔", num:"7"}, {pos:"MF", name:"羅德里戈", num:"8"},
+      {pos:"FW", name:"拉菲尼亞", num:"11"}, {pos:"FW", name:"恩德里克", num:"9"}, {pos:"FW", name:"維尼修斯", num:"10"}
+    ],
+    subs: ["埃德森","布雷默","安德烈","薩維尼奧","埃瓦尼爾森","路易斯·恩里克"],
+    stats: { atk: 92, mid: 88, def: 85, spd: 90, tec: 91, phy: 84 }
+  },
+  "jpn": { name: "日本", group: "F組", flag: "\uD83C\uDDEF\uD83C\uDDF5", formation: "4-2-3-1",
+    lineup: [
+      {pos:"GK", name:"鈴木彩艷", num:"1"},
+      {pos:"DF", name:"菅原由勢", num:"2"}, {pos:"DF", name:"板倉滉", num:"3"}, {pos:"DF", name:"谷口彰悟", num:"4"}, {pos:"DF", name:"中山雄太", num:"5"},
+      {pos:"MF", name:"遠藤航", num:"6"}, {pos:"MF", name:"守田英正", num:"7"},
+      {pos:"MF", name:"伊東純也", num:"8"}, {pos:"MF", name:"堂安律", num:"10"}, {pos:"MF", name:"中村敬斗", num:"11"},
+      {pos:"FW", name:"上田綺世", num:"9"}
+    ],
+    subs: ["前川黛也","町田浩樹","橋岡大樹","藤田讓瑠","旗手憐央","細谷真大"],
+    stats: { atk: 82, mid: 84, def: 80, spd: 85, tec: 86, phy: 76 }
+  },
+  "ger": { name: "德國", group: "E組", flag: "\uD83C\uDDE9\uD83C\uDDEA", formation: "4-2-3-1",
+    lineup: [
+      {pos:"GK", name:"諾伊爾", num:"1"},
+      {pos:"DF", name:"基米希", num:"6"}, {pos:"DF", name:"呂迪格", num:"2"}, {pos:"DF", name:"塔", num:"4"}, {pos:"DF", name:"米特爾施泰特", num:"3"},
+      {pos:"MF", name:"安德里希", num:"5"}, {pos:"MF", name:"克羅斯", num:"8"},
+      {pos:"MF", name:"穆西亞拉", num:"10"}, {pos:"MF", name:"哈弗茨", num:"7"}, {pos:"MF", name:"維爾茨", num:"11"},
+      {pos:"FW", name:"菲爾克魯格", num:"9"}
+    ],
+    subs: ["鮑曼","施洛特貝克","亨里希斯","格羅斯","昂達夫","拜爾"],
+    stats: { atk: 88, mid: 90, def: 85, spd: 84, tec: 91, phy: 86 }
+  },
+  "ned": { name: "荷蘭", group: "F組", flag: "\uD83C\uDDF3\uD83C\uDDF1", formation: "4-3-3",
+    lineup: [
+      {pos:"GK", name:"弗萊肯", num:"1"},
+      {pos:"DF", name:"鄧弗里斯", num:"2"}, {pos:"DF", name:"范德文", num:"3"}, {pos:"DF", name:"范迪克", num:"4"}, {pos:"DF", name:"阿克", num:"5"},
+      {pos:"MF", name:"斯豪滕", num:"6"}, {pos:"MF", name:"庫普梅納斯", num:"8"}, {pos:"MF", name:"賴因德斯", num:"7"},
+      {pos:"FW", name:"弗林蓬", num:"11"}, {pos:"FW", name:"德佩", num:"9"}, {pos:"FW", name:"加克波", num:"10"}
+    ],
+    subs: ["費爾布呂亨","德里赫特","廷貝爾","西蒙斯","馬倫","韋霍斯特"],
+    stats: { atk: 86, mid: 87, def: 88, spd: 85, tec: 88, phy: 85 }
+  },
+  "fra": { name: "法國", group: "I組", flag: "\uD83C\uDDEB\uD83C\uDDF7", formation: "4-3-3",
+    lineup: [
+      {pos:"GK", name:"邁尼昂", num:"1"},
+      {pos:"DF", name:"孔德", num:"2"}, {pos:"DF", name:"薩利巴", num:"4"}, {pos:"DF", name:"於帕梅卡諾", num:"3"}, {pos:"DF", name:"特奧", num:"5"},
+      {pos:"MF", name:"瓊阿梅尼", num:"6"}, {pos:"MF", name:"卡馬文加", num:"8"}, {pos:"MF", name:"埃梅里", num:"7"},
+      {pos:"FW", name:"登貝萊", num:"11"}, {pos:"FW", name:"穆阿尼", num:"9"}, {pos:"FW", name:"姆巴佩", num:"10"}
+    ],
+    subs: ["桑巴","科納特","克勞斯","拉比奧","格里茲曼","圖拉姆"],
+    stats: { atk: 93, mid: 88, def: 87, spd: 94, tec: 89, phy: 89 }
+  },
+  "arg": { name: "阿根廷", group: "J組", flag: "\uD83C\uDDE6\uD83C\uDDF7", formation: "4-3-3",
+    lineup: [
+      {pos:"GK", name:"E·馬丁內斯", num:"1"},
+      {pos:"DF", name:"莫利納", num:"2"}, {pos:"DF", name:"羅梅羅", num:"4"}, {pos:"DF", name:"利桑德羅", num:"3"}, {pos:"DF", name:"塔利亞菲科", num:"5"},
+      {pos:"MF", name:"德保羅", num:"6"}, {pos:"MF", name:"恩佐", num:"8"}, {pos:"MF", name:"麥卡利斯特", num:"7"},
+      {pos:"FW", name:"阿爾瓦雷斯", num:"9"}, {pos:"FW", name:"梅西", num:"10"}, {pos:"FW", name:"尼科·帕斯", num:"11"}
+    ],
+    subs: ["魯利","奧塔門迪","蒙鐵爾","帕雷德斯","朱利亞諾·西蒙尼","勞塔羅"],
+    stats: { atk: 91, mid: 89, def: 86, spd: 85, tec: 93, phy: 84 }
+  },
+  "esp": { name: "西班牙", group: "H組", flag: "\uD83C\uDDEA\uD83C\uDDF8", formation: "4-3-3",
+    lineup: [
+      {pos:"GK", name:"烏奈·西蒙", num:"1"},
+      {pos:"DF", name:"卡瓦哈爾", num:"2"}, {pos:"DF", name:"勒諾爾芒", num:"3"}, {pos:"DF", name:"拉波爾特", num:"4"}, {pos:"DF", name:"庫庫雷利亞", num:"5"},
+      {pos:"MF", name:"祖比門迪", num:"6"}, {pos:"MF", name:"佩德里", num:"8"}, {pos:"MF", name:"羅德里", num:"7"},
+      {pos:"FW", name:"亞馬爾", num:"10"}, {pos:"FW", name:"莫拉塔", num:"9"}, {pos:"FW", name:"威廉斯", num:"11"}
+    ],
+    subs: ["拉亞","納喬","格里馬爾多","法比安","奧爾莫","何塞盧"],
+    stats: { atk: 89, mid: 92, def: 87, spd: 88, tec: 93, phy: 83 }
+  },
+  "por": { name: "葡萄牙", group: "K組", flag: "\uD83C\uDDF5\uD83C\uDDF9", formation: "4-3-3",
+    lineup: [
+      {pos:"GK", name:"迪奧戈·科斯塔", num:"1"},
+      {pos:"DF", name:"達洛特", num:"2"}, {pos:"DF", name:"迪亞斯", num:"4"}, {pos:"DF", name:"伊納西奧", num:"3"}, {pos:"DF", name:"門德斯", num:"5"},
+      {pos:"MF", name:"帕利尼亞", num:"6"}, {pos:"MF", name:"B·費爾南德斯", num:"8"}, {pos:"MF", name:"維蒂尼亞", num:"7"},
+      {pos:"FW", name:"萊奧", num:"11"}, {pos:"FW", name:"C羅", num:"9"}, {pos:"FW", name:"費利克斯", num:"10"}
+    ],
+    subs: ["帕特里西奧","安東尼奧·席爾瓦","坎塞洛","內維斯","若塔","內托"],
+    stats: { atk: 90, mid: 88, def: 85, spd: 87, tec: 90, phy: 85 }
+  },
+  "mex": { name: "墨西哥", group: "A組", flag: "\uD83C\uDDF2\uD83C\uDDFD", formation: "4-3-3",
+    lineup: [
+      {pos:"GK", name:"奧喬亞", num:"1"},
+      {pos:"DF", name:"桑切斯", num:"2"}, {pos:"DF", name:"蒙特斯", num:"4"}, {pos:"DF", name:"巴斯克斯", num:"3"}, {pos:"DF", name:"阿爾德雷特", num:"5"},
+      {pos:"MF", name:"阿爾瓦雷斯", num:"6"}, {pos:"MF", name:"羅莫", num:"8"}, {pos:"MF", name:"查韋斯", num:"7"},
+      {pos:"FW", name:"安圞納", num:"11"}, {pos:"FW", name:"希門尼斯", num:"9"}, {pos:"FW", name:"基尼奧內斯", num:"10"}
+    ],
+    subs: ["馬拉貢","約翰·巴斯克斯","埃德森·阿爾瓦雷斯","埃里克·桑切斯","皮內達","亨利·馬丁"],
+    stats: { atk: 78, mid: 79, def: 77, spd: 80, tec: 81, phy: 78 }
+  },
+  "rsa": { name: "南非", group: "A組", flag: "\uD83C\uDDFF\uD83C\uDDE6", formation: "4-4-2",
+    lineup: [
+      {pos:"GK", name:"威廉姆斯", num:"1"},
+      {pos:"DF", name:"馬比薩", num:"2"}, {pos:"DF", name:"蘇韋拉", num:"4"}, {pos:"DF", name:"科萊", num:"3"}, {pos:"DF", name:"馬西納", num:"5"},
+      {pos:"MF", name:"莫科納", num:"6"}, {pos:"MF", name:"薩拉", num:"8"}, {pos:"MF", name:"福斯特", num:"7"}, {pos:"MF", name:"塔烏", num:"10"},
+      {pos:"FW", name:"馬克戈帕", num:"9"}, {pos:"FW", name:"姆韋拉", num:"11"}
+    ],
+    subs: ["布魯斯·巴瓦","德爾文","莫迪比","西特霍萊","扎卡里","恩格馬"],
+    stats: { atk: 70, mid: 72, def: 71, spd: 76, tec: 73, phy: 75 }
+  },
+  "sui": { name: "瑞士", group: "B組", flag: "\uD83C\uDDE8\uD83C\uDDED", formation: "4-2-3-1",
+    lineup: [
+      {pos:"GK", name:"索默", num:"1"},
+      {pos:"DF", name:"維德默", num:"2"}, {pos:"DF", name:"阿坎吉", num:"4"}, {pos:"DF", name:"沙爾", num:"3"}, {pos:"DF", name:"羅德里格斯", num:"5"},
+      {pos:"MF", name:"扎卡", num:"6"}, {pos:"MF", name:"弗羅伊勒", num:"8"},
+      {pos:"MF", name:"恩博洛", num:"7"}, {pos:"MF", name:"斯特芬", num:"10"}, {pos:"MF", name:"巴爾加斯", num:"11"},
+      {pos:"FW", name:"奧卡福", num:"9"}
+    ],
+    subs: ["科貝爾","埃爾維迪","姆巴布","索烏","里德爾","杜阿"],
+    stats: { atk: 81, mid: 83, def: 82, spd: 80, tec: 84, phy: 81 }
+  },
+  "can": { name: "加拿大", group: "B組", flag: "\uD83C\uDDE8\uD83C\uDDE6", formation: "4-2-3-1",
+    lineup: [
+      {pos:"GK", name:"克雷波", num:"1"},
+      {pos:"DF", name:"約翰斯頓", num:"2"}, {pos:"DF", name:"科尼利厄斯", num:"4"}, {pos:"DF", name:"德富熱羅勒", num:"3"}, {pos:"DF", name:"拉爾亞", num:"5"},
+      {pos:"MF", name:"布坎南", num:"6"}, {pos:"MF", name:"尤斯塔基奧", num:"8"},
+      {pos:"MF", name:"戴維", num:"7"}, {pos:"MF", name:"米勒", num:"10"}, {pos:"MF", name:"拉林", num:"11"},
+      {pos:"FW", name:"奧盧瓦塞伊", num:"9"}
+    ],
+    subs: ["聖克萊爾","卡馬爾·米勒","奧索里奧","科內","霍伊萊特","烏格博"],
+    stats: { atk: 79, mid: 78, def: 76, spd: 85, tec: 78, phy: 80 }
+  },
+  "bih": { name: "波黑", group: "B組", flag: "\uD83C\uDDE7\uD83C\uDDE6", formation: "3-5-2",
+    lineup: [
+      {pos:"GK", name:"瓦西爾", num:"1"},
+      {pos:"DF", name:"德迪奇", num:"2"}, {pos:"DF", name:"哈伊拉迪諾維奇", num:"4"}, {pos:"DF", name:"科拉希納茨", num:"3"},
+      {pos:"MF", name:"加齊貝戈維奇", num:"5"}, {pos:"MF", name:"皮亞尼奇", num:"6"}, {pos:"MF", name:"克魯尼奇", num:"8"}, {pos:"MF", name:"塔希羅維奇", num:"7"}, {pos:"MF", name:"德米羅維奇", num:"10"},
+      {pos:"FW", name:"哲科", num:"9"}, {pos:"FW", name:"巴圖里納", num:"11"}
+    ],
+    subs: ["尼古拉","薩尼查寧","艾哈邁德霍季奇","斯蒂萬諾維奇","普雷夫賈克","薩拉馬蒂奇"],
+    stats: { atk: 76, mid: 78, def: 75, spd: 74, tec: 80, phy: 79 }
+  },
+  "mar": { name: "摩洛哥", group: "C組", flag: "\uD83C\uDDF2\uD83C\uDDE6", formation: "4-3-3",
+    lineup: [
+      {pos:"GK", name:"布努", num:"1"},
+      {pos:"DF", name:"哈基米", num:"2"}, {pos:"DF", name:"阿格德", num:"4"}, {pos:"DF", name:"塞斯", num:"3"}, {pos:"DF", name:"馬茲拉維", num:"5"},
+      {pos:"MF", name:"阿姆拉巴特", num:"6"}, {pos:"MF", name:"歐納希", num:"8"}, {pos:"MF", name:"阿姆拉巴特", num:"7"},
+      {pos:"FW", name:"鮑法爾", num:"11"}, {pos:"FW", name:"恩內斯里", num:"9"}, {pos:"FW", name:"齊耶赫", num:"10"}
+    ],
+    subs: ["穆尼爾","亞米克","阿什拉夫·達里","哈努斯","薩比里","拉希米"],
+    stats: { atk: 83, mid: 82, def: 83, spd: 85, tec: 85, phy: 83 }
+  },
+  "usa": { name: "美國", group: "D組", flag: "\uD83C\uDDFA\uD83C\uDDF8", formation: "4-3-3",
+    lineup: [
+      {pos:"GK", name:"特納", num:"1"},
+      {pos:"DF", name:"德斯特", num:"2"}, {pos:"DF", name:"里姆", num:"4"}, {pos:"DF", name:"羅賓遜", num:"3"}, {pos:"DF", name:"斯卡利", num:"5"},
+      {pos:"MF", name:"亞當斯", num:"6"}, {pos:"MF", name:"穆薩", num:"8"}, {pos:"MF", name:"麥肯尼", num:"7"},
+      {pos:"FW", name:"普利西奇", num:"10"}, {pos:"FW", name:"巴洛貢", num:"9"}, {pos:"FW", name:"維阿", num:"11"}
+    ],
+    subs: ["霍瓦特","卡特·維克斯","倫納德","雷納","阿倫森","佩皮"],
+    stats: { atk: 82, mid: 81, def: 79, spd: 84, tec: 82, phy: 81 }
+  },
+  "aus": { name: "澳大利亞", group: "D組", flag: "\uD83C\uDDE6\uD83C\uDDFA", formation: "4-2-3-1",
+    lineup: [
+      {pos:"GK", name:"馬修·瑞安", num:"1"},
+      {pos:"DF", name:"阿特金森", num:"2"}, {pos:"DF", name:"蘇塔", num:"4"}, {pos:"DF", name:"羅爾斯", num:"3"}, {pos:"DF", name:"貝希", num:"5"},
+      {pos:"MF", name:"歐文", num:"6"}, {pos:"MF", name:"巴克斯", num:"8"},
+      {pos:"MF", name:"古德溫", num:"7"}, {pos:"MF", name:"麥格里", num:"10"}, {pos:"MF", name:"博伊勒", num:"11"},
+      {pos:"FW", name:"杜克", num:"9"}
+    ],
+    subs: ["高奇","德格內克","米勒","伊蘭昆達","蒂利奧","延吉"],
+    stats: { atk: 76, mid: 77, def: 76, spd: 79, tec: 77, phy: 82 }
+  },
+  "par": { name: "巴拉圭", group: "D組", flag: "\uD83C\uDDF7\uD83C\uDDF7", formation: "4-4-2",
+    lineup: [
+      {pos:"GK", name:"羅哈斯", num:"1"},
+      {pos:"DF", name:"埃斯皮諾薩", num:"2"}, {pos:"DF", name:"古斯塔沃·戈麥斯", num:"4"}, {pos:"DF", name:"阿爾德雷特", num:"3"}, {pos:"DF", name:"維拉", num:"5"},
+      {pos:"MF", name:"庫巴斯", num:"6"}, {pos:"MF", name:"維拉桑蒂", num:"8"}, {pos:"MF", name:"阿爾米隆", num:"7"}, {pos:"MF", name:"索薩", num:"10"},
+      {pos:"FW", name:"薩納夫里亞", num:"9"}, {pos:"FW", name:"巴雷羅", num:"11"}
+    ],
+    subs: ["安東尼·席爾瓦","巴爾布埃納","里韋羅","卡多佐","恩西索","莫里尼戈"],
+    stats: { atk: 75, mid: 76, def: 75, spd: 78, tec: 77, phy: 79 }
+  },
+  "civ": { name: "科特迪瓦", group: "E組", flag: "\uD83C\uDDE8\uD83C\uDDEE", formation: "4-3-3",
+    lineup: [
+      {pos:"GK", name:"福法納", num:"1"},
+      {pos:"DF", name:"奧利耶", num:"2"}, {pos:"DF", name:"恩迪卡", num:"4"}, {pos:"DF", name:"博利", num:"3"}, {pos:"DF", name:"科南", num:"5"},
+      {pos:"MF", name:"塞里", num:"6"}, {pos:"MF", name:"凱西", num:"8"}, {pos:"MF", name:"福法納", num:"7"},
+      {pos:"FW", name:"扎哈", num:"11"}, {pos:"FW", name:"霍斯", num:"9"}, {pos:"FW", name:"格拉德爾", num:"10"}
+    ],
+    subs: ["桑加雷","奧帕庫","迪亞洛","桑加雷","阿萊","佩佩"],
+    stats: { atk: 80, mid: 79, def: 78, spd: 84, tec: 80, phy: 83 }
+  },
+  "ecu": { name: "厄瓜多爾", group: "E組", flag: "\uD83C\uDDEA\uD83C\uDDE8", formation: "4-3-3",
+    lineup: [
+      {pos:"GK", name:"多明格斯", num:"1"},
+      {pos:"DF", name:"托雷斯", num:"2"}, {pos:"DF", name:"因卡皮耶", num:"4"}, {pos:"DF", name:"帕喬", num:"3"}, {pos:"DF", name:"埃斯图皮尼安", num:"5"},
+      {pos:"MF", name:"凱塞多", num:"6"}, {pos:"MF", name:"門德斯", num:"8"}, {pos:"MF", name:"弗蘭科", num:"7"},
+      {pos:"FW", name:"薩米恩托", num:"11"}, {pos:"FW", name:"恩納·瓦倫西亞", num:"9"}, {pos:"FW", name:"帕埃斯", num:"10"}
+    ],
+    subs: ["加林德斯","菲利克斯·托雷斯","普雷西亞多","格隆","普拉塔","卡爾博尼"],
+    stats: { atk: 79, mid: 80, def: 78, spd: 83, tec: 80, phy: 82 }
+  },
+  "swe": { name: "瑞典", group: "F組", flag: "\uD83C\uDDF8\uD83C\uDDEA", formation: "4-4-2",
+    lineup: [
+      {pos:"GK", name:"奧爾森", num:"1"},
+      {pos:"DF", name:"卡尤斯特", num:"2"}, {pos:"DF", name:"林德洛夫", num:"4"}, {pos:"DF", name:"赫蘭德", num:"3"}, {pos:"DF", name:"奧古斯丁松", num:"5"},
+      {pos:"MF", name:"奧拉松", num:"6"}, {pos:"MF", name:"卡爾斯特羅姆", num:"8"}, {pos:"MF", name:"福斯貝里", num:"7"}, {pos:"MF", name:"庫盧塞夫斯基", num:"10"},
+      {pos:"FW", name:"伊薩克", num:"9"}, {pos:"FW", name:"哲凱賴什", num:"11"}
+    ],
+    subs: ["諾德菲爾特","丹尼爾森","馬伊爾達","斯萬貝里","埃蘭加","卡爾松"],
+    stats: { atk: 82, mid: 81, def: 80, spd: 82, tec: 82, phy: 82 }
+  },
+  "bel": { name: "比利時", group: "G組", flag: "\uD83C\uDDE7\uD83C\uDDEA", formation: "4-3-3",
+    lineup: [
+      {pos:"GK", name:"卡斯特爾斯", num:"1"},
+      {pos:"DF", name:"卡斯塔涅", num:"2"}, {pos:"DF", name:"德巴", num:"4"}, {pos:"DF", name:"費斯", num:"3"}, {pos:"DF", name:"德庫耶佩", num:"5"},
+      {pos:"MF", name:"奧納納", num:"6"}, {pos:"MF", name:"蒂萊曼斯", num:"8"}, {pos:"MF", name:"德布勞內", num:"7"},
+      {pos:"FW", name:"多庫", num:"11"}, {pos:"FW", name:"盧卡庫", num:"9"}, {pos:"FW", name:"奧彭達", num:"10"}
+    ],
+    subs: ["塞爾斯","維爾通亨","曼加拉","德凱特萊爾","巴卡約科","特羅薩德"],
+    stats: { atk: 87, mid: 88, def: 82, spd: 86, tec: 90, phy: 85 }
+  },
+  "egy": { name: "埃及", group: "G組", flag: "\uD83C\uDDEA\uD83C\uDDEC", formation: "4-2-3-1",
+    lineup: [
+      {pos:"GK", name:"艾爾·謝納維", num:"1"},
+      {pos:"DF", name:"阿什拉夫", num:"2"}, {pos:"DF", name:"赫加齊", num:"4"}, {pos:"DF", name:"拉比亞", num:"3"}, {pos:"DF", name:"法特希", num:"5"},
+      {pos:"MF", name:"埃爾·索里亞", num:"6"}, {pos:"MF", name:"弗蘭克·科西", num:"8"},
+      {pos:"MF", name:"薩拉赫", num:"10"}, {pos:"MF", name:"馬爾穆什", num:"7"}, {pos:"MF", name:"特雷澤蓋", num:"11"},
+      {pos:"FW", name:"穆罕默德", num:"9"}
+    ],
+    subs: ["阿布加巴爾","奧馬爾","哈姆迪","蘇拉亞","齤什拉","穆斯塔法·穆罕默德"],
+    stats: { atk: 84, mid: 80, def: 78, spd: 86, tec: 85, phy: 81 }
+  },
+  "cpv": { name: "佛得角", group: "H組", flag: "\uD83C\uDDE8\uD83C\uDDFB", formation: "4-3-3",
+    lineup: [
+      {pos:"GK", name:"沃津尼亞", num:"1"},
+      {pos:"DF", name:"德爾加多", num:"2"}, {pos:"DF", name:"洛佩斯", num:"4"}, {pos:"DF", name:"科雷亞", num:"3"}, {pos:"DF", name:"塔瓦雷斯", num:"5"},
+      {pos:"MF", name:"桑托斯", num:"6"}, {pos:"MF", name:"里瓦爾多", num:"8"}, {pos:"MF", name:"帕特里克", num:"7"},
+      {pos:"FW", name:"瑞安", num:"11"}, {pos:"FW", name:"貝爾納多", num:"9"}, {pos:"FW", name:"加里", num:"10"}
+    ],
+    subs: ["科埃略","迪尼斯","卡洛斯","布赖恩","凱文","羅尼"],
+    stats: { atk: 71, mid: 72, def: 71, spd: 75, tec: 73, phy: 74 }
+  },
+  "nor": { name: "挪威", group: "I組", flag: "\uD83C\uDDF3\uD83C\uDDF4", formation: "4-3-3",
+    lineup: [
+      {pos:"GK", name:"尼蘭德", num:"1"},
+      {pos:"DF", name:"瑞爾森", num:"2"}, {pos:"DF", name:"厄斯蒂高", num:"4"}, {pos:"DF", name:"斯特蘭德貝里", num:"3"}, {pos:"DF", name:"梅爾", num:"5"},
+      {pos:"MF", name:"貝格", num:"6"}, {pos:"MF", name:"厄德高", num:"8"}, {pos:"MF", name:"桑德·貝格", num:"7"},
+      {pos:"FW", name:"哈蘭德", num:"9"}, {pos:"FW", name:"索爾洛特", num:"11"}, {pos:"FW", name:"鮑伯", num:"10"}
+    ],
+    subs: ["漢森","阿耶爾","奧爾森","達厄萊","努薩","拉森"],
+    stats: { atk: 86, mid: 83, def: 79, spd: 85, tec: 84, phy: 86 }
+  },
+  "sen": { name: "塞內加爾", group: "I組", flag: "\uD83C\uDDF8\uD83C\uDDF9", formation: "4-3-3",
+    lineup: [
+      {pos:"GK", name:"門迪", num:"1"},
+      {pos:"DF", name:"薩巴利", num:"2"}, {pos:"DF", name:"庫利巴利", num:"4"}, {pos:"DF", name:"迪亞洛", num:"3"}, {pos:"DF", name:"雅各布斯", num:"5"},
+      {pos:"MF", name:"蓋伊", num:"6"}, {pos:"MF", name:"庫亞特", num:"8"}, {pos:"MF", name:"西斯", num:"7"},
+      {pos:"FW", name:"薩拉", num:"11"}, {pos:"FW", name:"雅克松", num:"9"}, {pos:"FW", name:"馬內", num:"10"}
+    ],
+    subs: ["迪昂","巴洛·圖雷","恩迪亞耶","納帕·孟德","迪昂","恩迪亞耶"],
+    stats: { atk: 83, mid: 81, def: 80, spd: 86, tec: 82, phy: 84 }
+  },
+  "aut": { name: "奧地利", group: "J組", flag: "\uD83C\uDDE6\uD83C\uDDF9", formation: "4-2-3-1",
+    lineup: [
+      {pos:"GK", name:"林德納", num:"1"},
+      {pos:"DF", name:"波施", num:"2"}, {pos:"DF", name:"丹索", num:"4"}, {pos:"DF", name:"林哈特", num:"3"}, {pos:"DF", name:"姆維內", num:"5"},
+      {pos:"MF", name:"塞瓦爾德", num:"6"}, {pos:"MF", name:"萊默爾", num:"8"},
+      {pos:"MF", name:"薩比策", num:"7"}, {pos:"MF", name:"鮑姆加特納", num:"10"}, {pos:"MF", name:"維默爾", num:"11"},
+      {pos:"FW", name:"阿瑙托維奇", num:"9"}
+    ],
+    subs: ["赫德爾","弗里德爾","特勞納","凱因茨","格魯爾","恩特魯普"],
+    stats: { atk: 80, mid: 82, def: 80, spd: 81, tec: 83, phy: 82 }
+  },
+  "alg": { name: "阿爾及利亞", group: "J組", flag: "\uD83C\uDDE9\uD83C\uDDFF", formation: "4-3-3",
+    lineup: [
+      {pos:"GK", name:"曼德雷亞", num:"1"},
+      {pos:"DF", name:"阿塔勒", num:"2"}, {pos:"DF", name:"本塞拜尼", num:"4"}, {pos:"DF", name:"曼迪", num:"3"}, {pos:"DF", name:"費圖希", num:"5"},
+      {pos:"MF", name:"本納賽爾", num:"6"}, {pos:"MF", name:"費古利", num:"8"}, {pos:"MF", name:"澤魯基", num:"7"},
+      {pos:"FW", name:"馬赫雷斯", num:"10"}, {pos:"FW", name:"奧納斯", num:"11"}, {pos:"FW", name:"本拉赫馬", num:"9"}
+    ],
+    subs: ["澤格巴","切蒂","塔布尼","本塔萊布","斯利馬尼","阿穆拉"],
+    stats: { atk: 82, mid: 81, def: 78, spd: 83, tec: 85, phy: 81 }
+  },
+  "col": { name: "哥倫比亞", group: "K組", flag: "\uD83C\uDDE8\uD83C\uDDF4", formation: "4-2-3-1",
+    lineup: [
+      {pos:"GK", name:"巴爾加斯", num:"1"},
+      {pos:"DF", name:"穆尼奧斯", num:"2"}, {pos:"DF", name:"桑切斯", num:"4"}, {pos:"DF", name:"盧庫米", num:"3"}, {pos:"DF", name:"莫希卡", num:"5"},
+      {pos:"MF", name:"萊爾馬", num:"6"}, {pos:"MF", name:"烏里韋", num:"8"},
+      {pos:"MF", name:"阿里亞斯", num:"7"}, {pos:"MF", name:"哈梅斯", num:"10"}, {pos:"MF", name:"路易斯·迪亞斯", num:"11"},
+      {pos:"FW", name:"博雷", num:"9"}
+    ],
+    subs: ["蒙特羅","達文森·桑切斯","博爾哈","卡爾多納","西尼斯特拉","阿斯普里利亞"],
+    stats: { atk: 84, mid: 83, def: 80, spd: 85, tec: 85, phy: 82 }
+  },
+  "cod": { name: "剛果（金）", group: "K組", flag: "\uD83C\uDDE8\uD83C\uDDE9", formation: "4-2-3-1",
+    lineup: [
+      {pos:"GK", name:"姆帕西", num:"1"},
+      {pos:"DF", name:"馬蘇亞庫", num:"2"}, {pos:"DF", name:"巴圖賓西卡", num:"4"}, {pos:"DF", name:"姆本巴", num:"3"}, {pos:"DF", name:"齊博拉", num:"5"},
+      {pos:"MF", name:"皮克", num:"6"}, {pos:"MF", name:"維薩", num:"8"},
+      {pos:"MF", name:"卡耶", num:"7"}, {pos:"MF", name:"博寧加", num:"10"}, {pos:"MF", name:"姆武拉", num:"11"},
+      {pos:"FW", name:"巴坎布", num:"9"}
+    ],
+    subs: ["恩扎烏","馬孔德","金彭貝","卡孔戈","姆布庫","盧博亞"],
+    stats: { atk: 76, mid: 75, def: 74, spd: 80, tec: 76, phy: 81 }
+  },
+  "eng": { name: "英格蘭", group: "L組", flag: "\uD83C\uDDEC\uD83C\uDDE7", formation: "4-2-3-1",
+    lineup: [
+      {pos:"GK", name:"皮克福德", num:"1"},
+      {pos:"DF", name:"沃克", num:"2"}, {pos:"DF", name:"格伊", num:"4"}, {pos:"DF", name:"斯通斯", num:"3"}, {pos:"DF", name:"奇爾韋爾", num:"5"},
+      {pos:"MF", name:"賴斯", num:"6"}, {pos:"MF", name:"貝林厄姆", num:"8"},
+      {pos:"MF", name:"薩卡", num:"7"}, {pos:"MF", name:"福登", num:"10"}, {pos:"MF", name:"戈登", num:"11"},
+      {pos:"FW", name:"凱恩", num:"9"}
+    ],
+    subs: ["拉姆斯代爾","查洛巴","特里皮爾","梅努","帕爾默","沃特金斯"],
+    stats: { atk: 90, mid: 89, def: 87, spd: 88, tec: 90, phy: 88 }
+  },
+  "cro": { name: "克羅地亞", group: "L組", flag: "\uD83C\uDDED\uD83C\uDDF7", formation: "4-3-3",
+    lineup: [
+      {pos:"GK", name:"利瓦科維奇", num:"1"},
+      {pos:"DF", name:"斯塔尼西奇", num:"2"}, {pos:"DF", name:"格瓦迪奧爾", num:"4"}, {pos:"DF", name:"蘇塔洛", num:"3"}, {pos:"DF", name:"索薩", num:"5"},
+      {pos:"MF", name:"布羅佐維奇", num:"6"}, {pos:"MF", name:"莫德里奇", num:"8"}, {pos:"MF", name:"科瓦契奇", num:"7"},
+      {pos:"FW", name:"克拉馬里奇", num:"9"}, {pos:"FW", name:"佩特科維奇", num:"11"}, {pos:"FW", name:"馬耶爾", num:"10"}
+    ],
+    subs: ["伊武希奇","龐格拉契奇","尤拉諾維奇","弗拉西奇","蘇契奇","布迪米爾"],
+    stats: { atk: 84, mid: 88, def: 83, spd: 81, tec: 90, phy: 82 }
+  },
+  "gha": { name: "加納", group: "L組", flag: "\uD83C\uDDEC\uD83C\uDDED", formation: "4-3-3",
+    lineup: [
+      {pos:"GK", name:"阿蒂齊吉", num:"1"},
+      {pos:"DF", name:"奧多伊", num:"2"}, {pos:"DF", name:"薩利蘇", num:"4"}, {pos:"DF", name:"德吉庫", num:"3"}, {pos:"DF", name:"巴巴", num:"5"},
+      {pos:"MF", name:"帕爾泰", num:"6"}, {pos:"MF", name:"庫杜斯", num:"8"}, {pos:"MF", name:"奧烏蘇", num:"7"},
+      {pos:"FW", name:"蘇萊曼納", num:"11"}, {pos:"FW", name:"喬丹·阿尤", num:"9"}, {pos:"FW", name:"威廉斯", num:"10"}
+    ],
+    subs: ["沃拉科特","阿馬泰","蘭普泰","伊德里蘇","布卡里","伊納基·威廉斯"],
+    stats: { atk: 79, mid: 80, def: 77, spd: 84, tec: 81, phy: 83 }
+  }
+};
+
+function renderFormation(lineup, formation) {
+  const rows = [];
+  if (formation === "4-3-3") {
+    rows.push(lineup.filter(p=>p.pos==="FW"));
+    rows.push(lineup.filter(p=>p.pos==="MF"));
+    rows.push(lineup.filter(p=>p.pos==="DF"));
+    rows.push(lineup.filter(p=>p.pos==="GK"));
+  } else if (formation === "4-2-3-1") {
+    rows.push(lineup.filter(p=>p.pos==="FW"));
+    rows.push(lineup.filter(p=>p.pos==="MF").slice(2,5));
+    rows.push(lineup.filter(p=>p.pos==="MF").slice(0,2));
+    rows.push(lineup.filter(p=>p.pos==="DF"));
+    rows.push(lineup.filter(p=>p.pos==="GK"));
+  } else if (formation === "4-4-2") {
+    rows.push(lineup.filter(p=>p.pos==="FW"));
+    rows.push(lineup.filter(p=>p.pos==="MF"));
+    rows.push(lineup.filter(p=>p.pos==="DF"));
+    rows.push(lineup.filter(p=>p.pos==="GK"));
+  } else if (formation === "3-5-2") {
+    const fw = lineup.filter(p=>p.pos==="FW");
+    const mf = lineup.filter(p=>p.pos==="MF");
+    const df = lineup.filter(p=>p.pos==="DF");
+    const gk = lineup.filter(p=>p.pos==="GK");
+    rows.push(fw);
+    rows.push(mf.slice(1,4));
+    rows.push([mf[0], ...mf.slice(4), df[0]]);
+    rows.push(df.slice(1));
+    rows.push(gk);
+  }
+
+  return rows.map((row, i) => `
+    <div class="pos-row" style="margin-top:${i===0?0:16}px">
+      ${row.map(p=>`
+        <div class="player-dot">
+          <div class="dot ${p.pos==='GK'?'gk':''}">${p.num}</div>
+          <div class="player-name">${p.name}</div>
+        </div>
+      `).join('')}
+    </div>
+  `).join('');
 }
-function toggleExpand(btn){
-const content=btn.nextElementSibling;
-btn.classList.toggle('collapsed');
-content.classList.toggle('show');
+
+function renderTeamList() {
+  const container = document.getElementById('teamList');
+  const order = ["bra","jpn","ger","ned","fra","arg","esp","por","mex","rsa","sui","can","bih","mar","usa","aus","par","civ","ecu","swe","bel","egy","cpv","nor","sen","aut","alg","col","cod","eng","cro","gha"];
+  container.innerHTML = order.map(key => {
+    const t = teamsData[key];
+    return `
+      <div class="team-card" id="card-${key}" onclick="toggleTeam('${key}')">
+        <div class="team-header">
+          <div class="team-info">
+            <div class="team-flag">${t.flag}</div>
+            <div>
+              <span class="team-name">${t.name}</span>
+              <span class="team-group">${t.group}</span>
+            </div>
+          </div>
+          <div class="team-arrow">▶</div>
+        </div>
+        <div class="team-detail">
+          <div class="detail-inner">
+            <div class="formation-title">預計陣型：${t.formation}</div>
+            <div class="pitch">
+              ${renderFormation(t.lineup, t.formation)}
+            </div>
+            <div style="margin-top:12px;font-size:0.75rem;color:var(--text-secondary);">
+              <b style="color:var(--accent)">關鍵替補：</b>${t.subs.join('、')}
+            </div>
+            <div class="stats-grid">
+              <div class="stat-box"><div class="stat-value">${t.stats.atk}</div><div class="stat-label">進攻</div></div>
+              <div class="stat-box"><div class="stat-value">${t.stats.mid}</div><div class="stat-label">中場</div></div>
+              <div class="stat-box"><div class="stat-value">${t.stats.def}</div><div class="stat-label">防守</div></div>
+              <div class="stat-box"><div class="stat-value">${t.stats.spd}</div><div class="stat-label">速度</div></div>
+              <div class="stat-box"><div class="stat-value">${t.stats.tec}</div><div class="stat-label">技術</div></div>
+              <div class="stat-box"><div class="stat-value">${t.stats.phy}</div><div class="stat-label">身體</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
 }
-window.addEventListener('load',()=>{
-document.querySelectorAll('.expand-content').forEach(el=>el.classList.remove('show'));
-document.querySelectorAll('.expand-btn').forEach(el=>el.classList.add('collapsed'));
-});
+
+function toggleTeam(key) {
+  const card = document.getElementById('card-'+key);
+  card.classList.toggle('expanded');
+}
+
+function initCompare() {
+  const selA = document.getElementById('teamA');
+  const selB = document.getElementById('teamB');
+  const keys = Object.keys(teamsData);
+  const opts = keys.map(k => `<option value="${k}">${teamsData[k].flag} ${teamsData[k].name}</option>`).join('');
+  selA.innerHTML = opts;
+  selB.innerHTML = opts;
+  selB.value = keys[1];
+}
+
+let radarChart = null;
+
+function runCompare() {
+  const k1 = document.getElementById('teamA').value;
+  const k2 = document.getElementById('teamB').value;
+  const t1 = teamsData[k1];
+  const t2 = teamsData[k2];
+  const res = document.getElementById('compareResult');
+
+  const atk1 = t1.stats.atk, def2 = t2.stats.def;
+  const atk2 = t2.stats.atk, def1 = t1.stats.def;
+  const mid1 = t1.stats.mid, mid2 = t2.stats.mid;
+
+  const base1 = Math.max(0, (atk1 * 1.1 - def2 * 0.6 + mid1 * 0.3) / 18);
+  const base2 = Math.max(0, (atk2 * 1.1 - def1 * 0.6 + mid2 * 0.3) / 18);
+
+  let s1 = Math.round(base1 + (Math.random() * 1.2 - 0.4));
+  let s2 = Math.round(base2 + (Math.random() * 1.2 - 0.4));
+  if (s1 < 0) s1 = 0; if (s2 < 0) s2 = 0;
+  if (s1 === 0 && s2 === 0) { s1 = 1; }
+
+  const total = s1 + s2;
+  const o25 = total >= 3 ? "大2.5" : "小2.5";
+  const btts = s1 > 0 && s2 > 0 ? "雙方進球" : "單方進球";
+  const win = s1 > s2 ? t1.name : s1 < s2 ? t2.name : "平局";
+
+  res.innerHTML = `
+    <div class="compare-result">
+      <div class="score-display">
+        <div class="score-team">
+          <div class="flag">${t1.flag}</div>
+          <div class="name">${t1.name}</div>
+        </div>
+        <div class="score-box">
+          <span class="score-num">${s1}</span>
+          <span class="score-sep">:</span>
+          <span class="score-num">${s2}</span>
+        </div>
+        <div class="score-team">
+          <div class="flag">${t2.flag}</div>
+          <div class="name">${t2.name}</div>
+        </div>
+      </div>
+      <div class="prediction-tags">
+        <span class="pred-tag">預測勝者：${win}</span>
+        <span class="pred-tag">${o25}</span>
+        <span class="pred-tag">${btts}</span>
+      </div>
+      <div class="radar-wrap">
+        <canvas id="radarChart"></canvas>
+      </div>
+      <div class="stats-compare">
+        ${['atk','mid','def','spd','tec','phy'].map(stat => {
+          const labels = {atk:'進攻',mid:'中場',def:'防守',spd:'速度',tec:'技術',phy:'身體'};
+          const v1 = t1.stats[stat], v2 = t2.stats[stat];
+          const max = Math.max(v1, v2, 95);
+          return `
+            <div class="compare-stat-row">
+              <span class="compare-val val-team1">${v1}</span>
+              <div class="bar-wrap">
+                <div class="bar bar-team1" style="width:${(v1/max*100)}%;position:absolute;left:0;top:0;opacity:0.9"></div>
+                <div class="bar bar-team2" style="width:${(v2/max*100)}%;position:absolute;right:0;top:0;opacity:0.9"></div>
+              </div>
+              <span class="compare-label">${labels[stat]}</span>
+              <div class="bar-wrap" style="visibility:hidden;width:0"></div>
+              <span class="compare-val val-team2">${v2}</span>
+            </div>
+          `;
+        }).join('')}
+      </div>
+    </div>
+  `;
+
+  setTimeout(() => {
+    const ctx = document.getElementById('radarChart').getContext('2d');
+    if (radarChart) radarChart.destroy();
+    radarChart = new Chart(ctx, {
+      type: 'radar',
+      data: {
+        labels: ['進攻','中場','防守','速度','技術','身體'],
+        datasets: [
+          { label: t1.name, data: [t1.stats.atk,t1.stats.mid,t1.stats.def,t1.stats.spd,t1.stats.tec,t1.stats.phy], borderColor: '#facc15', backgroundColor: 'rgba(250,204,21,0.2)', pointBackgroundColor: '#facc15' },
+          { label: t2.name, data: [t2.stats.atk,t2.stats.mid,t2.stats.def,t2.stats.spd,t2.stats.tec,t2.stats.phy], borderColor: '#3b82f6', backgroundColor: 'rgba(59,130,246,0.2)', pointBackgroundColor: '#3b82f6' }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          r: {
+            min: 60, max: 100,
+            ticks: { color: '#94a3b8', backdropColor: 'transparent', stepSize: 10 },
+            grid: { color: 'rgba(255,255,255,0.1)' },
+            angleLines: { color: 'rgba(255,255,255,0.1)' },
+            pointLabels: { color: '#f8fafc', font: { size: 11 } }
+          }
+        },
+        plugins: {
+          legend: { labels: { color: '#f8fafc', font: { size: 12 } } }
+        }
+      }
+    });
+  }, 50);
+}
+
+function switchTab(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+renderTeamList();
+initCompare();
 </script>
 </body>
 </html>
