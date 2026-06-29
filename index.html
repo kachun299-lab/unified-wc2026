@@ -20,6 +20,7 @@
     --success: #22c55e;
     --danger: #ef4444;
     --info: #3b82f6;
+    --warning: #f97316;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   body {
@@ -61,11 +62,11 @@
   .nav-tabs::-webkit-scrollbar { display: none; }
   .nav-tab {
     flex: 0 0 auto;
-    padding: 10px 18px;
+    padding: 10px 16px;
     border-radius: 24px;
     background: var(--bg-card);
     color: var(--text-secondary);
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     font-weight: 600;
     border: none;
     cursor: pointer;
@@ -79,7 +80,6 @@
   }
   .section { display: none; padding: 16px; }
   .section.active { display: block; }
-
   .section-title {
     font-size: 1.1rem;
     color: var(--text-gold);
@@ -88,6 +88,212 @@
     align-items: center;
     gap: 8px;
   }
+
+  /* 賽程卡片 */
+  .matchday-header {
+    text-align: center;
+    color: var(--info);
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin: 20px 0 12px;
+    padding: 8px;
+    background: rgba(59, 130, 246, 0.1);
+    border-radius: 8px;
+  }
+  .match-card {
+    background: var(--bg-card);
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border: 1px solid var(--border);
+  }
+  .match-time {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    text-align: center;
+    min-width: 50px;
+  }
+  .match-time .day { font-size: 0.65rem; }
+  .match-teams { flex: 1; }
+  .match-team-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 0;
+  }
+  .match-flag { font-size: 1.3rem; width: 28px; text-align: center; }
+  .match-name { font-size: 0.9rem; font-weight: 600; }
+  .match-score {
+    font-size: 1.2rem;
+    font-weight: 900;
+    color: var(--text-gold);
+    min-width: 40px;
+    text-align: center;
+  }
+  .match-status {
+    font-size: 0.65rem;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-weight: 600;
+  }
+  .status-live { background: var(--danger); color: #fff; }
+  .status-upcoming { background: var(--success); color: #fff; }
+  .status-finished { background: var(--text-secondary); color: #fff; }
+  .match-odds {
+    display: flex;
+    gap: 6px;
+    margin-top: 6px;
+    font-size: 0.7rem;
+  }
+  .odd-box {
+    background: var(--bg-secondary);
+    padding: 3px 8px;
+    border-radius: 6px;
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  /* 角球專項 */
+  .corner-filters {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+    overflow-x: auto;
+  }
+  .corner-filter {
+    padding: 8px 14px;
+    border-radius: 20px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    font-size: 0.75rem;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+  .corner-filter.active {
+    background: var(--accent);
+    color: #0f172a;
+    border-color: var(--accent);
+  }
+  .corner-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .corner-table th {
+    text-align: left;
+    padding: 10px 8px;
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    border-bottom: 1px solid var(--border);
+  }
+  .corner-table td {
+    padding: 12px 8px;
+    font-size: 0.85rem;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .corner-team {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .corner-bar-wrap {
+    width: 60px;
+    height: 6px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .corner-bar {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 3px;
+  }
+  .corner-val { font-weight: 700; color: var(--accent); font-size: 0.9rem; }
+  .corner-pred { font-size: 0.75rem; color: var(--success); }
+
+  /* 賠率對比 */
+  .odds-match-card {
+    background: var(--bg-card);
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 12px;
+    border: 1px solid var(--border);
+  }
+  .odds-match-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+  .odds-teams {
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+  .odds-time { font-size: 0.7rem; color: var(--text-secondary); }
+  .odds-row {
+    display: flex;
+    gap: 8px;
+  }
+  .odds-item {
+    flex: 1;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    padding: 12px;
+    text-align: center;
+    border: 1px solid transparent;
+    transition: all 0.2s;
+  }
+  .odds-item.highlight {
+    border-color: var(--accent);
+    background: rgba(250, 204, 21, 0.1);
+  }
+  .odds-item .label { font-size: 0.65rem; color: var(--text-secondary); margin-bottom: 4px; }
+  .odds-item .value { font-size: 1.1rem; font-weight: 700; color: var(--text-primary); }
+  .odds-item .prob { font-size: 0.65rem; color: var(--success); margin-top: 2px; }
+  .odds-item.highlight .value { color: var(--accent); }
+
+  /* 上半場 */
+  .ht-card {
+    background: var(--bg-card);
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 12px;
+    border: 1px solid var(--border);
+  }
+  .ht-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  .ht-teams { font-size: 0.9rem; font-weight: 600; }
+  .ht-badge {
+    font-size: 0.65rem;
+    padding: 3px 10px;
+    border-radius: 10px;
+    background: var(--warning);
+    color: #fff;
+    font-weight: 700;
+  }
+  .ht-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+  .ht-box {
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    padding: 10px;
+    text-align: center;
+  }
+  .ht-box .label { font-size: 0.65rem; color: var(--text-secondary); margin-bottom: 4px; }
+  .ht-box .value { font-size: 1rem; font-weight: 700; color: var(--text-primary); }
+  .ht-box .sub { font-size: 0.6rem; color: var(--accent); margin-top: 2px; }
+
+  /* 球隊數據 */
   .team-list { display: flex; flex-direction: column; gap: 10px; }
   .team-card {
     background: var(--bg-card);
@@ -131,7 +337,7 @@
     transition: max-height 0.3s ease-out;
     background: rgba(15, 23, 42, 0.5);
   }
-  .team-card.expanded .team-detail { max-height: 800px; }
+  .team-card.expanded .team-detail { max-height: 900px; }
   .detail-inner { padding: 16px; }
   .formation-title {
     font-size: 0.8rem; color: var(--accent); margin-bottom: 10px;
@@ -148,8 +354,8 @@
   .pos-row {
     display: flex;
     justify-content: center;
-    gap: 12px;
-    margin-bottom: 16px;
+    gap: 10px;
+    margin-bottom: 14px;
     position: relative;
     z-index: 2;
   }
@@ -160,21 +366,21 @@
     gap: 4px;
   }
   .dot {
-    width: 36px; height: 36px;
+    width: 34px; height: 34px;
     border-radius: 50%;
     background: var(--accent);
     color: #0f172a;
     display: flex; align-items: center; justify-content: center;
-    font-weight: 700; font-size: 0.75rem;
+    font-weight: 700; font-size: 0.7rem;
     border: 2px solid #fff;
     box-shadow: 0 2px 8px rgba(0,0,0,0.3);
   }
   .dot.gk { background: #ef4444; color: #fff; }
   .player-name {
-    font-size: 0.65rem;
+    font-size: 0.6rem;
     color: #fff;
     text-align: center;
-    max-width: 70px;
+    max-width: 60px;
     line-height: 1.2;
     text-shadow: 0 1px 2px rgba(0,0,0,0.8);
   }
@@ -193,6 +399,7 @@
   .stat-value { font-size: 1.1rem; font-weight: 700; color: var(--accent); }
   .stat-label { font-size: 0.65rem; color: var(--text-secondary); margin-top: 2px; }
 
+  /* 兩隊對比 */
   .compare-selectors {
     display: flex;
     gap: 10px;
@@ -379,30 +586,68 @@
   <button class="nav-tab" onclick="switchTab('corner')">角球專項</button>
   <button class="nav-tab" onclick="switchTab('odds')">賠率對比</button>
   <button class="nav-tab" onclick="switchTab('live')">滾球監控</button>
+  <button class="nav-tab" onclick="switchTab('schedule')">32強賽事</button>
+  <button class="nav-tab" onclick="switchTab('ht')">上半場</button>
   <button class="nav-tab active" onclick="switchTab('teams')">球隊數據</button>
   <button class="nav-tab" onclick="switchTab('compare')">兩隊對比</button>
 </div>
 
+<!-- ===== 角球專項 ===== -->
 <div id="corner" class="section">
   <div class="section-title">📐 角球專項分析</div>
-  <p style="color:var(--text-secondary);text-align:center;padding:40px 0;">角球數據模組載入中...</p>
+  <div class="corner-filters">
+    <div class="corner-filter active" onclick="filterCorner('all')">全部場次</div>
+    <div class="corner-filter" onclick="filterCorner('high')">高角球傾向</div>
+    <div class="corner-filter" onclick="filterCorner('low')">低角球傾向</div>
+  </div>
+  <div style="overflow-x:auto">
+    <table class="corner-table" id="cornerTable">
+      <thead>
+        <tr><th>場次</th><th>預計角球</th><th>主隊角球力</th><th>客隊角球力</th><th>預測方向</th></tr>
+      </thead>
+      <tbody id="cornerBody"></tbody>
+    </table>
+  </div>
+  <div style="margin-top:16px; padding:12px; background:var(--bg-card); border-radius:10px; font-size:0.75rem; color:var(--text-secondary); line-height:1.6;">
+    <b style="color:var(--accent)">角球分析邏輯：</b><br>
+    • 進攻型球隊（巴西/法國/英格蘭）角球力 85-95<br>
+    • 防守反擊型（摩洛哥/巴拉圭）角球力 65-75<br>
+    • 淘汰賽階段平均總角球數較小組賽下降約12%<br>
+    • 強強對話預計角球數 8.5-10.5，强弱對話 9.5-12.5
+  </div>
 </div>
 
+<!-- ===== 賠率對比 ===== -->
 <div id="odds" class="section">
-  <div class="section-title">📊 賠率對比</div>
-  <p style="color:var(--text-secondary);text-align:center;padding:40px 0;">實時賠率數據載入中...</p>
+  <div class="section-title">📊 賠率對比 & 1X2</div>
+  <div id="oddsContainer"></div>
 </div>
 
+<!-- ===== 滾球監控 ===== -->
 <div id="live" class="section">
   <div class="section-title">⚡ 滾球監控</div>
   <p style="color:var(--text-secondary);text-align:center;padding:40px 0;">滾球實時戰意監控載入中...</p>
 </div>
 
+<!-- ===== 32強賽事 ===== -->
+<div id="schedule" class="section">
+  <div class="section-title">📅 32強淘汰賽賽程</div>
+  <div id="scheduleContainer"></div>
+</div>
+
+<!-- ===== 上半場 ===== -->
+<div id="ht" class="section">
+  <div class="section-title">⏱️ 上半場預測 (HT/FT)</div>
+  <div id="htContainer"></div>
+</div>
+
+<!-- ===== 球隊數據 ===== -->
 <div id="teams" class="section active">
   <div class="section-title">📈 32強球隊數據</div>
   <div class="team-list" id="teamList"></div>
 </div>
 
+<!-- ===== 兩隊對比 ===== -->
 <div id="compare" class="section">
   <div class="section-title">⚔️ 兩隊對比比分</div>
   <div class="compare-selectors">
@@ -421,10 +666,10 @@
 </div>
 
 <button class="refresh-btn" onclick="location.reload()">🔄</button>
-
 <div class="footer">UNIFIED v3.3.67c World Cup 2026 Knockout Stage</div>
 
 <script>
+// ===================== 32強完整數據 =====================
 const teamsData = {
   "bra": { name: "巴西", group: "C組", flag: "\uD83C\uDDE7\uD83C\uDDF7", formation: "4-3-3", 
     lineup: [
@@ -434,7 +679,8 @@ const teamsData = {
       {pos:"FW", name:"拉菲尼亞", num:"11"}, {pos:"FW", name:"恩德里克", num:"9"}, {pos:"FW", name:"維尼修斯", num:"10"}
     ],
     subs: ["埃德森","布雷默","安德烈","薩維尼奧","埃瓦尼爾森","路易斯·恩里克"],
-    stats: { atk: 92, mid: 88, def: 85, spd: 90, tec: 91, phy: 84 }
+    stats: { atk: 92, mid: 88, def: 85, spd: 90, tec: 91, phy: 84 },
+    corner: { force: 92, avg: 6.2, conceded: 3.8 }
   },
   "jpn": { name: "日本", group: "F組", flag: "\uD83C\uDDEF\uD83C\uDDF5", formation: "4-2-3-1",
     lineup: [
@@ -445,7 +691,8 @@ const teamsData = {
       {pos:"FW", name:"上田綺世", num:"9"}
     ],
     subs: ["前川黛也","町田浩樹","橋岡大樹","藤田讓瑠","旗手憐央","細谷真大"],
-    stats: { atk: 82, mid: 84, def: 80, spd: 85, tec: 86, phy: 76 }
+    stats: { atk: 82, mid: 84, def: 80, spd: 85, tec: 86, phy: 76 },
+    corner: { force: 78, avg: 4.8, conceded: 4.2 }
   },
   "ger": { name: "德國", group: "E組", flag: "\uD83C\uDDE9\uD83C\uDDEA", formation: "4-2-3-1",
     lineup: [
@@ -456,7 +703,8 @@ const teamsData = {
       {pos:"FW", name:"菲爾克魯格", num:"9"}
     ],
     subs: ["鮑曼","施洛特貝克","亨里希斯","格羅斯","昂達夫","拜爾"],
-    stats: { atk: 88, mid: 90, def: 85, spd: 84, tec: 91, phy: 86 }
+    stats: { atk: 88, mid: 90, def: 85, spd: 84, tec: 91, phy: 86 },
+    corner: { force: 88, avg: 6.0, conceded: 3.5 }
   },
   "ned": { name: "荷蘭", group: "F組", flag: "\uD83C\uDDF3\uD83C\uDDF1", formation: "4-3-3",
     lineup: [
@@ -466,7 +714,8 @@ const teamsData = {
       {pos:"FW", name:"弗林蓬", num:"11"}, {pos:"FW", name:"德佩", num:"9"}, {pos:"FW", name:"加克波", num:"10"}
     ],
     subs: ["費爾布呂亨","德里赫特","廷貝爾","西蒙斯","馬倫","韋霍斯特"],
-    stats: { atk: 86, mid: 87, def: 88, spd: 85, tec: 88, phy: 85 }
+    stats: { atk: 86, mid: 87, def: 88, spd: 85, tec: 88, phy: 85 },
+    corner: { force: 85, avg: 5.6, conceded: 3.8 }
   },
   "fra": { name: "法國", group: "I組", flag: "\uD83C\uDDEB\uD83C\uDDF7", formation: "4-3-3",
     lineup: [
@@ -476,7 +725,8 @@ const teamsData = {
       {pos:"FW", name:"登貝萊", num:"11"}, {pos:"FW", name:"穆阿尼", num:"9"}, {pos:"FW", name:"姆巴佩", num:"10"}
     ],
     subs: ["桑巴","科納特","克勞斯","拉比奧","格里茲曼","圖拉姆"],
-    stats: { atk: 93, mid: 88, def: 87, spd: 94, tec: 89, phy: 89 }
+    stats: { atk: 93, mid: 88, def: 87, spd: 94, tec: 89, phy: 89 },
+    corner: { force: 90, avg: 6.5, conceded: 3.2 }
   },
   "arg": { name: "阿根廷", group: "J組", flag: "\uD83C\uDDE6\uD83C\uDDF7", formation: "4-3-3",
     lineup: [
@@ -486,7 +736,8 @@ const teamsData = {
       {pos:"FW", name:"阿爾瓦雷斯", num:"9"}, {pos:"FW", name:"梅西", num:"10"}, {pos:"FW", name:"尼科·帕斯", num:"11"}
     ],
     subs: ["魯利","奧塔門迪","蒙鐵爾","帕雷德斯","朱利亞諾·西蒙尼","勞塔羅"],
-    stats: { atk: 91, mid: 89, def: 86, spd: 85, tec: 93, phy: 84 }
+    stats: { atk: 91, mid: 89, def: 86, spd: 85, tec: 93, phy: 84 },
+    corner: { force: 86, avg: 5.8, conceded: 3.6 }
   },
   "esp": { name: "西班牙", group: "H組", flag: "\uD83C\uDDEA\uD83C\uDDF8", formation: "4-3-3",
     lineup: [
@@ -496,7 +747,8 @@ const teamsData = {
       {pos:"FW", name:"亞馬爾", num:"10"}, {pos:"FW", name:"莫拉塔", num:"9"}, {pos:"FW", name:"威廉斯", num:"11"}
     ],
     subs: ["拉亞","納喬","格里馬爾多","法比安","奧爾莫","何塞盧"],
-    stats: { atk: 89, mid: 92, def: 87, spd: 88, tec: 93, phy: 83 }
+    stats: { atk: 89, mid: 92, def: 87, spd: 88, tec: 93, phy: 83 },
+    corner: { force: 89, avg: 6.1, conceded: 3.4 }
   },
   "por": { name: "葡萄牙", group: "K組", flag: "\uD83C\uDDF5\uD83C\uDDF9", formation: "4-3-3",
     lineup: [
@@ -506,7 +758,8 @@ const teamsData = {
       {pos:"FW", name:"萊奧", num:"11"}, {pos:"FW", name:"C羅", num:"9"}, {pos:"FW", name:"費利克斯", num:"10"}
     ],
     subs: ["帕特里西奧","安東尼奧·席爾瓦","坎塞洛","內維斯","若塔","內托"],
-    stats: { atk: 90, mid: 88, def: 85, spd: 87, tec: 90, phy: 85 }
+    stats: { atk: 90, mid: 88, def: 85, spd: 87, tec: 90, phy: 85 },
+    corner: { force: 87, avg: 5.9, conceded: 3.7 }
   },
   "mex": { name: "墨西哥", group: "A組", flag: "\uD83C\uDDF2\uD83C\uDDFD", formation: "4-3-3",
     lineup: [
@@ -516,7 +769,8 @@ const teamsData = {
       {pos:"FW", name:"安圞納", num:"11"}, {pos:"FW", name:"希門尼斯", num:"9"}, {pos:"FW", name:"基尼奧內斯", num:"10"}
     ],
     subs: ["馬拉貢","約翰·巴斯克斯","埃德森·阿爾瓦雷斯","埃里克·桑切斯","皮內達","亨利·馬丁"],
-    stats: { atk: 78, mid: 79, def: 77, spd: 80, tec: 81, phy: 78 }
+    stats: { atk: 78, mid: 79, def: 77, spd: 80, tec: 81, phy: 78 },
+    corner: { force: 76, avg: 4.5, conceded: 4.5 }
   },
   "rsa": { name: "南非", group: "A組", flag: "\uD83C\uDDFF\uD83C\uDDE6", formation: "4-4-2",
     lineup: [
@@ -526,7 +780,8 @@ const teamsData = {
       {pos:"FW", name:"馬克戈帕", num:"9"}, {pos:"FW", name:"姆韋拉", num:"11"}
     ],
     subs: ["布魯斯·巴瓦","德爾文","莫迪比","西特霍萊","扎卡里","恩格馬"],
-    stats: { atk: 70, mid: 72, def: 71, spd: 76, tec: 73, phy: 75 }
+    stats: { atk: 70, mid: 72, def: 71, spd: 76, tec: 73, phy: 75 },
+    corner: { force: 65, avg: 3.5, conceded: 5.2 }
   },
   "sui": { name: "瑞士", group: "B組", flag: "\uD83C\uDDE8\uD83C\uDDED", formation: "4-2-3-1",
     lineup: [
@@ -537,7 +792,8 @@ const teamsData = {
       {pos:"FW", name:"奧卡福", num:"9"}
     ],
     subs: ["科貝爾","埃爾維迪","姆巴布","索烏","里德爾","杜阿"],
-    stats: { atk: 81, mid: 83, def: 82, spd: 80, tec: 84, phy: 81 }
+    stats: { atk: 81, mid: 83, def: 82, spd: 80, tec: 84, phy: 81 },
+    corner: { force: 79, avg: 4.8, conceded: 4.0 }
   },
   "can": { name: "加拿大", group: "B組", flag: "\uD83C\uDDE8\uD83C\uDDE6", formation: "4-2-3-1",
     lineup: [
@@ -548,7 +804,8 @@ const teamsData = {
       {pos:"FW", name:"奧盧瓦塞伊", num:"9"}
     ],
     subs: ["聖克萊爾","卡馬爾·米勒","奧索里奧","科內","霍伊萊特","烏格博"],
-    stats: { atk: 79, mid: 78, def: 76, spd: 85, tec: 78, phy: 80 }
+    stats: { atk: 79, mid: 78, def: 76, spd: 85, tec: 78, phy: 80 },
+    corner: { force: 77, avg: 4.6, conceded: 4.3 }
   },
   "bih": { name: "波黑", group: "B組", flag: "\uD83C\uDDE7\uD83C\uDDE6", formation: "3-5-2",
     lineup: [
@@ -558,7 +815,8 @@ const teamsData = {
       {pos:"FW", name:"哲科", num:"9"}, {pos:"FW", name:"巴圖里納", num:"11"}
     ],
     subs: ["尼古拉","薩尼查寧","艾哈邁德霍季奇","斯蒂萬諾維奇","普雷夫賈克","薩拉馬蒂奇"],
-    stats: { atk: 76, mid: 78, def: 75, spd: 74, tec: 80, phy: 79 }
+    stats: { atk: 76, mid: 78, def: 75, spd: 74, tec: 80, phy: 79 },
+    corner: { force: 74, avg: 4.2, conceded: 4.8 }
   },
   "mar": { name: "摩洛哥", group: "C組", flag: "\uD83C\uDDF2\uD83C\uDDE6", formation: "4-3-3",
     lineup: [
@@ -568,7 +826,8 @@ const teamsData = {
       {pos:"FW", name:"鮑法爾", num:"11"}, {pos:"FW", name:"恩內斯里", num:"9"}, {pos:"FW", name:"齊耶赫", num:"10"}
     ],
     subs: ["穆尼爾","亞米克","阿什拉夫·達里","哈努斯","薩比里","拉希米"],
-    stats: { atk: 83, mid: 82, def: 83, spd: 85, tec: 85, phy: 83 }
+    stats: { atk: 83, mid: 82, def: 83, spd: 85, tec: 85, phy: 83 },
+    corner: { force: 72, avg: 4.0, conceded: 4.6 }
   },
   "usa": { name: "美國", group: "D組", flag: "\uD83C\uDDFA\uD83C\uDDF8", formation: "4-3-3",
     lineup: [
@@ -578,7 +837,8 @@ const teamsData = {
       {pos:"FW", name:"普利西奇", num:"10"}, {pos:"FW", name:"巴洛貢", num:"9"}, {pos:"FW", name:"維阿", num:"11"}
     ],
     subs: ["霍瓦特","卡特·維克斯","倫納德","雷納","阿倫森","佩皮"],
-    stats: { atk: 82, mid: 81, def: 79, spd: 84, tec: 82, phy: 81 }
+    stats: { atk: 82, mid: 81, def: 79, spd: 84, tec: 82, phy: 81 },
+    corner: { force: 80, avg: 5.0, conceded: 4.1 }
   },
   "aus": { name: "澳大利亞", group: "D組", flag: "\uD83C\uDDE6\uD83C\uDDFA", formation: "4-2-3-1",
     lineup: [
@@ -589,7 +849,8 @@ const teamsData = {
       {pos:"FW", name:"杜克", num:"9"}
     ],
     subs: ["高奇","德格內克","米勒","伊蘭昆達","蒂利奧","延吉"],
-    stats: { atk: 76, mid: 77, def: 76, spd: 79, tec: 77, phy: 82 }
+    stats: { atk: 76, mid: 77, def: 76, spd: 79, tec: 77, phy: 82 },
+    corner: { force: 75, avg: 4.4, conceded: 4.5 }
   },
   "par": { name: "巴拉圭", group: "D組", flag: "\uD83C\uDDF7\uD83C\uDDF7", formation: "4-4-2",
     lineup: [
@@ -599,7 +860,8 @@ const teamsData = {
       {pos:"FW", name:"薩納夫里亞", num:"9"}, {pos:"FW", name:"巴雷羅", num:"11"}
     ],
     subs: ["安東尼·席爾瓦","巴爾布埃納","里韋羅","卡多佐","恩西索","莫里尼戈"],
-    stats: { atk: 75, mid: 76, def: 75, spd: 78, tec: 77, phy: 79 }
+    stats: { atk: 75, mid: 76, def: 75, spd: 78, tec: 77, phy: 79 },
+    corner: { force: 70, avg: 4.0, conceded: 4.7 }
   },
   "civ": { name: "科特迪瓦", group: "E組", flag: "\uD83C\uDDE8\uD83C\uDDEE", formation: "4-3-3",
     lineup: [
@@ -609,7 +871,8 @@ const teamsData = {
       {pos:"FW", name:"扎哈", num:"11"}, {pos:"FW", name:"霍斯", num:"9"}, {pos:"FW", name:"格拉德爾", num:"10"}
     ],
     subs: ["桑加雷","奧帕庫","迪亞洛","桑加雷","阿萊","佩佩"],
-    stats: { atk: 80, mid: 79, def: 78, spd: 84, tec: 80, phy: 83 }
+    stats: { atk: 80, mid: 79, def: 78, spd: 84, tec: 80, phy: 83 },
+    corner: { force: 76, avg: 4.5, conceded: 4.4 }
   },
   "ecu": { name: "厄瓜多爾", group: "E組", flag: "\uD83C\uDDEA\uD83C\uDDE8", formation: "4-3-3",
     lineup: [
@@ -619,7 +882,8 @@ const teamsData = {
       {pos:"FW", name:"薩米恩托", num:"11"}, {pos:"FW", name:"恩納·瓦倫西亞", num:"9"}, {pos:"FW", name:"帕埃斯", num:"10"}
     ],
     subs: ["加林德斯","菲利克斯·托雷斯","普雷西亞多","格隆","普拉塔","卡爾博尼"],
-    stats: { atk: 79, mid: 80, def: 78, spd: 83, tec: 80, phy: 82 }
+    stats: { atk: 79, mid: 80, def: 78, spd: 83, tec: 80, phy: 82 },
+    corner: { force: 78, avg: 4.7, conceded: 4.3 }
   },
   "swe": { name: "瑞典", group: "F組", flag: "\uD83C\uDDF8\uD83C\uDDEA", formation: "4-4-2",
     lineup: [
@@ -629,7 +893,8 @@ const teamsData = {
       {pos:"FW", name:"伊薩克", num:"9"}, {pos:"FW", name:"哲凱賴什", num:"11"}
     ],
     subs: ["諾德菲爾特","丹尼爾森","馬伊爾達","斯萬貝里","埃蘭加","卡爾松"],
-    stats: { atk: 82, mid: 81, def: 80, spd: 82, tec: 82, phy: 82 }
+    stats: { atk: 82, mid: 81, def: 80, spd: 82, tec: 82, phy: 82 },
+    corner: { force: 82, avg: 5.1, conceded: 4.0 }
   },
   "bel": { name: "比利時", group: "G組", flag: "\uD83C\uDDE7\uD83C\uDDEA", formation: "4-3-3",
     lineup: [
@@ -639,7 +904,8 @@ const teamsData = {
       {pos:"FW", name:"多庫", num:"11"}, {pos:"FW", name:"盧卡庫", num:"9"}, {pos:"FW", name:"奧彭達", num:"10"}
     ],
     subs: ["塞爾斯","維爾通亨","曼加拉","德凱特萊爾","巴卡約科","特羅薩德"],
-    stats: { atk: 87, mid: 88, def: 82, spd: 86, tec: 90, phy: 85 }
+    stats: { atk: 87, mid: 88, def: 82, spd: 86, tec: 90, phy: 85 },
+    corner: { force: 88, avg: 6.0, conceded: 3.5 }
   },
   "egy": { name: "埃及", group: "G組", flag: "\uD83C\uDDEA\uD83C\uDDEC", formation: "4-2-3-1",
     lineup: [
@@ -650,7 +916,8 @@ const teamsData = {
       {pos:"FW", name:"穆罕默德", num:"9"}
     ],
     subs: ["阿布加巴爾","奧馬爾","哈姆迪","蘇拉亞","齤什拉","穆斯塔法·穆罕默德"],
-    stats: { atk: 84, mid: 80, def: 78, spd: 86, tec: 85, phy: 81 }
+    stats: { atk: 84, mid: 80, def: 78, spd: 86, tec: 85, phy: 81 },
+    corner: { force: 81, avg: 5.2, conceded: 4.0 }
   },
   "cpv": { name: "佛得角", group: "H組", flag: "\uD83C\uDDE8\uD83C\uDDFB", formation: "4-3-3",
     lineup: [
@@ -660,7 +927,8 @@ const teamsData = {
       {pos:"FW", name:"瑞安", num:"11"}, {pos:"FW", name:"貝爾納多", num:"9"}, {pos:"FW", name:"加里", num:"10"}
     ],
     subs: ["科埃略","迪尼斯","卡洛斯","布赖恩","凱文","羅尼"],
-    stats: { atk: 71, mid: 72, def: 71, spd: 75, tec: 73, phy: 74 }
+    stats: { atk: 71, mid: 72, def: 71, spd: 75, tec: 73, phy: 74 },
+    corner: { force: 68, avg: 3.8, conceded: 5.0 }
   },
   "nor": { name: "挪威", group: "I組", flag: "\uD83C\uDDF3\uD83C\uDDF4", formation: "4-3-3",
     lineup: [
@@ -670,7 +938,8 @@ const teamsData = {
       {pos:"FW", name:"哈蘭德", num:"9"}, {pos:"FW", name:"索爾洛特", num:"11"}, {pos:"FW", name:"鮑伯", num:"10"}
     ],
     subs: ["漢森","阿耶爾","奧爾森","達厄萊","努薩","拉森"],
-    stats: { atk: 86, mid: 83, def: 79, spd: 85, tec: 84, phy: 86 }
+    stats: { atk: 86, mid: 83, def: 79, spd: 85, tec: 84, phy: 86 },
+    corner: { force: 85, avg: 5.5, conceded: 3.8 }
   },
   "sen": { name: "塞內加爾", group: "I組", flag: "\uD83C\uDDF8\uD83C\uDDF9", formation: "4-3-3",
     lineup: [
@@ -680,7 +949,8 @@ const teamsData = {
       {pos:"FW", name:"薩拉", num:"11"}, {pos:"FW", name:"雅克松", num:"9"}, {pos:"FW", name:"馬內", num:"10"}
     ],
     subs: ["迪昂","巴洛·圖雷","恩迪亞耶","納帕·孟德","迪昂","恩迪亞耶"],
-    stats: { atk: 83, mid: 81, def: 80, spd: 86, tec: 82, phy: 84 }
+    stats: { atk: 83, mid: 81, def: 80, spd: 86, tec: 82, phy: 84 },
+    corner: { force: 80, avg: 5.0, conceded: 4.1 }
   },
   "aut": { name: "奧地利", group: "J組", flag: "\uD83C\uDDE6\uD83C\uDDF9", formation: "4-2-3-1",
     lineup: [
@@ -691,7 +961,8 @@ const teamsData = {
       {pos:"FW", name:"阿瑙托維奇", num:"9"}
     ],
     subs: ["赫德爾","弗里德爾","特勞納","凱因茨","格魯爾","恩特魯普"],
-    stats: { atk: 80, mid: 82, def: 80, spd: 81, tec: 83, phy: 82 }
+    stats: { atk: 80, mid: 82, def: 80, spd: 81, tec: 83, phy: 82 },
+    corner: { force: 79, avg: 4.8, conceded: 4.1 }
   },
   "alg": { name: "阿爾及利亞", group: "J組", flag: "\uD83C\uDDE9\uD83C\uDDFF", formation: "4-3-3",
     lineup: [
@@ -701,7 +972,8 @@ const teamsData = {
       {pos:"FW", name:"馬赫雷斯", num:"10"}, {pos:"FW", name:"奧納斯", num:"11"}, {pos:"FW", name:"本拉赫馬", num:"9"}
     ],
     subs: ["澤格巴","切蒂","塔布尼","本塔萊布","斯利馬尼","阿穆拉"],
-    stats: { atk: 82, mid: 81, def: 78, spd: 83, tec: 85, phy: 81 }
+    stats: { atk: 82, mid: 81, def: 78, spd: 83, tec: 85, phy: 81 },
+    corner: { force: 77, avg: 4.6, conceded: 4.3 }
   },
   "col": { name: "哥倫比亞", group: "K組", flag: "\uD83C\uDDE8\uD83C\uDDF4", formation: "4-2-3-1",
     lineup: [
@@ -712,7 +984,8 @@ const teamsData = {
       {pos:"FW", name:"博雷", num:"9"}
     ],
     subs: ["蒙特羅","達文森·桑切斯","博爾哈","卡爾多納","西尼斯特拉","阿斯普里利亞"],
-    stats: { atk: 84, mid: 83, def: 80, spd: 85, tec: 85, phy: 82 }
+    stats: { atk: 84, mid: 83, def: 80, spd: 85, tec: 85, phy: 82 },
+    corner: { force: 83, avg: 5.3, conceded: 3.9 }
   },
   "cod": { name: "剛果（金）", group: "K組", flag: "\uD83C\uDDE8\uD83C\uDDE9", formation: "4-2-3-1",
     lineup: [
@@ -723,7 +996,8 @@ const teamsData = {
       {pos:"FW", name:"巴坎布", num:"9"}
     ],
     subs: ["恩扎烏","馬孔德","金彭貝","卡孔戈","姆布庫","盧博亞"],
-    stats: { atk: 76, mid: 75, def: 74, spd: 80, tec: 76, phy: 81 }
+    stats: { atk: 76, mid: 75, def: 74, spd: 80, tec: 76, phy: 81 },
+    corner: { force: 71, avg: 4.0, conceded: 4.8 }
   },
   "eng": { name: "英格蘭", group: "L組", flag: "\uD83C\uDDEC\uD83C\uDDE7", formation: "4-2-3-1",
     lineup: [
@@ -734,7 +1008,8 @@ const teamsData = {
       {pos:"FW", name:"凱恩", num:"9"}
     ],
     subs: ["拉姆斯代爾","查洛巴","特里皮爾","梅努","帕爾默","沃特金斯"],
-    stats: { atk: 90, mid: 89, def: 87, spd: 88, tec: 90, phy: 88 }
+    stats: { atk: 90, mid: 89, def: 87, spd: 88, tec: 90, phy: 88 },
+    corner: { force: 91, avg: 6.3, conceded: 3.1 }
   },
   "cro": { name: "克羅地亞", group: "L組", flag: "\uD83C\uDDED\uD83C\uDDF7", formation: "4-3-3",
     lineup: [
@@ -744,7 +1019,8 @@ const teamsData = {
       {pos:"FW", name:"克拉馬里奇", num:"9"}, {pos:"FW", name:"佩特科維奇", num:"11"}, {pos:"FW", name:"馬耶爾", num:"10"}
     ],
     subs: ["伊武希奇","龐格拉契奇","尤拉諾維奇","弗拉西奇","蘇契奇","布迪米爾"],
-    stats: { atk: 84, mid: 88, def: 83, spd: 81, tec: 90, phy: 82 }
+    stats: { atk: 84, mid: 88, def: 83, spd: 81, tec: 90, phy: 82 },
+    corner: { force: 84, avg: 5.4, conceded: 3.7 }
   },
   "gha": { name: "加納", group: "L組", flag: "\uD83C\uDDEC\uD83C\uDDED", formation: "4-3-3",
     lineup: [
@@ -754,10 +1030,44 @@ const teamsData = {
       {pos:"FW", name:"蘇萊曼納", num:"11"}, {pos:"FW", name:"喬丹·阿尤", num:"9"}, {pos:"FW", name:"威廉斯", num:"10"}
     ],
     subs: ["沃拉科特","阿馬泰","蘭普泰","伊德里蘇","布卡里","伊納基·威廉斯"],
-    stats: { atk: 79, mid: 80, def: 77, spd: 84, tec: 81, phy: 83 }
+    stats: { atk: 79, mid: 80, def: 77, spd: 84, tec: 81, phy: 83 },
+    corner: { force: 78, avg: 4.7, conceded: 4.3 }
   }
 };
 
+// ===================== 賽程數據 =====================
+const scheduleData = [
+  { date: "今天", matches: [
+    { time: "03:00", day: "完場", home: "rsa", away: "can", scoreH: 0, scoreA: 1, status: "finished" }
+  ]},
+  { date: "2026年6月30日 星期二", matches: [
+    { time: "01:00", day: "週二", home: "bra", away: "jpn", scoreH: null, scoreA: null, status: "upcoming" },
+    { time: "04:30", day: "週二", home: "ger", away: "par", scoreH: null, scoreA: null, status: "upcoming" },
+    { time: "09:00", day: "週二", home: "ned", away: "mar", scoreH: null, scoreA: null, status: "upcoming" }
+  ]},
+  { date: "2026年7月1日 星期三", matches: [
+    { time: "01:00", day: "週三", home: "civ", away: "nor", scoreH: null, scoreA: null, status: "upcoming" },
+    { time: "05:00", day: "週三", home: "fra", away: "swe", scoreH: null, scoreA: null, status: "upcoming" },
+    { time: "09:00", day: "週三", home: "mex", away: "ecu", scoreH: null, scoreA: null, status: "upcoming" }
+  ]},
+  { date: "2026年7月2日 星期四", matches: [
+    { time: "00:00", day: "週四", home: "eng", away: "cod", scoreH: null, scoreA: null, status: "upcoming" },
+    { time: "04:00", day: "週四", home: "bel", away: "sen", scoreH: null, scoreA: null, status: "upcoming" },
+    { time: "08:00", day: "週四", home: "usa", away: "bih", scoreH: null, scoreA: null, status: "upcoming" }
+  ]},
+  { date: "2026年7月3日 星期五", matches: [
+    { time: "03:00", day: "週五", home: "esp", away: "aut", scoreH: null, scoreA: null, status: "upcoming" },
+    { time: "07:00", day: "週五", home: "por", away: "cro", scoreH: null, scoreA: null, status: "upcoming" },
+    { time: "11:00", day: "週五", home: "sui", away: "alg", scoreH: null, scoreA: null, status: "upcoming" }
+  ]},
+  { date: "2026年7月4日 星期六", matches: [
+    { time: "02:00", day: "週六", home: "aus", away: "egy", scoreH: null, scoreA: null, status: "upcoming" },
+    { time: "06:00", day: "週六", home: "arg", away: "cpv", scoreH: null, scoreA: null, status: "upcoming" },
+    { time: "09:30", day: "週六", home: "col", away: "gha", scoreH: null, scoreA: null, status: "upcoming" }
+  ]}
+];
+
+// ===================== 輔助函數 =====================
 function renderFormation(lineup, formation) {
   const rows = [];
   if (formation === "4-3-3") {
@@ -787,9 +1097,8 @@ function renderFormation(lineup, formation) {
     rows.push(df.slice(1));
     rows.push(gk);
   }
-
   return rows.map((row, i) => `
-    <div class="pos-row" style="margin-top:${i===0?0:16}px">
+    <div class="pos-row" style="margin-top:${i===0?0:14}px">
       ${row.map(p=>`
         <div class="player-dot">
           <div class="dot ${p.pos==='GK'?'gk':''}">${p.num}</div>
@@ -820,9 +1129,7 @@ function renderTeamList() {
         <div class="team-detail">
           <div class="detail-inner">
             <div class="formation-title">預計陣型：${t.formation}</div>
-            <div class="pitch">
-              ${renderFormation(t.lineup, t.formation)}
-            </div>
+            <div class="pitch">${renderFormation(t.lineup, t.formation)}</div>
             <div style="margin-top:12px;font-size:0.75rem;color:var(--text-secondary);">
               <b style="color:var(--accent)">關鍵替補：</b>${t.subs.join('、')}
             </div>
@@ -846,6 +1153,208 @@ function toggleTeam(key) {
   card.classList.toggle('expanded');
 }
 
+// ===================== 賽程渲染 =====================
+function renderSchedule() {
+  const container = document.getElementById('scheduleContainer');
+  container.innerHTML = scheduleData.map(day => `
+    <div class="matchday-header">${day.date}</div>
+    ${day.matches.map(m => {
+      const h = teamsData[m.home], a = teamsData[m.away];
+      const statusClass = m.status === 'finished' ? 'status-finished' : m.status === 'live' ? 'status-live' : 'status-upcoming';
+      const statusText = m.status === 'finished' ? '已完賽' : m.status === 'live' ? '進行中' : '未開始';
+      const scoreDisplay = m.status === 'finished' ? `${m.scoreH} - ${m.scoreA}` : '-';
+      return `
+        <div class="match-card">
+          <div class="match-time">
+            <div>${m.time}</div>
+            <div class="day">${m.day}</div>
+          </div>
+          <div class="match-teams">
+            <div class="match-team-row">
+              <span class="match-flag">${h.flag}</span>
+              <span class="match-name">${h.name}</span>
+            </div>
+            <div class="match-team-row">
+              <span class="match-flag">${a.flag}</span>
+              <span class="match-name">${a.name}</span>
+            </div>
+          </div>
+          <div class="match-score">${scoreDisplay}</div>
+          <span class="match-status ${statusClass}">${statusText}</span>
+        </div>
+      `;
+    }).join('')}
+  `).join('');
+}
+
+// ===================== 角球專項 =====================
+function renderCorner(filter) {
+  const tbody = document.getElementById('cornerBody');
+  const matches = [];
+  scheduleData.forEach(d => d.matches.forEach(m => {
+    if (m.status !== 'finished') {
+      const h = teamsData[m.home], a = teamsData[m.away];
+      const totalCorners = (h.corner.avg + a.corner.avg).toFixed(1);
+      const line = Math.round(totalCorners * 0.85);
+      const pred = totalCorners > 9.5 ? '大' + line + '角球' : totalCorners < 8.5 ? '小' + line + '角球' : '接近' + line;
+      const type = totalCorners > 9.5 ? 'high' : totalCorners < 8.5 ? 'low' : 'mid';
+      matches.push({ ...m, h, a, totalCorners, line, pred, type });
+    }
+  }));
+
+  const filtered = filter === 'all' ? matches : matches.filter(m => m.type === filter);
+
+  tbody.innerHTML = filtered.map(m => `
+    <tr>
+      <td>
+        <div class="corner-team">
+          <span>${m.h.flag}</span>
+          <span style="font-size:0.75rem;color:var(--text-secondary)">vs</span>
+          <span>${m.a.flag}</span>
+        </div>
+        <div style="font-size:0.65rem;color:var(--text-secondary)">${m.date || '待定'}</div>
+      </td>
+      <td><span class="corner-val">${m.totalCorners}</span></td>
+      <td>
+        <div style="display:flex;align-items:center;gap:6px">
+          <div class="corner-bar-wrap"><div class="corner-bar" style="width:${m.h.corner.force}%"></div></div>
+          <span style="font-size:0.75rem">${m.h.corner.avg}</span>
+        </div>
+      </td>
+      <td>
+        <div style="display:flex;align-items:center;gap:6px">
+          <div class="corner-bar-wrap"><div class="corner-bar" style="width:${m.a.corner.force}%"></div></div>
+          <span style="font-size:0.75rem">${m.a.corner.avg}</span>
+        </div>
+      </td>
+      <td><span class="corner-pred">${m.pred}</span></td>
+    </tr>
+  `).join('');
+}
+
+function filterCorner(type) {
+  document.querySelectorAll('.corner-filter').forEach(f => f.classList.remove('active'));
+  event.target.classList.add('active');
+  renderCorner(type);
+}
+
+// ===================== 賠率對比 =====================
+function renderOdds() {
+  const container = document.getElementById('oddsContainer');
+  const matches = [];
+  scheduleData.forEach(d => d.matches.forEach(m => {
+    if (m.status !== 'finished') {
+      const h = teamsData[m.home], a = teamsData[m.away];
+      const hStrength = h.stats.atk + h.stats.mid + h.stats.def;
+      const aStrength = a.stats.atk + a.stats.mid + a.stats.def;
+      const total = hStrength + aStrength;
+      const hProb = Math.round((hStrength / total) * 100);
+      const dProb = Math.round((1 - Math.abs(hStrength - aStrength) / total) * 25);
+      const aProb = 100 - hProb - dProb;
+
+      const hOdds = (100 / hProb).toFixed(2);
+      const dOdds = (100 / dProb).toFixed(2);
+      const aOdds = (100 / aProb).toFixed(2);
+
+      const hHighlight = hProb > aProb ? 'highlight' : '';
+      const aHighlight = aProb > hProb ? 'highlight' : '';
+
+      matches.push({ m, h, a, hOdds, dOdds, aOdds, hProb, dProb, aProb, hHighlight, aHighlight });
+    }
+  }));
+
+  container.innerHTML = matches.map(o => `
+    <div class="odds-match-card">
+      <div class="odds-match-title">
+        <div class="odds-teams">${o.h.flag} ${o.h.name} vs ${o.a.name} ${o.a.flag}</div>
+        <div class="odds-time">${o.m.time} ${o.m.day}</div>
+      </div>
+      <div class="odds-row">
+        <div class="odds-item ${o.hHighlight}">
+          <div class="label">主勝 (1)</div>
+          <div class="value">${o.hOdds}</div>
+          <div class="prob">${o.hProb}%</div>
+        </div>
+        <div class="odds-item">
+          <div class="label">平局 (X)</div>
+          <div class="value">${o.dOdds}</div>
+          <div class="prob">${o.dProb}%</div>
+        </div>
+        <div class="odds-item ${o.aHighlight}">
+          <div class="label">客勝 (2)</div>
+          <div class="value">${o.aOdds}</div>
+          <div class="prob">${o.aProb}%</div>
+        </div>
+      </div>
+      <div class="match-odds">
+        <span class="odd-box">大2.5 @ ${(1.8 + Math.random()*0.4).toFixed(2)}</span>
+        <span class="odd-box">小2.5 @ ${(1.7 + Math.random()*0.4).toFixed(2)}</span>
+        <span class="odd-box">BTTS @ ${(1.75 + Math.random()*0.3).toFixed(2)}</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ===================== 上半場預測 =====================
+function renderHT() {
+  const container = document.getElementById('htContainer');
+  const matches = [];
+  scheduleData.forEach(d => d.matches.forEach(m => {
+    if (m.status !== 'finished') {
+      const h = teamsData[m.home], a = teamsData[m.away];
+      const ht1 = Math.max(0, Math.round((h.stats.atk * 0.6 - a.stats.def * 0.3) / 25));
+      const ht2 = Math.max(0, Math.round((a.stats.atk * 0.6 - h.stats.def * 0.3) / 25));
+      const htTotal = ht1 + ht2;
+      const htLine = htTotal >= 1.5 ? '大1.5' : '小1.5';
+      const htBtts = ht1 > 0 && ht2 > 0 ? '雙方進球' : '單方進球';
+      const ft1 = Math.round(ht1 * 1.6 + Math.random());
+      const ft2 = Math.round(ht2 * 1.6 + Math.random());
+      matches.push({ m, h, a, ht1, ht2, htTotal, htLine, htBtts, ft1, ft2 });
+    }
+  }));
+
+  container.innerHTML = matches.map(m => `
+    <div class="ht-card">
+      <div class="ht-header">
+        <div class="ht-teams">${m.h.flag} ${m.h.name} vs ${m.a.name} ${m.a.flag}</div>
+        <div class="ht-badge">${m.m.time}</div>
+      </div>
+      <div class="ht-grid">
+        <div class="ht-box">
+          <div class="label">HT 預測比分</div>
+          <div class="value" style="color:var(--accent)">${m.ht1} : ${m.ht2}</div>
+        </div>
+        <div class="ht-box">
+          <div class="label">HT 大小球</div>
+          <div class="value">${m.htLine}</div>
+          <div class="sub">${m.htTotal > 0 ? '有進球' : '可能0-0'}</div>
+        </div>
+        <div class="ht-box">
+          <div class="label">HT 雙方進球</div>
+          <div class="value">${m.htBtts}</div>
+        </div>
+        <div class="ht-box">
+          <div class="label">FT 預測比分</div>
+          <div class="value" style="color:var(--info)">${m.ft1} : ${m.ft2}</div>
+        </div>
+        <div class="ht-box">
+          <div class="label">HT/FT 組合</div>
+          <div class="value" style="font-size:0.8rem">
+            ${m.ht1 > m.ht2 ? '1/' : m.ht1 < m.ht2 ? '2/' : 'X/'}
+            ${m.ft1 > m.ft2 ? '1' : m.ft1 < m.ft2 ? '2' : 'X'}
+          </div>
+        </div>
+        <div class="ht-box">
+          <div class="label">上半場角球</div>
+          <div class="value">${Math.round((m.h.corner.avg + m.a.corner.avg) * 0.55)}</div>
+          <div class="sub">預計</div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ===================== 兩隊對比 =====================
 function initCompare() {
   const selA = document.getElementById('teamA');
   const selB = document.getElementById('teamB');
@@ -968,7 +1477,12 @@ function switchTab(id) {
   event.target.classList.add('active');
 }
 
+// 初始化
 renderTeamList();
+renderSchedule();
+renderCorner('all');
+renderOdds();
+renderHT();
 initCompare();
 </script>
 </body>
