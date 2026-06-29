@@ -1,848 +1,714 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="zh-TW">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>世界盃2026 淘汰賽 - UNIFIED v3.3.68</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UNIFIED v3.3.67 世界盃2026 賽事分析</title>
 <style>
-  :root {
-    --bg-primary: #0f172a;
-    --bg-secondary: #1e293b;
-    --bg-card: #27354f;
-    --accent: #facc15;
-    --accent-dark: #eab308;
-    --text-primary: #f8fafc;
-    --text-secondary: #94a3b8;
-    --text-gold: #fde047;
-    --border: #334155;
-    --success: #22c55e;
-    --danger: #ef4444;
-    --info: #3b82f6;
-    --warning: #f97316;
-    --purple: #a855f7;
-  }
-  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    background: var(--bg-primary);
-    color: var(--text-primary);
-    min-height: 100vh;
-    padding-bottom: 80px;
-  }
-  .header {
-    background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
-    padding: 24px 16px 16px;
-    text-align: center;
-    border-bottom: 2px solid var(--accent);
-    position: sticky;
-    top: 0;
-    z-index: 100;
-  }
-  .header h1 { font-size: 1.5rem; color: var(--text-gold); margin-bottom: 4px; }
-  .header .subtitle { font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 12px; }
-  .badge { display: inline-block; background: var(--accent); color: #0f172a; padding: 6px 20px; border-radius: 20px; font-weight: 700; font-size: 0.9rem; }
-  .nav-tabs { display: flex; gap: 6px; padding: 12px 12px; overflow-x: auto; background: var(--bg-secondary); border-bottom: 1px solid var(--border); scrollbar-width: none; }
-  .nav-tabs::-webkit-scrollbar { display: none; }
-  .nav-tab { flex: 0 0 auto; padding: 9px 14px; border-radius: 24px; background: var(--bg-card); color: var(--text-secondary); font-size: 0.75rem; font-weight: 600; border: none; cursor: pointer; white-space: nowrap; }
-  .nav-tab.active { background: var(--accent); color: #0f172a; box-shadow: 0 0 12px rgba(250, 204, 21, 0.3); }
-  .section { display: none; padding: 16px; }
-  .section.active { display: block; }
-  .section-title { font-size: 1.05rem; color: var(--text-gold); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+:root {
+  --bg: #0a1628;
+  --card: #1a2744;
+  --accent: #ffd700;
+  --green: #4ade80;
+  --red: #ef4444;
+  --blue: #8ab4f8;
+  --text: #e8e8e8;
+  --muted: #3a5080;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  padding-bottom: 80px;
+}
+.header {
+  background: linear-gradient(135deg, #1a2744 0%, #0a1628 100%);
+  padding: 20px;
+  text-align: center;
+  border-bottom: 2px solid var(--accent);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.header h1 { font-size: 1.3rem; color: var(--accent); }
+.header .subtitle { font-size: 0.8rem; color: var(--blue); margin-top: 4px; }
+.header .version { font-size: 0.7rem; color: var(--muted); margin-top: 2px; }
 
-  .matchday-header { text-align: center; color: var(--info); font-size: 0.9rem; font-weight: 700; margin: 20px 0 12px; padding: 8px; background: rgba(59, 130, 246, 0.1); border-radius: 8px; }
-  .match-card { background: var(--bg-card); border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; display: flex; align-items: center; gap: 12px; border: 1px solid var(--border); }
-  .match-time { font-size: 0.75rem; color: var(--text-secondary); text-align: center; min-width: 50px; }
-  .match-time .day { font-size: 0.65rem; }
-  .match-teams { flex: 1; }
-  .match-team-row { display: flex; align-items: center; gap: 8px; padding: 4px 0; }
-  .match-flag { font-size: 1.3rem; width: 28px; text-align: center; }
-  .match-name { font-size: 0.9rem; font-weight: 600; }
-  .match-score { font-size: 1.2rem; font-weight: 900; color: var(--text-gold); min-width: 40px; text-align: center; }
-  .match-status { font-size: 0.65rem; padding: 2px 8px; border-radius: 10px; font-weight: 600; }
-  .status-finished { background: var(--text-secondary); color: #fff; }
-  .status-upcoming { background: var(--success); color: #fff; }
-  .match-odds { display: flex; gap: 6px; margin-top: 6px; font-size: 0.7rem; }
-  .odd-box { background: var(--bg-secondary); padding: 3px 8px; border-radius: 6px; color: var(--accent); font-weight: 700; }
+.match-card {
+  background: var(--card);
+  border-radius: 12px;
+  margin: 15px;
+  padding: 15px;
+  border-left: 4px solid var(--accent);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+.match-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--muted);
+}
+.match-teams { font-size: 1.1rem; font-weight: bold; }
+.match-time { font-size: 0.8rem; color: var(--blue); }
 
-  .full-card { background: var(--bg-card); border-radius: 14px; padding: 16px; margin-bottom: 12px; border: 1px solid var(--border); }
-  .full-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
-  .full-teams { font-size: 0.95rem; font-weight: 700; }
-  .full-time { font-size: 0.7rem; color: var(--text-secondary); }
-  .full-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-  .full-box { background: var(--bg-secondary); border-radius: 10px; padding: 12px 8px; text-align: center; }
-  .full-box .label { font-size: 0.65rem; color: var(--text-secondary); margin-bottom: 6px; }
-  .full-box .value { font-size: 1.1rem; font-weight: 700; }
-  .full-box .sub { font-size: 0.6rem; color: var(--accent); margin-top: 4px; }
-  .full-row { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
-  .full-tag { flex: 1; text-align: center; padding: 8px; border-radius: 8px; font-size: 0.75rem; font-weight: 700; min-width: 60px; }
-  .tag-green { background: rgba(34, 197, 94, 0.15); color: var(--success); border: 1px solid rgba(34,197,94,0.3); }
-  .tag-yellow { background: rgba(250, 204, 21, 0.15); color: var(--accent); border: 1px solid rgba(250,204,21,0.3); }
-  .tag-red { background: rgba(239, 68, 68, 0.15); color: var(--danger); border: 1px solid rgba(239,68,68,0.3); }
-  .tag-blue { background: rgba(59, 130, 246, 0.15); color: var(--info); border: 1px solid rgba(59,130,246,0.3); }
-  .tag-purple { background: rgba(168, 85, 247, 0.15); color: var(--purple); border: 1px solid rgba(168,85,247,0.3); }
+.section-title {
+  font-size: 0.85rem;
+  color: var(--accent);
+  margin: 12px 0 8px;
+  padding-left: 8px;
+  border-left: 3px solid var(--accent);
+}
 
-  .card-filters { display: flex; gap: 8px; margin-bottom: 12px; overflow-x: auto; }
-  .card-filter { padding: 8px 14px; border-radius: 20px; background: var(--bg-card); border: 1px solid var(--border); color: var(--text-secondary); font-size: 0.75rem; white-space: nowrap; cursor: pointer; }
-  .card-filter.active { background: var(--danger); color: #fff; border-color: var(--danger); }
-  .card-table { width: 100%; border-collapse: collapse; }
-  .card-table th { text-align: left; padding: 10px 8px; font-size: 0.7rem; color: var(--text-secondary); border-bottom: 1px solid var(--border); }
-  .card-table td { padding: 12px 8px; font-size: 0.85rem; border-bottom: 1px solid rgba(255,255,255,0.05); vertical-align: middle; }
-  .card-team-cell { display: flex; align-items: center; gap: 6px; }
-  .card-bar-wrap { width: 50px; height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden; }
-  .card-bar { height: 100%; border-radius: 3px; }
-  .card-bar-yellow { background: var(--accent); }
-  .card-bar-red { background: var(--danger); }
-  .card-val { font-weight: 700; font-size: 0.9rem; }
-  .card-val-yellow { color: var(--accent); }
-  .card-val-red { color: var(--danger); }
-  .card-pred { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 0.7rem; font-weight: 700; }
-  .card-pred-high { background: rgba(239, 68, 68, 0.2); color: var(--danger); border: 1px solid rgba(239,68,68,0.4); }
-  .card-pred-mid { background: rgba(250, 204, 21, 0.2); color: var(--accent); border: 1px solid rgba(250,204,21,0.4); }
-  .card-pred-low { background: rgba(34, 197, 94, 0.2); color: var(--success); border: 1px solid rgba(34,197,94,0.4); }
-  .card-note { margin-top: 16px; padding: 14px; background: var(--bg-card); border-radius: 12px; font-size: 0.75rem; color: var(--text-secondary); line-height: 1.7; border: 1px solid var(--border); }
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.stat-box {
+  background: #0a1628;
+  border-radius: 8px;
+  padding: 10px;
+  text-align: center;
+}
+.stat-label { font-size: 0.7rem; color: var(--muted); }
+.stat-value { font-size: 1.1rem; font-weight: bold; color: var(--text); }
+.stat-value.green { color: var(--green); }
+.stat-value.red { color: var(--red); }
+.stat-value.blue { color: var(--blue); }
+.stat-value.gold { color: var(--accent); }
 
-  .corner-filters { display: flex; gap: 8px; margin-bottom: 12px; overflow-x: auto; }
-  .corner-filter { padding: 8px 14px; border-radius: 20px; background: var(--bg-card); border: 1px solid var(--border); color: var(--text-secondary); font-size: 0.75rem; white-space: nowrap; cursor: pointer; }
-  .corner-filter.active { background: var(--accent); color: #0f172a; border-color: var(--accent); }
-  .corner-table { width: 100%; border-collapse: collapse; }
-  .corner-table th { text-align: left; padding: 10px 8px; font-size: 0.7rem; color: var(--text-secondary); border-bottom: 1px solid var(--border); }
-  .corner-table td { padding: 12px 8px; font-size: 0.85rem; border-bottom: 1px solid rgba(255,255,255,0.05); }
-  .corner-team { display: flex; align-items: center; gap: 8px; }
-  .corner-bar-wrap { width: 60px; height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden; }
-  .corner-bar { height: 100%; background: var(--accent); border-radius: 3px; }
-  .corner-val { font-weight: 700; color: var(--accent); font-size: 0.9rem; }
-  .corner-pred { font-size: 0.75rem; color: var(--success); }
+.recommendation {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  margin-top: 4px;
+}
+.rec-home { background: rgba(74,222,128,0.2); color: var(--green); border: 1px solid var(--green); }
+.rec-away { background: rgba(239,68,68,0.2); color: var(--red); border: 1px solid var(--red); }
+.rec-draw { background: rgba(138,180,248,0.2); color: var(--blue); border: 1px solid var(--blue); }
+.rec-over { background: rgba(255,215,0,0.2); color: var(--accent); border: 1px solid var(--accent); }
 
-  .odds-match-card { background: var(--bg-card); border-radius: 14px; padding: 16px; margin-bottom: 12px; border: 1px solid var(--border); }
-  .odds-match-title { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
-  .odds-teams { font-size: 0.9rem; font-weight: 600; }
-  .odds-time { font-size: 0.7rem; color: var(--text-secondary); }
-  .odds-row { display: flex; gap: 8px; }
-  .odds-item { flex: 1; background: var(--bg-secondary); border-radius: 10px; padding: 12px; text-align: center; border: 1px solid transparent; }
-  .odds-item.highlight { border-color: var(--accent); background: rgba(250, 204, 21, 0.1); }
-  .odds-item .label { font-size: 0.65rem; color: var(--text-secondary); margin-bottom: 4px; }
-  .odds-item .value { font-size: 1.1rem; font-weight: 700; color: var(--text-primary); }
-  .odds-item .prob { font-size: 0.65rem; color: var(--success); margin-top: 2px; }
-  .odds-item.highlight .value { color: var(--accent); }
+.cs-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+  justify-content: center;
+}
+.cs-item {
+  background: #0a1628;
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 0.8rem;
+}
+.cs-item .cs-score { font-weight: bold; color: var(--accent); }
+.cs-item .cs-prob { color: var(--muted); font-size: 0.7rem; }
 
-  .ht-card { background: var(--bg-card); border-radius: 14px; padding: 16px; margin-bottom: 12px; border: 1px solid var(--border); }
-  .ht-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
-  .ht-teams { font-size: 0.9rem; font-weight: 600; }
-  .ht-badge { font-size: 0.65rem; padding: 3px 10px; border-radius: 10px; background: var(--warning); color: #fff; font-weight: 700; }
-  .ht-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-  .ht-box { background: var(--bg-secondary); border-radius: 10px; padding: 10px; text-align: center; }
-  .ht-box .label { font-size: 0.65rem; color: var(--text-secondary); margin-bottom: 4px; }
-  .ht-box .value { font-size: 1rem; font-weight: 700; color: var(--text-primary); }
-  .ht-box .sub { font-size: 0.6rem; color: var(--accent); margin-top: 2px; }
+.corner-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+  font-size: 0.8rem;
+}
+.corner-bar .bar {
+  flex: 1;
+  height: 6px;
+  background: #2a3f5f;
+  border-radius: 3px;
+  overflow: hidden;
+}
+.corner-bar .bar-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 3px;
+}
 
-  .team-list { display: flex; flex-direction: column; gap: 10px; }
-  .team-card { background: var(--bg-card); border-radius: 12px; overflow: hidden; border: 1px solid transparent; }
-  .team-card:active { transform: scale(0.98); }
-  .team-header { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; cursor: pointer; }
-  .team-info { display: flex; align-items: center; gap: 12px; }
-  .team-flag { width: 32px; height: 24px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; background: var(--bg-secondary); }
-  .team-name { font-weight: 600; font-size: 1rem; color: var(--text-gold); }
-  .team-group { font-size: 0.75rem; color: var(--text-secondary); background: var(--bg-secondary); padding: 2px 8px; border-radius: 8px; margin-left: 8px; }
-  .team-arrow { color: var(--accent); font-size: 0.8rem; transition: transform 0.3s; }
-  .team-card.expanded .team-arrow { transform: rotate(90deg); }
-  .team-detail { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; background: rgba(15, 23, 42, 0.5); }
-  .team-card.expanded .team-detail { max-height: 900px; }
-  .detail-inner { padding: 16px; }
-  .formation-title { font-size: 0.8rem; color: var(--accent); margin-bottom: 10px; text-align: center; letter-spacing: 2px; }
-  .pitch { background: linear-gradient(180deg, #166534 0%, #14532d 100%); border-radius: 12px; padding: 16px 12px; position: relative; min-height: 320px; border: 2px solid rgba(255,255,255,0.1); }
-  .pos-row { display: flex; justify-content: center; gap: 10px; margin-bottom: 14px; position: relative; z-index: 2; }
-  .player-dot { display: flex; flex-direction: column; align-items: center; gap: 4px; }
-  .dot { width: 34px; height: 34px; border-radius: 50%; background: var(--accent); color: #0f172a; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.7rem; border: 2px solid #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.3); }
-  .dot.gk { background: #ef4444; color: #fff; }
-  .player-name { font-size: 0.6rem; color: #fff; text-align: center; max-width: 60px; line-height: 1.2; text-shadow: 0 1px 2px rgba(0,0,0,0.8); }
-  .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 12px; }
-  .stat-box { background: var(--bg-secondary); padding: 10px; border-radius: 8px; text-align: center; }
-  .stat-value { font-size: 1.1rem; font-weight: 700; color: var(--accent); }
-  .stat-label { font-size: 0.65rem; color: var(--text-secondary); margin-top: 2px; }
+.divider {
+  height: 1px;
+  background: var(--muted);
+  margin: 12px 0;
+  opacity: 0.3;
+}
 
-  .compare-selectors { display: flex; gap: 10px; margin-bottom: 16px; }
-  .select-wrap { flex: 1; }
-  .select-wrap label { display: block; font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 4px; }
-  select { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text-primary); font-size: 0.9rem; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23facc15' d='M6 9L1 4h10z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; }
-  .vs-divider { display: flex; align-items: center; justify-content: center; font-size: 1.2rem; font-weight: 700; color: var(--accent); padding-top: 18px; }
-  .compare-btn { width: 100%; padding: 14px; margin: 16px 0; background: linear-gradient(90deg, var(--accent), var(--accent-dark)); color: #0f172a; border: none; border-radius: 12px; font-size: 1rem; font-weight: 700; cursor: pointer; box-shadow: 0 4px 15px rgba(250, 204, 21, 0.3); }
-  .compare-result { background: var(--bg-card); border-radius: 16px; padding: 20px; margin-top: 8px; border: 1px solid var(--border); }
-  .score-display { display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 20px; }
-  .score-team { text-align: center; flex: 1; }
-  .score-team .flag { font-size: 2.5rem; }
-  .score-team .name { font-size: 0.85rem; color: var(--text-secondary); margin-top: 4px; }
-  .score-box { background: linear-gradient(135deg, #0f172a, #1e293b); border: 2px solid var(--accent); border-radius: 16px; padding: 16px 24px; display: flex; align-items: center; gap: 12px; }
-  .score-num { font-size: 2.5rem; font-weight: 900; color: var(--text-gold); font-variant-numeric: tabular-nums; }
-  .score-sep { font-size: 1.5rem; color: var(--text-secondary); }
-  .prediction-tags { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 12px; }
-  .pred-tag { background: rgba(250, 204, 21, 0.15); border: 1px solid rgba(250, 204, 21, 0.3); color: var(--text-gold); padding: 6px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
-  .radar-wrap { position: relative; height: 260px; margin: 16px 0; }
-  .stats-compare { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 12px; }
-  .compare-stat-row { display: flex; align-items: center; gap: 8px; background: var(--bg-secondary); padding: 10px 12px; border-radius: 8px; }
-  .compare-stat-row .bar-wrap { flex: 1; height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden; position: relative; }
-  .compare-stat-row .bar { height: 100%; border-radius: 3px; transition: width 0.5s ease; }
-  .bar-team1 { background: var(--accent); }
-  .bar-team2 { background: var(--info); }
-  .compare-label { font-size: 0.7rem; color: var(--text-secondary); min-width: 50px; text-align: center; }
-  .compare-val { font-size: 0.8rem; font-weight: 700; min-width: 28px; text-align: center; }
-  .val-team1 { color: var(--accent); }
-  .val-team2 { color: var(--info); }
+.quick-nav {
+  position: fixed;
+  bottom: 15px;
+  right: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 1000;
+}
+.quick-nav button {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: none;
+  background: var(--card);
+  color: var(--accent);
+  font-size: 1.2rem;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+  border: 1px solid var(--accent);
+}
 
-  .refresh-btn { position: fixed; bottom: 24px; right: 24px; width: 56px; height: 56px; border-radius: 50%; background: var(--accent); color: #0f172a; border: none; font-size: 1.5rem; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 20px rgba(250, 204, 21, 0.4); cursor: pointer; z-index: 99; }
-  .footer { text-align: center; padding: 16px; font-size: 0.75rem; color: var(--text-secondary); margin-top: 24px; }
+.copy-btn {
+  background: transparent;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  margin-top: 8px;
+  display: block;
+  width: 100%;
+}
+.copy-btn:hover { background: var(--accent); color: var(--bg); }
 
-  .calib-banner { background: linear-gradient(90deg, rgba(250,204,21,0.15), rgba(59,130,246,0.15)); border: 1px solid rgba(250,204,21,0.3); border-radius: 12px; padding: 12px; margin-bottom: 16px; font-size: 0.75rem; color: var(--text-secondary); }
-  .calib-banner b { color: var(--accent); }
-  .live-indicator { display: inline-block; width: 8px; height: 8px; background: var(--danger); border-radius: 50%; animation: pulse 1.5s infinite; margin-right: 6px; }
-  @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
-  .live-card { background: var(--bg-card); border-radius: 12px; padding: 14px; margin-bottom: 10px; border: 1px solid var(--border); border-left: 3px solid var(--danger); }
-  .live-match-title { font-size: 0.9rem; font-weight: 700; margin-bottom: 8px; }
-  .live-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 10px; }
-  .live-stat { background: var(--bg-secondary); padding: 8px; border-radius: 8px; text-align: center; font-size: 0.7rem; }
-  .live-stat .num { font-size: 1rem; font-weight: 700; color: var(--accent); }
-  .motivation-bar { width: 100%; height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden; margin-top: 6px; }
-  .motivation-fill { height: 100%; border-radius: 4px; transition: width 0.5s ease; }
-  .motivation-high { background: var(--danger); }
-  .motivation-mid { background: var(--warning); }
-  .motivation-low { background: var(--success); }
-  .upset-alert { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239,68,68,0.3); border-radius: 8px; padding: 8px; margin-top: 8px; font-size: 0.7rem; color: var(--danger); }
+@media (max-width: 400px) {
+  .grid-3 { grid-template-columns: repeat(2, 1fr); }
+}
 </style>
 </head>
 <body>
 
 <div class="header">
-  <h1>🏆 世界盃2026 淘汰賽</h1>
-  <div class="subtitle">UNIFIED v3.3.68 智能預測系統</div>
-  <div class="badge">32強至決賽</div>
+  <h1>🏆 UNIFIED v3.3.67 世界盃2026</h1>
+  <div class="subtitle">全場標合分析 + 上半場預測 + 波膽 + 角球</div>
+  <div class="version">65場真實賽果回測校準 | 1X2:61.5% | OU:58.5% | HT:50.8%</div>
 </div>
 
-<div class="nav-tabs">
-  <button class="nav-tab" onclick="switchTab('corner')">角球專項</button>
-  <button class="nav-tab" onclick="switchTab('odds')">賠率對比</button>
-  <button class="nav-tab" onclick="switchTab('live')">滾球監控</button>
-  <button class="nav-tab" onclick="switchTab('schedule')">32強賽事</button>
-  <button class="nav-tab" onclick="switchTab('ht')">上半場</button>
-  <button class="nav-tab" onclick="switchTab('full')">全場分析</button>
-  <button class="nav-tab" onclick="switchTab('cards')">罰牌分析</button>
-  <button class="nav-tab active" onclick="switchTab('teams')">球隊數據</button>
-  <button class="nav-tab" onclick="switchTab('compare')">兩隊對比</button>
-</div>
-
-<!-- 校準說明橫幅 -->
-<div class="calib-banner" style="margin:12px 16px 0;">
-  <b>📊 v3.3.68 校準更新：</b>基於56場小組賽真實數據回測 — 平均進球3.02 | 大2.5佔57% | 角球均值8.6 | 淘汰賽保守係數-24%
-</div>
-
-<!-- ===== 角球專項 ===== -->
-<div id="corner" class="section">
-  <div class="section-title">📐 角球專項分析</div>
-  <div class="corner-filters">
-    <div class="corner-filter active" onclick="filterCorner('all')">全部場次</div>
-    <div class="corner-filter" onclick="filterCorner('high')">高角球</div>
-    <div class="corner-filter" onclick="filterCorner('low')">低角球</div>
+<div class="match-card" id="match-0">
+  <div class="match-header">
+    <div class="match-teams">🇧🇷 巴西 vs 日本 🇯🇵</div>
+    <div class="match-time">06-30 01:00</div>
   </div>
-  <div style="overflow-x:auto">
-    <table class="corner-table" id="cornerTable">
-      <thead><tr><th>場次</th><th>預計角球</th><th>主隊力</th><th>客隊力</th><th>預測方向</th></tr></thead>
-      <tbody id="cornerBody"></tbody>
-    </table>
+
+  <div class="section-title">📊 全場標合分析</div>
+  <div class="grid-3">
+    <div class="stat-box">
+      <div class="stat-label">預測比分</div>
+      <div class="stat-value gold">2.0 - 0.8</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">主勝概率</div>
+      <div class="stat-value green">65.2%</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">客勝概率</div>
+      <div class="stat-value blue">14.6%</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">平局概率</div>
+      <div class="stat-value">20.2%</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">大 2.5</div>
+      <div class="stat-value green">63.7%</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">雙方進球</div>
+      <span class="stat-value green">是</span>
+    </div>
   </div>
-  <div style="margin-top:16px; padding:12px; background:var(--bg-card); border-radius:10px; font-size:0.75rem; color:var(--text-secondary); line-height:1.6;">
-    <b style="color:var(--accent)">角球分析邏輯（v3.3.68校準）：</b><br>
-    • 小組賽實際平均角球 8.6個，淘汰賽下修至 8.0個<br>
-    • 強強對話（如巴西vs日本）預計 8-10個<br>
-    • 防守型對決（如巴拉圭vs摩洛哥）預計 5-7個<br>
-    • 亞洲盤口參考：7.5 / 8.5 / 9.5 三檔
+
+  <div style="text-align:center; margin: 8px 0;">
+    <span class="recommendation rec-home">推薦: 主勝</span> <span class="recommendation rec-over">大 2.5</span>
   </div>
-</div>
 
-<!-- ===== 賠率對比 ===== -->
-<div id="odds" class="section">
-  <div class="section-title">📊 賠率對比 & 1X2</div>
-  <div id="oddsContainer"></div>
-</div>
+  <div class="divider"></div>
 
-<!-- ===== 滾球監控 ===== -->
-<div id="live" class="section">
-  <div class="section-title"><span class="live-indicator"></span>滾球監控</div>
-  <div id="liveContainer"></div>
-</div>
+  <div class="section-title">🚩 全場角球 + 波膽</div>
+  <div class="grid-2">
+    <div class="stat-box">
+      <div class="stat-label">預期總角球</div>
+      <div class="stat-value gold">10.9</div>
+      <div class="stat-label" style="margin-top:4px">主 5.6 + 客 5.3</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">波膽最高機率</div>
+      <div class="stat-value gold">1-0</div>
+      <div class="cs-list"><div class="cs-item"><span class="cs-score">1-0</span> <span class="cs-prob">15.4%</span></div><div class="cs-item"><span class="cs-score">2-0</span> <span class="cs-prob">15.0%</span></div><div class="cs-item"><span class="cs-score">1-1</span> <span class="cs-prob">11.2%</span></div><div class="cs-item"><span class="cs-score">0-0</span> <span class="cs-prob">10.6%</span></div><div class="cs-item"><span class="cs-score">3-0</span> <span class="cs-prob">8.9%</span></div></div>
+    </div>
+  </div>
 
-<!-- ===== 32強賽事 ===== -->
-<div id="schedule" class="section">
-  <div class="section-title">📅 32強淘汰賽賽程</div>
-  <div id="scheduleContainer"></div>
-</div>
+  <div style="margin-top:8px; font-size:0.75rem; color:var(--muted);">
+    主風格: 技術流 | 客風格: 快速傳切
+  </div>
+  <div class="corner-bar"><span style="width:30px">角8.5</span><div class="bar"><div class="bar-fill" style="width:75.56%"></div></div><span>76%</span></div><div class="corner-bar"><span style="width:30px">角9.0</span><div class="bar"><div class="bar-fill" style="width:64.44%"></div></div><span>64%</span></div><div class="corner-bar"><span style="width:30px">角9.5</span><div class="bar"><div class="bar-fill" style="width:64.44%"></div></div><span>64%</span></div><div class="corner-bar"><span style="width:30px">角10.0</span><div class="bar"><div class="bar-fill" style="width:52.35999999999999%"></div></div><span>52%</span></div><div class="corner-bar"><span style="width:30px">角10.5</span><div class="bar"><div class="bar-fill" style="width:52.35999999999999%"></div></div><span>52%</span></div><div class="corner-bar"><span style="width:30px">角11.0</span><div class="bar"><div class="bar-fill" style="width:40.43%"></div></div><span>40%</span></div>
 
-<!-- ===== 上半場 ===== -->
-<div id="ht" class="section">
+  <div class="divider"></div>
+
   <div class="section-title">⏱️ 上半場預測 (HT/FT)</div>
-  <div id="htContainer"></div>
-</div>
-
-<!-- ===== 全場分析 ===== -->
-<div id="full" class="section">
-  <div class="section-title">🔥 全場綜合分析</div>
-  <div id="fullContainer"></div>
-</div>
-
-<!-- ===== 罰牌分析 ===== -->
-<div id="cards" class="section">
-  <div class="section-title">🟨 罰牌分析</div>
-  <div class="card-filters">
-    <div class="card-filter active" onclick="filterCard('all')">全部場次</div>
-    <div class="card-filter" onclick="filterCard('high')">高罰牌</div>
-    <div class="card-filter" onclick="filterCard('mid')">中等罰牌</div>
-    <div class="card-filter" onclick="filterCard('low')">低罰牌</div>
-  </div>
-  <div style="overflow-x:auto">
-    <table class="card-table" id="cardTable">
-      <thead><tr><th>場次</th><th>主隊紀律</th><th>客隊紀律</th><th>預計黃牌</th><th>預計紅牌</th><th>總罰牌</th><th>預測</th></tr></thead>
-      <tbody id="cardBody"></tbody>
-    </table>
-  </div>
-  <div class="card-note">
-    <b style="color:var(--danger)">罰牌分析邏輯（v3.3.68校準）：</b><br>
-    • 淘汰賽壓力係數：+15%（較小組賽下調，因裁判尺度趨嚴）<br>
-    • 球風對抗係數：技術型vs身體型對抗，罰牌數 +10-20%<br>
-    • 歷史基準：基於各隊近20場國際賽平均黃牌數<br>
-    • 小組賽實際平均罰牌 4.8張，淘汰賽預計 5.2-6.5張
-  </div>
-</div>
-
-<!-- ===== 球隊數據 ===== -->
-<div id="teams" class="section active">
-  <div class="section-title">🏟️ 32強球隊數據庫</div>
-  <div class="team-list" id="teamList"></div>
-</div>
-
-<!-- ===== 兩隊對比 ===== -->
-<div id="compare" class="section">
-  <div class="section-title">⚔️ 兩隊對比分析</div>
-  <div class="compare-selectors">
-    <div class="select-wrap">
-      <label>主隊</label>
-      <select id="team1Select"><option value="">選擇球隊</option></select>
+  <div class="grid-3">
+    <div class="stat-box">
+      <div class="stat-label">HT 主隊</div>
+      <div class="stat-value">0.8</div>
     </div>
-    <div class="select-wrap">
-      <label>客隊</label>
-      <select id="team2Select"><option value="">選擇球隊</option></select>
+    <div class="stat-box">
+      <div class="stat-label">HT 客隊</div>
+      <div class="stat-value">0.3</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">HT 大 0.5</div>
+      <div class="stat-value green">66.5%</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">FT 主隊</div>
+      <div class="stat-value green">2.0</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">FT 客隊</div>
+      <div class="stat-value blue">0.8</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">HT 角球</div>
+      <div class="stat-value gold">5.2</div>
     </div>
   </div>
-  <div class="vs-divider">VS</div>
-  <button class="compare-btn" onclick="compareTeams()">開始對比分析</button>
-  <div id="compareResult"></div>
+
+  <div style="text-align:center; margin-top:8px; font-size:0.8rem;">
+    <span style="color:var(--green)">HT/FT 推薦: H/H</span>
+  </div>
+
+  <button class="copy-btn" onclick="copyMatch(0)">📋 複製分析</button>
 </div>
 
-<button class="refresh-btn" onclick="location.reload()">⟳</button>
+<div class="match-card" id="match-1">
+  <div class="match-header">
+    <div class="match-teams">🇩🇪 德國 vs 巴拉圭 🇵🇾</div>
+    <div class="match-time">06-30 04:30</div>
+  </div>
 
-<div class="footer">
-  UNIFIED v3.3.68 | 基於56場小組賽真實數據校準<br>
-  淘汰賽保守係數 -24% | 大球threshold 3.0 | 角球基準 8.0
+  <div class="section-title">📊 全場標合分析</div>
+  <div class="grid-3">
+    <div class="stat-box">
+      <div class="stat-label">預測比分</div>
+      <div class="stat-value gold">1.9 - 0.4</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">主勝概率</div>
+      <div class="stat-value green">73.2%</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">客勝概率</div>
+      <div class="stat-value blue">7.5%</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">平局概率</div>
+      <div class="stat-value">19.3%</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">大 2.5</div>
+      <div class="stat-value green">57.6%</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">雙方進球</div>
+      <span class="stat-value green">是</span>
+    </div>
+  </div>
+
+  <div style="text-align:center; margin: 8px 0;">
+    <span class="recommendation rec-home">推薦: 主勝</span> <span class="recommendation rec-over">大 2.5</span>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-title">🚩 全場角球 + 波膽</div>
+  <div class="grid-2">
+    <div class="stat-box">
+      <div class="stat-label">預期總角球</div>
+      <div class="stat-value gold">10.8</div>
+      <div class="stat-label" style="margin-top:4px">主 6.8 + 客 4.0</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">波膽最高機率</div>
+      <div class="stat-value gold">1-0</div>
+      <div class="cs-list"><div class="cs-item"><span class="cs-score">1-0</span> <span class="cs-prob">22.6%</span></div><div class="cs-item"><span class="cs-score">2-0</span> <span class="cs-prob">19.6%</span></div><div class="cs-item"><span class="cs-score">0-0</span> <span class="cs-prob">15.1%</span></div><div class="cs-item"><span class="cs-score">3-0</span> <span class="cs-prob">10.8%</span></div><div class="cs-item"><span class="cs-score">1-1</span> <span class="cs-prob">8.0%</span></div></div>
+    </div>
+  </div>
+
+  <div style="margin-top:8px; font-size:0.75rem; color:var(--muted);">
+    主風格: 高位壓迫 | 客風格: 防守硬朗
+  </div>
+  <div class="corner-bar"><span style="width:30px">角8.5</span><div class="bar"><div class="bar-fill" style="width:75.31%"></div></div><span>75%</span></div><div class="corner-bar"><span style="width:30px">角9.0</span><div class="bar"><div class="bar-fill" style="width:64.14%"></div></div><span>64%</span></div><div class="corner-bar"><span style="width:30px">角9.5</span><div class="bar"><div class="bar-fill" style="width:64.14%"></div></div><span>64%</span></div><div class="corner-bar"><span style="width:30px">角10.0</span><div class="bar"><div class="bar-fill" style="width:52.04%"></div></div><span>52%</span></div><div class="corner-bar"><span style="width:30px">角10.5</span><div class="bar"><div class="bar-fill" style="width:52.04%"></div></div><span>52%</span></div><div class="corner-bar"><span style="width:30px">角11.0</span><div class="bar"><div class="bar-fill" style="width:40.12%"></div></div><span>40%</span></div>
+
+  <div class="divider"></div>
+
+  <div class="section-title">⏱️ 上半場預測 (HT/FT)</div>
+  <div class="grid-3">
+    <div class="stat-box">
+      <div class="stat-label">HT 主隊</div>
+      <div class="stat-value">0.7</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">HT 客隊</div>
+      <div class="stat-value">0.2</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">HT 大 0.5</div>
+      <div class="stat-value green">58.9%</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">FT 主隊</div>
+      <div class="stat-value green">1.9</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">FT 客隊</div>
+      <div class="stat-value blue">0.4</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">HT 角球</div>
+      <div class="stat-value gold">4.2</div>
+    </div>
+  </div>
+
+  <div style="text-align:center; margin-top:8px; font-size:0.8rem;">
+    <span style="color:var(--green)">HT/FT 推薦: H/H</span>
+  </div>
+
+  <button class="copy-btn" onclick="copyMatch(1)">📋 複製分析</button>
+</div>
+
+<div class="match-card" id="match-2">
+  <div class="match-header">
+    <div class="match-teams">🇳🇱 荷蘭 vs 摩洛哥 🇲🇦</div>
+    <div class="match-time">06-30 05:00</div>
+  </div>
+
+  <div class="section-title">📊 全場標合分析</div>
+  <div class="grid-3">
+    <div class="stat-box">
+      <div class="stat-label">預測比分</div>
+      <div class="stat-value gold">1.8 - 1.0</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">主勝概率</div>
+      <div class="stat-value green">56.1%</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">客勝概率</div>
+      <div class="stat-value blue">20.9%</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">平局概率</div>
+      <div class="stat-value">23.0%</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">大 2.5</div>
+      <div class="stat-value green">62.6%</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">雙方進球</div>
+      <span class="stat-value green">是</span>
+    </div>
+  </div>
+
+  <div style="text-align:center; margin: 8px 0;">
+    <span class="recommendation rec-home">推薦: 主勝</span> <span class="recommendation rec-over">大 2.5</span>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-title">🚩 全場角球 + 波膽</div>
+  <div class="grid-2">
+    <div class="stat-box">
+      <div class="stat-label">預期總角球</div>
+      <div class="stat-value gold">10.4</div>
+      <div class="stat-label" style="margin-top:4px">主 5.9 + 客 4.5</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">波膽最高機率</div>
+      <div class="stat-value gold">1-0</div>
+      <div class="cs-list"><div class="cs-item"><span class="cs-score">1-0</span> <span class="cs-prob">13.9%</span></div><div class="cs-item"><span class="cs-score">1-1</span> <span class="cs-prob">13.3%</span></div><div class="cs-item"><span class="cs-score">2-0</span> <span class="cs-prob">12.0%</span></div><div class="cs-item"><span class="cs-score">0-0</span> <span class="cs-prob">11.5%</span></div><div class="cs-item"><span class="cs-score">2-1</span> <span class="cs-prob">9.1%</span></div></div>
+    </div>
+  </div>
+
+  <div style="margin-top:8px; font-size:0.75rem; color:var(--muted);">
+    主風格: 組織進攻 | 客風格: 防守反擊
+  </div>
+  <div class="corner-bar"><span style="width:30px">角8.5</span><div class="bar"><div class="bar-fill" style="width:70.83%"></div></div><span>71%</span></div><div class="corner-bar"><span style="width:30px">角9.0</span><div class="bar"><div class="bar-fill" style="width:58.86%"></div></div><span>59%</span></div><div class="corner-bar"><span style="width:30px">角9.5</span><div class="bar"><div class="bar-fill" style="width:58.86%"></div></div><span>59%</span></div><div class="corner-bar"><span style="width:30px">角10.0</span><div class="bar"><div class="bar-fill" style="width:46.44%"></div></div><span>46%</span></div><div class="corner-bar"><span style="width:30px">角10.5</span><div class="bar"><div class="bar-fill" style="width:46.44%"></div></div><span>46%</span></div><div class="corner-bar"><span style="width:30px">角11.0</span><div class="bar"><div class="bar-fill" style="width:34.71%"></div></div><span>35%</span></div>
+
+  <div class="divider"></div>
+
+  <div class="section-title">⏱️ 上半場預測 (HT/FT)</div>
+  <div class="grid-3">
+    <div class="stat-box">
+      <div class="stat-label">HT 主隊</div>
+      <div class="stat-value">0.7</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">HT 客隊</div>
+      <div class="stat-value">0.4</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">HT 大 0.5</div>
+      <div class="stat-value green">65.6%</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">FT 主隊</div>
+      <div class="stat-value green">1.8</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">FT 客隊</div>
+      <div class="stat-value blue">1.0</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">HT 角球</div>
+      <div class="stat-value gold">5.1</div>
+    </div>
+  </div>
+
+  <div style="text-align:center; margin-top:8px; font-size:0.8rem;">
+    <span style="color:var(--green)">HT/FT 推薦: H/H</span>
+  </div>
+
+  <button class="copy-btn" onclick="copyMatch(2)">📋 複製分析</button>
+</div>
+
+<div class="match-card" id="match-3">
+  <div class="match-header">
+    <div class="match-teams">🇫🇷 法國 vs 伊拉克 🇮🇶</div>
+    <div class="match-time">06-30 23:00</div>
+  </div>
+
+  <div class="section-title">📊 全場標合分析</div>
+  <div class="grid-3">
+    <div class="stat-box">
+      <div class="stat-label">預測比分</div>
+      <div class="stat-value gold">2.5 - 0.3</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">主勝概率</div>
+      <div class="stat-value green">75.3%</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">客勝概率</div>
+      <div class="stat-value blue">2.7%</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">平局概率</div>
+      <div class="stat-value">22.0%</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">大 2.5</div>
+      <div class="stat-value green">70.0%</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">雙方進球</div>
+      <span class="stat-value green">是</span>
+    </div>
+  </div>
+
+  <div style="text-align:center; margin: 8px 0;">
+    <span class="recommendation rec-home">推薦: 主勝</span> <span class="recommendation rec-over">大 2.5</span>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-title">🚩 全場角球 + 波膽</div>
+  <div class="grid-2">
+    <div class="stat-box">
+      <div class="stat-label">預期總角球</div>
+      <div class="stat-value gold">9.8</div>
+      <div class="stat-label" style="margin-top:4px">主 5.7 + 客 4.1</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">波膽最高機率</div>
+      <div class="stat-value gold">2-0</div>
+      <div class="cs-list"><div class="cs-item"><span class="cs-score">2-0</span> <span class="cs-prob">20.4%</span></div><div class="cs-item"><span class="cs-score">1-0</span> <span class="cs-prob">17.6%</span></div><div class="cs-item"><span class="cs-score">3-0</span> <span class="cs-prob">15.1%</span></div><div class="cs-item"><span class="cs-score">0-0</span> <span class="cs-prob">9.0%</span></div><div class="cs-item"><span class="cs-score">4-0</span> <span class="cs-prob">8.4%</span></div></div>
+    </div>
+  </div>
+
+  <div style="margin-top:8px; font-size:0.75rem; color:var(--muted);">
+    主風格: 全能壓制 | 客風格: 防守反擊
+  </div>
+  <div class="corner-bar"><span style="width:30px">角8.5</span><div class="bar"><div class="bar-fill" style="width:63.980000000000004%"></div></div><span>64%</span></div><div class="corner-bar"><span style="width:30px">角9.0</span><div class="bar"><div class="bar-fill" style="width:51.2%"></div></div><span>51%</span></div><div class="corner-bar"><span style="width:30px">角9.5</span><div class="bar"><div class="bar-fill" style="width:51.2%"></div></div><span>51%</span></div><div class="corner-bar"><span style="width:30px">角10.0</span><div class="bar"><div class="bar-fill" style="width:38.72%"></div></div><span>39%</span></div><div class="corner-bar"><span style="width:30px">角10.5</span><div class="bar"><div class="bar-fill" style="width:38.72%"></div></div><span>39%</span></div><div class="corner-bar"><span style="width:30px">角11.0</span><div class="bar"><div class="bar-fill" style="width:27.650000000000002%"></div></div><span>28%</span></div>
+
+  <div class="divider"></div>
+
+  <div class="section-title">⏱️ 上半場預測 (HT/FT)</div>
+  <div class="grid-3">
+    <div class="stat-box">
+      <div class="stat-label">HT 主隊</div>
+      <div class="stat-value">0.9</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">HT 客隊</div>
+      <div class="stat-value">0.1</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">HT 大 0.5</div>
+      <div class="stat-value green">65.1%</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">FT 主隊</div>
+      <div class="stat-value green">2.5</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">FT 客隊</div>
+      <div class="stat-value blue">0.3</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">HT 角球</div>
+      <div class="stat-value gold">5.0</div>
+    </div>
+  </div>
+
+  <div style="text-align:center; margin-top:8px; font-size:0.8rem;">
+    <span style="color:var(--green)">HT/FT 推薦: H/H</span>
+  </div>
+
+  <button class="copy-btn" onclick="copyMatch(3)">📋 複製分析</button>
+</div>
+
+<div class="match-card" id="match-4">
+  <div class="match-header">
+    <div class="match-teams">🇦🇷 阿根廷 vs 奧地利 🇦🇹</div>
+    <div class="match-time">06-30 23:00</div>
+  </div>
+
+  <div class="section-title">📊 全場標合分析</div>
+  <div class="grid-3">
+    <div class="stat-box">
+      <div class="stat-label">預測比分</div>
+      <div class="stat-value gold">2.4 - 0.4</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">主勝概率</div>
+      <div class="stat-value green">74.0%</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">客勝概率</div>
+      <div class="stat-value blue">3.9%</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">平局概率</div>
+      <div class="stat-value">22.0%</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">大 2.5</div>
+      <div class="stat-value green">67.0%</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">雙方進球</div>
+      <span class="stat-value green">是</span>
+    </div>
+  </div>
+
+  <div style="text-align:center; margin: 8px 0;">
+    <span class="recommendation rec-home">推薦: 主勝</span> <span class="recommendation rec-over">大 2.5</span>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-title">🚩 全場角球 + 波膽</div>
+  <div class="grid-2">
+    <div class="stat-box">
+      <div class="stat-label">預期總角球</div>
+      <div class="stat-value gold">11.7</div>
+      <div class="stat-label" style="margin-top:4px">主 6.8 + 客 4.9</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">波膽最高機率</div>
+      <div class="stat-value gold">2-0</div>
+      <div class="cs-list"><div class="cs-item"><span class="cs-score">2-0</span> <span class="cs-prob">20.4%</span></div><div class="cs-item"><span class="cs-score">1-0</span> <span class="cs-prob">18.3%</span></div><div class="cs-item"><span class="cs-score">3-0</span> <span class="cs-prob">14.6%</span></div><div class="cs-item"><span class="cs-score">0-0</span> <span class="cs-prob">9.7%</span></div><div class="cs-item"><span class="cs-score">4-0</span> <span class="cs-prob">7.8%</span></div></div>
+    </div>
+  </div>
+
+  <div style="margin-top:8px; font-size:0.75rem; color:var(--muted);">
+    主風格: 控球圍攻 | 客風格: 組織進攻
+  </div>
+  <div class="corner-bar"><span style="width:30px">角8.5</span><div class="bar"><div class="bar-fill" style="width:82.65%"></div></div><span>83%</span></div><div class="corner-bar"><span style="width:30px">角9.0</span><div class="bar"><div class="bar-fill" style="width:73.32%"></div></div><span>73%</span></div><div class="corner-bar"><span style="width:30px">角9.5</span><div class="bar"><div class="bar-fill" style="width:73.32%"></div></div><span>73%</span></div><div class="corner-bar"><span style="width:30px">角10.0</span><div class="bar"><div class="bar-fill" style="width:62.38%"></div></div><span>62%</span></div><div class="corner-bar"><span style="width:30px">角10.5</span><div class="bar"><div class="bar-fill" style="width:62.38%"></div></div><span>62%</span></div><div class="corner-bar"><span style="width:30px">角11.0</span><div class="bar"><div class="bar-fill" style="width:50.72%"></div></div><span>51%</span></div>
+
+  <div class="divider"></div>
+
+  <div class="section-title">⏱️ 上半場預測 (HT/FT)</div>
+  <div class="grid-3">
+    <div class="stat-box">
+      <div class="stat-label">HT 主隊</div>
+      <div class="stat-value">0.9</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">HT 客隊</div>
+      <div class="stat-value">0.1</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">HT 大 0.5</div>
+      <div class="stat-value green">65.1%</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">FT 主隊</div>
+      <div class="stat-value green">2.4</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">FT 客隊</div>
+      <div class="stat-value blue">0.4</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">HT 角球</div>
+      <div class="stat-value gold">5.0</div>
+    </div>
+  </div>
+
+  <div style="text-align:center; margin-top:8px; font-size:0.8rem;">
+    <span style="color:var(--green)">HT/FT 推薦: H/H</span>
+  </div>
+
+  <button class="copy-btn" onclick="copyMatch(4)">📋 複製分析</button>
+</div>
+
+<div class="quick-nav">
+  <button onclick="window.scrollTo({top:0,behavior:'smooth'})" title="回頂部">⬆️</button>
 </div>
 
 <script>
+function copyMatch(idx) {
+  const cards = document.querySelectorAll('.match-card');
+  const card = cards[idx];
+  const teams = card.querySelector('.match-teams').textContent.trim();
+  const labels = card.querySelectorAll('.stat-label');
+  const values = card.querySelectorAll('.stat-value');
 
-// ===================== 校準參數 (基於56場小組賽) =====================
-const CALIBRATION = {
-  avgGoals: 3.02,
-  over25Rate: 0.57,
-  avgCorners: 8.6,
-  knockoutConservative: -0.24,
-  bttsRate: 0.55,
-  avgCards: 4.8,
-  knockoutCardFactor: 1.15,
-  htGoalRate: 0.48,
-  over3Threshold: 3.0,
-  cornerBaseKO: 8.0,
-  upsetAlertThreshold: 0.35
-};
+  let text = "【UNIFIED v3.3.67 分析】\n" + teams + "\n";
+  for (let i = 0; i < Math.min(labels.length, values.length); i++) {
+    text += labels[i].textContent + ": " + values[i].textContent + "\n";
+  }
 
-// ===================== 32強球隊數據 =====================
-const TEAMS = {
-  "argentina": { name: "阿根廷", flag: "🇦🇷", group: "A1", elo: 1850, attack: 92, defense: 88, possession: 58, form: [3,3,1,3,3], avgGoals: 2.4, avgConceded: 0.6, avgCorners: 5.2, discipline: 2.1, style: "attack", keyPlayers: ["梅西", "阿瓦雷斯", "恩佐"], formation: "4-3-3" },
-  "france": { name: "法國", flag: "🇫🇷", group: "B1", elo: 1840, attack: 90, defense: 89, possession: 56, form: [3,1,3,3,3], avgGoals: 2.2, avgConceded: 0.8, avgCorners: 4.8, discipline: 2.3, style: "balanced", keyPlayers: ["姆巴佩", "格列茲曼", "楚阿梅尼"], formation: "4-2-3-1" },
-  "brazil": { name: "巴西", flag: "🇧🇷", group: "C1", elo: 1830, attack: 91, defense: 86, possession: 57, form: [3,3,3,1,3], avgGoals: 2.3, avgConceded: 0.9, avgCorners: 5.5, discipline: 2.5, style: "attack", keyPlayers: ["維尼修斯", "羅德里戈", "馬基尼奧斯"], formation: "4-3-3" },
-  "germany": { name: "德國", flag: "🇩🇪", group: "D1", elo: 1810, attack: 88, defense: 85, possession: 60, form: [3,3,3,3,1], avgGoals: 2.5, avgConceded: 1.0, avgCorners: 6.0, discipline: 1.8, style: "attack", keyPlayers: ["穆西亞拉", "哈弗茨", "基米希"], formation: "4-2-3-1" },
-  "spain": { name: "西班牙", flag: "🇪🇸", group: "E1", elo: 1820, attack: 89, defense: 87, possession: 65, form: [3,3,3,3,3], avgGoals: 2.1, avgConceded: 0.7, avgCorners: 5.8, discipline: 1.9, style: "possession", keyPlayers: ["亞馬爾", "佩德里", "羅德里"], formation: "4-3-3" },
-  "portugal": { name: "葡萄牙", flag: "🇵🇹", group: "F1", elo: 1790, attack: 87, defense: 85, possession: 55, form: [3,1,3,3,3], avgGoals: 2.0, avgConceded: 0.9, avgCorners: 5.0, discipline: 2.4, style: "balanced", keyPlayers: ["C羅", "B費", "萊奧"], formation: "4-3-3" },
-  "england": { name: "英格蘭", flag: "🏴󠁧󠁢󠁥󠁮󠁧󠁿", group: "G1", elo: 1800, attack: 88, defense: 86, possession: 54, form: [1,3,3,3,3], avgGoals: 2.2, avgConceded: 0.8, avgCorners: 5.5, discipline: 1.7, style: "balanced", keyPlayers: ["貝林漢姆", "凱恩", "福登"], formation: "4-2-3-1" },
-  "netherlands": { name: "荷蘭", flag: "🇳🇱", group: "H1", elo: 1780, attack: 86, defense: 87, possession: 53, form: [3,3,1,3,3], avgGoals: 1.9, avgConceded: 0.8, avgCorners: 4.5, discipline: 2.2, style: "defense", keyPlayers: ["范戴克", "德佩", "加克波"], formation: "3-4-3" },
-  "belgium": { name: "比利時", flag: "🇧🇪", group: "A2", elo: 1760, attack: 85, defense: 82, possession: 54, form: [3,3,3,1,3], avgGoals: 2.0, avgConceded: 1.1, avgCorners: 4.8, discipline: 2.0, style: "balanced", keyPlayers: ["德布勞內", "盧卡庫", "多庫"], formation: "4-2-3-1" },
-  "japan": { name: "日本", flag: "🇯🇵", group: "A3", elo: 1690, attack: 83, defense: 81, possession: 49, form: [3,3,3,3,1], avgGoals: 1.9, avgConceded: 1.0, avgCorners: 4.5, discipline: 1.5, style: "possession", keyPlayers: ["三笘薰", "久保建英", "遠藤航"], formation: "4-2-3-1" },
-  "mexico": { name: "墨西哥", flag: "🇲🇽", group: "D3", elo: 1660, attack: 79, defense: 78, possession: 46, form: [1,3,3,1,3], avgGoals: 1.5, avgConceded: 1.2, avgCorners: 3.8, discipline: 2.7, style: "balanced", keyPlayers: ["阿爾瓦雷斯", "希門尼斯", "桑切斯"], formation: "4-3-3" },
-  "switzerland": { name: "瑞士", flag: "🇨🇭", group: "E3", elo: 1680, attack: 80, defense: 82, possession: 48, form: [3,3,1,3,1], avgGoals: 1.6, avgConceded: 1.0, avgCorners: 4.0, discipline: 2.3, style: "defense", keyPlayers: ["沙奇里", "扎卡", "阿坎吉"], formation: "3-4-2-1" },
-  "croatia": { name: "克羅地亞", flag: "🇭🇷", group: "C2", elo: 1750, attack: 83, defense: 84, possession: 52, form: [1,3,3,1,3], avgGoals: 1.6, avgConceded: 0.9, avgCorners: 4.0, discipline: 2.8, style: "possession", keyPlayers: ["莫德里奇", "科瓦契奇", "佩里西奇"], formation: "4-3-3" },
-  "usa": { name: "美國", flag: "🇺🇸", group: "F2", elo: 1700, attack: 80, defense: 79, possession: 48, form: [3,3,1,3,1], avgGoals: 1.6, avgConceded: 1.2, avgCorners: 3.8, discipline: 2.3, style: "balanced", keyPlayers: ["普利西奇", "雷納", "亞當斯"], formation: "4-3-3" },
-  "senegal": { name: "塞內加爾", flag: "🇸🇳", group: "G2", elo: 1710, attack: 81, defense: 80, possession: 46, form: [3,3,3,1,3], avgGoals: 1.7, avgConceded: 1.1, avgCorners: 3.5, discipline: 2.5, style: "attack", keyPlayers: ["馬內", "庫利巴利", "門迪"], formation: "4-3-3" },
-  "morocco": { name: "摩洛哥", flag: "🇲🇦", group: "H2", elo: 1730, attack: 82, defense: 86, possession: 45, form: [3,1,3,3,3], avgGoals: 1.5, avgConceded: 0.7, avgCorners: 3.2, discipline: 2.4, style: "defense", keyPlayers: ["齊耶赫", "阿姆拉巴特", "阿什拉夫"], formation: "4-1-4-1" },
-  "austria": { name: "奧地利", flag: "🇦🇹", group: "B3", elo: 1690, attack: 81, defense: 79, possession: 49, form: [3,1,3,3,1], avgGoals: 1.6, avgConceded: 1.2, avgCorners: 4.0, discipline: 2.1, style: "balanced", keyPlayers: ["薩比策", "阿瑙托維奇", "萊默爾"], formation: "4-2-3-1" },
-  "ecuador": { name: "厄瓜多爾", flag: "🇪🇨", group: "G3", elo: 1630, attack: 78, defense: 77, possession: 45, form: [3,3,1,3,1], avgGoals: 1.4, avgConceded: 1.3, avgCorners: 3.5, discipline: 2.8, style: "balanced", keyPlayers: ["凱塞多", "恩納·瓦倫西亞", "埃斯图皮尼安"], formation: "4-3-3" },
-  "colombia": { name: "哥倫比亞", flag: "🇨🇴", group: "A3", elo: 1700, attack: 82, defense: 80, possession: 47, form: [3,3,3,1,3], avgGoals: 1.7, avgConceded: 1.1, avgCorners: 4.2, discipline: 2.6, style: "balanced", keyPlayers: ["J羅", "路易斯·迪亞斯", "米納"], formation: "4-2-3-1" },
-  "paraguay": { name: "巴拉圭", flag: "🇵🇾", group: "H3", elo: 1610, attack: 75, defense: 78, possession: 42, form: [3,1,3,1,3], avgGoals: 1.2, avgConceded: 1.1, avgCorners: 2.8, discipline: 2.8, style: "defense", keyPlayers: ["阿爾米隆", "恩西索", "吉梅內斯"], formation: "4-4-2" },
-  "australia": { name: "澳洲", flag: "🇦🇺", group: "C3", elo: 1650, attack: 78, defense: 77, possession: 44, form: [3,3,1,1,3], avgGoals: 1.4, avgConceded: 1.3, avgCorners: 3.5, discipline: 2.2, style: "balanced", keyPlayers: ["古德溫", "歐文", "蘇塔"], formation: "4-2-3-1" },
-  "ghana": { name: "加納", flag: "🇬🇭", group: "H3", elo: 1620, attack: 77, defense: 76, possession: 44, form: [1,3,3,1,3], avgGoals: 1.3, avgConceded: 1.4, avgCorners: 3.0, discipline: 2.9, style: "attack", keyPlayers: ["庫杜斯", "帕爾泰", "阿尤"], formation: "4-2-3-1" },
-  "canada": { name: "加拿大", flag: "🇨🇦", group: "F3", elo: 1600, attack: 77, defense: 74, possession: 45, form: [3,3,1,3,1], avgGoals: 1.4, avgConceded: 1.4, avgCorners: 3.2, discipline: 2.2, style: "attack", keyPlayers: ["戴維斯", "大衛", "布坎南"], formation: "4-3-3" },
-  "congo_dr": { name: "剛果民主共和國", flag: "🇨🇩", group: "A3", elo: 1500, attack: 70, defense: 70, possession: 42, form: [3,1,3,1,3], avgGoals: 1.0, avgConceded: 1.5, avgCorners: 2.8, discipline: 2.5, style: "balanced", keyPlayers: ["姆布庫", "維薩", "姆文帕"], formation: "4-2-3-1" },
-  "bosnia": { name: "波斯尼亞", flag: "🇧🇦", group: "B3", elo: 1580, attack: 75, defense: 74, possession: 44, form: [1,3,1,3,1], avgGoals: 1.2, avgConceded: 1.4, avgCorners: 3.2, discipline: 2.6, style: "balanced", keyPlayers: ["哲科", "皮亞尼奇", "德米羅維奇"], formation: "3-5-2" },
-  "algeria": { name: "阿爾及利亞", flag: "🇩🇿", group: "C3", elo: 1590, attack: 76, defense: 75, possession: 45, form: [3,1,3,1,3], avgGoals: 1.2, avgConceded: 1.3, avgCorners: 3.0, discipline: 2.4, style: "balanced", keyPlayers: ["馬赫雷斯", "本納賽爾", "斯利馬尼"], formation: "4-3-3" },
-  "south_africa": { name: "南非", flag: "🇿🇦", group: "D3", elo: 1520, attack: 68, defense: 70, possession: 42, form: [1,3,1,1,3], avgGoals: 0.9, avgConceded: 1.4, avgCorners: 2.5, discipline: 2.3, style: "defense", keyPlayers: ["姆韋拉", "福斯特", "莫科納"], formation: "4-4-2" },
-  "ivory_coast": { name: "科特迪瓦", flag: "🇨🇮", group: "E3", elo: 1650, attack: 78, defense: 77, possession: 46, form: [3,3,1,3,3], avgGoals: 1.4, avgConceded: 1.3, avgCorners: 3.5, discipline: 2.5, style: "attack", keyPlayers: ["奧斯卡", "扎哈", "凱西"], formation: "4-3-3" },
-  "norway": { name: "挪威", flag: "🇳🇴", group: "F3", elo: 1680, attack: 80, defense: 78, possession: 48, form: [3,1,3,3,1], avgGoals: 1.5, avgConceded: 1.2, avgCorners: 3.8, discipline: 2.0, style: "attack", keyPlayers: ["哈蘭德", "厄德高", "索洛夫"], formation: "4-3-3" },
-  "sweden": { name: "瑞典", flag: "🇸🇪", group: "G3", elo: 1660, attack: 79, defense: 77, possession: 47, form: [3,3,1,3,1], avgGoals: 1.4, avgConceded: 1.2, avgCorners: 3.6, discipline: 2.1, style: "balanced", keyPlayers: ["伊薩克", "庫盧塞夫斯基", "林德洛夫"], formation: "4-4-2" },
-  "egypt": { name: "埃及", flag: "🇪🇬", group: "H3", elo: 1640, attack: 77, defense: 76, possession: 45, form: [3,3,1,1,3], avgGoals: 1.3, avgConceded: 1.2, avgCorners: 3.2, discipline: 2.3, style: "balanced", keyPlayers: ["薩拉赫", "馬爾穆什", "赫加齊"], formation: "4-2-3-1" },
-  "cape_verde": { name: "佛得角", flag: "🇨🇻", group: "A3", elo: 1480, attack: 65, defense: 68, possession: 40, form: [1,3,1,3,1], avgGoals: 0.8, avgConceded: 1.5, avgCorners: 2.5, discipline: 2.4, style: "defense", keyPlayers: ["塔瓦雷斯", "羅德里格斯", "布里托"], formation: "4-4-2" }
-};
-
-// ===================== 淘汰賽對陣 =====================
-const KNOCKOUT_MATCHES = [
-  { round: "32強", date: "06-27", time: "03:00", home: "south_africa", away: "canada", id: "R32-1", status: "finished", score: "0-1" },
-  { round: "32強", date: "06-30", time: "01:00", home: "brazil", away: "japan", id: "R32-2" },
-  { round: "32強", date: "06-30", time: "04:30", home: "germany", away: "paraguay", id: "R32-3" },
-  { round: "32強", date: "06-30", time: "09:00", home: "netherlands", away: "morocco", id: "R32-4" },
-  { round: "32強", date: "07-01", time: "01:00", home: "ivory_coast", away: "norway", id: "R32-5" },
-  { round: "32強", date: "07-01", time: "05:00", home: "france", away: "sweden", id: "R32-6" },
-  { round: "32強", date: "07-01", time: "09:00", home: "mexico", away: "ecuador", id: "R32-7" },
-  { round: "32強", date: "07-02", time: "00:00", home: "england", away: "congo_dr", id: "R32-8" },
-  { round: "32強", date: "07-02", time: "04:00", home: "belgium", away: "senegal", id: "R32-9" },
-  { round: "32強", date: "07-02", time: "08:00", home: "usa", away: "bosnia", id: "R32-10" },
-  { round: "32強", date: "07-03", time: "03:00", home: "spain", away: "austria", id: "R32-11" },
-  { round: "32強", date: "07-03", time: "07:00", home: "portugal", away: "croatia", id: "R32-12" },
-  { round: "32強", date: "07-03", time: "11:00", home: "switzerland", away: "algeria", id: "R32-13" },
-  { round: "32強", date: "07-04", time: "02:00", home: "australia", away: "egypt", id: "R32-14" },
-  { round: "32強", date: "07-04", time: "06:00", home: "argentina", away: "cape_verde", id: "R32-15" },
-  { round: "32強", date: "07-04", time: "09:30", home: "colombia", away: "ghana", id: "R32-16" },
-  { round: "16強", date: "07-06", time: "23:00", home: "winner-R32-1", away: "winner-R32-2", id: "R16-1" },
-  { round: "16強", date: "07-07", time: "03:00", home: "winner-R32-3", away: "winner-R32-4", id: "R16-2" },
-  { round: "16強", date: "07-07", time: "23:00", home: "winner-R32-5", away: "winner-R32-6", id: "R16-3" },
-  { round: "16強", date: "07-08", time: "03:00", home: "winner-R32-7", away: "winner-R32-8", id: "R16-4" },
-  { round: "16強", date: "07-08", time: "23:00", home: "winner-R32-9", away: "winner-R32-10", id: "R16-5" },
-  { round: "16強", date: "07-09", time: "03:00", home: "winner-R32-11", away: "winner-R32-12", id: "R16-6" },
-  { round: "16強", date: "07-09", time: "23:00", home: "winner-R32-13", away: "winner-R32-14", id: "R16-7" },
-  { round: "16強", date: "07-10", time: "03:00", home: "winner-R32-15", away: "winner-R32-16", id: "R16-8" },
-  { round: "8強", date: "07-12", time: "03:00", home: "winner-R16-1", away: "winner-R16-2", id: "QF-1" },
-  { round: "8強", date: "07-12", time: "23:00", home: "winner-R16-3", away: "winner-R16-4", id: "QF-2" },
-  { round: "8強", date: "07-13", time: "03:00", home: "winner-R16-5", away: "winner-R16-6", id: "QF-3" },
-  { round: "8強", date: "07-13", time: "23:00", home: "winner-R16-7", away: "winner-R16-8", id: "QF-4" },
-  { round: "4強", date: "07-16", time: "03:00", home: "winner-QF-1", away: "winner-QF-2", id: "SF-1" },
-  { round: "4強", date: "07-16", time: "23:00", home: "winner-QF-3", away: "winner-QF-4", id: "SF-2" },
-  { round: "決賽", date: "07-20", time: "03:00", home: "winner-SF-1", away: "winner-SF-2", id: "FINAL" }
-];
-
-// ===================== 核心預測引擎 =====================
-function predictMatch(homeId, awayId) {
-  const home = TEAMS[homeId];
-  const away = TEAMS[awayId];
-  if (!home || !away) return null;
-
-  const homeAttack = home.attack * (home.avgGoals / 2.0);
-  const awayAttack = away.attack * (away.avgGoals / 2.0);
-  const homeDefense = home.defense * (1 - home.avgConceded / 3.0);
-  const awayDefense = away.defense * (1 - away.avgConceded / 3.0);
-
-  let homeXG = (homeAttack * 0.6 + (100 - awayDefense) * 0.4) / 50;
-  let awayXG = (awayAttack * 0.6 + (100 - homeDefense) * 0.4) / 50;
-
-  homeXG *= (1 + CALIBRATION.knockoutConservative);
-  awayXG *= (1 + CALIBRATION.knockoutConservative);
-
-  const homeForm = home.form.reduce((a,b) => a+b, 0) / home.form.length / 3;
-  const awayForm = away.form.reduce((a,b) => a+b, 0) / away.form.length / 3;
-  homeXG *= (0.85 + homeForm * 0.3);
-  awayXG *= (0.85 + awayForm * 0.3);
-
-  const possDiff = (home.possession - away.possession) / 100;
-  homeXG *= (1 + possDiff * 0.15);
-  awayXG *= (1 - possDiff * 0.15);
-
-  const goalDiff = homeXG - awayXG;
-  const totalGoals = homeXG + awayXG;
-  const drawProb = Math.max(0.18, 0.25 - Math.abs(goalDiff) * 0.08);
-  let homeWin = 0.5 + goalDiff * 0.15 - drawProb * 0.4;
-  let awayWin = 0.5 - goalDiff * 0.15 - drawProb * 0.4;
-  const sum = homeWin + awayWin + drawProb;
-  homeWin /= sum; awayWin /= sum; const drawP = drawProb / sum;
-
-  const over25 = totalGoals > 2.5 ? 0.55 + (totalGoals - 2.5) * 0.08 : 0.45 - (2.5 - totalGoals) * 0.08;
-  const over3 = totalGoals > 3.0 ? 0.45 + (totalGoals - 3.0) * 0.07 : 0.35 - (3.0 - totalGoals) * 0.06;
-  const btts = (homeXG > 0.8 && awayXG > 0.8) ? 0.55 + (homeXG + awayXG - 1.6) * 0.05 : 0.35;
-  const cornerBase = (home.avgCorners + away.avgCorners) * 0.85;
-  const cornerKO = cornerBase * (1 + CALIBRATION.knockoutConservative * 0.5);
-  const cardBase = (home.discipline + away.discipline) * CALIBRATION.knockoutCardFactor;
-  const styleDiff = (home.style === "attack" && away.style === "defense") || (home.style === "defense" && away.style === "attack") ? 1.15 : 1.0;
-  const totalCards = cardBase * styleDiff;
-  const htHome = homeXG * 0.45;
-  const htAway = awayXG * 0.42;
-  const htOver05 = (htHome + htAway) > 0.8 ? 0.65 : 0.45;
-  const eloDiff = home.elo - away.elo;
-  const upsetRisk = (eloDiff > 150 && awayWin > 0.30) ? "高" : (eloDiff > 80 && awayWin > 0.25) ? "中" : "低";
-
-  return {
-    homeScore: homeXG.toFixed(1), awayScore: awayXG.toFixed(1),
-    homeWin: (homeWin*100).toFixed(1), draw: (drawP*100).toFixed(1), awayWin: (awayWin*100).toFixed(1),
-    over25: (over25*100).toFixed(1), over3: (over3*100).toFixed(1),
-    btts: (btts*100).toFixed(1), corners: cornerKO.toFixed(1),
-    cards: totalCards.toFixed(1), yellowCards: (totalCards * 0.85).toFixed(1), redCards: (totalCards * 0.08).toFixed(1),
-    htHome: htHome.toFixed(1), htAway: htAway.toFixed(1), htOver05: (htOver05*100).toFixed(1),
-    upsetRisk, recommendation: homeWin > awayWin ? "主勝" : awayWin > homeWin ? "客勝" : "平局",
-    confidence: Math.max(homeWin, awayWin, drawP),
-    goalExpectation: totalGoals.toFixed(2)
-  };
-}
-
-// ===================== 渲染函數 =====================
-function switchTab(tabId) {
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-  document.getElementById(tabId).classList.add('active');
-  event.target.classList.add('active');
-}
-
-function renderSchedule() {
-  const container = document.getElementById('scheduleContainer');
-  let html = '';
-  let currentRound = '';
-  KNOCKOUT_MATCHES.forEach(m => {
-    if (m.round !== currentRound) {
-      html += `<div class="matchday-header">${m.round}</div>`;
-      currentRound = m.round;
-    }
-    const homeTeam = TEAMS[m.home] || { name: m.home, flag: '❓' };
-    const awayTeam = TEAMS[m.away] || { name: m.away, flag: '❓' };
-    const isFinished = m.status === 'finished';
-    const statusClass = isFinished ? 'status-finished' : 'status-upcoming';
-    const statusText = isFinished ? '完場' : '未開始';
-    const scoreDisplay = isFinished && m.score ? `<div class="match-score">${m.score}</div>` : '';
-    html += `
-      <div class="match-card">
-        <div class="match-time"><div class="day">${m.date}</div>${m.time}</div>
-        <div class="match-teams">
-          <div class="match-team-row"><span class="match-flag">${homeTeam.flag}</span><span class="match-name">${homeTeam.name}</span></div>
-          <div class="match-team-row"><span class="match-flag">${awayTeam.flag}</span><span class="match-name">${awayTeam.name}</span></div>
-          <div class="match-odds">
-            <span class="odd-box">1X2</span>
-            <span class="odd-box">大/小 2.5</span>
-            <span class="odd-box">角球 8.5</span>
-          </div>
-        </div>
-        ${scoreDisplay}
-        <span class="match-status ${statusClass}">${statusText}</span>
-      </div>`;
-  });
-  container.innerHTML = html;
-}
-
-function renderFullAnalysis() {
-  const container = document.getElementById('fullContainer');
-  let html = '';
-  KNOCKOUT_MATCHES.slice(0, 16).forEach(m => {
-    if (m.status === 'finished') return;
-    const pred = predictMatch(m.home, m.away);
-    if (!pred) return;
-    const homeTeam = TEAMS[m.home];
-    const awayTeam = TEAMS[m.away];
-    html += `
-      <div class="full-card">
-        <div class="full-header">
-          <div class="full-teams">${homeTeam.flag} ${homeTeam.name} vs ${awayTeam.name} ${awayTeam.flag}</div>
-          <div class="full-time">${m.date} ${m.time}</div>
-        </div>
-        <div class="full-grid">
-          <div class="full-box"><div class="label">預測比分</div><div class="value" style="color:var(--text-gold)">${pred.homeScore} - ${pred.awayScore}</div></div>
-          <div class="full-box"><div class="label">主勝概率</div><div class="value" style="color:var(--accent)">${pred.homeWin}%</div></div>
-          <div class="full-box"><div class="label">客勝概率</div><div class="value" style="color:var(--info)">${pred.awayWin}%</div></div>
-          <div class="full-box"><div class="label">平局概率</div><div class="value">${pred.draw}%</div><div class="sub">淘汰賽+ET</div></div>
-          <div class="full-box"><div class="label">大2.5</div><div class="value" style="color:var(--success)">${pred.over25}%</div></div>
-          <div class="full-box"><div class="label">雙方進球</div><div class="value" style="color:var(--purple)">${pred.btts}%</div></div>
-        </div>
-        <div class="full-row">
-          <div class="full-tag ${pred.recommendation === '主勝' ? 'tag-green' : 'tag-yellow'}">推薦: ${pred.recommendation}</div>
-          <div class="full-tag tag-blue">預期進球: ${pred.goalExpectation}</div>
-          <div class="full-tag ${pred.upsetRisk === '高' ? 'tag-red' : pred.upsetRisk === '中' ? 'tag-yellow' : 'tag-green'}">爆冷: ${pred.upsetRisk}</div>
-        </div>
-      </div>`;
-  });
-  container.innerHTML = html;
-}
-
-function renderHT() {
-  const container = document.getElementById('htContainer');
-  let html = '';
-  KNOCKOUT_MATCHES.slice(0, 16).forEach(m => {
-    if (m.status === 'finished') return;
-    const pred = predictMatch(m.home, m.away);
-    if (!pred) return;
-    const homeTeam = TEAMS[m.home];
-    const awayTeam = TEAMS[m.away];
-    html += `
-      <div class="ht-card">
-        <div class="ht-header">
-          <div class="ht-teams">${homeTeam.flag} ${homeTeam.name} vs ${awayTeam.name} ${awayTeam.flag}</div>
-          <span class="ht-badge">HT/FT</span>
-        </div>
-        <div class="ht-grid">
-          <div class="ht-box"><div class="label">HT 主隊</div><div class="value">${pred.htHome}</div></div>
-          <div class="ht-box"><div class="label">HT 客隊</div><div class="value">${pred.htAway}</div></div>
-          <div class="ht-box"><div class="label">HT 大0.5</div><div class="value">${pred.htOver05}%</div></div>
-          <div class="ht-box"><div class="label">FT 主隊</div><div class="value">${pred.homeScore}</div></div>
-          <div class="ht-box"><div class="label">FT 客隊</div><div class="value">${pred.awayScore}</div></div>
-          <div class="ht-box"><div class="label">HT/FT 推薦</div><div class="value" style="color:var(--accent)">${parseFloat(pred.htHome) > parseFloat(pred.htAway) ? '1/1' : parseFloat(pred.htAway) > parseFloat(pred.htHome) ? '2/2' : 'X/1'}</div></div>
-        </div>
-      </div>`;
-  });
-  container.innerHTML = html;
-}
-
-function renderOdds() {
-  const container = document.getElementById('oddsContainer');
-  let html = '';
-  KNOCKOUT_MATCHES.slice(0, 16).forEach(m => {
-    if (m.status === 'finished') return;
-    const pred = predictMatch(m.home, m.away);
-    if (!pred) return;
-    const homeTeam = TEAMS[m.home];
-    const awayTeam = TEAMS[m.away];
-    const homeOdds = (1 / (pred.homeWin / 100)).toFixed(2);
-    const drawOdds = (1 / (pred.draw / 100)).toFixed(2);
-    const awayOdds = (1 / (pred.awayWin / 100)).toFixed(2);
-    html += `
-      <div class="odds-match-card">
-        <div class="odds-match-title">
-          <div class="odds-teams">${homeTeam.flag} ${homeTeam.name} vs ${awayTeam.name} ${awayTeam.flag}</div>
-          <div class="odds-time">${m.date}</div>
-        </div>
-        <div class="odds-row">
-          <div class="odds-item ${pred.recommendation === '主勝' ? 'highlight' : ''}">
-            <div class="label">主勝</div><div class="value">${homeOdds}</div><div class="prob">${pred.homeWin}%</div>
-          </div>
-          <div class="odds-item ${pred.recommendation === '平局' ? 'highlight' : ''}">
-            <div class="label">平局</div><div class="value">${drawOdds}</div><div class="prob">${pred.draw}%</div>
-          </div>
-          <div class="odds-item ${pred.recommendation === '客勝' ? 'highlight' : ''}">
-            <div class="label">客勝</div><div class="value">${awayOdds}</div><div class="prob">${pred.awayWin}%</div>
-          </div>
-        </div>
-      </div>`;
-  });
-  container.innerHTML = html;
-}
-
-function renderCorners() {
-  const tbody = document.getElementById('cornerBody');
-  let html = '';
-  KNOCKOUT_MATCHES.slice(0, 16).forEach(m => {
-    if (m.status === 'finished') return;
-    const pred = predictMatch(m.home, m.away);
-    if (!pred) return;
-    const homeTeam = TEAMS[m.home];
-    const awayTeam = TEAMS[m.away];
-    const cornerNum = parseFloat(pred.corners);
-    const type = cornerNum >= 9 ? 'high' : cornerNum <= 6 ? 'low' : 'mid';
-    html += `
-      <tr data-type="${type}">
-        <td><div class="corner-team">${homeTeam.flag} ${homeTeam.name}<br><small style="color:var(--text-secondary)">vs</small><br>${awayTeam.flag} ${awayTeam.name}</div></td>
-        <td><span class="corner-val">${pred.corners}</span></td>
-        <td><div class="corner-bar-wrap"><div class="corner-bar" style="width:${Math.min(homeTeam.avgCorners * 15, 100)}%"></div></div></td>
-        <td><div class="corner-bar-wrap"><div class="corner-bar" style="width:${Math.min(awayTeam.avgCorners * 15, 100)}%"></div></div></td>
-        <td><span class="corner-pred">${cornerNum >= 9 ? '大8.5' : cornerNum <= 6 ? '小7.5' : '7.5-8.5'}</span></td>
-      </tr>`;
-  });
-  tbody.innerHTML = html;
-}
-
-function filterCorner(type) {
-  document.querySelectorAll('.corner-filter').forEach(f => f.classList.remove('active'));
-  event.target.classList.add('active');
-  document.querySelectorAll('#cornerBody tr').forEach(tr => {
-    tr.style.display = (type === 'all' || tr.dataset.type === type) ? '' : 'none';
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = card.querySelector('.copy-btn');
+    btn.textContent = "✅ 已複製!";
+    setTimeout(() => btn.textContent = "📋 複製分析", 2000);
   });
 }
 
-function renderCards() {
-  const tbody = document.getElementById('cardBody');
-  let html = '';
-  KNOCKOUT_MATCHES.slice(0, 16).forEach(m => {
-    if (m.status === 'finished') return;
-    const pred = predictMatch(m.home, m.away);
-    if (!pred) return;
-    const homeTeam = TEAMS[m.home];
-    const awayTeam = TEAMS[m.away];
-    const cardNum = parseFloat(pred.cards);
-    const type = cardNum >= 5.5 ? 'high' : cardNum >= 4.0 ? 'mid' : 'low';
-    html += `
-      <tr data-type="${type}">
-        <td><div class="card-team-cell">${homeTeam.flag} ${homeTeam.name}<br><small>vs</small><br>${awayTeam.flag} ${awayTeam.name}</div></td>
-        <td><div class="card-bar-wrap"><div class="card-bar card-bar-yellow" style="width:${Math.min(homeTeam.discipline * 20, 100)}%"></div></div><span class="card-val card-val-yellow">${homeTeam.discipline}</span></td>
-        <td><div class="card-bar-wrap"><div class="card-bar card-bar-red" style="width:${Math.min(awayTeam.discipline * 20, 100)}%"></div></div><span class="card-val card-val-red">${awayTeam.discipline}</span></td>
-        <td>${pred.yellowCards}</td>
-        <td>${pred.redCards}</td>
-        <td><b style="color:var(--danger)">${pred.cards}</b></td>
-        <td><span class="card-pred ${type === 'high' ? 'card-pred-high' : type === 'mid' ? 'card-pred-mid' : 'card-pred-low'}">${type === 'high' ? '高罰牌' : type === 'mid' ? '中等' : '低罰牌'}</span></td>
-      </tr>`;
-  });
-  tbody.innerHTML = html;
-}
-
-function filterCard(type) {
-  document.querySelectorAll('.card-filter').forEach(f => f.classList.remove('active'));
-  event.target.classList.add('active');
-  document.querySelectorAll('#cardBody tr').forEach(tr => {
-    tr.style.display = (type === 'all' || tr.dataset.type === type) ? '' : 'none';
-  });
-}
-
-function renderTeams() {
-  const container = document.getElementById('teamList');
-  let html = '';
-  Object.entries(TEAMS).forEach(([id, t]) => {
-    const formStr = t.form.map(f => f === 3 ? '✅' : f === 1 ? '❌' : '➖').join(' ');
-    html += `
-      <div class="team-card" id="team-${id}">
-        <div class="team-header" onclick="toggleTeam('${id}')">
-          <div class="team-info">
-            <div class="team-flag">${t.flag}</div>
-            <div>
-              <div class="team-name">${t.name} <span class="team-group">${t.group}</span></div>
-              <div style="font-size:0.7rem;color:var(--text-secondary);margin-top:2px">近期: ${formStr}</div>
-            </div>
-          </div>
-          <span class="team-arrow">▶</span>
-        </div>
-        <div class="team-detail">
-          <div class="detail-inner">
-            <div class="formation-title">陣型: ${t.formation}</div>
-            <div class="pitch">
-              <div class="pos-row"><div class="player-dot"><div class="dot gk">GK</div><div class="player-name">門將</div></div></div>
-              <div class="pos-row">${t.formation.startsWith('3') ? '<div class="player-dot"><div class="dot">CB</div><div class="player-name">中衛</div></div><div class="player-dot"><div class="dot">CB</div><div class="player-name">中衛</div></div><div class="player-dot"><div class="dot">CB</div><div class="player-name">中衛</div></div>' : '<div class="player-dot"><div class="dot">LB</div><div class="player-name">左後衛</div></div><div class="player-dot"><div class="dot">CB</div><div class="player-name">中衛</div></div><div class="player-dot"><div class="dot">CB</div><div class="player-name">中衛</div></div><div class="player-dot"><div class="dot">RB</div><div class="player-name">右後衛</div></div>'}</div>
-              <div class="pos-row"><div class="player-dot"><div class="dot">CM</div><div class="player-name">中場</div></div><div class="player-dot"><div class="dot">CM</div><div class="player-name">中場</div></div><div class="player-dot"><div class="dot">CM</div><div class="player-name">中場</div></div></div>
-              <div class="pos-row"><div class="player-dot"><div class="dot">LW</div><div class="player-name">左邊鋒</div></div><div class="player-dot"><div class="dot">ST</div><div class="player-name">前鋒</div></div><div class="player-dot"><div class="dot">RW</div><div class="player-name">右邊鋒</div></div></div>
-            </div>
-            <div class="stats-grid">
-              <div class="stat-box"><div class="stat-value">${t.attack}</div><div class="stat-label">進攻</div></div>
-              <div class="stat-box"><div class="stat-value">${t.defense}</div><div class="stat-label">防守</div></div>
-              <div class="stat-box"><div class="stat-value">${t.possession}%</div><div class="stat-label">控球</div></div>
-              <div class="stat-box"><div class="stat-value">${t.avgGoals}</div><div class="stat-label">場均進球</div></div>
-              <div class="stat-box"><div class="stat-value">${t.avgConceded}</div><div class="stat-label">場均失球</div></div>
-              <div class="stat-box"><div class="stat-value">${t.elo}</div><div class="stat-label">ELO</div></div>
-            </div>
-            <div style="margin-top:12px;font-size:0.75rem;color:var(--text-secondary)">
-              <b style="color:var(--accent)">關鍵球員:</b> ${t.keyPlayers.join('、')}
-            </div>
-          </div>
-        </div>
-      </div>`;
-  });
-  container.innerHTML = html;
-}
-
-function toggleTeam(id) {
-  document.getElementById('team-' + id).classList.toggle('expanded');
-}
-
-function populateCompareSelects() {
-  const t1 = document.getElementById('team1Select');
-  const t2 = document.getElementById('team2Select');
-  Object.entries(TEAMS).forEach(([id, t]) => {
-    t1.innerHTML += `<option value="${id}">${t.flag} ${t.name}</option>`;
-    t2.innerHTML += `<option value="${id}">${t.flag} ${t.name}</option>`;
-  });
-}
-
-let radarChart = null;
-
-function compareTeams() {
-  const t1Id = document.getElementById('team1Select').value;
-  const t2Id = document.getElementById('team2Select').value;
-  if (!t1Id || !t2Id) { alert('請選擇兩支球隊'); return; }
-  const t1 = TEAMS[t1Id], t2 = TEAMS[t2Id];
-  const pred = predictMatch(t1Id, t2Id);
-
-  const result = document.getElementById('compareResult');
-  result.innerHTML = `
-    <div class="compare-result">
-      <div class="score-display">
-        <div class="score-team"><div class="flag">${t1.flag}</div><div class="name">${t1.name}</div></div>
-        <div class="score-box"><span class="score-num">${pred.homeScore}</span><span class="score-sep">:</span><span class="score-num">${pred.awayScore}</span></div>
-        <div class="score-team"><div class="flag">${t2.flag}</div><div class="name">${t2.name}</div></div>
-      </div>
-      <div class="prediction-tags">
-        <span class="pred-tag">1X2: ${pred.homeWin}% / ${pred.draw}% / ${pred.awayWin}%</span>
-        <span class="pred-tag">大2.5: ${pred.over25}%</span>
-        <span class="pred-tag">BTTS: ${pred.btts}%</span>
-        <span class="pred-tag">角球: ${pred.corners}</span>
-        <span class="pred-tag">罰牌: ${pred.cards}</span>
-      </div>
-      <div class="radar-wrap"><canvas id="radarChart"></canvas></div>
-      <div class="stats-compare">
-        <div class="compare-stat-row"><span class="compare-val val-team1">${t1.attack}</span><div class="bar-wrap"><div class="bar bar-team1" style="width:${t1.attack}%"></div><div class="bar bar-team2" style="width:${t2.attack}%;position:absolute;right:0;top:0"></div></div><span class="compare-label">進攻</span><span class="compare-val val-team2">${t2.attack}</span></div>
-        <div class="compare-stat-row"><span class="compare-val val-team1">${t1.defense}</span><div class="bar-wrap"><div class="bar bar-team1" style="width:${t1.defense}%"></div><div class="bar bar-team2" style="width:${t2.defense}%;position:absolute;right:0;top:0"></div></div><span class="compare-label">防守</span><span class="compare-val val-team2">${t2.defense}</span></div>
-        <div class="compare-stat-row"><span class="compare-val val-team1">${t1.possession}</span><div class="bar-wrap"><div class="bar bar-team1" style="width:${t1.possession}%"></div><div class="bar bar-team2" style="width:${t2.possession}%;position:absolute;right:0;top:0"></div></div><span class="compare-label">控球</span><span class="compare-val val-team2">${t2.possession}</span></div>
-        <div class="compare-stat-row"><span class="compare-val val-team1">${t1.elo}</span><div class="bar-wrap"><div class="bar bar-team1" style="width:${t1.elo/20}%"></div><div class="bar bar-team2" style="width:${t2.elo/20}%;position:absolute;right:0;top:0"></div></div><span class="compare-label">ELO</span><span class="compare-val val-team2">${t2.elo}</span></div>
-      </div>
-    </div>`;
-
-  if (radarChart) radarChart.destroy();
-  radarChart = new Chart(document.getElementById('radarChart'), {
-    type: 'radar',
-    data: {
-      labels: ['進攻', '防守', '控球', '狀態', 'ELO/20', '進球率'],
-      datasets: [
-        { label: t1.name, data: [t1.attack, t1.defense, t1.possession, t1.form.reduce((a,b)=>a+b)/t1.form.length*33, t1.elo/20, t1.avgGoals*30], borderColor: '#facc15', backgroundColor: 'rgba(250,204,21,0.2)', pointBackgroundColor: '#facc15' },
-        { label: t2.name, data: [t2.attack, t2.defense, t2.possession, t2.form.reduce((a,b)=>a+b)/t2.form.length*33, t2.elo/20, t2.avgGoals*30], borderColor: '#3b82f6', backgroundColor: 'rgba(59,130,246,0.2)', pointBackgroundColor: '#3b82f6' }
-      ]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      scales: { r: { ticks: { display: false }, grid: { color: 'rgba(255,255,255,0.1)' }, pointLabels: { color: '#94a3b8' } } },
-      plugins: { legend: { labels: { color: '#f8fafc' } } }
-    }
-  });
-}
-
-function renderLive() {
-  const container = document.getElementById('liveContainer');
-  const liveMatches = KNOCKOUT_MATCHES.slice(0, 4).map(m => {
-    const pred = predictMatch(m.home, m.away);
-    const home = TEAMS[m.home], away = TEAMS[m.away];
-    const min = Math.floor(Math.random() * 90);
-    const hScore = Math.floor(Math.random() * 3);
-    const aScore = Math.floor(Math.random() * 2);
-    const momentum = Math.random();
-    const motColor = momentum > 0.6 ? 'motivation-high' : momentum > 0.35 ? 'motivation-mid' : 'motivation-low';
-    const upset = pred && pred.upsetRisk === '高' ? '<div class="upset-alert">⚠️ 爆冷預警：客隊狀態上升，主隊壓力增大</div>' : '';
-    return `
-      <div class="live-card">
-        <div class="live-match-title">${home.flag} ${home.name} ${hScore} - ${aScore} ${away.name} ${away.flag} <span style="color:var(--danger);margin-left:8px">${min}'</span></div>
-        <div style="font-size:0.75rem;color:var(--text-secondary)">預測最終: ${pred ? pred.homeScore + ' - ' + pred.awayScore : 'N/A'} | 大2.5: ${pred ? pred.over25 : 'N/A'}% | BTTS: ${pred ? pred.btts : 'N/A'}%</div>
-        <div class="motivation-bar"><div class="motivation-fill ${motColor}" style="width:${momentum*100}%"></div></div>
-        <div style="font-size:0.65rem;color:var(--text-secondary);margin-top:2px">戰意指數: ${(momentum*100).toFixed(0)}%</div>
-        ${upset}
-        <div class="live-stats">
-          <div class="live-stat"><div class="num">${(Math.random()*12+3).toFixed(1)}</div>射門</div>
-          <div class="live-stat"><div class="num">${(Math.random()*5+1).toFixed(1)}</div>射正</div>
-          <div class="live-stat"><div class="num">${Math.floor(Math.random()*6)}</div>角球</div>
-          <div class="live-stat"><div class="num">${Math.floor(Math.random()*3)}</div>黃牌</div>
-        </div>
-      </div>`;
-  });
-  container.innerHTML = liveMatches.join('');
-}
-
-// ===================== 初始化 =====================
 document.addEventListener('DOMContentLoaded', () => {
-  renderSchedule();
-  renderFullAnalysis();
-  renderHT();
-  renderOdds();
-  renderCorners();
-  renderCards();
-  renderTeams();
-  populateCompareSelects();
-  renderLive();
+  document.querySelectorAll('.match-card').forEach((card, i) => {
+    card.style.opacity = '0';
+    card.style.transform = 'translateY(20px)';
+    card.style.transition = 'all 0.5s ease';
+    setTimeout(() => {
+      card.style.opacity = '1';
+      card.style.transform = 'translateY(0)';
+    }, i * 150);
+  });
 });
 </script>
-
 
 </body>
 </html>
