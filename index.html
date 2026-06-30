@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>UNIFIED v3.3.67 世界盃2026 賽程分析</title>
+<title>UNIFIED v3.3.67 世界盃2026 32強淘汰賽</title>
 <style>
 :root {
   --bg: #0a1628;
@@ -15,7 +15,6 @@
   --text: #e8e8e8;
   --muted: #3a5080;
   --tab-bg: #0f1d30;
-  --tab-active: #ffd700;
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body {
@@ -38,7 +37,6 @@ body {
 .header .subtitle { font-size: 0.75rem; color: var(--blue); margin-top: 4px; }
 .header .version { font-size: 0.65rem; color: var(--muted); margin-top: 2px; }
 
-/* 分頁標籤 */
 .tab-container {
   display: flex;
   overflow-x: auto;
@@ -69,18 +67,11 @@ body {
   color: var(--bg);
   font-weight: bold;
 }
-.tab-btn:hover:not(.active) {
-  background: #2a3f5f;
-}
+.tab-btn:hover:not(.active) { background: #2a3f5f; }
 
-/* 分頁內容 */
-.tab-content {
-  display: none;
-  padding: 10px 0;
-}
-.tab-content.active {
-  display: block;
-}
+.tab-content { display: none; padding: 10px 0; }
+.tab-content.active { display: block; }
+
 .date-title {
   text-align: center;
   font-size: 1rem;
@@ -101,6 +92,10 @@ body {
   border-left: 4px solid var(--accent);
   box-shadow: 0 4px 12px rgba(0,0,0,0.3);
 }
+.match-card.finished {
+  border-left-color: var(--green);
+  opacity: 0.9;
+}
 .match-header {
   display: flex;
   justify-content: space-between;
@@ -119,14 +114,29 @@ body {
   border-radius: 10px;
   margin-left: 8px;
 }
-.tbd-badge {
+.finished-badge {
   font-size: 0.65rem;
-  color: var(--red);
-  background: rgba(239,68,68,0.1);
+  color: var(--green);
+  background: rgba(74,222,128,0.1);
   padding: 2px 8px;
   border-radius: 10px;
   margin-left: 8px;
-  border: 1px solid var(--red);
+  border: 1px solid var(--green);
+}
+.result-badge {
+  font-size: 0.85rem;
+  color: var(--text);
+  background: #2a3f5f;
+  padding: 6px 14px;
+  border-radius: 8px;
+  margin-top: 6px;
+  display: inline-block;
+  font-weight: bold;
+}
+.result-detail {
+  font-size: 0.7rem;
+  color: var(--muted);
+  margin-top: 4px;
 }
 
 .section-title {
@@ -254,6 +264,17 @@ body {
 }
 .copy-btn:hover { background: var(--accent); color: var(--bg); }
 
+.elimination-note {
+  background: rgba(255,215,0,0.05);
+  border: 1px dashed var(--accent);
+  border-radius: 8px;
+  padding: 10px;
+  margin: 8px 0;
+  font-size: 0.75rem;
+  color: var(--muted);
+  text-align: center;
+}
+
 @media (max-width: 400px) {
   .grid-3 { grid-template-columns: repeat(2, 1fr); }
   .tab-btn { padding: 6px 12px; font-size: 0.75rem; }
@@ -264,59 +285,251 @@ body {
 
 <div class="header">
   <h1>🏆 UNIFIED v3.3.67 世界盃2026</h1>
-  <div class="subtitle">全場標合 + 上半場預測 + 波膽 + 角球</div>
+  <div class="subtitle">32強淘汰賽 | 全場標合 + 半場 + 波膽 + 角球</div>
   <div class="version">65場回測校準 | 1X2:61.5% | OU:58.5% | HT:50.8%</div>
 </div>
 
-<!-- 分頁標籤 -->
 <div class="tab-container">
-  <button class="tab-btn active" onclick="showTab('tab-0630')">今天 6/30</button>
-  <button class="tab-btn" onclick="showTab('tab-0701')">7/1 週三</button>
-  <button class="tab-btn" onclick="showTab('tab-0702')">7/2 週四</button>
-  <button class="tab-btn" onclick="showTab('tab-0703')">7/3 週五</button>
-  <button class="tab-btn" onclick="showTab('tab-0704')">7/4 週六</button>
-  <button class="tab-btn" onclick="showTab('tab-0705')">7/5 週日</button>
-  <button class="tab-btn" onclick="showTab('tab-0706')">7/6 週一</button>
-  <button class="tab-btn" onclick="showTab('tab-0707')">7/7 週二</button>
+  <button class="tab-btn" onclick="showTab('tab-0629')">6/29</button>
+  <button class="tab-btn" onclick="showTab('tab-0630')">6/30</button>
+  <button class="tab-btn active" onclick="showTab('tab-0701')">今天 7/1</button>
+  <button class="tab-btn" onclick="showTab('tab-0702')">7/2</button>
+  <button class="tab-btn" onclick="showTab('tab-0703')">7/3</button>
+  <button class="tab-btn" onclick="showTab('tab-0704')">7/4</button>
 </div>
-<div id="tab-0630" class="tab-content active">
-<div class="date-title">今天 6月30日（星期二）</div>
+<div id="tab-0629" class="tab-content">
+<div class="date-title">6月29日（已完賽）</div>
 
-<div class="match-card" id="match-06-30-0">
+<div class="match-card finished" id="match-06-29-0">
   <div class="match-header">
-    <div class="match-teams">德國 vs 巴拉圭<span class="match-round">R3</span></div>
-    <div class="match-time">04:30</div>
+    <div class="match-teams">南非 vs 加拿大<span class="match-round">32強</span><span class="finished-badge">已完賽</span><div class="result-badge">0 - 1</div><div class="result-detail">加拿大勝</div></div>
+    <div class="match-time">03:00</div>
   </div>
+
+  <div class="elimination-note">⚠️ 淘汰賽模式：預期進球較小組賽保守 | 和局可進加時/點球</div>
 
   <div class="section-title">📊 全場標合分析</div>
   <div class="grid-3">
     <div class="stat-box">
-      <div class="stat-label">預測比分</div>
-      <div class="stat-value gold">1.9 - 0.4</div>
+      <div class="stat-label">預期進球</div>
+      <div class="stat-value gold">0.7 - 1.2</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">主勝</div>
-      <div class="stat-value green">73.2%</div>
+      <div class="stat-value green">22.5%</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">客勝</div>
-      <div class="stat-value blue">7.5%</div>
+      <div class="stat-value blue">55.5%</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">平局</div>
-      <div class="stat-value">19.3%</div>
+      <div class="stat-value">22.0%</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">大 2.5</div>
-      <div class="stat-value green">57.6%</div>
+      <div class="stat-value green">45.4%</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">雙方進球</div>
-      <span class="stat-value green">是</span>
+      <span class="stat-value red">否</span>
     </div>
   </div>
   <div style="text-align:center; margin: 8px 0;">
-    <span class="recommendation rec-home">主勝</span> <span class="recommendation rec-over">大2.5</span>
+    <span class="recommendation rec-away">客勝</span> <span class="recommendation rec-draw">觀望</span>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-title">🚩 全場角球 + 波膽</div>
+  <div class="grid-2">
+    <div class="stat-box">
+      <div class="stat-label">預期總角球</div>
+      <div class="stat-value gold">9.4</div>
+      <div class="stat-label" style="margin-top:4px">主 4.7 + 客 4.7</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">波膽最高機率</div>
+      <div class="stat-value gold">0-0</div>
+      <div class="cs-list"><div class="cs-item"><span class="cs-score">0-0</span> <span class="cs-prob">18.8%</span></div><div class="cs-item"><span class="cs-score">0-1</span> <span class="cs-prob">18.4%</span></div><div class="cs-item"><span class="cs-score">1-1</span> <span class="cs-prob">13.6%</span></div><div class="cs-item"><span class="cs-score">0-2</span> <span class="cs-prob">11.6%</span></div><div class="cs-item"><span class="cs-score">1-0</span> <span class="cs-prob">8.8%</span></div></div>
+    </div>
+  </div>
+  <div style="margin-top:8px; font-size:0.75rem; color:var(--muted);">
+    主風格: 防守反擊 | 客風格: 體能衝擊
+  </div>
+  <div class="corner-bar"><span style="width:30px">角8.5</span><div class="bar"><div class="bar-fill" style="width:59.64%"></div></div><span>60%</span></div><div class="corner-bar"><span style="width:30px">角9.0</span><div class="bar"><div class="bar-fill" style="width:46.58%"></div></div><span>47%</span></div><div class="corner-bar"><span style="width:30px">角9.5</span><div class="bar"><div class="bar-fill" style="width:46.58%"></div></div><span>47%</span></div><div class="corner-bar"><span style="width:30px">角10.0</span><div class="bar"><div class="bar-fill" style="width:34.300000000000004%"></div></div><span>34%</span></div><div class="corner-bar"><span style="width:30px">角10.5</span><div class="bar"><div class="bar-fill" style="width:34.300000000000004%"></div></div><span>34%</span></div><div class="corner-bar"><span style="width:30px">角11.0</span><div class="bar"><div class="bar-fill" style="width:23.799999999999997%"></div></div><span>24%</span></div>
+
+  <div class="divider"></div>
+
+  <div class="section-title">⏱️ 上半場預測 (HT/FT)</div>
+  <div class="grid-3">
+    <div class="stat-box">
+      <div class="stat-label">HT 主隊</div>
+      <div class="stat-value">0.2</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">HT 客隊</div>
+      <div class="stat-value">0.5</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">HT 大 0.5</div>
+      <div class="stat-value green">50.7%</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">FT 主隊</div>
+      <div class="stat-value green">0.7</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">FT 客隊</div>
+      <div class="stat-value blue">1.2</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">HT 角球</div>
+      <div class="stat-value gold">3.3</div>
+    </div>
+  </div>
+  <div style="text-align:center; margin-top:8px; font-size:0.8rem;">
+    <span style="color:var(--green)">HT/FT 推薦: A/A</span>
+  </div>
+
+  <button class="copy-btn" onclick="copyMatch('06-29-0')">📋 複製分析</button>
+</div>
+</div>
+<div id="tab-0630" class="tab-content">
+<div class="date-title">6月30日（已完賽）</div>
+
+<div class="match-card finished" id="match-06-30-0">
+  <div class="match-header">
+    <div class="match-teams">巴西 vs 日本<span class="match-round">32強</span><span class="finished-badge">已完賽</span><div class="result-badge">2 - 1</div><div class="result-detail">巴西勝</div></div>
+    <div class="match-time">01:00</div>
+  </div>
+
+  <div class="elimination-note">⚠️ 淘汰賽模式：預期進球較小組賽保守 | 和局可進加時/點球</div>
+
+  <div class="section-title">📊 全場標合分析</div>
+  <div class="grid-3">
+    <div class="stat-box">
+      <div class="stat-label">預期進球</div>
+      <div class="stat-value gold">1.8 - 0.6</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">主勝</div>
+      <div class="stat-value green">66.1%</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">客勝</div>
+      <div class="stat-value blue">12.3%</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">平局</div>
+      <div class="stat-value">21.6%</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">大 2.5</div>
+      <div class="stat-value green">52.7%</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">雙方進球</div>
+      <span class="stat-value red">否</span>
+    </div>
+  </div>
+  <div style="text-align:center; margin: 8px 0;">
+    <span class="recommendation rec-home">主勝</span> <span class="recommendation rec-draw">觀望</span>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-title">🚩 全場角球 + 波膽</div>
+  <div class="grid-2">
+    <div class="stat-box">
+      <div class="stat-label">預期總角球</div>
+      <div class="stat-value gold">10.9</div>
+      <div class="stat-label" style="margin-top:4px">主 5.6 + 客 5.3</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">波膽最高機率</div>
+      <div class="stat-value gold">1-0</div>
+      <div class="cs-list"><div class="cs-item"><span class="cs-score">1-0</span> <span class="cs-prob">15.4%</span></div><div class="cs-item"><span class="cs-score">2-0</span> <span class="cs-prob">15.0%</span></div><div class="cs-item"><span class="cs-score">1-1</span> <span class="cs-prob">11.2%</span></div><div class="cs-item"><span class="cs-score">0-0</span> <span class="cs-prob">10.6%</span></div><div class="cs-item"><span class="cs-score">3-0</span> <span class="cs-prob">8.9%</span></div></div>
+    </div>
+  </div>
+  <div style="margin-top:8px; font-size:0.75rem; color:var(--muted);">
+    主風格: 技術流 | 客風格: 快速傳切
+  </div>
+  <div class="corner-bar"><span style="width:30px">角8.5</span><div class="bar"><div class="bar-fill" style="width:75.56%"></div></div><span>76%</span></div><div class="corner-bar"><span style="width:30px">角9.0</span><div class="bar"><div class="bar-fill" style="width:64.44%"></div></div><span>64%</span></div><div class="corner-bar"><span style="width:30px">角9.5</span><div class="bar"><div class="bar-fill" style="width:64.44%"></div></div><span>64%</span></div><div class="corner-bar"><span style="width:30px">角10.0</span><div class="bar"><div class="bar-fill" style="width:52.35999999999999%"></div></div><span>52%</span></div><div class="corner-bar"><span style="width:30px">角10.5</span><div class="bar"><div class="bar-fill" style="width:52.35999999999999%"></div></div><span>52%</span></div><div class="corner-bar"><span style="width:30px">角11.0</span><div class="bar"><div class="bar-fill" style="width:40.43%"></div></div><span>40%</span></div>
+
+  <div class="divider"></div>
+
+  <div class="section-title">⏱️ 上半場預測 (HT/FT)</div>
+  <div class="grid-3">
+    <div class="stat-box">
+      <div class="stat-label">HT 主隊</div>
+      <div class="stat-value">0.7</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">HT 客隊</div>
+      <div class="stat-value">0.2</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">HT 大 0.5</div>
+      <div class="stat-value green">61.0%</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">FT 主隊</div>
+      <div class="stat-value green">1.8</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">FT 客隊</div>
+      <div class="stat-value blue">0.6</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">HT 角球</div>
+      <div class="stat-value gold">4.5</div>
+    </div>
+  </div>
+  <div style="text-align:center; margin-top:8px; font-size:0.8rem;">
+    <span style="color:var(--green)">HT/FT 推薦: H/H</span>
+  </div>
+
+  <button class="copy-btn" onclick="copyMatch('06-30-0')">📋 複製分析</button>
+</div>
+
+<div class="match-card finished" id="match-06-30-1">
+  <div class="match-header">
+    <div class="match-teams">德國 vs 巴拉圭<span class="match-round">32強</span><span class="finished-badge">已完賽</span><div class="result-badge">1 - 1</div><div class="result-detail">巴拉圭勝(點球3-4)</div></div>
+    <div class="match-time">04:30</div>
+  </div>
+
+  <div class="elimination-note">⚠️ 淘汰賽模式：預期進球較小組賽保守 | 和局可進加時/點球</div>
+
+  <div class="section-title">📊 全場標合分析</div>
+  <div class="grid-3">
+    <div class="stat-box">
+      <div class="stat-label">預期進球</div>
+      <div class="stat-value gold">1.7 - 0.3</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">主勝</div>
+      <div class="stat-value green">72.9%</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">客勝</div>
+      <div class="stat-value blue">5.9%</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">平局</div>
+      <div class="stat-value">21.2%</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">大 2.5</div>
+      <div class="stat-value green">47.6%</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">雙方進球</div>
+      <span class="stat-value red">否</span>
+    </div>
+  </div>
+  <div style="text-align:center; margin: 8px 0;">
+    <span class="recommendation rec-home">主勝</span> <span class="recommendation rec-draw">觀望</span>
   </div>
 
   <div class="divider"></div>
@@ -345,71 +558,73 @@ body {
   <div class="grid-3">
     <div class="stat-box">
       <div class="stat-label">HT 主隊</div>
-      <div class="stat-value">0.7</div>
+      <div class="stat-value">0.6</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">HT 客隊</div>
-      <div class="stat-value">0.2</div>
+      <div class="stat-value">0.1</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">HT 大 0.5</div>
-      <div class="stat-value green">58.9%</div>
+      <div class="stat-value green">53.4%</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">FT 主隊</div>
-      <div class="stat-value green">1.9</div>
+      <div class="stat-value green">1.7</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">FT 客隊</div>
-      <div class="stat-value blue">0.4</div>
+      <div class="stat-value blue">0.3</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">HT 角球</div>
-      <div class="stat-value gold">4.2</div>
+      <div class="stat-value gold">3.6</div>
     </div>
   </div>
   <div style="text-align:center; margin-top:8px; font-size:0.8rem;">
     <span style="color:var(--green)">HT/FT 推薦: H/H</span>
   </div>
 
-  <button class="copy-btn" onclick="copyMatch('06-30-0')">📋 複製分析</button>
+  <button class="copy-btn" onclick="copyMatch('06-30-1')">📋 複製分析</button>
 </div>
 
-<div class="match-card" id="match-06-30-1">
+<div class="match-card finished" id="match-06-30-2">
   <div class="match-header">
-    <div class="match-teams">荷蘭 vs 摩洛哥<span class="match-round">R3</span></div>
+    <div class="match-teams">荷蘭 vs 摩洛哥<span class="match-round">32強</span><span class="finished-badge">已完賽</span><div class="result-badge">1 - 1</div><div class="result-detail">摩洛哥勝(點球2-3)</div></div>
     <div class="match-time">09:00</div>
   </div>
+
+  <div class="elimination-note">⚠️ 淘汰賽模式：預期進球較小組賽保守 | 和局可進加時/點球</div>
 
   <div class="section-title">📊 全場標合分析</div>
   <div class="grid-3">
     <div class="stat-box">
-      <div class="stat-label">預測比分</div>
-      <div class="stat-value gold">1.8 - 1.0</div>
+      <div class="stat-label">預期進球</div>
+      <div class="stat-value gold">1.6 - 0.8</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">主勝</div>
-      <div class="stat-value green">56.1%</div>
+      <div class="stat-value green">56.3%</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">客勝</div>
-      <div class="stat-value blue">20.9%</div>
+      <div class="stat-value blue">18.7%</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">平局</div>
-      <div class="stat-value">23.0%</div>
+      <div class="stat-value">24.9%</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">大 2.5</div>
-      <div class="stat-value green">62.6%</div>
+      <div class="stat-value green">51.6%</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">雙方進球</div>
-      <span class="stat-value green">是</span>
+      <span class="stat-value red">否</span>
     </div>
   </div>
   <div style="text-align:center; margin: 8px 0;">
-    <span class="recommendation rec-home">主勝</span> <span class="recommendation rec-over">大2.5</span>
+    <span class="recommendation rec-home">主勝</span> <span class="recommendation rec-draw">觀望</span>
   </div>
 
   <div class="divider"></div>
@@ -438,58 +653,60 @@ body {
   <div class="grid-3">
     <div class="stat-box">
       <div class="stat-label">HT 主隊</div>
-      <div class="stat-value">0.7</div>
+      <div class="stat-value">0.6</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">HT 客隊</div>
-      <div class="stat-value">0.4</div>
+      <div class="stat-value">0.3</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">HT 大 0.5</div>
-      <div class="stat-value green">65.6%</div>
+      <div class="stat-value green">60.0%</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">FT 主隊</div>
-      <div class="stat-value green">1.8</div>
+      <div class="stat-value green">1.6</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">FT 客隊</div>
-      <div class="stat-value blue">1.0</div>
+      <div class="stat-value blue">0.8</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">HT 角球</div>
-      <div class="stat-value gold">5.1</div>
+      <div class="stat-value gold">4.3</div>
     </div>
   </div>
   <div style="text-align:center; margin-top:8px; font-size:0.8rem;">
     <span style="color:var(--green)">HT/FT 推薦: H/H</span>
   </div>
 
-  <button class="copy-btn" onclick="copyMatch('06-30-1')">📋 複製分析</button>
+  <button class="copy-btn" onclick="copyMatch('06-30-2')">📋 複製分析</button>
 </div>
 </div>
-<div id="tab-0701" class="tab-content">
-<div class="date-title">7月1日（星期三）</div>
+<div id="tab-0701" class="tab-content active">
+<div class="date-title">今天 7月1日（32強淘汰賽）</div>
 
 <div class="match-card" id="match-07-01-0">
   <div class="match-header">
-    <div class="match-teams">科特迪瓦 vs 挪威<span class="match-round">R3</span></div>
+    <div class="match-teams">科特迪瓦 vs 挪威<span class="match-round">32強</span></div>
     <div class="match-time">01:00</div>
   </div>
+
+  <div class="elimination-note">⚠️ 淘汰賽模式：預期進球較小組賽保守 | 和局可進加時/點球</div>
 
   <div class="section-title">📊 全場標合分析</div>
   <div class="grid-3">
     <div class="stat-box">
-      <div class="stat-label">預測比分</div>
-      <div class="stat-value gold">0.9 - 1.2</div>
+      <div class="stat-label">預期進球</div>
+      <div class="stat-value gold">0.7 - 1.0</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">主勝</div>
-      <div class="stat-value green">29.7%</div>
+      <div class="stat-value green">28.2%</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">客勝</div>
-      <div class="stat-value blue">48.3%</div>
+      <div class="stat-value blue">49.8%</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">平局</div>
@@ -497,15 +714,15 @@ body {
     </div>
     <div class="stat-box">
       <div class="stat-label">大 2.5</div>
-      <div class="stat-value green">52.1%</div>
+      <div class="stat-value green">41.1%</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">雙方進球</div>
-      <span class="stat-value green">是</span>
+      <span class="stat-value red">否</span>
     </div>
   </div>
   <div style="text-align:center; margin: 8px 0;">
-    <span class="recommendation rec-away">客勝</span> <span class="recommendation rec-draw">觀望</span>
+    <span class="recommendation rec-away">客勝</span> <span class="recommendation rec-draw">細2.5</span>
   </div>
 
   <div class="divider"></div>
@@ -538,23 +755,23 @@ body {
     </div>
     <div class="stat-box">
       <div class="stat-label">HT 客隊</div>
-      <div class="stat-value">0.5</div>
+      <div class="stat-value">0.4</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">HT 大 0.5</div>
-      <div class="stat-value green">55.1%</div>
+      <div class="stat-value green">47.8%</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">FT 主隊</div>
-      <div class="stat-value green">0.9</div>
+      <div class="stat-value green">0.7</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">FT 客隊</div>
-      <div class="stat-value blue">1.2</div>
+      <div class="stat-value blue">1.0</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">HT 角球</div>
-      <div class="stat-value gold">3.8</div>
+      <div class="stat-value gold">3.1</div>
     </div>
   </div>
   <div style="text-align:center; margin-top:8px; font-size:0.8rem;">
@@ -566,35 +783,37 @@ body {
 
 <div class="match-card" id="match-07-01-1">
   <div class="match-header">
-    <div class="match-teams">法國 vs 瑞典<span class="match-round">R3</span></div>
+    <div class="match-teams">法國 vs 瑞典<span class="match-round">32強</span></div>
     <div class="match-time">05:00</div>
   </div>
+
+  <div class="elimination-note">⚠️ 淘汰賽模式：預期進球較小組賽保守 | 和局可進加時/點球</div>
 
   <div class="section-title">📊 全場標合分析</div>
   <div class="grid-3">
     <div class="stat-box">
-      <div class="stat-label">預測比分</div>
-      <div class="stat-value gold">2.2 - 0.6</div>
+      <div class="stat-label">預期進球</div>
+      <div class="stat-value gold">2.0 - 0.4</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">主勝</div>
-      <div class="stat-value green">73.9%</div>
+      <div class="stat-value green">75.4%</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">客勝</div>
-      <div class="stat-value blue">9.0%</div>
+      <div class="stat-value blue">6.7%</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">平局</div>
-      <div class="stat-value">17.1%</div>
+      <div class="stat-value">17.8%</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">大 2.5</div>
-      <div class="stat-value green">68.4%</div>
+      <div class="stat-value green">57.4%</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">雙方進球</div>
-      <span class="stat-value green">是</span>
+      <span class="stat-value red">否</span>
     </div>
   </div>
   <div style="text-align:center; margin: 8px 0;">
@@ -635,19 +854,19 @@ body {
     </div>
     <div class="stat-box">
       <div class="stat-label">HT 大 0.5</div>
-      <div class="stat-value green">66.3%</div>
+      <div class="stat-value green">60.7%</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">FT 主隊</div>
-      <div class="stat-value green">2.2</div>
+      <div class="stat-value green">2.0</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">FT 客隊</div>
-      <div class="stat-value blue">0.6</div>
+      <div class="stat-value blue">0.4</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">HT 角球</div>
-      <div class="stat-value gold">5.1</div>
+      <div class="stat-value gold">4.4</div>
     </div>
   </div>
   <div style="text-align:center; margin-top:8px; font-size:0.8rem;">
@@ -659,39 +878,41 @@ body {
 
 <div class="match-card" id="match-07-01-2">
   <div class="match-header">
-    <div class="match-teams">墨西哥 vs 厄瓜多爾<span class="match-round">R3</span></div>
+    <div class="match-teams">墨西哥 vs 厄瓜多爾<span class="match-round">32強</span></div>
     <div class="match-time">09:00</div>
   </div>
+
+  <div class="elimination-note">⚠️ 淘汰賽模式：預期進球較小組賽保守 | 和局可進加時/點球</div>
 
   <div class="section-title">📊 全場標合分析</div>
   <div class="grid-3">
     <div class="stat-box">
-      <div class="stat-label">預測比分</div>
-      <div class="stat-value gold">1.6 - 0.9</div>
+      <div class="stat-label">預期進球</div>
+      <div class="stat-value gold">1.4 - 0.7</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">主勝</div>
-      <div class="stat-value green">55.0%</div>
+      <div class="stat-value green">59.1%</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">客勝</div>
-      <div class="stat-value blue">20.2%</div>
+      <div class="stat-value blue">18.9%</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">平局</div>
-      <div class="stat-value">24.9%</div>
+      <div class="stat-value">22.0%</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">大 2.5</div>
-      <div class="stat-value green">59.7%</div>
+      <div class="stat-value green">48.7%</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">雙方進球</div>
-      <span class="stat-value green">是</span>
+      <span class="stat-value red">否</span>
     </div>
   </div>
   <div style="text-align:center; margin: 8px 0;">
-    <span class="recommendation rec-home">主勝</span> <span class="recommendation rec-over">大2.5</span>
+    <span class="recommendation rec-home">主勝</span> <span class="recommendation rec-draw">觀望</span>
   </div>
 
   <div class="divider"></div>
@@ -720,7 +941,7 @@ body {
   <div class="grid-3">
     <div class="stat-box">
       <div class="stat-label">HT 主隊</div>
-      <div class="stat-value">0.6</div>
+      <div class="stat-value">0.5</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">HT 客隊</div>
@@ -728,19 +949,19 @@ body {
     </div>
     <div class="stat-box">
       <div class="stat-label">HT 大 0.5</div>
-      <div class="stat-value green">61.0%</div>
+      <div class="stat-value green">54.6%</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">FT 主隊</div>
-      <div class="stat-value green">1.6</div>
+      <div class="stat-value green">1.4</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">FT 客隊</div>
-      <div class="stat-value blue">0.9</div>
+      <div class="stat-value blue">0.7</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">HT 角球</div>
-      <div class="stat-value gold">4.5</div>
+      <div class="stat-value gold">3.7</div>
     </div>
   </div>
   <div style="text-align:center; margin-top:8px; font-size:0.8rem;">
@@ -751,27 +972,29 @@ body {
 </div>
 </div>
 <div id="tab-0702" class="tab-content">
-<div class="date-title">7月2日（星期四）</div>
+<div class="date-title">7月2日（32強淘汰賽）</div>
 
 <div class="match-card" id="match-07-02-0">
   <div class="match-header">
-    <div class="match-teams">英格蘭 vs 剛果(金)<span class="match-round">R3</span></div>
+    <div class="match-teams">英格蘭 vs 剛果(金)<span class="match-round">32強</span></div>
     <div class="match-time">00:00</div>
   </div>
+
+  <div class="elimination-note">⚠️ 淘汰賽模式：預期進球較小組賽保守 | 和局可進加時/點球</div>
 
   <div class="section-title">📊 全場標合分析</div>
   <div class="grid-3">
     <div class="stat-box">
-      <div class="stat-label">預測比分</div>
-      <div class="stat-value gold">2.3 - 0.3</div>
+      <div class="stat-label">預期進球</div>
+      <div class="stat-value gold">2.1 - 0.3</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">主勝</div>
-      <div class="stat-value green">74.6%</div>
+      <div class="stat-value green">73.9%</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">客勝</div>
-      <div class="stat-value blue">3.3%</div>
+      <div class="stat-value blue">4.0%</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">平局</div>
@@ -779,11 +1002,11 @@ body {
     </div>
     <div class="stat-box">
       <div class="stat-label">大 2.5</div>
-      <div class="stat-value green">66.9%</div>
+      <div class="stat-value green">58.9%</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">雙方進球</div>
-      <span class="stat-value green">是</span>
+      <span class="stat-value red">否</span>
     </div>
   </div>
   <div style="text-align:center; margin: 8px 0;">
@@ -816,7 +1039,7 @@ body {
   <div class="grid-3">
     <div class="stat-box">
       <div class="stat-label">HT 主隊</div>
-      <div class="stat-value">0.9</div>
+      <div class="stat-value">0.8</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">HT 客隊</div>
@@ -824,11 +1047,11 @@ body {
     </div>
     <div class="stat-box">
       <div class="stat-label">HT 大 0.5</div>
-      <div class="stat-value green">62.2%</div>
+      <div class="stat-value green">59.2%</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">FT 主隊</div>
-      <div class="stat-value green">2.3</div>
+      <div class="stat-value green">2.1</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">FT 客隊</div>
@@ -836,7 +1059,7 @@ body {
     </div>
     <div class="stat-box">
       <div class="stat-label">HT 角球</div>
-      <div class="stat-value gold">4.6</div>
+      <div class="stat-value gold">4.2</div>
     </div>
   </div>
   <div style="text-align:center; margin-top:8px; font-size:0.8rem;">
@@ -848,23 +1071,25 @@ body {
 
 <div class="match-card" id="match-07-02-1">
   <div class="match-header">
-    <div class="match-teams">比利時 vs 塞內加爾<span class="match-round">R3</span></div>
+    <div class="match-teams">比利時 vs 塞內加爾<span class="match-round">32強</span></div>
     <div class="match-time">04:00</div>
   </div>
+
+  <div class="elimination-note">⚠️ 淘汰賽模式：預期進球較小組賽保守 | 和局可進加時/點球</div>
 
   <div class="section-title">📊 全場標合分析</div>
   <div class="grid-3">
     <div class="stat-box">
-      <div class="stat-label">預測比分</div>
-      <div class="stat-value gold">1.3 - 0.7</div>
+      <div class="stat-label">預期進球</div>
+      <div class="stat-value gold">1.1 - 0.5</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">主勝</div>
-      <div class="stat-value green">55.0%</div>
+      <div class="stat-value green">57.4%</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">客勝</div>
-      <div class="stat-value blue">23.0%</div>
+      <div class="stat-value blue">20.6%</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">平局</div>
@@ -872,15 +1097,15 @@ body {
     </div>
     <div class="stat-box">
       <div class="stat-label">大 2.5</div>
-      <div class="stat-value green">51.4%</div>
+      <div class="stat-value green">40.4%</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">雙方進球</div>
-      <span class="stat-value green">是</span>
+      <span class="stat-value red">否</span>
     </div>
   </div>
   <div style="text-align:center; margin: 8px 0;">
-    <span class="recommendation rec-home">主勝</span> <span class="recommendation rec-draw">觀望</span>
+    <span class="recommendation rec-home">主勝</span> <span class="recommendation rec-draw">細2.5</span>
   </div>
 
   <div class="divider"></div>
@@ -909,27 +1134,27 @@ body {
   <div class="grid-3">
     <div class="stat-box">
       <div class="stat-label">HT 主隊</div>
-      <div class="stat-value">0.5</div>
+      <div class="stat-value">0.4</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">HT 客隊</div>
-      <div class="stat-value">0.3</div>
+      <div class="stat-value">0.2</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">HT 大 0.5</div>
-      <div class="stat-value green">54.3%</div>
+      <div class="stat-value green">46.8%</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">FT 主隊</div>
-      <div class="stat-value green">1.3</div>
+      <div class="stat-value green">1.1</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">FT 客隊</div>
-      <div class="stat-value blue">0.7</div>
+      <div class="stat-value blue">0.5</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">HT 角球</div>
-      <div class="stat-value gold">3.7</div>
+      <div class="stat-value gold">3.0</div>
     </div>
   </div>
   <div style="text-align:center; margin-top:8px; font-size:0.8rem;">
@@ -941,39 +1166,41 @@ body {
 
 <div class="match-card" id="match-07-02-2">
   <div class="match-header">
-    <div class="match-teams">美國 vs 波斯尼亞<span class="match-round">R3</span></div>
+    <div class="match-teams">美國 vs 波斯尼亞<span class="match-round">32強</span></div>
     <div class="match-time">08:00</div>
   </div>
+
+  <div class="elimination-note">⚠️ 淘汰賽模式：預期進球較小組賽保守 | 和局可進加時/點球</div>
 
   <div class="section-title">📊 全場標合分析</div>
   <div class="grid-3">
     <div class="stat-box">
-      <div class="stat-label">預測比分</div>
-      <div class="stat-value gold">1.7 - 0.5</div>
+      <div class="stat-label">預期進球</div>
+      <div class="stat-value gold">1.5 - 0.3</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">主勝</div>
-      <div class="stat-value green">67.5%</div>
+      <div class="stat-value green">67.4%</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">客勝</div>
-      <div class="stat-value blue">9.7%</div>
+      <div class="stat-value blue">7.3%</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">平局</div>
-      <div class="stat-value">22.9%</div>
+      <div class="stat-value">25.3%</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">大 2.5</div>
-      <div class="stat-value green">54.4%</div>
+      <div class="stat-value green">44.0%</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">雙方進球</div>
-      <span class="stat-value green">是</span>
+      <span class="stat-value red">否</span>
     </div>
   </div>
   <div style="text-align:center; margin: 8px 0;">
-    <span class="recommendation rec-home">主勝</span> <span class="recommendation rec-draw">觀望</span>
+    <span class="recommendation rec-home">主勝</span> <span class="recommendation rec-draw">細2.5</span>
   </div>
 
   <div class="divider"></div>
@@ -1006,23 +1233,23 @@ body {
     </div>
     <div class="stat-box">
       <div class="stat-label">HT 客隊</div>
-      <div class="stat-value">0.2</div>
+      <div class="stat-value">0.1</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">HT 大 0.5</div>
-      <div class="stat-value green">55.5%</div>
+      <div class="stat-value green">49.0%</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">FT 主隊</div>
-      <div class="stat-value green">1.7</div>
+      <div class="stat-value green">1.5</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">FT 客隊</div>
-      <div class="stat-value blue">0.5</div>
+      <div class="stat-value blue">0.3</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">HT 角球</div>
-      <div class="stat-value gold">3.8</div>
+      <div class="stat-value gold">3.2</div>
     </div>
   </div>
   <div style="text-align:center; margin-top:8px; font-size:0.8rem;">
@@ -1033,43 +1260,45 @@ body {
 </div>
 </div>
 <div id="tab-0703" class="tab-content">
-<div class="date-title">7月3日（星期五）</div>
+<div class="date-title">7月3日（32強淘汰賽）</div>
 
 <div class="match-card" id="match-07-03-0">
   <div class="match-header">
-    <div class="match-teams">西班牙 vs 奧地利<span class="match-round">R3</span></div>
+    <div class="match-teams">西班牙 vs 奧地利<span class="match-round">32強</span></div>
     <div class="match-time">03:00</div>
   </div>
+
+  <div class="elimination-note">⚠️ 淘汰賽模式：預期進球較小組賽保守 | 和局可進加時/點球</div>
 
   <div class="section-title">📊 全場標合分析</div>
   <div class="grid-3">
     <div class="stat-box">
-      <div class="stat-label">預測比分</div>
-      <div class="stat-value gold">2.1 - 0.5</div>
+      <div class="stat-label">預期進球</div>
+      <div class="stat-value gold">1.9 - 0.3</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">主勝</div>
-      <div class="stat-value green">75.6%</div>
+      <div class="stat-value green">76.6%</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">客勝</div>
-      <div class="stat-value blue">7.0%</div>
+      <div class="stat-value blue">5.0%</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">平局</div>
-      <div class="stat-value">17.3%</div>
+      <div class="stat-value">18.4%</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">大 2.5</div>
-      <div class="stat-value green">62.1%</div>
+      <div class="stat-value green">48.5%</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">雙方進球</div>
-      <span class="stat-value green">是</span>
+      <span class="stat-value red">否</span>
     </div>
   </div>
   <div style="text-align:center; margin: 8px 0;">
-    <span class="recommendation rec-home">主勝</span> <span class="recommendation rec-over">大2.5</span>
+    <span class="recommendation rec-home">主勝</span> <span class="recommendation rec-draw">觀望</span>
   </div>
 
   <div class="divider"></div>
@@ -1098,27 +1327,27 @@ body {
   <div class="grid-3">
     <div class="stat-box">
       <div class="stat-label">HT 主隊</div>
-      <div class="stat-value">0.8</div>
+      <div class="stat-value">0.7</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">HT 客隊</div>
-      <div class="stat-value">0.2</div>
+      <div class="stat-value">0.1</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">HT 大 0.5</div>
-      <div class="stat-value green">62.3%</div>
+      <div class="stat-value green">56.7%</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">FT 主隊</div>
-      <div class="stat-value green">2.1</div>
+      <div class="stat-value green">1.9</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">FT 客隊</div>
-      <div class="stat-value blue">0.5</div>
+      <div class="stat-value blue">0.3</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">HT 角球</div>
-      <div class="stat-value gold">4.6</div>
+      <div class="stat-value gold">4.0</div>
     </div>
   </div>
   <div style="text-align:center; margin-top:8px; font-size:0.8rem;">
@@ -1130,39 +1359,41 @@ body {
 
 <div class="match-card" id="match-07-03-1">
   <div class="match-header">
-    <div class="match-teams">葡萄牙 vs 克羅地亞<span class="match-round">R3</span></div>
+    <div class="match-teams">葡萄牙 vs 克羅地亞<span class="match-round">32強</span></div>
     <div class="match-time">07:00</div>
   </div>
+
+  <div class="elimination-note">⚠️ 淘汰賽模式：預期進球較小組賽保守 | 和局可進加時/點球</div>
 
   <div class="section-title">📊 全場標合分析</div>
   <div class="grid-3">
     <div class="stat-box">
-      <div class="stat-label">預測比分</div>
-      <div class="stat-value gold">1.5 - 0.9</div>
+      <div class="stat-label">預期進球</div>
+      <div class="stat-value gold">1.3 - 0.7</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">主勝</div>
-      <div class="stat-value green">50.5%</div>
+      <div class="stat-value green">54.9%</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">客勝</div>
-      <div class="stat-value blue">23.5%</div>
+      <div class="stat-value blue">23.1%</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">平局</div>
-      <div class="stat-value">25.9%</div>
+      <div class="stat-value">22.0%</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">大 2.5</div>
-      <div class="stat-value green">57.2%</div>
+      <div class="stat-value green">46.2%</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">雙方進球</div>
-      <span class="stat-value green">是</span>
+      <span class="stat-value red">否</span>
     </div>
   </div>
   <div style="text-align:center; margin: 8px 0;">
-    <span class="recommendation rec-home">主勝</span> <span class="recommendation rec-over">大2.5</span>
+    <span class="recommendation rec-home">主勝</span> <span class="recommendation rec-draw">觀望</span>
   </div>
 
   <div class="divider"></div>
@@ -1191,27 +1422,27 @@ body {
   <div class="grid-3">
     <div class="stat-box">
       <div class="stat-label">HT 主隊</div>
-      <div class="stat-value">0.6</div>
+      <div class="stat-value">0.5</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">HT 客隊</div>
-      <div class="stat-value">0.4</div>
+      <div class="stat-value">0.3</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">HT 大 0.5</div>
-      <div class="stat-value green">60.6%</div>
+      <div class="stat-value green">54.1%</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">FT 主隊</div>
-      <div class="stat-value green">1.5</div>
+      <div class="stat-value green">1.3</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">FT 客隊</div>
-      <div class="stat-value blue">0.9</div>
+      <div class="stat-value blue">0.7</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">HT 角球</div>
-      <div class="stat-value gold">4.4</div>
+      <div class="stat-value gold">3.7</div>
     </div>
   </div>
   <div style="text-align:center; margin-top:8px; font-size:0.8rem;">
@@ -1223,23 +1454,25 @@ body {
 
 <div class="match-card" id="match-07-03-2">
   <div class="match-header">
-    <div class="match-teams">瑞士 vs 阿爾及利亞<span class="match-round">R3</span></div>
+    <div class="match-teams">瑞士 vs 阿爾及利亞<span class="match-round">32強</span></div>
     <div class="match-time">11:00</div>
   </div>
+
+  <div class="elimination-note">⚠️ 淘汰賽模式：預期進球較小組賽保守 | 和局可進加時/點球</div>
 
   <div class="section-title">📊 全場標合分析</div>
   <div class="grid-3">
     <div class="stat-box">
-      <div class="stat-label">預測比分</div>
-      <div class="stat-value gold">1.2 - 0.4</div>
+      <div class="stat-label">預期進球</div>
+      <div class="stat-value gold">1.0 - 0.3</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">主勝</div>
-      <div class="stat-value green">64.4%</div>
+      <div class="stat-value green">65.2%</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">客勝</div>
-      <div class="stat-value blue">13.6%</div>
+      <div class="stat-value blue">12.8%</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">平局</div>
@@ -1247,11 +1480,11 @@ body {
     </div>
     <div class="stat-box">
       <div class="stat-label">大 2.5</div>
-      <div class="stat-value green">45.0%</div>
+      <div class="stat-value green">35.4%</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">雙方進球</div>
-      <span class="stat-value green">是</span>
+      <span class="stat-value red">否</span>
     </div>
   </div>
   <div style="text-align:center; margin: 8px 0;">
@@ -1284,27 +1517,27 @@ body {
   <div class="grid-3">
     <div class="stat-box">
       <div class="stat-label">HT 主隊</div>
-      <div class="stat-value">0.5</div>
+      <div class="stat-value">0.4</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">HT 客隊</div>
-      <div class="stat-value">0.2</div>
+      <div class="stat-value">0.1</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">HT 大 0.5</div>
-      <div class="stat-value green">46.2%</div>
+      <div class="stat-value green">39.7%</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">FT 主隊</div>
-      <div class="stat-value green">1.2</div>
+      <div class="stat-value green">1.0</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">FT 客隊</div>
-      <div class="stat-value blue">0.4</div>
+      <div class="stat-value blue">0.3</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">HT 角球</div>
-      <div class="stat-value gold">2.9</div>
+      <div class="stat-value gold">2.4</div>
     </div>
   </div>
   <div style="text-align:center; margin-top:8px; font-size:0.8rem;">
@@ -1315,27 +1548,29 @@ body {
 </div>
 </div>
 <div id="tab-0704" class="tab-content">
-<div class="date-title">7月4日（星期六）</div>
+<div class="date-title">7月4日（32強淘汰賽）</div>
 
 <div class="match-card" id="match-07-04-0">
   <div class="match-header">
-    <div class="match-teams">澳洲 vs 埃及<span class="match-round">R3</span></div>
+    <div class="match-teams">澳洲 vs 埃及<span class="match-round">32強</span></div>
     <div class="match-time">02:00</div>
   </div>
+
+  <div class="elimination-note">⚠️ 淘汰賽模式：預期進球較小組賽保守 | 和局可進加時/點球</div>
 
   <div class="section-title">📊 全場標合分析</div>
   <div class="grid-3">
     <div class="stat-box">
-      <div class="stat-label">預測比分</div>
-      <div class="stat-value gold">1.3 - 0.7</div>
+      <div class="stat-label">預期進球</div>
+      <div class="stat-value gold">1.1 - 0.5</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">主勝</div>
-      <div class="stat-value green">56.6%</div>
+      <div class="stat-value green">59.3%</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">客勝</div>
-      <div class="stat-value blue">21.4%</div>
+      <div class="stat-value blue">18.7%</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">平局</div>
@@ -1343,15 +1578,15 @@ body {
     </div>
     <div class="stat-box">
       <div class="stat-label">大 2.5</div>
-      <div class="stat-value green">50.9%</div>
+      <div class="stat-value green">40.0%</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">雙方進球</div>
-      <span class="stat-value green">是</span>
+      <span class="stat-value red">否</span>
     </div>
   </div>
   <div style="text-align:center; margin: 8px 0;">
-    <span class="recommendation rec-home">主勝</span> <span class="recommendation rec-draw">觀望</span>
+    <span class="recommendation rec-home">主勝</span> <span class="recommendation rec-draw">細2.5</span>
   </div>
 
   <div class="divider"></div>
@@ -1380,27 +1615,27 @@ body {
   <div class="grid-3">
     <div class="stat-box">
       <div class="stat-label">HT 主隊</div>
-      <div class="stat-value">0.5</div>
+      <div class="stat-value">0.4</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">HT 客隊</div>
-      <div class="stat-value">0.3</div>
+      <div class="stat-value">0.2</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">HT 大 0.5</div>
-      <div class="stat-value green">53.8%</div>
+      <div class="stat-value green">46.2%</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">FT 主隊</div>
-      <div class="stat-value green">1.3</div>
+      <div class="stat-value green">1.1</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">FT 客隊</div>
-      <div class="stat-value blue">0.7</div>
+      <div class="stat-value blue">0.5</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">HT 角球</div>
-      <div class="stat-value gold">3.7</div>
+      <div class="stat-value gold">2.9</div>
     </div>
   </div>
   <div style="text-align:center; margin-top:8px; font-size:0.8rem;">
@@ -1412,19 +1647,21 @@ body {
 
 <div class="match-card" id="match-07-04-1">
   <div class="match-header">
-    <div class="match-teams">阿根廷 vs 佛得角<span class="match-round">R3</span></div>
+    <div class="match-teams">阿根廷 vs 佛得角<span class="match-round">32強</span></div>
     <div class="match-time">06:00</div>
   </div>
+
+  <div class="elimination-note">⚠️ 淘汰賽模式：預期進球較小組賽保守 | 和局可進加時/點球</div>
 
   <div class="section-title">📊 全場標合分析</div>
   <div class="grid-3">
     <div class="stat-box">
-      <div class="stat-label">預測比分</div>
-      <div class="stat-value gold">2.6 - 0.4</div>
+      <div class="stat-label">預期進球</div>
+      <div class="stat-value gold">2.4 - 0.3</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">主勝</div>
-      <div class="stat-value green">75.1%</div>
+      <div class="stat-value green">75.0%</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">客勝</div>
@@ -1436,11 +1673,11 @@ body {
     </div>
     <div class="stat-box">
       <div class="stat-label">大 2.5</div>
-      <div class="stat-value green">73.0%</div>
+      <div class="stat-value green">64.1%</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">雙方進球</div>
-      <span class="stat-value green">是</span>
+      <span class="stat-value red">否</span>
     </div>
   </div>
   <div style="text-align:center; margin: 8px 0;">
@@ -1473,7 +1710,7 @@ body {
   <div class="grid-3">
     <div class="stat-box">
       <div class="stat-label">HT 主隊</div>
-      <div class="stat-value">1.0</div>
+      <div class="stat-value">0.9</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">HT 客隊</div>
@@ -1481,19 +1718,19 @@ body {
     </div>
     <div class="stat-box">
       <div class="stat-label">HT 大 0.5</div>
-      <div class="stat-value green">67.7%</div>
+      <div class="stat-value green">64.3%</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">FT 主隊</div>
-      <div class="stat-value green">2.6</div>
+      <div class="stat-value green">2.4</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">FT 客隊</div>
-      <div class="stat-value blue">0.4</div>
+      <div class="stat-value blue">0.3</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">HT 角球</div>
-      <div class="stat-value gold">5.3</div>
+      <div class="stat-value gold">4.9</div>
     </div>
   </div>
   <div style="text-align:center; margin-top:8px; font-size:0.8rem;">
@@ -1505,31 +1742,33 @@ body {
 
 <div class="match-card" id="match-07-04-2">
   <div class="match-header">
-    <div class="match-teams">哥倫比亞 vs 加納<span class="match-round">R3</span></div>
+    <div class="match-teams">哥倫比亞 vs 加納<span class="match-round">32強</span></div>
     <div class="match-time">09:30</div>
   </div>
+
+  <div class="elimination-note">⚠️ 淘汰賽模式：預期進球較小組賽保守 | 和局可進加時/點球</div>
 
   <div class="section-title">📊 全場標合分析</div>
   <div class="grid-3">
     <div class="stat-box">
-      <div class="stat-label">預測比分</div>
-      <div class="stat-value gold">1.6 - 0.6</div>
+      <div class="stat-label">預期進球</div>
+      <div class="stat-value gold">1.4 - 0.4</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">主勝</div>
-      <div class="stat-value green">63.3%</div>
+      <div class="stat-value green">64.1%</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">客勝</div>
-      <div class="stat-value blue">12.9%</div>
+      <div class="stat-value blue">9.8%</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">平局</div>
-      <div class="stat-value">23.8%</div>
+      <div class="stat-value">26.1%</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">大 2.5</div>
-      <div class="stat-value green">54.1%</div>
+      <div class="stat-value green">43.1%</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">雙方進球</div>
@@ -1537,7 +1776,7 @@ body {
     </div>
   </div>
   <div style="text-align:center; margin: 8px 0;">
-    <span class="recommendation rec-home">主勝</span> <span class="recommendation rec-draw">觀望</span>
+    <span class="recommendation rec-home">主勝</span> <span class="recommendation rec-draw">細2.5</span>
   </div>
 
   <div class="divider"></div>
@@ -1570,23 +1809,23 @@ body {
     </div>
     <div class="stat-box">
       <div class="stat-label">HT 客隊</div>
-      <div class="stat-value">0.2</div>
+      <div class="stat-value">0.1</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">HT 大 0.5</div>
-      <div class="stat-value green">57.3%</div>
+      <div class="stat-value green">50.3%</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">FT 主隊</div>
-      <div class="stat-value green">1.6</div>
+      <div class="stat-value green">1.4</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">FT 客隊</div>
-      <div class="stat-value blue">0.6</div>
+      <div class="stat-value blue">0.4</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">HT 角球</div>
-      <div class="stat-value gold">4.0</div>
+      <div class="stat-value gold">3.3</div>
     </div>
   </div>
   <div style="text-align:center; margin-top:8px; font-size:0.8rem;">
@@ -1596,480 +1835,6 @@ body {
   <button class="copy-btn" onclick="copyMatch('07-04-2')">📋 複製分析</button>
 </div>
 </div>
-<div id="tab-0705" class="tab-content">
-<div class="date-title">7月5日（星期日）— 淘汰賽</div>
-
-<div class="match-card" id="match-07-05-0">
-  <div class="match-header">
-    <div class="match-teams">加拿大 vs 荷蘭<span class="match-round">R4 淘汰賽</span><span class="tbd-badge">暫定對陣</span></div>
-    <div class="match-time">01:00</div>
-  </div>
-
-  <div class="section-title">📊 全場標合分析</div>
-  <div class="grid-3">
-    <div class="stat-box">
-      <div class="stat-label">預測比分</div>
-      <div class="stat-value gold">1.1 - 1.3</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-label">主勝</div>
-      <div class="stat-value green">34.5%</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-label">客勝</div>
-      <div class="stat-value blue">43.5%</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-label">平局</div>
-      <div class="stat-value">22.0%</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-label">大 2.5</div>
-      <div class="stat-value green">53.6%</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-label">雙方進球</div>
-      <span class="stat-value red">否</span>
-    </div>
-  </div>
-  <div style="text-align:center; margin: 8px 0;">
-    <span class="recommendation rec-away">客勝</span> <span class="recommendation rec-draw">觀望</span>
-  </div>
-
-  <div class="divider"></div>
-
-  <div class="section-title">🚩 全場角球 + 波膽</div>
-  <div class="grid-2">
-    <div class="stat-box">
-      <div class="stat-label">預期總角球</div>
-      <div class="stat-value gold">10.7</div>
-      <div class="stat-label" style="margin-top:4px">主 5.5 + 客 5.2</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-label">波膽最高機率</div>
-      <div class="stat-value gold">1-1</div>
-      <div class="cs-list"><div class="cs-item"><span class="cs-score">1-1</span> <span class="cs-prob">14.9%</span></div><div class="cs-item"><span class="cs-score">0-0</span> <span class="cs-prob">11.7%</span></div><div class="cs-item"><span class="cs-score">0-1</span> <span class="cs-prob">10.6%</span></div><div class="cs-item"><span class="cs-score">1-0</span> <span class="cs-prob">8.9%</span></div><div class="cs-item"><span class="cs-score">1-2</span> <span class="cs-prob">8.2%</span></div></div>
-    </div>
-  </div>
-  <div style="margin-top:8px; font-size:0.75rem; color:var(--muted);">
-    主風格: 體能衝擊 | 客風格: 組織進攻
-  </div>
-  <div class="corner-bar"><span style="width:30px">角8.5</span><div class="bar"><div class="bar-fill" style="width:74.1%"></div></div><span>74%</span></div><div class="corner-bar"><span style="width:30px">角9.0</span><div class="bar"><div class="bar-fill" style="width:62.69%"></div></div><span>63%</span></div><div class="corner-bar"><span style="width:30px">角9.5</span><div class="bar"><div class="bar-fill" style="width:62.69%"></div></div><span>63%</span></div><div class="corner-bar"><span style="width:30px">角10.0</span><div class="bar"><div class="bar-fill" style="width:50.480000000000004%"></div></div><span>50%</span></div><div class="corner-bar"><span style="width:30px">角10.5</span><div class="bar"><div class="bar-fill" style="width:50.480000000000004%"></div></div><span>50%</span></div><div class="corner-bar"><span style="width:30px">角11.0</span><div class="bar"><div class="bar-fill" style="width:38.59%"></div></div><span>39%</span></div>
-
-  <div class="divider"></div>
-
-  <div class="section-title">⏱️ 上半場預測 (HT/FT)</div>
-  <div class="grid-3">
-    <div class="stat-box">
-      <div class="stat-label">HT 主隊</div>
-      <div class="stat-value">0.4</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-label">HT 客隊</div>
-      <div class="stat-value">0.5</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-label">HT 大 0.5</div>
-      <div class="stat-value green">60.0%</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-label">FT 主隊</div>
-      <div class="stat-value green">1.1</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-label">FT 客隊</div>
-      <div class="stat-value blue">1.3</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-label">HT 角球</div>
-      <div class="stat-value gold">4.3</div>
-    </div>
-  </div>
-  <div style="text-align:center; margin-top:8px; font-size:0.8rem;">
-    <span style="color:var(--green)">HT/FT 推薦: A/A</span>
-  </div>
-
-  <button class="copy-btn" onclick="copyMatch('07-05-0')">📋 複製分析</button>
-</div>
-
-<div class="match-card" id="match-07-05-1">
-  <div class="match-header">
-    <div class="match-teams">德國 vs 法國<span class="match-round">R4 淘汰賽</span><span class="tbd-badge">暫定對陣</span></div>
-    <div class="match-time">05:00</div>
-  </div>
-
-  <div class="section-title">📊 全場標合分析</div>
-  <div class="grid-3">
-    <div class="stat-box">
-      <div class="stat-label">預測比分</div>
-      <div class="stat-value gold">1.2 - 1.4</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-label">主勝</div>
-      <div class="stat-value green">33.1%</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-label">客勝</div>
-      <div class="stat-value blue">40.5%</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-label">平局</div>
-      <div class="stat-value">26.4%</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-label">大 2.5</div>
-      <div class="stat-value green">57.2%</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-label">雙方進球</div>
-      <span class="stat-value red">否</span>
-    </div>
-  </div>
-  <div style="text-align:center; margin: 8px 0;">
-    <span class="recommendation rec-away">客勝</span> <span class="recommendation rec-over">大2.5</span>
-  </div>
-
-  <div class="divider"></div>
-
-  <div class="section-title">🚩 全場角球 + 波膽</div>
-  <div class="grid-2">
-    <div class="stat-box">
-      <div class="stat-label">預期總角球</div>
-      <div class="stat-value gold">12.8</div>
-      <div class="stat-label" style="margin-top:4px">主 7.0 + 客 5.8</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-label">波膽最高機率</div>
-      <div class="stat-value gold">1-1</div>
-      <div class="cs-list"><div class="cs-item"><span class="cs-score">1-1</span> <span class="cs-prob">14.5%</span></div><div class="cs-item"><span class="cs-score">0-0</span> <span class="cs-prob">10.1%</span></div><div class="cs-item"><span class="cs-score">0-1</span> <span class="cs-prob">9.4%</span></div><div class="cs-item"><span class="cs-score">1-2</span> <span class="cs-prob">8.5%</span></div><div class="cs-item"><span class="cs-score">1-0</span> <span class="cs-prob">8.1%</span></div></div>
-    </div>
-  </div>
-  <div style="margin-top:8px; font-size:0.75rem; color:var(--muted);">
-    主風格: 高位壓迫 | 客風格: 全能壓制
-  </div>
-  <div class="corner-bar"><span style="width:30px">角8.5</span><div class="bar"><div class="bar-fill" style="width:89.02%"></div></div><span>89%</span></div><div class="corner-bar"><span style="width:30px">角9.0</span><div class="bar"><div class="bar-fill" style="width:81.98%"></div></div><span>82%</span></div><div class="corner-bar"><span style="width:30px">角9.5</span><div class="bar"><div class="bar-fill" style="width:81.98%"></div></div><span>82%</span></div><div class="corner-bar"><span style="width:30px">角10.0</span><div class="bar"><div class="bar-fill" style="width:72.98%"></div></div><span>73%</span></div><div class="corner-bar"><span style="width:30px">角10.5</span><div class="bar"><div class="bar-fill" style="width:72.98%"></div></div><span>73%</span></div><div class="corner-bar"><span style="width:30px">角11.0</span><div class="bar"><div class="bar-fill" style="width:62.51%"></div></div><span>63%</span></div>
-
-  <div class="divider"></div>
-
-  <div class="section-title">⏱️ 上半場預測 (HT/FT)</div>
-  <div class="grid-3">
-    <div class="stat-box">
-      <div class="stat-label">HT 主隊</div>
-      <div class="stat-value">0.5</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-label">HT 客隊</div>
-      <div class="stat-value">0.5</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-label">HT 大 0.5</div>
-      <div class="stat-value green">62.5%</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-label">FT 主隊</div>
-      <div class="stat-value green">1.2</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-label">FT 客隊</div>
-      <div class="stat-value blue">1.4</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-label">HT 角球</div>
-      <div class="stat-value gold">4.6</div>
-    </div>
-  </div>
-  <div style="text-align:center; margin-top:8px; font-size:0.8rem;">
-    <span style="color:var(--green)">HT/FT 推薦: A/A</span>
-  </div>
-
-  <button class="copy-btn" onclick="copyMatch('07-05-1')">📋 複製分析</button>
-</div>
-</div>
-<div id="tab-0706" class="tab-content">
-<div class="date-title">7月6日（星期一）— 淘汰賽</div>
-
-<div class="match-card" id="match-07-06-0">
-  <div class="match-header">
-    <div class="match-teams">巴西 vs 科特迪瓦<span class="match-round">R4 淘汰賽</span><span class="tbd-badge">暫定對陣</span></div>
-    <div class="match-time">05:00</div>
-  </div>
-
-  <div class="section-title">📊 全場標合分析</div>
-  <div class="grid-3">
-    <div class="stat-box">
-      <div class="stat-label">預測比分</div>
-      <div class="stat-value gold">2.1 - 0.3</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-label">主勝</div>
-      <div class="stat-value green">74.1%</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-label">客勝</div>
-      <div class="stat-value blue">3.8%</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-label">平局</div>
-      <div class="stat-value">22.0%</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-label">大 2.5</div>
-      <div class="stat-value green">57.8%</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-label">雙方進球</div>
-      <span class="stat-value red">否</span>
-    </div>
-  </div>
-  <div style="text-align:center; margin: 8px 0;">
-    <span class="recommendation rec-home">主勝</span> <span class="recommendation rec-over">大2.5</span>
-  </div>
-
-  <div class="divider"></div>
-
-  <div class="section-title">🚩 全場角球 + 波膽</div>
-  <div class="grid-2">
-    <div class="stat-box">
-      <div class="stat-label">預期總角球</div>
-      <div class="stat-value gold">10.3</div>
-      <div class="stat-label" style="margin-top:4px">主 5.6 + 客 4.8</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-label">波膽最高機率</div>
-      <div class="stat-value gold">2-0</div>
-      <div class="cs-list"><div class="cs-item"><span class="cs-score">2-0</span> <span class="cs-prob">20.4%</span></div><div class="cs-item"><span class="cs-score">1-0</span> <span class="cs-prob">19.0%</span></div><div class="cs-item"><span class="cs-score">3-0</span> <span class="cs-prob">14.1%</span></div><div class="cs-item"><span class="cs-score">0-0</span> <span class="cs-prob">10.3%</span></div><div class="cs-item"><span class="cs-score">4-0</span> <span class="cs-prob">7.3%</span></div></div>
-    </div>
-  </div>
-  <div style="margin-top:8px; font-size:0.75rem; color:var(--muted);">
-    主風格: 技術流 | 客風格: 體能壓制
-  </div>
-  <div class="corner-bar"><span style="width:30px">角8.5</span><div class="bar"><div class="bar-fill" style="width:70.47%"></div></div><span>70%</span></div><div class="corner-bar"><span style="width:30px">角9.0</span><div class="bar"><div class="bar-fill" style="width:58.45%"></div></div><span>58%</span></div><div class="corner-bar"><span style="width:30px">角9.5</span><div class="bar"><div class="bar-fill" style="width:58.45%"></div></div><span>58%</span></div><div class="corner-bar"><span style="width:30px">角10.0</span><div class="bar"><div class="bar-fill" style="width:46.01%"></div></div><span>46%</span></div><div class="corner-bar"><span style="width:30px">角10.5</span><div class="bar"><div class="bar-fill" style="width:46.01%"></div></div><span>46%</span></div><div class="corner-bar"><span style="width:30px">角11.0</span><div class="bar"><div class="bar-fill" style="width:34.31%"></div></div><span>34%</span></div>
-
-  <div class="divider"></div>
-
-  <div class="section-title">⏱️ 上半場預測 (HT/FT)</div>
-  <div class="grid-3">
-    <div class="stat-box">
-      <div class="stat-label">HT 主隊</div>
-      <div class="stat-value">0.8</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-label">HT 客隊</div>
-      <div class="stat-value">0.1</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-label">HT 大 0.5</div>
-      <div class="stat-value green">60.1%</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-label">FT 主隊</div>
-      <div class="stat-value green">2.1</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-label">FT 客隊</div>
-      <div class="stat-value blue">0.3</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-label">HT 角球</div>
-      <div class="stat-value gold">4.4</div>
-    </div>
-  </div>
-  <div style="text-align:center; margin-top:8px; font-size:0.8rem;">
-    <span style="color:var(--green)">HT/FT 推薦: H/H</span>
-  </div>
-
-  <button class="copy-btn" onclick="copyMatch('07-06-0')">📋 複製分析</button>
-</div>
-
-<div class="match-card" id="match-07-06-1">
-  <div class="match-header">
-    <div class="match-teams">墨西哥 vs 英格蘭<span class="match-round">R4 淘汰賽</span><span class="tbd-badge">暫定對陣</span></div>
-    <div class="match-time">08:00</div>
-  </div>
-
-  <div class="section-title">📊 全場標合分析</div>
-  <div class="grid-3">
-    <div class="stat-box">
-      <div class="stat-label">預測比分</div>
-      <div class="stat-value gold">1.0 - 1.3</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-label">主勝</div>
-      <div class="stat-value green">31.2%</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-label">客勝</div>
-      <div class="stat-value blue">46.8%</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-label">平局</div>
-      <div class="stat-value">22.0%</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-label">大 2.5</div>
-      <div class="stat-value green">53.3%</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-label">雙方進球</div>
-      <span class="stat-value red">否</span>
-    </div>
-  </div>
-  <div style="text-align:center; margin: 8px 0;">
-    <span class="recommendation rec-away">客勝</span> <span class="recommendation rec-draw">觀望</span>
-  </div>
-
-  <div class="divider"></div>
-
-  <div class="section-title">🚩 全場角球 + 波膽</div>
-  <div class="grid-2">
-    <div class="stat-box">
-      <div class="stat-label">預期總角球</div>
-      <div class="stat-value gold">12.2</div>
-      <div class="stat-label" style="margin-top:4px">主 7.0 + 客 5.2</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-label">波膽最高機率</div>
-      <div class="stat-value gold">1-1</div>
-      <div class="cs-list"><div class="cs-item"><span class="cs-score">1-1</span> <span class="cs-prob">14.9%</span></div><div class="cs-item"><span class="cs-score">0-0</span> <span class="cs-prob">12.6%</span></div><div class="cs-item"><span class="cs-score">0-1</span> <span class="cs-prob">12.0%</span></div><div class="cs-item"><span class="cs-score">1-0</span> <span class="cs-prob">8.7%</span></div><div class="cs-item"><span class="cs-score">0-2</span> <span class="cs-prob">8.6%</span></div></div>
-    </div>
-  </div>
-  <div style="margin-top:8px; font-size:0.75rem; color:var(--muted);">
-    主風格: 控球圍攻 | 客風格: 快速反擊
-  </div>
-  <div class="corner-bar"><span style="width:30px">角8.5</span><div class="bar"><div class="bar-fill" style="width:85.47%"></div></div><span>85%</span></div><div class="corner-bar"><span style="width:30px">角9.0</span><div class="bar"><div class="bar-fill" style="width:77.06%"></div></div><span>77%</span></div><div class="corner-bar"><span style="width:30px">角9.5</span><div class="bar"><div class="bar-fill" style="width:77.06%"></div></div><span>77%</span></div><div class="corner-bar"><span style="width:30px">角10.0</span><div class="bar"><div class="bar-fill" style="width:66.85%"></div></div><span>67%</span></div><div class="corner-bar"><span style="width:30px">角10.5</span><div class="bar"><div class="bar-fill" style="width:66.85%"></div></div><span>67%</span></div><div class="corner-bar"><span style="width:30px">角11.0</span><div class="bar"><div class="bar-fill" style="width:55.559999999999995%"></div></div><span>56%</span></div>
-
-  <div class="divider"></div>
-
-  <div class="section-title">⏱️ 上半場預測 (HT/FT)</div>
-  <div class="grid-3">
-    <div class="stat-box">
-      <div class="stat-label">HT 主隊</div>
-      <div class="stat-value">0.4</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-label">HT 客隊</div>
-      <div class="stat-value">0.5</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-label">HT 大 0.5</div>
-      <div class="stat-value green">58.6%</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-label">FT 主隊</div>
-      <div class="stat-value green">1.0</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-label">FT 客隊</div>
-      <div class="stat-value blue">1.3</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-label">HT 角球</div>
-      <div class="stat-value gold">4.2</div>
-    </div>
-  </div>
-  <div style="text-align:center; margin-top:8px; font-size:0.8rem;">
-    <span style="color:var(--green)">HT/FT 推薦: A/A</span>
-  </div>
-
-  <button class="copy-btn" onclick="copyMatch('07-06-1')">📋 複製分析</button>
-</div>
-</div>
-<div id="tab-0707" class="tab-content">
-<div class="date-title">7月7日（星期二）— 淘汰賽</div>
-
-<div class="match-card" id="match-07-07-0">
-  <div class="match-header">
-    <div class="match-teams">葡萄牙 vs 西班牙<span class="match-round">R4 淘汰賽</span><span class="tbd-badge">暫定對陣</span></div>
-    <div class="match-time">03:00</div>
-  </div>
-
-  <div class="section-title">📊 全場標合分析</div>
-  <div class="grid-3">
-    <div class="stat-box">
-      <div class="stat-label">預測比分</div>
-      <div class="stat-value gold">1.1 - 1.3</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-label">主勝</div>
-      <div class="stat-value green">34.7%</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-label">客勝</div>
-      <div class="stat-value blue">43.3%</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-label">平局</div>
-      <div class="stat-value">22.0%</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-label">大 2.5</div>
-      <div class="stat-value green">51.3%</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-label">雙方進球</div>
-      <span class="stat-value red">否</span>
-    </div>
-  </div>
-  <div style="text-align:center; margin: 8px 0;">
-    <span class="recommendation rec-away">客勝</span> <span class="recommendation rec-draw">觀望</span>
-  </div>
-
-  <div class="divider"></div>
-
-  <div class="section-title">🚩 全場角球 + 波膽</div>
-  <div class="grid-2">
-    <div class="stat-box">
-      <div class="stat-label">預期總角球</div>
-      <div class="stat-value gold">11.5</div>
-      <div class="stat-label" style="margin-top:4px">主 5.6 + 客 5.9</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-label">波膽最高機率</div>
-      <div class="stat-value gold">1-1</div>
-      <div class="cs-list"><div class="cs-item"><span class="cs-score">1-1</span> <span class="cs-prob">15.0%</span></div><div class="cs-item"><span class="cs-score">0-0</span> <span class="cs-prob">11.9%</span></div><div class="cs-item"><span class="cs-score">0-1</span> <span class="cs-prob">10.8%</span></div><div class="cs-item"><span class="cs-score">1-0</span> <span class="cs-prob">9.0%</span></div><div class="cs-item"><span class="cs-score">1-2</span> <span class="cs-prob">8.1%</span></div></div>
-    </div>
-  </div>
-  <div style="margin-top:8px; font-size:0.75rem; color:var(--muted);">
-    主風格: 技術流 | 客風格: 傳控滲透
-  </div>
-  <div class="corner-bar"><span style="width:30px">角8.5</span><div class="bar"><div class="bar-fill" style="width:80.88%"></div></div><span>81%</span></div><div class="corner-bar"><span style="width:30px">角9.0</span><div class="bar"><div class="bar-fill" style="width:71.04%"></div></div><span>71%</span></div><div class="corner-bar"><span style="width:30px">角9.5</span><div class="bar"><div class="bar-fill" style="width:71.04%"></div></div><span>71%</span></div><div class="corner-bar"><span style="width:30px">角10.0</span><div class="bar"><div class="bar-fill" style="width:59.730000000000004%"></div></div><span>60%</span></div><div class="corner-bar"><span style="width:30px">角10.5</span><div class="bar"><div class="bar-fill" style="width:59.730000000000004%"></div></div><span>60%</span></div><div class="corner-bar"><span style="width:30px">角11.0</span><div class="bar"><div class="bar-fill" style="width:47.92%"></div></div><span>48%</span></div>
-
-  <div class="divider"></div>
-
-  <div class="section-title">⏱️ 上半場預測 (HT/FT)</div>
-  <div class="grid-3">
-    <div class="stat-box">
-      <div class="stat-label">HT 主隊</div>
-      <div class="stat-value">0.4</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-label">HT 客隊</div>
-      <div class="stat-value">0.5</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-label">HT 大 0.5</div>
-      <div class="stat-value green">59.7%</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-label">FT 主隊</div>
-      <div class="stat-value green">1.1</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-label">FT 客隊</div>
-      <div class="stat-value blue">1.3</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-label">HT 角球</div>
-      <div class="stat-value gold">4.3</div>
-    </div>
-  </div>
-  <div style="text-align:center; margin-top:8px; font-size:0.8rem;">
-    <span style="color:var(--green)">HT/FT 推薦: A/A</span>
-  </div>
-
-  <button class="copy-btn" onclick="copyMatch('07-07-0')">📋 複製分析</button>
-</div>
-</div>
 
 <div class="quick-nav">
   <button onclick="window.scrollTo({top:0,behavior:'smooth'})" title="回頂部">⬆️</button>
@@ -2077,25 +1842,20 @@ body {
 
 <script>
 function showTab(tabId) {
-  // 隱藏所有分頁
   document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-
-  // 顯示選中分頁
   document.getElementById(tabId).classList.add('active');
   event.target.classList.add('active');
-
-  // 滾動到頂部
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
 function copyMatch(matchId) {
   const card = document.getElementById('match-' + matchId);
-  const teams = card.querySelector('.match-teams').textContent.trim();
+  const teams = card.querySelector('.match-teams').textContent.trim().split('已完賽')[0].split('32強')[0].trim();
   const labels = card.querySelectorAll('.stat-label');
   const values = card.querySelectorAll('.stat-value');
 
-  let text = "【UNIFIED v3.3.67】\n" + teams + "\n";
+  let text = "【UNIFIED v3.3.67 32強淘汰賽】\n" + teams + "\n";
   for (let i = 0; i < Math.min(labels.length, values.length); i++) {
     text += labels[i].textContent + ": " + values[i].textContent + "\n";
   }
@@ -2107,7 +1867,6 @@ function copyMatch(matchId) {
   });
 }
 
-// 頁面加載動畫
 document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.match-card').forEach((card, i) => {
     card.style.opacity = '0';
