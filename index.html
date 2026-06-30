@@ -15,6 +15,8 @@
   --text: #e8e8e8;
   --muted: #3a5080;
   --tab-bg: #0f1d30;
+  --orange: #f97316;
+  --purple: #a855f7;
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body {
@@ -145,6 +147,9 @@ body {
   margin: 12px 0 8px;
   padding-left: 8px;
   border-left: 3px solid var(--accent);
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .grid-3 {
@@ -171,6 +176,8 @@ body {
 .stat-value.red { color: var(--red); }
 .stat-value.blue { color: var(--blue); }
 .stat-value.gold { color: var(--accent); }
+.stat-value.orange { color: var(--orange); }
+.stat-value.purple { color: var(--purple); }
 
 .recommendation {
   display: inline-block;
@@ -220,6 +227,55 @@ body {
   background: var(--accent);
   border-radius: 3px;
 }
+
+/* 入球時間 */
+.goal-time-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  margin-top: 8px;
+}
+.goal-time-item {
+  background: #0a1628;
+  border-radius: 6px;
+  padding: 8px 6px;
+  text-align: center;
+  font-size: 0.75rem;
+}
+.goal-time-label { color: var(--muted); font-size: 0.65rem; }
+.goal-time-prob { color: var(--green); font-weight: bold; font-size: 0.9rem; }
+.goal-time-highlight {
+  background: rgba(74,222,128,0.1);
+  border: 1px solid var(--green);
+}
+
+/* 罰牌 */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  margin-top: 8px;
+}
+.card-item {
+  background: #0a1628;
+  border-radius: 6px;
+  padding: 8px 6px;
+  text-align: center;
+  font-size: 0.75rem;
+}
+.card-label { color: var(--muted); font-size: 0.65rem; }
+.card-value { color: var(--red); font-weight: bold; font-size: 0.9rem; }
+.card-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+  font-size: 0.8rem;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.card-line:last-child { border-bottom: none; }
+.card-line-name { color: var(--muted); }
+.card-line-value { color: var(--text); font-weight: bold; }
 
 .divider {
   height: 1px;
@@ -277,6 +333,8 @@ body {
 
 @media (max-width: 400px) {
   .grid-3 { grid-template-columns: repeat(2, 1fr); }
+  .goal-time-grid { grid-template-columns: repeat(2, 1fr); }
+  .card-grid { grid-template-columns: repeat(2, 1fr); }
   .tab-btn { padding: 6px 12px; font-size: 0.75rem; }
 }
 </style>
@@ -285,7 +343,7 @@ body {
 
 <div class="header">
   <h1>🏆 UNIFIED v3.3.67 世界盃2026</h1>
-  <div class="subtitle">32強淘汰賽 | 全場標合 + 半場 + 波膽 + 角球</div>
+  <div class="subtitle">32強淘汰賽 | 全場標合 + 半場 + 波膽 + 角球 + 入球時間 + 罰牌</div>
   <div class="version">65場回測校準 | 1X2:61.5% | OU:58.5% | HT:50.8%</div>
 </div>
 
@@ -338,6 +396,63 @@ body {
   <div style="text-align:center; margin: 8px 0;">
     <span class="recommendation rec-away">客勝</span> <span class="recommendation rec-draw">觀望</span>
   </div>
+
+  <div class="divider"></div>
+
+  
+  <div class="section-title">⚽ 上半場預計入球時間</div>
+  <div class="goal-time-grid">
+    <div class="goal-time-item ">
+      <div class="goal-time-label">0-15分鐘</div>
+      <div class="goal-time-prob">13.2%</div>
+    </div>
+    <div class="goal-time-item ">
+      <div class="goal-time-label">15-30分鐘</div>
+      <div class="goal-time-prob">16.2%</div>
+    </div>
+    <div class="goal-time-item ">
+      <div class="goal-time-label">30-45分鐘</div>
+      <div class="goal-time-prob">19.1%</div>
+    </div>
+  </div>
+  <div style="margin-top:6px; font-size:0.75rem; color:var(--muted); text-align:center;">
+    最可能入球時間段: <span style="color:var(--green); font-weight:bold;">60-75分鐘</span> (概率 25.0%)
+  </div>
+
+
+  <div class="divider"></div>
+
+  
+  <div class="section-title">🟨🟥 罰牌分析</div>
+  <div class="card-grid">
+    <div class="card-item">
+      <div class="card-label">上半場罰牌</div>
+      <div class="card-value">2.4</div>
+    </div>
+    <div class="card-item">
+      <div class="card-label">全場罰牌</div>
+      <div class="card-value">6.0</div>
+    </div>
+    <div class="card-item">
+      <div class="card-label">最可能罰牌數</div>
+      <div class="card-value">6 張</div>
+    </div>
+  </div>
+  <div style="margin-top:8px;">
+    <div class="card-line">
+      <span class="card-line-name">大罰牌 2.5</span>
+      <span class="card-line-value">93.9%</span>
+    </div>
+    <div class="card-line">
+      <span class="card-line-name">大罰牌 3.5</span>
+      <span class="card-line-value">85.2%</span>
+    </div>
+    <div class="card-line">
+      <span class="card-line-name">大罰牌 4.5</span>
+      <span class="card-line-value">71.9%</span>
+    </div>
+  </div>
+
 
   <div class="divider"></div>
 
@@ -439,6 +554,63 @@ body {
 
   <div class="divider"></div>
 
+  
+  <div class="section-title">⚽ 上半場預計入球時間</div>
+  <div class="goal-time-grid">
+    <div class="goal-time-item ">
+      <div class="goal-time-label">0-15分鐘</div>
+      <div class="goal-time-prob">17.2%</div>
+    </div>
+    <div class="goal-time-item ">
+      <div class="goal-time-label">15-30分鐘</div>
+      <div class="goal-time-prob">21.0%</div>
+    </div>
+    <div class="goal-time-item ">
+      <div class="goal-time-label">30-45分鐘</div>
+      <div class="goal-time-prob">24.6%</div>
+    </div>
+  </div>
+  <div style="margin-top:6px; font-size:0.75rem; color:var(--muted); text-align:center;">
+    最可能入球時間段: <span style="color:var(--green); font-weight:bold;">60-75分鐘</span> (概率 31.9%)
+  </div>
+
+
+  <div class="divider"></div>
+
+  
+  <div class="section-title">🟨🟥 罰牌分析</div>
+  <div class="card-grid">
+    <div class="card-item">
+      <div class="card-label">上半場罰牌</div>
+      <div class="card-value">2.1</div>
+    </div>
+    <div class="card-item">
+      <div class="card-label">全場罰牌</div>
+      <div class="card-value">5.2</div>
+    </div>
+    <div class="card-item">
+      <div class="card-label">最可能罰牌數</div>
+      <div class="card-value">5 張</div>
+    </div>
+  </div>
+  <div style="margin-top:8px;">
+    <div class="card-line">
+      <span class="card-line-name">大罰牌 2.5</span>
+      <span class="card-line-value">89.4%</span>
+    </div>
+    <div class="card-line">
+      <span class="card-line-name">大罰牌 3.5</span>
+      <span class="card-line-value">76.8%</span>
+    </div>
+    <div class="card-line">
+      <span class="card-line-name">大罰牌 4.5</span>
+      <span class="card-line-value">60.1%</span>
+    </div>
+  </div>
+
+
+  <div class="divider"></div>
+
   <div class="section-title">🚩 全場角球 + 波膽</div>
   <div class="grid-2">
     <div class="stat-box">
@@ -534,6 +706,63 @@ body {
 
   <div class="divider"></div>
 
+  
+  <div class="section-title">⚽ 上半場預計入球時間</div>
+  <div class="goal-time-grid">
+    <div class="goal-time-item ">
+      <div class="goal-time-label">0-15分鐘</div>
+      <div class="goal-time-prob">14.2%</div>
+    </div>
+    <div class="goal-time-item ">
+      <div class="goal-time-label">15-30分鐘</div>
+      <div class="goal-time-prob">17.4%</div>
+    </div>
+    <div class="goal-time-item ">
+      <div class="goal-time-label">30-45分鐘</div>
+      <div class="goal-time-prob">20.5%</div>
+    </div>
+  </div>
+  <div style="margin-top:6px; font-size:0.75rem; color:var(--muted); text-align:center;">
+    最可能入球時間段: <span style="color:var(--green); font-weight:bold;">60-75分鐘</span> (概率 26.8%)
+  </div>
+
+
+  <div class="divider"></div>
+
+  
+  <div class="section-title">🟨🟥 罰牌分析</div>
+  <div class="card-grid">
+    <div class="card-item">
+      <div class="card-label">上半場罰牌</div>
+      <div class="card-value">2.0</div>
+    </div>
+    <div class="card-item">
+      <div class="card-label">全場罰牌</div>
+      <div class="card-value">5.0</div>
+    </div>
+    <div class="card-item">
+      <div class="card-label">最可能罰牌數</div>
+      <div class="card-value">5 張</div>
+    </div>
+  </div>
+  <div style="margin-top:8px;">
+    <div class="card-line">
+      <span class="card-line-name">大罰牌 2.5</span>
+      <span class="card-line-value">87.7%</span>
+    </div>
+    <div class="card-line">
+      <span class="card-line-name">大罰牌 3.5</span>
+      <span class="card-line-value">73.9%</span>
+    </div>
+    <div class="card-line">
+      <span class="card-line-name">大罰牌 4.5</span>
+      <span class="card-line-value">56.4%</span>
+    </div>
+  </div>
+
+
+  <div class="divider"></div>
+
   <div class="section-title">🚩 全場角球 + 波膽</div>
   <div class="grid-2">
     <div class="stat-box">
@@ -626,6 +855,63 @@ body {
   <div style="text-align:center; margin: 8px 0;">
     <span class="recommendation rec-home">主勝</span> <span class="recommendation rec-draw">觀望</span>
   </div>
+
+  <div class="divider"></div>
+
+  
+  <div class="section-title">⚽ 上半場預計入球時間</div>
+  <div class="goal-time-grid">
+    <div class="goal-time-item ">
+      <div class="goal-time-label">0-15分鐘</div>
+      <div class="goal-time-prob">16.7%</div>
+    </div>
+    <div class="goal-time-item ">
+      <div class="goal-time-label">15-30分鐘</div>
+      <div class="goal-time-prob">20.5%</div>
+    </div>
+    <div class="goal-time-item ">
+      <div class="goal-time-label">30-45分鐘</div>
+      <div class="goal-time-prob">24.0%</div>
+    </div>
+  </div>
+  <div style="margin-top:6px; font-size:0.75rem; color:var(--muted); text-align:center;">
+    最可能入球時間段: <span style="color:var(--green); font-weight:bold;">60-75分鐘</span> (概率 31.2%)
+  </div>
+
+
+  <div class="divider"></div>
+
+  
+  <div class="section-title">🟨🟥 罰牌分析</div>
+  <div class="card-grid">
+    <div class="card-item">
+      <div class="card-label">上半場罰牌</div>
+      <div class="card-value">2.1</div>
+    </div>
+    <div class="card-item">
+      <div class="card-label">全場罰牌</div>
+      <div class="card-value">5.2</div>
+    </div>
+    <div class="card-item">
+      <div class="card-label">最可能罰牌數</div>
+      <div class="card-value">5 張</div>
+    </div>
+  </div>
+  <div style="margin-top:8px;">
+    <div class="card-line">
+      <span class="card-line-name">大罰牌 2.5</span>
+      <span class="card-line-value">89.4%</span>
+    </div>
+    <div class="card-line">
+      <span class="card-line-name">大罰牌 3.5</span>
+      <span class="card-line-value">76.8%</span>
+    </div>
+    <div class="card-line">
+      <span class="card-line-name">大罰牌 4.5</span>
+      <span class="card-line-value">60.1%</span>
+    </div>
+  </div>
+
 
   <div class="divider"></div>
 
@@ -727,6 +1013,63 @@ body {
 
   <div class="divider"></div>
 
+  
+  <div class="section-title">⚽ 上半場預計入球時間</div>
+  <div class="goal-time-grid">
+    <div class="goal-time-item ">
+      <div class="goal-time-label">0-15分鐘</div>
+      <div class="goal-time-prob">12.2%</div>
+    </div>
+    <div class="goal-time-item ">
+      <div class="goal-time-label">15-30分鐘</div>
+      <div class="goal-time-prob">15.0%</div>
+    </div>
+    <div class="goal-time-item ">
+      <div class="goal-time-label">30-45分鐘</div>
+      <div class="goal-time-prob">17.7%</div>
+    </div>
+  </div>
+  <div style="margin-top:6px; font-size:0.75rem; color:var(--muted); text-align:center;">
+    最可能入球時間段: <span style="color:var(--green); font-weight:bold;">60-75分鐘</span> (概率 23.3%)
+  </div>
+
+
+  <div class="divider"></div>
+
+  
+  <div class="section-title">🟨🟥 罰牌分析</div>
+  <div class="card-grid">
+    <div class="card-item">
+      <div class="card-label">上半場罰牌</div>
+      <div class="card-value">2.1</div>
+    </div>
+    <div class="card-item">
+      <div class="card-label">全場罰牌</div>
+      <div class="card-value">5.2</div>
+    </div>
+    <div class="card-item">
+      <div class="card-label">最可能罰牌數</div>
+      <div class="card-value">5 張</div>
+    </div>
+  </div>
+  <div style="margin-top:8px;">
+    <div class="card-line">
+      <span class="card-line-name">大罰牌 2.5</span>
+      <span class="card-line-value">89.4%</span>
+    </div>
+    <div class="card-line">
+      <span class="card-line-name">大罰牌 3.5</span>
+      <span class="card-line-value">76.8%</span>
+    </div>
+    <div class="card-line">
+      <span class="card-line-name">大罰牌 4.5</span>
+      <span class="card-line-value">60.1%</span>
+    </div>
+  </div>
+
+
+  <div class="divider"></div>
+
   <div class="section-title">🚩 全場角球 + 波膽</div>
   <div class="grid-2">
     <div class="stat-box">
@@ -822,6 +1165,63 @@ body {
 
   <div class="divider"></div>
 
+  
+  <div class="section-title">⚽ 上半場預計入球時間</div>
+  <div class="goal-time-grid">
+    <div class="goal-time-item ">
+      <div class="goal-time-label">0-15分鐘</div>
+      <div class="goal-time-prob">17.1%</div>
+    </div>
+    <div class="goal-time-item ">
+      <div class="goal-time-label">15-30分鐘</div>
+      <div class="goal-time-prob">20.8%</div>
+    </div>
+    <div class="goal-time-item ">
+      <div class="goal-time-label">30-45分鐘</div>
+      <div class="goal-time-prob">24.5%</div>
+    </div>
+  </div>
+  <div style="margin-top:6px; font-size:0.75rem; color:var(--muted); text-align:center;">
+    最可能入球時間段: <span style="color:var(--green); font-weight:bold;">60-75分鐘</span> (概率 31.7%)
+  </div>
+
+
+  <div class="divider"></div>
+
+  
+  <div class="section-title">🟨🟥 罰牌分析</div>
+  <div class="card-grid">
+    <div class="card-item">
+      <div class="card-label">上半場罰牌</div>
+      <div class="card-value">2.0</div>
+    </div>
+    <div class="card-item">
+      <div class="card-label">全場罰牌</div>
+      <div class="card-value">5.0</div>
+    </div>
+    <div class="card-item">
+      <div class="card-label">最可能罰牌數</div>
+      <div class="card-value">5 張</div>
+    </div>
+  </div>
+  <div style="margin-top:8px;">
+    <div class="card-line">
+      <span class="card-line-name">大罰牌 2.5</span>
+      <span class="card-line-value">87.7%</span>
+    </div>
+    <div class="card-line">
+      <span class="card-line-name">大罰牌 3.5</span>
+      <span class="card-line-value">73.9%</span>
+    </div>
+    <div class="card-line">
+      <span class="card-line-name">大罰牌 4.5</span>
+      <span class="card-line-value">56.4%</span>
+    </div>
+  </div>
+
+
+  <div class="divider"></div>
+
   <div class="section-title">🚩 全場角球 + 波膽</div>
   <div class="grid-2">
     <div class="stat-box">
@@ -914,6 +1314,63 @@ body {
   <div style="text-align:center; margin: 8px 0;">
     <span class="recommendation rec-home">主勝</span> <span class="recommendation rec-draw">觀望</span>
   </div>
+
+  <div class="divider"></div>
+
+  
+  <div class="section-title">⚽ 上半場預計入球時間</div>
+  <div class="goal-time-grid">
+    <div class="goal-time-item ">
+      <div class="goal-time-label">0-15分鐘</div>
+      <div class="goal-time-prob">14.6%</div>
+    </div>
+    <div class="goal-time-item ">
+      <div class="goal-time-label">15-30分鐘</div>
+      <div class="goal-time-prob">17.9%</div>
+    </div>
+    <div class="goal-time-item ">
+      <div class="goal-time-label">30-45分鐘</div>
+      <div class="goal-time-prob">21.1%</div>
+    </div>
+  </div>
+  <div style="margin-top:6px; font-size:0.75rem; color:var(--muted); text-align:center;">
+    最可能入球時間段: <span style="color:var(--green); font-weight:bold;">60-75分鐘</span> (概率 27.6%)
+  </div>
+
+
+  <div class="divider"></div>
+
+  
+  <div class="section-title">🟨🟥 罰牌分析</div>
+  <div class="card-grid">
+    <div class="card-item">
+      <div class="card-label">上半場罰牌</div>
+      <div class="card-value">2.1</div>
+    </div>
+    <div class="card-item">
+      <div class="card-label">全場罰牌</div>
+      <div class="card-value">5.2</div>
+    </div>
+    <div class="card-item">
+      <div class="card-label">最可能罰牌數</div>
+      <div class="card-value">5 張</div>
+    </div>
+  </div>
+  <div style="margin-top:8px;">
+    <div class="card-line">
+      <span class="card-line-name">大罰牌 2.5</span>
+      <span class="card-line-value">89.4%</span>
+    </div>
+    <div class="card-line">
+      <span class="card-line-name">大罰牌 3.5</span>
+      <span class="card-line-value">76.8%</span>
+    </div>
+    <div class="card-line">
+      <span class="card-line-name">大罰牌 4.5</span>
+      <span class="card-line-value">60.1%</span>
+    </div>
+  </div>
+
 
   <div class="divider"></div>
 
@@ -1015,6 +1472,63 @@ body {
 
   <div class="divider"></div>
 
+  
+  <div class="section-title">⚽ 上半場預計入球時間</div>
+  <div class="goal-time-grid">
+    <div class="goal-time-item ">
+      <div class="goal-time-label">0-15分鐘</div>
+      <div class="goal-time-prob">16.4%</div>
+    </div>
+    <div class="goal-time-item ">
+      <div class="goal-time-label">15-30分鐘</div>
+      <div class="goal-time-prob">20.1%</div>
+    </div>
+    <div class="goal-time-item ">
+      <div class="goal-time-label">30-45分鐘</div>
+      <div class="goal-time-prob">23.6%</div>
+    </div>
+  </div>
+  <div style="margin-top:6px; font-size:0.75rem; color:var(--muted); text-align:center;">
+    最可能入球時間段: <span style="color:var(--green); font-weight:bold;">60-75分鐘</span> (概率 30.6%)
+  </div>
+
+
+  <div class="divider"></div>
+
+  
+  <div class="section-title">🟨🟥 罰牌分析</div>
+  <div class="card-grid">
+    <div class="card-item">
+      <div class="card-label">上半場罰牌</div>
+      <div class="card-value">1.7</div>
+    </div>
+    <div class="card-item">
+      <div class="card-label">全場罰牌</div>
+      <div class="card-value">4.4</div>
+    </div>
+    <div class="card-item">
+      <div class="card-label">最可能罰牌數</div>
+      <div class="card-value">4 張</div>
+    </div>
+  </div>
+  <div style="margin-top:8px;">
+    <div class="card-line">
+      <span class="card-line-name">大罰牌 2.5</span>
+      <span class="card-line-value">81.1%</span>
+    </div>
+    <div class="card-line">
+      <span class="card-line-name">大罰牌 3.5</span>
+      <span class="card-line-value">63.5%</span>
+    </div>
+    <div class="card-line">
+      <span class="card-line-name">大罰牌 4.5</span>
+      <span class="card-line-value">44.3%</span>
+    </div>
+  </div>
+
+
+  <div class="divider"></div>
+
   <div class="section-title">🚩 全場角球 + 波膽</div>
   <div class="grid-2">
     <div class="stat-box">
@@ -1110,6 +1624,63 @@ body {
 
   <div class="divider"></div>
 
+  
+  <div class="section-title">⚽ 上半場預計入球時間</div>
+  <div class="goal-time-grid">
+    <div class="goal-time-item ">
+      <div class="goal-time-label">0-15分鐘</div>
+      <div class="goal-time-prob">11.9%</div>
+    </div>
+    <div class="goal-time-item ">
+      <div class="goal-time-label">15-30分鐘</div>
+      <div class="goal-time-prob">14.6%</div>
+    </div>
+    <div class="goal-time-item ">
+      <div class="goal-time-label">30-45分鐘</div>
+      <div class="goal-time-prob">17.2%</div>
+    </div>
+  </div>
+  <div style="margin-top:6px; font-size:0.75rem; color:var(--muted); text-align:center;">
+    最可能入球時間段: <span style="color:var(--green); font-weight:bold;">60-75分鐘</span> (概率 22.7%)
+  </div>
+
+
+  <div class="divider"></div>
+
+  
+  <div class="section-title">🟨🟥 罰牌分析</div>
+  <div class="card-grid">
+    <div class="card-item">
+      <div class="card-label">上半場罰牌</div>
+      <div class="card-value">2.1</div>
+    </div>
+    <div class="card-item">
+      <div class="card-label">全場罰牌</div>
+      <div class="card-value">5.2</div>
+    </div>
+    <div class="card-item">
+      <div class="card-label">最可能罰牌數</div>
+      <div class="card-value">5 張</div>
+    </div>
+  </div>
+  <div style="margin-top:8px;">
+    <div class="card-line">
+      <span class="card-line-name">大罰牌 2.5</span>
+      <span class="card-line-value">89.4%</span>
+    </div>
+    <div class="card-line">
+      <span class="card-line-name">大罰牌 3.5</span>
+      <span class="card-line-value">76.8%</span>
+    </div>
+    <div class="card-line">
+      <span class="card-line-name">大罰牌 4.5</span>
+      <span class="card-line-value">60.1%</span>
+    </div>
+  </div>
+
+
+  <div class="divider"></div>
+
   <div class="section-title">🚩 全場角球 + 波膽</div>
   <div class="grid-2">
     <div class="stat-box">
@@ -1202,6 +1773,63 @@ body {
   <div style="text-align:center; margin: 8px 0;">
     <span class="recommendation rec-home">主勝</span> <span class="recommendation rec-draw">細2.5</span>
   </div>
+
+  <div class="divider"></div>
+
+  
+  <div class="section-title">⚽ 上半場預計入球時間</div>
+  <div class="goal-time-grid">
+    <div class="goal-time-item ">
+      <div class="goal-time-label">0-15分鐘</div>
+      <div class="goal-time-prob">12.6%</div>
+    </div>
+    <div class="goal-time-item ">
+      <div class="goal-time-label">15-30分鐘</div>
+      <div class="goal-time-prob">15.5%</div>
+    </div>
+    <div class="goal-time-item ">
+      <div class="goal-time-label">30-45分鐘</div>
+      <div class="goal-time-prob">18.3%</div>
+    </div>
+  </div>
+  <div style="margin-top:6px; font-size:0.75rem; color:var(--muted); text-align:center;">
+    最可能入球時間段: <span style="color:var(--green); font-weight:bold;">60-75分鐘</span> (概率 24.0%)
+  </div>
+
+
+  <div class="divider"></div>
+
+  
+  <div class="section-title">🟨🟥 罰牌分析</div>
+  <div class="card-grid">
+    <div class="card-item">
+      <div class="card-label">上半場罰牌</div>
+      <div class="card-value">2.4</div>
+    </div>
+    <div class="card-item">
+      <div class="card-label">全場罰牌</div>
+      <div class="card-value">6.0</div>
+    </div>
+    <div class="card-item">
+      <div class="card-label">最可能罰牌數</div>
+      <div class="card-value">6 張</div>
+    </div>
+  </div>
+  <div style="margin-top:8px;">
+    <div class="card-line">
+      <span class="card-line-name">大罰牌 2.5</span>
+      <span class="card-line-value">93.9%</span>
+    </div>
+    <div class="card-line">
+      <span class="card-line-name">大罰牌 3.5</span>
+      <span class="card-line-value">85.2%</span>
+    </div>
+    <div class="card-line">
+      <span class="card-line-name">大罰牌 4.5</span>
+      <span class="card-line-value">71.9%</span>
+    </div>
+  </div>
+
 
   <div class="divider"></div>
 
@@ -1303,6 +1931,63 @@ body {
 
   <div class="divider"></div>
 
+  
+  <div class="section-title">⚽ 上半場預計入球時間</div>
+  <div class="goal-time-grid">
+    <div class="goal-time-item ">
+      <div class="goal-time-label">0-15分鐘</div>
+      <div class="goal-time-prob">15.4%</div>
+    </div>
+    <div class="goal-time-item ">
+      <div class="goal-time-label">15-30分鐘</div>
+      <div class="goal-time-prob">18.9%</div>
+    </div>
+    <div class="goal-time-item ">
+      <div class="goal-time-label">30-45分鐘</div>
+      <div class="goal-time-prob">22.2%</div>
+    </div>
+  </div>
+  <div style="margin-top:6px; font-size:0.75rem; color:var(--muted); text-align:center;">
+    最可能入球時間段: <span style="color:var(--green); font-weight:bold;">60-75分鐘</span> (概率 28.9%)
+  </div>
+
+
+  <div class="divider"></div>
+
+  
+  <div class="section-title">🟨🟥 罰牌分析</div>
+  <div class="card-grid">
+    <div class="card-item">
+      <div class="card-label">上半場罰牌</div>
+      <div class="card-value">1.7</div>
+    </div>
+    <div class="card-item">
+      <div class="card-label">全場罰牌</div>
+      <div class="card-value">4.4</div>
+    </div>
+    <div class="card-item">
+      <div class="card-label">最可能罰牌數</div>
+      <div class="card-value">4 張</div>
+    </div>
+  </div>
+  <div style="margin-top:8px;">
+    <div class="card-line">
+      <span class="card-line-name">大罰牌 2.5</span>
+      <span class="card-line-value">81.1%</span>
+    </div>
+    <div class="card-line">
+      <span class="card-line-name">大罰牌 3.5</span>
+      <span class="card-line-value">63.5%</span>
+    </div>
+    <div class="card-line">
+      <span class="card-line-name">大罰牌 4.5</span>
+      <span class="card-line-value">44.3%</span>
+    </div>
+  </div>
+
+
+  <div class="divider"></div>
+
   <div class="section-title">🚩 全場角球 + 波膽</div>
   <div class="grid-2">
     <div class="stat-box">
@@ -1398,6 +2083,63 @@ body {
 
   <div class="divider"></div>
 
+  
+  <div class="section-title">⚽ 上半場預計入球時間</div>
+  <div class="goal-time-grid">
+    <div class="goal-time-item ">
+      <div class="goal-time-label">0-15分鐘</div>
+      <div class="goal-time-prob">14.4%</div>
+    </div>
+    <div class="goal-time-item ">
+      <div class="goal-time-label">15-30分鐘</div>
+      <div class="goal-time-prob">17.7%</div>
+    </div>
+    <div class="goal-time-item ">
+      <div class="goal-time-label">30-45分鐘</div>
+      <div class="goal-time-prob">20.8%</div>
+    </div>
+  </div>
+  <div style="margin-top:6px; font-size:0.75rem; color:var(--muted); text-align:center;">
+    最可能入球時間段: <span style="color:var(--green); font-weight:bold;">60-75分鐘</span> (概率 27.2%)
+  </div>
+
+
+  <div class="divider"></div>
+
+  
+  <div class="section-title">🟨🟥 罰牌分析</div>
+  <div class="card-grid">
+    <div class="card-item">
+      <div class="card-label">上半場罰牌</div>
+      <div class="card-value">2.1</div>
+    </div>
+    <div class="card-item">
+      <div class="card-label">全場罰牌</div>
+      <div class="card-value">5.2</div>
+    </div>
+    <div class="card-item">
+      <div class="card-label">最可能罰牌數</div>
+      <div class="card-value">5 張</div>
+    </div>
+  </div>
+  <div style="margin-top:8px;">
+    <div class="card-line">
+      <span class="card-line-name">大罰牌 2.5</span>
+      <span class="card-line-value">89.4%</span>
+    </div>
+    <div class="card-line">
+      <span class="card-line-name">大罰牌 3.5</span>
+      <span class="card-line-value">76.8%</span>
+    </div>
+    <div class="card-line">
+      <span class="card-line-name">大罰牌 4.5</span>
+      <span class="card-line-value">60.1%</span>
+    </div>
+  </div>
+
+
+  <div class="divider"></div>
+
   <div class="section-title">🚩 全場角球 + 波膽</div>
   <div class="grid-2">
     <div class="stat-box">
@@ -1490,6 +2232,63 @@ body {
   <div style="text-align:center; margin: 8px 0;">
     <span class="recommendation rec-home">主勝</span> <span class="recommendation rec-draw">細2.5</span>
   </div>
+
+  <div class="divider"></div>
+
+  
+  <div class="section-title">⚽ 上半場預計入球時間</div>
+  <div class="goal-time-grid">
+    <div class="goal-time-item ">
+      <div class="goal-time-label">0-15分鐘</div>
+      <div class="goal-time-prob">9.6%</div>
+    </div>
+    <div class="goal-time-item ">
+      <div class="goal-time-label">15-30分鐘</div>
+      <div class="goal-time-prob">11.9%</div>
+    </div>
+    <div class="goal-time-item ">
+      <div class="goal-time-label">30-45分鐘</div>
+      <div class="goal-time-prob">14.1%</div>
+    </div>
+  </div>
+  <div style="margin-top:6px; font-size:0.75rem; color:var(--muted); text-align:center;">
+    最可能入球時間段: <span style="color:var(--green); font-weight:bold;">60-75分鐘</span> (概率 18.6%)
+  </div>
+
+
+  <div class="divider"></div>
+
+  
+  <div class="section-title">🟨🟥 罰牌分析</div>
+  <div class="card-grid">
+    <div class="card-item">
+      <div class="card-label">上半場罰牌</div>
+      <div class="card-value">2.1</div>
+    </div>
+    <div class="card-item">
+      <div class="card-label">全場罰牌</div>
+      <div class="card-value">5.2</div>
+    </div>
+    <div class="card-item">
+      <div class="card-label">最可能罰牌數</div>
+      <div class="card-value">5 張</div>
+    </div>
+  </div>
+  <div style="margin-top:8px;">
+    <div class="card-line">
+      <span class="card-line-name">大罰牌 2.5</span>
+      <span class="card-line-value">89.4%</span>
+    </div>
+    <div class="card-line">
+      <span class="card-line-name">大罰牌 3.5</span>
+      <span class="card-line-value">76.8%</span>
+    </div>
+    <div class="card-line">
+      <span class="card-line-name">大罰牌 4.5</span>
+      <span class="card-line-value">60.1%</span>
+    </div>
+  </div>
+
 
   <div class="divider"></div>
 
@@ -1591,6 +2390,63 @@ body {
 
   <div class="divider"></div>
 
+  
+  <div class="section-title">⚽ 上半場預計入球時間</div>
+  <div class="goal-time-grid">
+    <div class="goal-time-item ">
+      <div class="goal-time-label">0-15分鐘</div>
+      <div class="goal-time-prob">11.7%</div>
+    </div>
+    <div class="goal-time-item ">
+      <div class="goal-time-label">15-30分鐘</div>
+      <div class="goal-time-prob">14.3%</div>
+    </div>
+    <div class="goal-time-item ">
+      <div class="goal-time-label">30-45分鐘</div>
+      <div class="goal-time-prob">17.0%</div>
+    </div>
+  </div>
+  <div style="margin-top:6px; font-size:0.75rem; color:var(--muted); text-align:center;">
+    最可能入球時間段: <span style="color:var(--green); font-weight:bold;">60-75分鐘</span> (概率 22.3%)
+  </div>
+
+
+  <div class="divider"></div>
+
+  
+  <div class="section-title">🟨🟥 罰牌分析</div>
+  <div class="card-grid">
+    <div class="card-item">
+      <div class="card-label">上半場罰牌</div>
+      <div class="card-value">2.1</div>
+    </div>
+    <div class="card-item">
+      <div class="card-label">全場罰牌</div>
+      <div class="card-value">5.2</div>
+    </div>
+    <div class="card-item">
+      <div class="card-label">最可能罰牌數</div>
+      <div class="card-value">5 張</div>
+    </div>
+  </div>
+  <div style="margin-top:8px;">
+    <div class="card-line">
+      <span class="card-line-name">大罰牌 2.5</span>
+      <span class="card-line-value">89.4%</span>
+    </div>
+    <div class="card-line">
+      <span class="card-line-name">大罰牌 3.5</span>
+      <span class="card-line-value">76.8%</span>
+    </div>
+    <div class="card-line">
+      <span class="card-line-name">大罰牌 4.5</span>
+      <span class="card-line-value">60.1%</span>
+    </div>
+  </div>
+
+
+  <div class="divider"></div>
+
   <div class="section-title">🚩 全場角球 + 波膽</div>
   <div class="grid-2">
     <div class="stat-box">
@@ -1683,6 +2539,63 @@ body {
   <div style="text-align:center; margin: 8px 0;">
     <span class="recommendation rec-home">主勝</span> <span class="recommendation rec-over">大2.5</span>
   </div>
+
+  <div class="divider"></div>
+
+  
+  <div class="section-title">⚽ 上半場預計入球時間</div>
+  <div class="goal-time-grid">
+    <div class="goal-time-item ">
+      <div class="goal-time-label">0-15分鐘</div>
+      <div class="goal-time-prob">18.6%</div>
+    </div>
+    <div class="goal-time-item ">
+      <div class="goal-time-label">15-30分鐘</div>
+      <div class="goal-time-prob">22.7%</div>
+    </div>
+    <div class="goal-time-item ">
+      <div class="goal-time-label">30-45分鐘</div>
+      <div class="goal-time-prob">26.6%</div>
+    </div>
+  </div>
+  <div style="margin-top:6px; font-size:0.75rem; color:var(--muted); text-align:center;">
+    最可能入球時間段: <span style="color:var(--green); font-weight:bold;">60-75分鐘</span> (概率 34.3%)
+  </div>
+
+
+  <div class="divider"></div>
+
+  
+  <div class="section-title">🟨🟥 罰牌分析</div>
+  <div class="card-grid">
+    <div class="card-item">
+      <div class="card-label">上半場罰牌</div>
+      <div class="card-value">1.7</div>
+    </div>
+    <div class="card-item">
+      <div class="card-label">全場罰牌</div>
+      <div class="card-value">4.4</div>
+    </div>
+    <div class="card-item">
+      <div class="card-label">最可能罰牌數</div>
+      <div class="card-value">4 張</div>
+    </div>
+  </div>
+  <div style="margin-top:8px;">
+    <div class="card-line">
+      <span class="card-line-name">大罰牌 2.5</span>
+      <span class="card-line-value">81.1%</span>
+    </div>
+    <div class="card-line">
+      <span class="card-line-name">大罰牌 3.5</span>
+      <span class="card-line-value">63.5%</span>
+    </div>
+    <div class="card-line">
+      <span class="card-line-name">大罰牌 4.5</span>
+      <span class="card-line-value">44.3%</span>
+    </div>
+  </div>
+
 
   <div class="divider"></div>
 
@@ -1781,6 +2694,63 @@ body {
 
   <div class="divider"></div>
 
+  
+  <div class="section-title">⚽ 上半場預計入球時間</div>
+  <div class="goal-time-grid">
+    <div class="goal-time-item ">
+      <div class="goal-time-label">0-15分鐘</div>
+      <div class="goal-time-prob">13.1%</div>
+    </div>
+    <div class="goal-time-item ">
+      <div class="goal-time-label">15-30分鐘</div>
+      <div class="goal-time-prob">16.0%</div>
+    </div>
+    <div class="goal-time-item ">
+      <div class="goal-time-label">30-45分鐘</div>
+      <div class="goal-time-prob">18.9%</div>
+    </div>
+  </div>
+  <div style="margin-top:6px; font-size:0.75rem; color:var(--muted); text-align:center;">
+    最可能入球時間段: <span style="color:var(--green); font-weight:bold;">60-75分鐘</span> (概率 24.8%)
+  </div>
+
+
+  <div class="divider"></div>
+
+  
+  <div class="section-title">🟨🟥 罰牌分析</div>
+  <div class="card-grid">
+    <div class="card-item">
+      <div class="card-label">上半場罰牌</div>
+      <div class="card-value">2.1</div>
+    </div>
+    <div class="card-item">
+      <div class="card-label">全場罰牌</div>
+      <div class="card-value">5.2</div>
+    </div>
+    <div class="card-item">
+      <div class="card-label">最可能罰牌數</div>
+      <div class="card-value">5 張</div>
+    </div>
+  </div>
+  <div style="margin-top:8px;">
+    <div class="card-line">
+      <span class="card-line-name">大罰牌 2.5</span>
+      <span class="card-line-value">89.4%</span>
+    </div>
+    <div class="card-line">
+      <span class="card-line-name">大罰牌 3.5</span>
+      <span class="card-line-value">76.8%</span>
+    </div>
+    <div class="card-line">
+      <span class="card-line-name">大罰牌 4.5</span>
+      <span class="card-line-value">60.1%</span>
+    </div>
+  </div>
+
+
+  <div class="divider"></div>
+
   <div class="section-title">🚩 全場角球 + 波膽</div>
   <div class="grid-2">
     <div class="stat-box">
@@ -1852,8 +2822,8 @@ function showTab(tabId) {
 function copyMatch(matchId) {
   const card = document.getElementById('match-' + matchId);
   const teams = card.querySelector('.match-teams').textContent.trim().split('已完賽')[0].split('32強')[0].trim();
-  const labels = card.querySelectorAll('.stat-label');
-  const values = card.querySelectorAll('.stat-value');
+  const labels = card.querySelectorAll('.stat-label, .goal-time-label, .card-label, .card-line-name');
+  const values = card.querySelectorAll('.stat-value, .goal-time-prob, .card-value, .card-line-value');
 
   let text = "【UNIFIED v3.3.67 32強淘汰賽】\n" + teams + "\n";
   for (let i = 0; i < Math.min(labels.length, values.length); i++) {
