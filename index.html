@@ -130,13 +130,49 @@ body {
 }
 .team-name.home { text-align: left; }
 .team-name.away { text-align: right; }
-.score-display {
-  font-size: 24px;
-  font-weight: 800;
-  color: var(--accent-green);
-  text-align: center;
-  min-width: 60px;
+
+/* Score display - HT vs FT */
+.scores-row {
+  display: flex;
+  gap: 8px;
+  margin: 12px 0;
 }
+.score-box {
+  flex: 1;
+  border-radius: 10px;
+  padding: 12px 8px;
+  text-align: center;
+}
+.score-box.ht {
+  background: rgba(227, 179, 65, 0.1);
+  border: 1px solid rgba(227, 179, 65, 0.25);
+}
+.score-box.ft {
+  background: rgba(88, 166, 255, 0.1);
+  border: 1px solid rgba(88, 166, 255, 0.25);
+}
+.score-box .label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+}
+.score-box.ht .label { color: var(--accent-orange); }
+.score-box.ft .label { color: var(--accent); }
+.score-box .score {
+  font-size: 28px;
+  font-weight: 800;
+}
+.score-box.ht .score { color: var(--accent-orange); }
+.score-box.ft .score { color: var(--accent); }
+.score-box .sub {
+  font-size: 10px;
+  color: var(--text-dim);
+  margin-top: 2px;
+}
+
+/* Predicted scores */
 .score-predicted {
   font-size: 20px;
   font-weight: 700;
@@ -186,16 +222,6 @@ body {
   font-weight: 700;
   color: var(--accent-orange);
   margin-top: 2px;
-}
-.ht-scoreline {
-  text-align: center;
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--accent-orange);
-  margin: 6px 0;
-  padding: 4px;
-  background: rgba(227, 179, 65, 0.1);
-  border-radius: 6px;
 }
 
 .corner-section {
@@ -418,16 +444,6 @@ body {
   to { opacity: 1; transform: translateY(0); }
 }
 .match-card { animation: fadeIn 0.3s ease-out; }
-
-.timeline-bar {
-  display: flex;
-  margin-top: 8px;
-  height: 4px;
-  border-radius: 2px;
-  overflow: hidden;
-}
-.timeline-ht { background: var(--accent-orange); width: 45%; }
-.timeline-ft { background: var(--accent); width: 55%; }
 </style>
 <base target="_blank">
 </head>
@@ -435,7 +451,7 @@ body {
 
 <div class="header">
   <h1>UNIFIED v3.3.68 <span class="badge">WC2026</span></h1>
-  <div class="subtitle">32強淘汰賽 | 7場已完賽 | 9場待預測 | 角球分析已啟用</div>
+  <div class="subtitle">32強淘汰賽 | 7場已完賽 | 9場待預測 | HT/FT比分分析</div>
 </div>
 
 <div class="tabs">
@@ -456,34 +472,37 @@ body {
     <div class="match-body">
       <div class="teams-row">
         <span class="team-name home">墨西哥</span>
-        <span class="score-display">2 - 0</span>
         <span class="team-name away">厄瓜多爾</span>
       </div>
-      <div class="match-details">
-        <div class="detail-item">
-          <div class="detail-label">半場</div>
-          <div class="detail-value" style="color:var(--accent-orange)">2-0</div>
+
+      <div class="scores-row">
+        <div class="score-box ht">
+          <div class="label">⏱ 上半場</div>
+          <div class="score">2 - 0</div>
+          <div class="sub">HT總入球: 2</div>
         </div>
+        <div class="score-box ft">
+          <div class="label">🏁 全場</div>
+          <div class="score">2 - 0</div>
+          <div class="sub">FT總入球: 2</div>
+        </div>
+      </div>
+
+      <div class="match-details">
         <div class="detail-item">
           <div class="detail-label">角球</div>
           <div class="detail-value">11</div>
         </div>
         <div class="detail-item">
-          <div class="detail-label">總球</div>
-          <div class="detail-value">2</div>
+          <div class="detail-label">HT佔比</div>
+          <div class="detail-value">100%</div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-label">大9.5</div>
+          <div class="detail-value">✓</div>
         </div>
       </div>
       
-
-      <div class="ht-section" style="margin-top:10px;">
-        <div class="ht-title">上半場數據</div>
-        <div class="ht-grid">
-          <div class="ht-box"><div class="label">HT入球</div><div class="value">2</div></div>
-          <div class="ht-box"><div class="label">HT佔比</div><div class="value">100%</div></div>
-          <div class="ht-box"><div class="label">HT主</div><div class="value">2</div></div>
-          <div class="ht-box"><div class="label">HT客</div><div class="value">0</div></div>
-        </div>
-      </div>
 
       <div class="corner-section" style="margin-top:10px;">
         <div class="corner-title">角球分析</div>
@@ -505,34 +524,37 @@ body {
     <div class="match-body">
       <div class="teams-row">
         <span class="team-name home">法國</span>
-        <span class="score-display">3 - 0</span>
         <span class="team-name away">瑞典</span>
       </div>
-      <div class="match-details">
-        <div class="detail-item">
-          <div class="detail-label">半場</div>
-          <div class="detail-value" style="color:var(--accent-orange)">1-0</div>
+
+      <div class="scores-row">
+        <div class="score-box ht">
+          <div class="label">⏱ 上半場</div>
+          <div class="score">1 - 0</div>
+          <div class="sub">HT總入球: 1</div>
         </div>
+        <div class="score-box ft">
+          <div class="label">🏁 全場</div>
+          <div class="score">3 - 0</div>
+          <div class="sub">FT總入球: 3</div>
+        </div>
+      </div>
+
+      <div class="match-details">
         <div class="detail-item">
           <div class="detail-label">角球</div>
           <div class="detail-value">10</div>
         </div>
         <div class="detail-item">
-          <div class="detail-label">總球</div>
-          <div class="detail-value">3</div>
+          <div class="detail-label">HT佔比</div>
+          <div class="detail-value">33%</div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-label">大9.5</div>
+          <div class="detail-value">✓</div>
         </div>
       </div>
       
-
-      <div class="ht-section" style="margin-top:10px;">
-        <div class="ht-title">上半場數據</div>
-        <div class="ht-grid">
-          <div class="ht-box"><div class="label">HT入球</div><div class="value">1</div></div>
-          <div class="ht-box"><div class="label">HT佔比</div><div class="value">33%</div></div>
-          <div class="ht-box"><div class="label">HT主</div><div class="value">1</div></div>
-          <div class="ht-box"><div class="label">HT客</div><div class="value">0</div></div>
-        </div>
-      </div>
 
       <div class="corner-section" style="margin-top:10px;">
         <div class="corner-title">角球分析</div>
@@ -554,34 +576,37 @@ body {
     <div class="match-body">
       <div class="teams-row">
         <span class="team-name home">科特迪瓦</span>
-        <span class="score-display">1 - 2</span>
         <span class="team-name away">挪威</span>
       </div>
-      <div class="match-details">
-        <div class="detail-item">
-          <div class="detail-label">半場</div>
-          <div class="detail-value" style="color:var(--accent-orange)">0-1</div>
+
+      <div class="scores-row">
+        <div class="score-box ht">
+          <div class="label">⏱ 上半場</div>
+          <div class="score">0 - 1</div>
+          <div class="sub">HT總入球: 1</div>
         </div>
+        <div class="score-box ft">
+          <div class="label">🏁 全場</div>
+          <div class="score">1 - 2</div>
+          <div class="sub">FT總入球: 3</div>
+        </div>
+      </div>
+
+      <div class="match-details">
         <div class="detail-item">
           <div class="detail-label">角球</div>
           <div class="detail-value">17</div>
         </div>
         <div class="detail-item">
-          <div class="detail-label">總球</div>
-          <div class="detail-value">3</div>
+          <div class="detail-label">HT佔比</div>
+          <div class="detail-value">33%</div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-label">大9.5</div>
+          <div class="detail-value">✓</div>
         </div>
       </div>
       
-
-      <div class="ht-section" style="margin-top:10px;">
-        <div class="ht-title">上半場數據</div>
-        <div class="ht-grid">
-          <div class="ht-box"><div class="label">HT入球</div><div class="value">1</div></div>
-          <div class="ht-box"><div class="label">HT佔比</div><div class="value">33%</div></div>
-          <div class="ht-box"><div class="label">HT主</div><div class="value">0</div></div>
-          <div class="ht-box"><div class="label">HT客</div><div class="value">1</div></div>
-        </div>
-      </div>
 
       <div class="corner-section" style="margin-top:10px;">
         <div class="corner-title">角球分析</div>
@@ -603,34 +628,37 @@ body {
     <div class="match-body">
       <div class="teams-row">
         <span class="team-name home">荷蘭</span>
-        <span class="score-display">1 - 1</span>
         <span class="team-name away">摩洛哥</span>
       </div>
-      <div class="match-details">
-        <div class="detail-item">
-          <div class="detail-label">半場</div>
-          <div class="detail-value" style="color:var(--accent-orange)">0-0</div>
+
+      <div class="scores-row">
+        <div class="score-box ht">
+          <div class="label">⏱ 上半場</div>
+          <div class="score">0 - 0</div>
+          <div class="sub">HT總入球: 0</div>
         </div>
+        <div class="score-box ft">
+          <div class="label">🏁 全場</div>
+          <div class="score">1 - 1</div>
+          <div class="sub">FT總入球: 2</div>
+        </div>
+      </div>
+
+      <div class="match-details">
         <div class="detail-item">
           <div class="detail-label">角球</div>
           <div class="detail-value">13</div>
         </div>
         <div class="detail-item">
-          <div class="detail-label">總球</div>
-          <div class="detail-value">2</div>
+          <div class="detail-label">HT佔比</div>
+          <div class="detail-value">0%</div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-label">大9.5</div>
+          <div class="detail-value">✓</div>
         </div>
       </div>
       <div style='font-size:11px;color:var(--text-dim);margin-top:6px;text-align:center;'>加時 1-1 | 點球 2-3</div>
-
-      <div class="ht-section" style="margin-top:10px;">
-        <div class="ht-title">上半場數據</div>
-        <div class="ht-grid">
-          <div class="ht-box"><div class="label">HT入球</div><div class="value">0</div></div>
-          <div class="ht-box"><div class="label">HT佔比</div><div class="value">0%</div></div>
-          <div class="ht-box"><div class="label">HT主</div><div class="value">0</div></div>
-          <div class="ht-box"><div class="label">HT客</div><div class="value">0</div></div>
-        </div>
-      </div>
 
       <div class="corner-section" style="margin-top:10px;">
         <div class="corner-title">角球分析</div>
@@ -652,34 +680,37 @@ body {
     <div class="match-body">
       <div class="teams-row">
         <span class="team-name home">德國</span>
-        <span class="score-display">1 - 1</span>
         <span class="team-name away">巴拉圭</span>
       </div>
-      <div class="match-details">
-        <div class="detail-item">
-          <div class="detail-label">半場</div>
-          <div class="detail-value" style="color:var(--accent-orange)">0-1</div>
+
+      <div class="scores-row">
+        <div class="score-box ht">
+          <div class="label">⏱ 上半場</div>
+          <div class="score">0 - 1</div>
+          <div class="sub">HT總入球: 1</div>
         </div>
+        <div class="score-box ft">
+          <div class="label">🏁 全場</div>
+          <div class="score">1 - 1</div>
+          <div class="sub">FT總入球: 2</div>
+        </div>
+      </div>
+
+      <div class="match-details">
         <div class="detail-item">
           <div class="detail-label">角球</div>
           <div class="detail-value">22</div>
         </div>
         <div class="detail-item">
-          <div class="detail-label">總球</div>
-          <div class="detail-value">2</div>
+          <div class="detail-label">HT佔比</div>
+          <div class="detail-value">50%</div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-label">大9.5</div>
+          <div class="detail-value">✓</div>
         </div>
       </div>
       <div style='font-size:11px;color:var(--text-dim);margin-top:6px;text-align:center;'>加時 1-1 | 點球 3-4</div>
-
-      <div class="ht-section" style="margin-top:10px;">
-        <div class="ht-title">上半場數據</div>
-        <div class="ht-grid">
-          <div class="ht-box"><div class="label">HT入球</div><div class="value">1</div></div>
-          <div class="ht-box"><div class="label">HT佔比</div><div class="value">50%</div></div>
-          <div class="ht-box"><div class="label">HT主</div><div class="value">0</div></div>
-          <div class="ht-box"><div class="label">HT客</div><div class="value">1</div></div>
-        </div>
-      </div>
 
       <div class="corner-section" style="margin-top:10px;">
         <div class="corner-title">角球分析</div>
@@ -701,34 +732,37 @@ body {
     <div class="match-body">
       <div class="teams-row">
         <span class="team-name home">巴西</span>
-        <span class="score-display">2 - 1</span>
         <span class="team-name away">日本</span>
       </div>
-      <div class="match-details">
-        <div class="detail-item">
-          <div class="detail-label">半場</div>
-          <div class="detail-value" style="color:var(--accent-orange)">0-1</div>
+
+      <div class="scores-row">
+        <div class="score-box ht">
+          <div class="label">⏱ 上半場</div>
+          <div class="score">0 - 1</div>
+          <div class="sub">HT總入球: 1</div>
         </div>
+        <div class="score-box ft">
+          <div class="label">🏁 全場</div>
+          <div class="score">2 - 1</div>
+          <div class="sub">FT總入球: 3</div>
+        </div>
+      </div>
+
+      <div class="match-details">
         <div class="detail-item">
           <div class="detail-label">角球</div>
           <div class="detail-value">8</div>
         </div>
         <div class="detail-item">
-          <div class="detail-label">總球</div>
-          <div class="detail-value">3</div>
+          <div class="detail-label">HT佔比</div>
+          <div class="detail-value">33%</div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-label">大9.5</div>
+          <div class="detail-value">✗</div>
         </div>
       </div>
       
-
-      <div class="ht-section" style="margin-top:10px;">
-        <div class="ht-title">上半場數據</div>
-        <div class="ht-grid">
-          <div class="ht-box"><div class="label">HT入球</div><div class="value">1</div></div>
-          <div class="ht-box"><div class="label">HT佔比</div><div class="value">33%</div></div>
-          <div class="ht-box"><div class="label">HT主</div><div class="value">0</div></div>
-          <div class="ht-box"><div class="label">HT客</div><div class="value">1</div></div>
-        </div>
-      </div>
 
       <div class="corner-section" style="margin-top:10px;">
         <div class="corner-title">角球分析</div>
@@ -750,34 +784,37 @@ body {
     <div class="match-body">
       <div class="teams-row">
         <span class="team-name home">南非</span>
-        <span class="score-display">0 - 1</span>
         <span class="team-name away">加拿大</span>
       </div>
-      <div class="match-details">
-        <div class="detail-item">
-          <div class="detail-label">半場</div>
-          <div class="detail-value" style="color:var(--accent-orange)">0-0</div>
+
+      <div class="scores-row">
+        <div class="score-box ht">
+          <div class="label">⏱ 上半場</div>
+          <div class="score">0 - 0</div>
+          <div class="sub">HT總入球: 0</div>
         </div>
+        <div class="score-box ft">
+          <div class="label">🏁 全場</div>
+          <div class="score">0 - 1</div>
+          <div class="sub">FT總入球: 1</div>
+        </div>
+      </div>
+
+      <div class="match-details">
         <div class="detail-item">
           <div class="detail-label">角球</div>
           <div class="detail-value">5</div>
         </div>
         <div class="detail-item">
-          <div class="detail-label">總球</div>
-          <div class="detail-value">1</div>
+          <div class="detail-label">HT佔比</div>
+          <div class="detail-value">0%</div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-label">大9.5</div>
+          <div class="detail-value">✗</div>
         </div>
       </div>
       
-
-      <div class="ht-section" style="margin-top:10px;">
-        <div class="ht-title">上半場數據</div>
-        <div class="ht-grid">
-          <div class="ht-box"><div class="label">HT入球</div><div class="value">0</div></div>
-          <div class="ht-box"><div class="label">HT佔比</div><div class="value">0%</div></div>
-          <div class="ht-box"><div class="label">HT主</div><div class="value">0</div></div>
-          <div class="ht-box"><div class="label">HT客</div><div class="value">0</div></div>
-        </div>
-      </div>
 
       <div class="corner-section" style="margin-top:10px;">
         <div class="corner-title">角球分析</div>
@@ -804,22 +841,24 @@ body {
     <div class="match-body">
       <div class="teams-row">
         <span class="team-name home">英格蘭<span class="gap-tag gap-large">大差距</span></span>
-        <span class="score-predicted">2.6 - 0.2</span>
         <span class="team-name away">剛果(金)</span>
       </div>
 
-      <div class="timeline-bar">
-        <div class="timeline-ht"></div>
-        <div class="timeline-ft"></div>
-      </div>
-      <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--text-dim);margin-top:2px;">
-        <span>HT 預計 1.2球</span>
-        <span>FT 預計 2.8球</span>
+      <div class="scores-row">
+        <div class="score-box ht">
+          <div class="label">⏱ 上半場預測</div>
+          <div class="score">1-0</div>
+          <div class="sub">HT預計: 1.1 - 0.1</div>
+        </div>
+        <div class="score-box ft">
+          <div class="label">🏁 全場預測</div>
+          <div class="score">2-0</div>
+          <div class="sub">FT預計: 2.6 - 0.2</div>
+        </div>
       </div>
 
       <div class="ht-section">
-        <div class="ht-title">上半場預測</div>
-        <div class="ht-scoreline">1-0 (HT)</div>
+        <div class="ht-title">上半場概率</div>
         <div class="ht-grid">
           <div class="ht-box"><div class="label">HT主勝</div><div class="value">62%</div></div>
           <div class="ht-box"><div class="label">HT和局</div><div class="value">34%</div></div>
@@ -895,22 +934,24 @@ body {
     <div class="match-body">
       <div class="teams-row">
         <span class="team-name home">比利時<span class="gap-tag gap-mid">中差距</span></span>
-        <span class="score-predicted">1.8 - 0.8</span>
         <span class="team-name away">塞內加爾</span>
       </div>
 
-      <div class="timeline-bar">
-        <div class="timeline-ht"></div>
-        <div class="timeline-ft"></div>
-      </div>
-      <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--text-dim);margin-top:2px;">
-        <span>HT 預計 1.0球</span>
-        <span>FT 預計 2.6球</span>
+      <div class="scores-row">
+        <div class="score-box ht">
+          <div class="label">⏱ 上半場預測</div>
+          <div class="score">0-0</div>
+          <div class="sub">HT預計: 0.7 - 0.3</div>
+        </div>
+        <div class="score-box ft">
+          <div class="label">🏁 全場預測</div>
+          <div class="score">1-0</div>
+          <div class="sub">FT預計: 1.8 - 0.8</div>
+        </div>
       </div>
 
       <div class="ht-section">
-        <div class="ht-title">上半場預測</div>
-        <div class="ht-scoreline">0-0 (HT)</div>
+        <div class="ht-title">上半場概率</div>
         <div class="ht-grid">
           <div class="ht-box"><div class="label">HT主勝</div><div class="value">40%</div></div>
           <div class="ht-box"><div class="label">HT和局</div><div class="value">45%</div></div>
@@ -980,22 +1021,24 @@ body {
     <div class="match-body">
       <div class="teams-row">
         <span class="team-name home">美國<span class="gap-tag gap-small">小差距</span></span>
-        <span class="score-predicted">0.9 - 0.4</span>
         <span class="team-name away">波斯尼亞</span>
       </div>
 
-      <div class="timeline-bar">
-        <div class="timeline-ht"></div>
-        <div class="timeline-ft"></div>
-      </div>
-      <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--text-dim);margin-top:2px;">
-        <span>HT 預計 0.4球</span>
-        <span>FT 預計 1.3球</span>
+      <div class="scores-row">
+        <div class="score-box ht">
+          <div class="label">⏱ 上半場預測</div>
+          <div class="score">0-0</div>
+          <div class="sub">HT預計: 0.3 - 0.1</div>
+        </div>
+        <div class="score-box ft">
+          <div class="label">🏁 全場預測</div>
+          <div class="score">0-0</div>
+          <div class="sub">FT預計: 0.9 - 0.4</div>
+        </div>
       </div>
 
       <div class="ht-section">
-        <div class="ht-title">上半場預測</div>
-        <div class="ht-scoreline">0-0 (HT)</div>
+        <div class="ht-title">上半場概率</div>
         <div class="ht-grid">
           <div class="ht-box"><div class="label">HT主勝</div><div class="value">23%</div></div>
           <div class="ht-box"><div class="label">HT和局</div><div class="value">67%</div></div>
@@ -1065,22 +1108,24 @@ body {
     <div class="match-body">
       <div class="teams-row">
         <span class="team-name home">西班牙<span class="gap-tag gap-mid">中差距</span></span>
-        <span class="score-predicted">2.7 - 1.0</span>
         <span class="team-name away">奧地利</span>
       </div>
 
-      <div class="timeline-bar">
-        <div class="timeline-ht"></div>
-        <div class="timeline-ft"></div>
-      </div>
-      <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--text-dim);margin-top:2px;">
-        <span>HT 預計 1.4球</span>
-        <span>FT 預計 3.7球</span>
+      <div class="scores-row">
+        <div class="score-box ht">
+          <div class="label">⏱ 上半場預測</div>
+          <div class="score">1-0</div>
+          <div class="sub">HT預計: 1.0 - 0.4</div>
+        </div>
+        <div class="score-box ft">
+          <div class="label">🏁 全場預測</div>
+          <div class="score">2-1</div>
+          <div class="sub">FT預計: 2.7 - 1.0</div>
+        </div>
       </div>
 
       <div class="ht-section">
-        <div class="ht-title">上半場預測</div>
-        <div class="ht-scoreline">1-0 (HT)</div>
+        <div class="ht-title">上半場概率</div>
         <div class="ht-grid">
           <div class="ht-box"><div class="label">HT主勝</div><div class="value">50%</div></div>
           <div class="ht-box"><div class="label">HT和局</div><div class="value">35%</div></div>
@@ -1156,22 +1201,24 @@ body {
     <div class="match-body">
       <div class="teams-row">
         <span class="team-name home">葡萄牙<span class="gap-tag gap-small">小差距</span></span>
-        <span class="score-predicted">2.5 - 1.1</span>
         <span class="team-name away">克羅地亞</span>
       </div>
 
-      <div class="timeline-bar">
-        <div class="timeline-ht"></div>
-        <div class="timeline-ft"></div>
-      </div>
-      <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--text-dim);margin-top:2px;">
-        <span>HT 預計 1.3球</span>
-        <span>FT 預計 3.7球</span>
+      <div class="scores-row">
+        <div class="score-box ht">
+          <div class="label">⏱ 上半場預測</div>
+          <div class="score">0-0</div>
+          <div class="sub">HT預計: 0.9 - 0.4</div>
+        </div>
+        <div class="score-box ft">
+          <div class="label">🏁 全場預測</div>
+          <div class="score">2-1</div>
+          <div class="sub">FT預計: 2.5 - 1.1</div>
+        </div>
       </div>
 
       <div class="ht-section">
-        <div class="ht-title">上半場預測</div>
-        <div class="ht-scoreline">0-0 (HT)</div>
+        <div class="ht-title">上半場概率</div>
         <div class="ht-grid">
           <div class="ht-box"><div class="label">HT主勝</div><div class="value">46%</div></div>
           <div class="ht-box"><div class="label">HT和局</div><div class="value">38%</div></div>
@@ -1247,22 +1294,24 @@ body {
     <div class="match-body">
       <div class="teams-row">
         <span class="team-name home">瑞士<span class="gap-tag gap-small">小差距</span></span>
-        <span class="score-predicted">1.0 - 0.3</span>
         <span class="team-name away">阿爾及利亞</span>
       </div>
 
-      <div class="timeline-bar">
-        <div class="timeline-ht"></div>
-        <div class="timeline-ft"></div>
-      </div>
-      <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--text-dim);margin-top:2px;">
-        <span>HT 預計 0.5球</span>
-        <span>FT 預計 1.3球</span>
+      <div class="scores-row">
+        <div class="score-box ht">
+          <div class="label">⏱ 上半場預測</div>
+          <div class="score">0-0</div>
+          <div class="sub">HT預計: 0.4 - 0.1</div>
+        </div>
+        <div class="score-box ft">
+          <div class="label">🏁 全場預測</div>
+          <div class="score">1-0</div>
+          <div class="sub">FT預計: 1.0 - 0.3</div>
+        </div>
       </div>
 
       <div class="ht-section">
-        <div class="ht-title">上半場預測</div>
-        <div class="ht-scoreline">0-0 (HT)</div>
+        <div class="ht-title">上半場概率</div>
         <div class="ht-grid">
           <div class="ht-box"><div class="label">HT主勝</div><div class="value">28%</div></div>
           <div class="ht-box"><div class="label">HT和局</div><div class="value">66%</div></div>
@@ -1332,22 +1381,24 @@ body {
     <div class="match-body">
       <div class="teams-row">
         <span class="team-name home">澳洲<span class="gap-tag gap-small">小差距</span></span>
-        <span class="score-predicted">0.8 - 0.5</span>
         <span class="team-name away">埃及</span>
       </div>
 
-      <div class="timeline-bar">
-        <div class="timeline-ht"></div>
-        <div class="timeline-ft"></div>
-      </div>
-      <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--text-dim);margin-top:2px;">
-        <span>HT 預計 0.5球</span>
-        <span>FT 預計 1.3球</span>
+      <div class="scores-row">
+        <div class="score-box ht">
+          <div class="label">⏱ 上半場預測</div>
+          <div class="score">0-0</div>
+          <div class="sub">HT預計: 0.3 - 0.2</div>
+        </div>
+        <div class="score-box ft">
+          <div class="label">🏁 全場預測</div>
+          <div class="score">0-0</div>
+          <div class="sub">FT預計: 0.8 - 0.5</div>
+        </div>
       </div>
 
       <div class="ht-section">
-        <div class="ht-title">上半場預測</div>
-        <div class="ht-scoreline">0-0 (HT)</div>
+        <div class="ht-title">上半場概率</div>
         <div class="ht-grid">
           <div class="ht-box"><div class="label">HT主勝</div><div class="value">22%</div></div>
           <div class="ht-box"><div class="label">HT和局</div><div class="value">67%</div></div>
@@ -1417,22 +1468,24 @@ body {
     <div class="match-body">
       <div class="teams-row">
         <span class="team-name home">阿根廷<span class="gap-tag gap-large">大差距</span></span>
-        <span class="score-predicted">2.6 - 0.2</span>
         <span class="team-name away">佛得角</span>
       </div>
 
-      <div class="timeline-bar">
-        <div class="timeline-ht"></div>
-        <div class="timeline-ft"></div>
-      </div>
-      <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--text-dim);margin-top:2px;">
-        <span>HT 預計 1.2球</span>
-        <span>FT 預計 2.8球</span>
+      <div class="scores-row">
+        <div class="score-box ht">
+          <div class="label">⏱ 上半場預測</div>
+          <div class="score">1-0</div>
+          <div class="sub">HT預計: 1.1 - 0.1</div>
+        </div>
+        <div class="score-box ft">
+          <div class="label">🏁 全場預測</div>
+          <div class="score">2-0</div>
+          <div class="sub">FT預計: 2.6 - 0.2</div>
+        </div>
       </div>
 
       <div class="ht-section">
-        <div class="ht-title">上半場預測</div>
-        <div class="ht-scoreline">1-0 (HT)</div>
+        <div class="ht-title">上半場概率</div>
         <div class="ht-grid">
           <div class="ht-box"><div class="label">HT主勝</div><div class="value">63%</div></div>
           <div class="ht-box"><div class="label">HT和局</div><div class="value">34%</div></div>
@@ -1502,22 +1555,24 @@ body {
     <div class="match-body">
       <div class="teams-row">
         <span class="team-name home">哥倫比亞<span class="gap-tag gap-small">小差距</span></span>
-        <span class="score-predicted">1.1 - 0.5</span>
         <span class="team-name away">加納</span>
       </div>
 
-      <div class="timeline-bar">
-        <div class="timeline-ht"></div>
-        <div class="timeline-ft"></div>
-      </div>
-      <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--text-dim);margin-top:2px;">
-        <span>HT 預計 0.6球</span>
-        <span>FT 預計 1.6球</span>
+      <div class="scores-row">
+        <div class="score-box ht">
+          <div class="label">⏱ 上半場預測</div>
+          <div class="score">0-0</div>
+          <div class="sub">HT預計: 0.4 - 0.2</div>
+        </div>
+        <div class="score-box ft">
+          <div class="label">🏁 全場預測</div>
+          <div class="score">1-0</div>
+          <div class="sub">FT預計: 1.1 - 0.5</div>
+        </div>
       </div>
 
       <div class="ht-section">
-        <div class="ht-title">上半場預測</div>
-        <div class="ht-scoreline">0-0 (HT)</div>
+        <div class="ht-title">上半場概率</div>
         <div class="ht-grid">
           <div class="ht-box"><div class="label">HT主勝</div><div class="value">29%</div></div>
           <div class="ht-box"><div class="label">HT和局</div><div class="value">61%</div></div>
@@ -1668,7 +1723,7 @@ body {
       v3.3.41 → 滾球監控 + 爆冷預警<br>
       v3.3.42 → 實時賠率 + ML自動訓練<br>
       v3.3.67 → 首發陣容 + 天氣校準<br>
-      v3.3.68 → 淘汰賽折扣 + 上半場分析 + 角球分析 + 7場回測校準<br>
+      v3.3.68 → 淘汰賽折扣 + 上半場分析 + 角球分析 + HT/FT比分 + 7場回測校準<br>
       <br>
       <span style="color:var(--accent)">下次校準: 16強賽完賽4-6場後</span>
     </p>
