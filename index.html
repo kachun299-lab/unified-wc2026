@@ -215,6 +215,90 @@ body {
 }
 .match-meta .date { color: var(--accent); font-weight: 600; }
 
+/* Lineup Section */
+.lineup-box {
+  background: linear-gradient(135deg, rgba(59,130,246,0.05), rgba(139,92,246,0.02));
+  border: 1px solid rgba(59,130,246,0.2);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+.lineup-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.lineup-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.lineup-team {
+  background: rgba(255,255,255,0.03);
+  border-radius: 10px;
+  padding: 14px;
+}
+.lineup-team-name {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--text);
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.lineup-players {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+.lineup-row {
+  padding: 3px 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.pos {
+  font-size: 0.65rem;
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-weight: 700;
+  min-width: 28px;
+  text-align: center;
+}
+.pos-gk { background: rgba(239,68,68,0.2); color: var(--accent-red); }
+.pos-df { background: rgba(59,130,246,0.2); color: var(--accent); }
+.pos-mf { background: rgba(16,185,129,0.2); color: var(--accent-green); }
+.pos-fw { background: rgba(245,158,11,0.2); color: var(--accent-gold); }
+.lineup-note {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+.lineup-impact {
+  background: rgba(255,255,255,0.02);
+  border-radius: 10px;
+  padding: 14px;
+}
+.lineup-impact-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--accent-gold);
+  margin-bottom: 8px;
+}
+.lineup-impact-line {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  padding: 4px 0;
+  line-height: 1.5;
+}
+.lineup-impact-line strong { color: var(--accent-gold); }
+
 /* Probabilities Grid */
 .prob-grid {
   display: grid;
@@ -463,77 +547,7 @@ body {
 .ko-label { font-size: 0.75rem; color: var(--text-dim); }
 .ko-value { font-size: 1.1rem; font-weight: 700; color: var(--accent-gold); }
 
-/* Bracket Section */
-.bracket-container {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  margin-bottom: 30px;
-}
-.bracket-round {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 16px;
-}
-.bracket-round-title {
-  font-size: 1rem;
-  font-weight: 700;
-  color: var(--accent);
-  margin-bottom: 12px;
-  text-align: center;
-}
-.bracket-match {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 16px;
-  background: rgba(255,255,255,0.03);
-  border-radius: 8px;
-  margin-bottom: 8px;
-}
-.bracket-team {
-  font-weight: 600;
-  font-size: 0.95rem;
-}
-.bracket-team.winner { color: var(--accent-green); }
-.bracket-team.loser { color: var(--text-dim); text-decoration: line-through; }
-.bracket-vs { color: var(--text-dim); font-size: 0.8rem; }
-.bracket-score { font-weight: 700; color: var(--accent-gold); }
-
-/* Footer */
-.footer {
-  text-align: center;
-  padding: 30px;
-  color: var(--text-dim);
-  font-size: 0.8rem;
-  border-top: 1px solid var(--border);
-  margin-top: 40px;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  .header h1 { font-size: 1.5rem; }
-  .match-header { flex-direction: column; text-align: center; }
-  .match-meta { text-align: center; }
-  .prob-grid { grid-template-columns: 1fr; }
-  .ko-grid { grid-template-columns: 1fr; }
-  .script-item { flex-direction: column; gap: 4px; }
-}
-
-/* Animations */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-.match-card { animation: fadeIn 0.5s ease forwards; }
-.match-card:nth-child(1) { animation-delay: 0.1s; }
-.match-card:nth-child(2) { animation-delay: 0.2s; }
-.match-card:nth-child(3) { animation-delay: 0.3s; }
-.match-card:nth-child(4) { animation-delay: 0.4s; }
-.match-card:nth-child(5) { animation-delay: 0.5s; }
-
-/* ===== 罸牌分析樣式 ===== */
+/* Card Section */
 .card-section-title {
   font-size: 1.1rem;
   font-weight: 700;
@@ -571,28 +585,6 @@ body {
   color: var(--text-muted);
   margin-top: 4px;
 }
-.card-split {
-  display: flex;
-  gap: 12px;
-  margin-bottom: 16px;
-}
-.card-split-item {
-  flex: 1;
-  background: rgba(255,255,255,0.03);
-  border-radius: 10px;
-  padding: 14px;
-  text-align: center;
-}
-.card-split-label {
-  font-size: 0.75rem;
-  color: var(--text-dim);
-}
-.card-split-value {
-  font-size: 1.4rem;
-  font-weight: 700;
-  color: var(--text);
-  margin-top: 4px;
-}
 .card-prob-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -627,7 +619,7 @@ body {
   background: linear-gradient(90deg, var(--accent-green), var(--accent-gold), var(--accent-red));
 }
 
-/* ===== 上半場分析樣式 ===== */
+/* HT Section */
 .ht-section-title {
   font-size: 1.1rem;
   font-weight: 700;
@@ -735,39 +727,76 @@ body {
 }
 .ht-trader-line strong { color: var(--accent-gold); }
 
-/* 比較表格 */
-.compare-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 20px;
-  font-size: 0.85rem;
+/* Bracket Section */
+.bracket-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 30px;
 }
-.compare-table th {
-  background: rgba(255,255,255,0.05);
-  padding: 10px 8px;
+.bracket-round {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+}
+.bracket-round-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 12px;
   text-align: center;
-  color: var(--text-dim);
+}
+.bracket-match {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: rgba(255,255,255,0.03);
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+.bracket-team {
   font-weight: 600;
-  border-bottom: 1px solid var(--border);
+  font-size: 0.95rem;
 }
-.compare-table td {
-  padding: 10px 8px;
-  text-align: center;
-  border-bottom: 1px solid rgba(255,255,255,0.03);
-  color: var(--text-muted);
-}
-.compare-table td:first-child {
-  text-align: left;
-  color: var(--text);
-  font-weight: 600;
-}
-.compare-table tr:hover td {
-  background: rgba(255,255,255,0.02);
-}
-.compare-table .high { color: var(--accent-green); font-weight: 700; }
-.compare-table .medium { color: var(--accent-gold); font-weight: 700; }
-.compare-table .low { color: var(--accent-red); font-weight: 700; }
+.bracket-team.winner { color: var(--accent-green); }
+.bracket-team.loser { color: var(--text-dim); text-decoration: line-through; }
+.bracket-vs { color: var(--text-dim); font-size: 0.8rem; }
+.bracket-score { font-weight: 700; color: var(--accent-gold); }
 
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 30px;
+  color: var(--text-dim);
+  font-size: 0.8rem;
+  border-top: 1px solid var(--border);
+  margin-top: 40px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .header h1 { font-size: 1.5rem; }
+  .match-header { flex-direction: column; text-align: center; }
+  .match-meta { text-align: center; }
+  .prob-grid { grid-template-columns: 1fr; }
+  .ko-grid { grid-template-columns: 1fr; }
+  .script-item { flex-direction: column; gap: 4px; }
+  .lineup-grid { grid-template-columns: 1fr; }
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.match-card { animation: fadeIn 0.5s ease forwards; }
+.match-card:nth-child(1) { animation-delay: 0.1s; }
+.match-card:nth-child(2) { animation-delay: 0.2s; }
+.match-card:nth-child(3) { animation-delay: 0.3s; }
+.match-card:nth-child(4) { animation-delay: 0.4s; }
+.match-card:nth-child(5) { animation-delay: 0.5s; }
 </style>
 </head>
 <body>
@@ -776,12 +805,12 @@ body {
 <!-- Header -->
 <div class="header">
   <h1>UNIFIED v4.0.12</h1>
-  <div class="subtitle">世界盃2026 淘汰賽預測中心 | 專業操盤師解讀</div>
+  <div class="subtitle">世界盃2026 淘汰賽預測中心 | 專業操盤師解讀 | 首發陣容整合</div>
   <div class="meta">
     <div class="meta-item">校準場次: <span>14,283</span></div>
     <div class="meta-item">版本: <span>v4.0.12</span></div>
-    <div class="meta-item">生成時間: <span>2026-07-07</span></div>
-    <div class="meta-item">模型: <span>Poisson-xG + ELO + Weather</span></div>
+    <div class="meta-item">更新: <span>2026-07-07 22:44</span></div>
+    <div class="meta-item">模型: <span>Poisson-xG + ELO + 首發陣容</span></div>
   </div>
 </div>
 
@@ -794,18 +823,14 @@ body {
   <div class="tab" onclick="showSection('cards')">罸牌分析</div>
   <div class="tab" onclick="showSection('ht')">上半場分析</div>
 </div>
-
-<!-- R16 Section -->
 <div id="r16" class="section active">
   <h2 class="section-title">16強 剩餘賽事 (2場)</h2>
-
-  <!-- Argentina vs Egypt -->
-  <div class="match-card">
+<div class="match-card ">
     <div class="match-header">
       <div class="match-info">
         <div class="team-block">
           <div class="team-flag">🇦🇷</div>
-          <div class="team-name">阿根廷</div>
+          <div class="team-name">Argentina</div>
           <div class="team-rank">FIFA #1 | ELO 2140</div>
         </div>
         <div class="vs-block">
@@ -814,7 +839,7 @@ body {
         </div>
         <div class="team-block">
           <div class="team-flag">🇪🇬</div>
-          <div class="team-name">埃及</div>
+          <div class="team-name">Egypt</div>
           <div class="team-rank">FIFA #36 | ELO 1720</div>
         </div>
       </div>
@@ -824,115 +849,128 @@ body {
         <div>☀️ Clear, 28°C, 65%濕度</div>
       </div>
     </div>
+    
+    <div class="lineup-box">
+      <div class="lineup-title">📋 預計首發陣容分析</div>
+      <div class="lineup-grid">
+        <div class="lineup-team">
+          <div class="lineup-team-name">🇦🇷 Argentina (4-4-2)</div>
+          <div class="lineup-players">
+            <div class="lineup-row"><span class="pos pos-gk">GK</span>馬丁內斯 #23</div>
+<div class="lineup-row"><span class="pos pos-df">DF</span>莫利納 #26 | 羅梅羅 #13 | L.馬丁內斯 #6 | 塔利亞菲科 #3</div>
+<div class="lineup-row"><span class="pos pos-mf">MF</span>德保羅 #7 | 帕雷德斯 #5 | 恩佐 #24 | 麥卡利斯特 #20</div>
+<div class="lineup-row"><span class="pos pos-fw">FW</span>梅西 #10 (C) | 阿爾瓦雷斯 #9</div>
+
+          </div>
+          <div class="lineup-note">✅ 全主力出戰 | 梅西+阿爾瓦雷斯雙前鋒火力充足 | 中場控制強</div>
+        </div>
+        <div class="lineup-team">
+          <div class="lineup-team-name">🇪🇬 Egypt (4-2-3-1)</div>
+          <div class="lineup-players">
+            <div class="lineup-row"><span class="pos pos-gk">GK</span>舒貝爾 #23</div>
+<div class="lineup-row"><span class="pos pos-df">DF</span>哈菲茲 #15 | 亞西爾 #2 | 拉比亞 #5 | 哈尼 #3</div>
+<div class="lineup-row"><span class="pos pos-mf">MF</span>濟科 #11 | 阿舒爾 #8 | 哈桑 #12</div>
+<div class="lineup-row"><span class="pos pos-fw">FW</span>阿提亞 #19 | 拉辛 #17 | 薩拉赫 #10 (C)</div>
+
+          </div>
+          <div class="lineup-note">⚠️ 薩拉赫單前鋒面對強大後衛線 | 中場控制力弱 | 預計深度防守</div>
+        </div>
+      </div>
+      <div class="lineup-impact">
+        <div class="lineup-impact-title">🔍 陣容影響評估</div>
+        <div class="lineup-impact-line">• 阿根廷雙前鋒(梅西+阿爾瓦雷斯)預計製造更多入球機會，xG上調至 2.93</div>
+<div class="lineup-impact-line">• 埃及薩拉赫單前鋒難以突破阿根廷中衛組合(羅梅羅+L.馬丁內斯)，客隊xG下調至 0.68</div>
+<div class="lineup-impact-line">• 阿根廷中場(德保羅+恩佐+麥卡利斯特+帕雷德斯)控制力極強，預計控球率 62%+</div>
+<div class="lineup-impact-line">• 角球預計 11.3 個，阿根廷壓制打法會持續製造角球</div>
+<div class="lineup-impact-line">• BTTS Yes機率上調至 48%（薩拉赫有能力個人突破）</div>
+
+      </div>
+    </div>
 
     <div class="score-prediction">
-      <div class="score-main">3 - 1</div>
-      <div class="score-sub">最可能比分 | 預計總入球 3.3</div>
-      <div class="score-xg">xG: 2.53 - 0.75</div>
+      <div class="score-main">2-0</div>
+      <div class="score-sub">最可能比分 | 預計總入球 3.6</div>
+      <div class="score-xg">xG: 2.93 - 0.68</div>
       <div class="top-scores">
-        <div class="top-score-item best">3-1 18.2%</div>
-        <div class="top-score-item">2-1 16.5%</div>
-        <div class="top-score-item">2-0 14.8%</div>
+        <div class="top-score-item best">2-0 11.7%</div>
+<div class="top-score-item ">3-0 10.8%</div>
+<div class="top-score-item ">2-1 9.8%</div>
+
       </div>
     </div>
-
     <div class="prob-grid">
       <div class="prob-box">
-        <div class="prob-label">1X2 主勝 <span class="prob-value home">72%</span></div>
-        <div class="prob-bar-bg"><div class="prob-bar-fill" style="width:72%;background:var(--accent)"></div></div>
+        <div class="prob-label">1X2 主勝 <span class="prob-value home">79%</span></div>
+        <div class="prob-bar-bg"><div class="prob-bar-fill" style="width:79%;background:var(--accent)"></div></div>
       </div>
       <div class="prob-box">
-        <div class="prob-label">1X2 平局 <span class="prob-value draw">20%</span></div>
-        <div class="prob-bar-bg"><div class="prob-bar-fill" style="width:20%;background:var(--accent-gold)"></div></div>
+        <div class="prob-label">1X2 平局 <span class="prob-value draw">15%</span></div>
+        <div class="prob-bar-bg"><div class="prob-bar-fill" style="width:15%;background:var(--accent-gold)"></div></div>
       </div>
       <div class="prob-box">
-        <div class="prob-label">1X2 客勝 <span class="prob-value away">9%</span></div>
-        <div class="prob-bar-bg"><div class="prob-bar-fill" style="width:9%;background:var(--accent-purple)"></div></div>
+        <div class="prob-label">1X2 客勝 <span class="prob-value away">6%</span></div>
+        <div class="prob-bar-bg"><div class="prob-bar-fill" style="width:6%;background:var(--accent-purple)"></div></div>
       </div>
       <div class="prob-box">
-        <div class="prob-label">大2.5球 <span class="prob-value over">62%</span></div>
-        <div class="prob-bar-bg"><div class="prob-bar-fill" style="width:62%;background:var(--accent-green)"></div></div>
+        <div class="prob-label">大2.5球 <span class="prob-value over">68%</span></div>
+        <div class="prob-bar-bg"><div class="prob-bar-fill" style="width:68%;background:var(--accent-green)"></div></div>
       </div>
       <div class="prob-box">
-        <div class="prob-label">雙方入球 Yes <span class="prob-value">38%</span></div>
-        <div class="prob-bar-bg"><div class="prob-bar-fill" style="width:38%;background:var(--accent-gold)"></div></div>
+        <div class="prob-label">雙方入球 Yes <span class="prob-value">48%</span></div>
+        <div class="prob-bar-bg"><div class="prob-bar-fill" style="width:48%;background:var(--accent-gold)"></div></div>
       </div>
       <div class="prob-box">
-        <div class="prob-label">角球Over 8.5 <span class="prob-value over">58%</span></div>
-        <div class="prob-bar-bg"><div class="prob-bar-fill" style="width:58%;background:var(--accent-green)"></div></div>
+        <div class="prob-label">角球Over 8.5 <span class="prob-value over">87%</span></div>
+        <div class="prob-bar-bg"><div class="prob-bar-fill" style="width:87%;background:var(--accent-green)"></div></div>
       </div>
     </div>
-
     <div class="ko-box">
       <div class="ko-title">⚔️ 淘汰賽專項</div>
       <div class="ko-grid">
-        <div class="ko-item"><div class="ko-label">加時賽機率</div><div class="ko-value">24%</div></div>
-        <div class="ko-item"><div class="ko-label">點球大戰機率</div><div class="ko-value">11%</div></div>
-        <div class="ko-item"><div class="ko-label">阿根廷PK勝率</div><div class="ko-value">72%</div></div>
+        <div class="ko-item"><div class="ko-label">加時賽機率</div><div class="ko-value">18%</div></div>
+        <div class="ko-item"><div class="ko-label">點球大戰機率</div><div class="ko-value">8%</div></div>
+        <div class="ko-item"><div class="ko-label">ArgentinaPK勝率</div><div class="ko-value">72%</div></div>
       </div>
     </div>
-
     <div class="trader-box">
       <div class="trader-title">💼 專業操盤師解讀</div>
-      <div class="trader-line"><strong>【方向盤】</strong>阿根廷讓球盤信心極高，盤口若開-1.0/-1.25有價值。ELO差距420分，實力懸殊。</div>
-      <div class="trader-line"><strong>【大小球】</strong>大2.5球方向明確，預計3.3球有緩衝。阿根廷進攻火力充足，埃及防守難以抵擋90分鐘。</div>
-      <div class="trader-line"><strong>【雙方入球】</strong>No方向機會較高（62%），阿根廷有能力零封，埃及進攻端創造力有限。</div>
-      <div class="trader-line"><strong>【角球】</strong>Over 8.5有緩衝，預計10個角球。阿根廷壓制打法會製造大量角球。</div>
-      <div class="trader-line"><strong>【淘汰賽】</strong>90分鐘內解決戰鬥機率高，阿根廷不會給埃及拖入加時的機會。</div>
+      <div class="trader-line"><strong>【方向盤】</strong>Argentina讓球盤信心極高，盤口若開-1.0/-1.25有價值。ELO差距420分，實力懸殊。</div>
+<div class="trader-line"><strong>【大小球】</strong>大2.5球方向明確，預計3.6球有緩衝。</div>
+<div class="trader-line"><strong>【雙方入球】</strong>五五波，雙方防守各有優劣。</div>
+<div class="trader-line"><strong>【角球】</strong>Over 8.5有緩衝，預計11個角球。</div>
     </div>
-
     <div class="script-box">
       <div class="script-title">📜 動態劇本推演</div>
       <div class="script-timeline">
-        <div class="script-item"><div class="script-time">0-15'</div><div class="script-name">試探階段</div><div class="script-desc">阿根廷控制節奏，埃及收縮防守，角球可能出現但入球機會低。</div></div>
-        <div class="script-item"><div class="script-time">15-30'</div><div class="script-name">圍攻階段</div><div class="script-desc">阿根廷加快進攻節奏，預計1-0領先。角球數上升。</div></div>
-        <div class="script-item"><div class="script-time">30-45'</div><div class="script-name">上半場尾段</div><div class="script-desc">定位球威脅增加，預計2-0進入中場。埃及反擊機會渺茫。</div></div>
-        <div class="script-item"><div class="script-time">45-60'</div><div class="script-name">下半場初段</div><div class="script-desc">阿根廷可能放緩節奏，埃及或獲零星機會，BTTS窗口期。</div></div>
-        <div class="script-item"><div class="script-time">60-75'</div><div class="script-name">關鍵決勝期</div><div class="script-desc">阿根廷再下一城，3-0鎖定勝局。角球數達到高峰。</div></div>
-        <div class="script-item"><div class="script-time">75-90+'</div><div class="script-name">尾段搏殺</div><div class="script-desc">埃及可能扳回一球，最終3-1。補時階段角球機會增加。</div></div>
+        <div class="script-item"><div class="script-time">0-15'</div><div class="script-name">試探階段</div><div class="script-desc">Argentina控制節奏，Egypt收縮防守，角球可能出現但入球機會低。</div></div>
+<div class="script-item"><div class="script-time">15-30'</div><div class="script-name">圍攻階段</div><div class="script-desc">Argentina加快進攻節奏，預計取得領先。角球數上升。</div></div>
+<div class="script-item"><div class="script-time">30-45'</div><div class="script-name">上半場尾段</div><div class="script-desc">定位球威脅增加，預計1-0進入中場。</div></div>
+<div class="script-item"><div class="script-time">45-60'</div><div class="script-name">下半場初段</div><div class="script-desc">換人調整期，戰術微調，可能出現閃電入球。</div></div>
+<div class="script-item"><div class="script-time">60-75'</div><div class="script-name">關鍵決勝期</div><div class="script-desc">落後方全力反撲，領先方收縮防守，入球機會最高。角球數急升。</div></div>
+<div class="script-item"><div class="script-time">75-90+'</div><div class="script-name">尾段搏殺</div><div class="script-desc">體力透支，長傳增多，補時階段絕殺機會。最終2-0。</div></div>
+
       </div>
     </div>
-
     <div class="factors-box">
-      <div class="factor-tag">阿根廷 ELO優勢(+420)</div>
-      <div class="factor-tag">淘汰賽制，平局機率上升</div>
-      <div class="factor-tag">天氣：Clear</div>
-      <div class="factor-tag">阿根廷 淘汰賽經驗豐富(12場)</div>
-      <div class="factor-tag">埃及 疲勞偏高(40)</div>
-    </div>
+      <div class="factor-tag ">阿根廷 ELO優勢(+420)</div>
+<div class="factor-tag ">梅西+阿爾瓦雷斯雙前鋒火力強</div>
+<div class="factor-tag ">阿根廷中場控制強(德保羅+恩佐)</div>
+<div class="factor-tag ">淘汰賽制</div>
+<div class="factor-tag ">天氣：Clear</div>
 
+    </div>
     <div class="bets-box">
       <div class="bets-title">🎯 推薦投注</div>
-      <div class="bet-row">
-        <div><div class="bet-market">1X2 主勝</div><div class="bet-selection">阿根廷</div></div>
-        <div><span class="bet-conf">信心 52%</span></div>
-        <div><span class="bet-stake medium">中注</span></div>
-      </div>
-      <div class="bet-row">
-        <div><div class="bet-market">大小球 2.5</div><div class="bet-selection">大球</div></div>
-        <div><span class="bet-conf">信心 24%</span></div>
-        <div><span class="bet-stake low">小注</span></div>
-      </div>
-      <div class="bet-row">
-        <div><div class="bet-market">雙方入球</div><div class="bet-selection">No</div></div>
-        <div><span class="bet-conf">信心 24%</span></div>
-        <div><span class="bet-stake low">小注</span></div>
-      </div>
-      <div class="bet-row">
-        <div><div class="bet-market">角球 Over 8.5</div><div class="bet-selection">Over</div></div>
-        <div><span class="bet-conf">信心 16%</span></div>
-        <div><span class="bet-stake low">小注</span></div>
-      </div>
+      <div class="bet-row"><div><div class="bet-market">1X2 1</div><div class="bet-selection">Argentina</div></div><div><span class="bet-conf">信心 73%</span></div><div><span class="bet-stake medium">中注</span></div></div>
+<div class="bet-row"><div><div class="bet-market">大小球 2.5</div><div class="bet-selection">大球</div></div><div><span class="bet-conf">信心 36%</span></div><div><span class="bet-stake low">小注</span></div></div>
+<div class="bet-row"><div><div class="bet-market">角球 Over 8.5</div><div class="bet-selection">Over</div></div><div><span class="bet-conf">信心 74%</span></div><div><span class="bet-stake low">小注</span></div></div>
     </div>
-  </div>
-
-  <!-- Switzerland vs Colombia -->
-  <div class="match-card">
+  </div><div class="match-card ">
     <div class="match-header">
       <div class="match-info">
         <div class="team-block">
           <div class="team-flag">🇨🇭</div>
-          <div class="team-name">瑞士</div>
+          <div class="team-name">Switzerland</div>
           <div class="team-rank">FIFA #15 | ELO 1850</div>
         </div>
         <div class="vs-block">
@@ -941,7 +979,7 @@ body {
         </div>
         <div class="team-block">
           <div class="team-flag">🇨🇴</div>
-          <div class="team-name">哥倫比亞</div>
+          <div class="team-name">Colombia</div>
           <div class="team-rank">FIFA #12 | ELO 1880</div>
         </div>
       </div>
@@ -951,18 +989,55 @@ body {
         <div>🌧️ Rain, 18°C, 75%濕度</div>
       </div>
     </div>
+    
+    <div class="lineup-box">
+      <div class="lineup-title">📋 預計首發陣容分析</div>
+      <div class="lineup-grid">
+        <div class="lineup-team">
+          <div class="lineup-team-name">🇨🇭 Switzerland (3-4-2-1)</div>
+          <div class="lineup-players">
+            <div class="lineup-row"><span class="pos pos-gk">GK</span>索默 #1</div>
+<div class="lineup-row"><span class="pos pos-df">DF</span>舍爾 #22 | 阿坎吉 #5 | 羅德里格斯 #13</div>
+<div class="lineup-row"><span class="pos pos-mf">MF</span>威德默 #3 | 扎卡 #10 (C) | 弗魯勒 #8 | 埃比舍爾 #15</div>
+<div class="lineup-row"><span class="pos pos-fw">FW</span>沙奇里 #23 | 斯特芬 #17 | 恩博洛 #7</div>
+
+          </div>
+          <div class="lineup-note">✅ 扎卡+弗魯勒雙後腰穩定 | 沙奇里替補奇兵 | 三後衛靈活</div>
+        </div>
+        <div class="lineup-team">
+          <div class="lineup-team-name">🇨🇴 Colombia (4-2-3-1)</div>
+          <div class="lineup-players">
+            <div class="lineup-row"><span class="pos pos-gk">GK</span>巴爾加斯 #12</div>
+<div class="lineup-row"><span class="pos pos-df">DF</span>穆尼奧斯 #3 | 桑切斯 #23 | 盧庫米 #22 | 馬查多 #6</div>
+<div class="lineup-row"><span class="pos pos-mf">MF</span>萊爾馬 #16 | 烏里韋 #15 | 哈梅斯 #10 (C)</div>
+<div class="lineup-row"><span class="pos pos-fw">FW</span>阿里亞斯 #11 | 博雷 #9 | 迪亞斯 #7</div>
+
+          </div>
+          <div class="lineup-note">⚠️ J羅組織核心 | 迪亞斯左路突破威脅 | 博雷單前鋒效率一般</div>
+        </div>
+      </div>
+      <div class="lineup-impact">
+        <div class="lineup-impact-title">🔍 陣容影響評估</div>
+        <div class="lineup-impact-line">• 瑞士三後衛(阿坎吉+舍爾+羅德里格斯)面對哥倫比亞邊路突破，防守壓力大</div>
+<div class="lineup-impact-line">• J羅(哈梅斯)組織能力強，預計創造多次關鍵傳球，客隊xG上調</div>
+<div class="lineup-impact-line">• 瑞士中場扎卡+弗魯勒雙後腰穩定，但進攻創造力有限，預計控球率 48%</div>
+<div class="lineup-impact-line">• 雨天作戰影響技術流打法，雙方可能更多長傳，角球數預計上升</div>
+<div class="lineup-impact-line">• 實力接近，預計拉鋸戰，平局機率維持 32%</div>
+
+      </div>
+    </div>
 
     <div class="score-prediction">
-      <div class="score-main">1 - 2</div>
+      <div class="score-main">1-2</div>
       <div class="score-sub">最可能比分 | 預計總入球 2.9</div>
       <div class="score-xg">xG: 1.35 - 1.51</div>
       <div class="top-scores">
         <div class="top-score-item best">1-2 14.5%</div>
-        <div class="top-score-item">1-1 13.8%</div>
-        <div class="top-score-item">0-1 12.2%</div>
+<div class="top-score-item ">1-1 13.8%</div>
+<div class="top-score-item ">0-1 12.2%</div>
+
       </div>
     </div>
-
     <div class="prob-grid">
       <div class="prob-box">
         <div class="prob-label">1X2 主勝 <span class="prob-value home">32%</span></div>
@@ -989,77 +1064,56 @@ body {
         <div class="prob-bar-bg"><div class="prob-bar-fill" style="width:55%;background:var(--accent-green)"></div></div>
       </div>
     </div>
-
     <div class="ko-box">
       <div class="ko-title">⚔️ 淘汰賽專項</div>
       <div class="ko-grid">
         <div class="ko-item"><div class="ko-label">加時賽機率</div><div class="ko-value">29%</div></div>
         <div class="ko-item"><div class="ko-label">點球大戰機率</div><div class="ko-value">14%</div></div>
-        <div class="ko-item"><div class="ko-label">瑞士PK勝率</div><div class="ko-value">52%</div></div>
+        <div class="ko-item"><div class="ko-label">SwitzerlandPK勝率</div><div class="ko-value">52%</div></div>
       </div>
     </div>
-
     <div class="trader-box">
       <div class="trader-title">💼 專業操盤師解讀</div>
-      <div class="trader-line"><strong>【方向盤】</strong>雙方實力接近，哥倫比亞略佔優勢。讓球盤風險高，建議觀察初盤水位或走地介入。</div>
-      <div class="trader-line"><strong>【大小球】</strong>2.5盤口接近五五波，雨天可能影響進攻流暢度，細球有微弱優勢但不夠安全邊際。</div>
-      <div class="trader-line"><strong>【雙方入球】</strong>Yes方向機會高（52%），兩隊防守都有漏洞，雨天反而增加亂戰入球機會。</div>
-      <div class="trader-line"><strong>【角球】</strong>Over 8.5有緩衝，雨天長傳增多，預計9個角球。哥倫比亞反擊會製造角球。</div>
-      <div class="trader-line"><strong>【淘汰賽】</strong>實力接近，平局機率32%，90分鐘平局有價值。加時賽機率29%偏高。</div>
+      <div class="trader-line"><strong>【方向盤】</strong>雙方實力接近，讓球盤風險高，考慮避開或走地介入。</div>
+<div class="trader-line"><strong>【大小球】</strong>2.5盤口接近五五波，邊緣盤口建議觀察。</div>
+<div class="trader-line"><strong>【雙方入球】</strong>五五波，雙方防守各有優劣。</div>
+<div class="trader-line"><strong>【角球】</strong>Under 8.5穩陣，戰術風格保守。</div>
+<div class="trader-line"><strong>【淘汰賽】</strong>加時機率0%，90分鐘平局機會不低。</div>
+<div class="trader-line"><strong>【十二碼】</strong>PK大戰機率0%，本屆命中率僅68%低於歷史均值。</div>
     </div>
-
     <div class="script-box">
       <div class="script-title">📜 動態劇本推演</div>
       <div class="script-timeline">
-        <div class="script-item"><div class="script-time">0-15'</div><div class="script-name">試探階段</div><div class="script-desc">雨天影響傳球，雙方試探為主，身體對抗增加。</div></div>
-        <div class="script-item"><div class="script-time">15-30'</div><div class="script-name">圍攻階段</div><div class="script-desc">哥倫比亞反擊威脅顯現，可能先開紀錄。角球數上升。</div></div>
-        <div class="script-item"><div class="script-time">30-45'</div><div class="script-name">上半場尾段</div><div class="script-desc">瑞士定位球威脅，可能扳平。預計1-1進入中場。</div></div>
-        <div class="script-item"><div class="script-time">45-60'</div><div class="script-name">下半場初段</div><div class="script-desc">換人調整期，節奏放緩，雙方都謹慎。</div></div>
-        <div class="script-item"><div class="script-time">60-75'</div><div class="script-name">關鍵決勝期</div><div class="script-desc">哥倫比亞體力優勢顯現，可能反超2-1。角球數急升。</div></div>
-        <div class="script-item"><div class="script-time">75-90+'</div><div class="script-name">尾段搏殺</div><div class="script-desc">瑞士全力反撲，哥倫比亞收縮防守。最終1-2或進入加時。</div></div>
+        <div class="script-item"><div class="script-time">0-15'</div><div class="script-name">試探階段</div><div class="script-desc">雙方試探，控球為主，防守穩陣。</div></div>
+<div class="script-item"><div class="script-time">15-30'</div><div class="script-name">圍攻階段</div><div class="script-desc">進攻節奏加快，角球數上升，弱隊可能靠反擊偷襲。</div></div>
+<div class="script-item"><div class="script-time">30-45'</div><div class="script-name">上半場尾段</div><div class="script-desc">體力開始下降，定位球威脅增加，上半場入球高峰期。</div></div>
+<div class="script-item"><div class="script-time">45-60'</div><div class="script-name">下半場初段</div><div class="script-desc">換人調整期，戰術微調，可能出現閃電入球。</div></div>
+<div class="script-item"><div class="script-time">60-75'</div><div class="script-name">關鍵決勝期</div><div class="script-desc">落後方全力反撲，領先方收縮防守，入球機會最高。角球數急升。</div></div>
+<div class="script-item"><div class="script-time">75-90+'</div><div class="script-name">尾段搏殺</div><div class="script-desc">體力透支，長傳增多。若平局進入加時。</div></div>
+
       </div>
     </div>
-
     <div class="factors-box">
-      <div class="factor-tag">哥倫比亞 ELO優勢(+30)</div>
-      <div class="factor-tag">淘汰賽制，平局機率上升</div>
-      <div class="factor-tag">天氣：Rain</div>
-      <div class="factor-tag">瑞士 疲勃較低(30)</div>
-      <div class="factor-tag">哥倫比亞 海拔適應優勢</div>
-    </div>
+      <div class="factor-tag ">哥倫比亞 ELO優勢(+30)</div>
+<div class="factor-tag ">淘汰賽制</div>
+<div class="factor-tag ">天氣：Rain</div>
+<div class="factor-tag ">瑞士疲勞較低(30)</div>
+<div class="factor-tag ">哥倫比亞海拔適應</div>
 
+    </div>
     <div class="bets-box">
       <div class="bets-title">🎯 推薦投注</div>
-      <div class="bet-row">
-        <div><div class="bet-market">1X2 客勝</div><div class="bet-selection">哥倫比亞</div></div>
-        <div><span class="bet-conf">信心 4%</span></div>
-        <div><span class="bet-stake low">小注</span></div>
-      </div>
-      <div class="bet-row">
-        <div><div class="bet-market">雙方入球</div><div class="bet-selection">Yes</div></div>
-        <div><span class="bet-conf">信心 4%</span></div>
-        <div><span class="bet-stake low">小注</span></div>
-      </div>
-      <div class="bet-row">
-        <div><div class="bet-market">角球 Over 8.5</div><div class="bet-selection">Over</div></div>
-        <div><span class="bet-conf">信心 10%</span></div>
-        <div><span class="bet-stake low">小注</span></div>
-      </div>
+      <div class="bet-row"><div><div class="bet-market">暫無高信心推薦</div></div></div>
     </div>
-  </div>
-</div>
-
-<!-- QF Section -->
+  </div></div>
 <div id="qf" class="section">
   <h2 class="section-title">8強 對陣 (3場已確定)</h2>
-
-  <!-- France vs Morocco -->
-  <div class="match-card">
+<div class="match-card ">
     <div class="match-header">
       <div class="match-info">
         <div class="team-block">
           <div class="team-flag">🇫🇷</div>
-          <div class="team-name">法國</div>
+          <div class="team-name">France</div>
           <div class="team-rank">FIFA #2 | ELO 2100</div>
         </div>
         <div class="vs-block">
@@ -1068,7 +1122,7 @@ body {
         </div>
         <div class="team-block">
           <div class="team-flag">🇲🇦</div>
-          <div class="team-name">摩洛哥</div>
+          <div class="team-name">Morocco</div>
           <div class="team-rank">FIFA #14 | ELO 1860</div>
         </div>
       </div>
@@ -1078,18 +1132,55 @@ body {
         <div>☀️ Clear, 24°C, 70%濕度</div>
       </div>
     </div>
+    
+    <div class="lineup-box">
+      <div class="lineup-title">📋 預計首發陣容分析</div>
+      <div class="lineup-grid">
+        <div class="lineup-team">
+          <div class="lineup-team-name">🇫🇷 France (4-3-3)</div>
+          <div class="lineup-players">
+            <div class="lineup-row"><span class="pos pos-gk">GK</span>邁尼昂 #16</div>
+<div class="lineup-row"><span class="pos pos-df">DF</span>孔德 #5 | 薩利巴 #17 | 於帕梅卡諾 #4 | 埃爾南德斯 #21</div>
+<div class="lineup-row"><span class="pos pos-mf">MF</span>楚阿梅尼 #8 | 坎特 #13 | 拉比奧 #14</div>
+<div class="lineup-row"><span class="pos pos-fw">FW</span>登貝萊 #11 | 吉魯 #9 | 姆巴佩 #10 (C)</div>
+
+          </div>
+          <div class="lineup-note">✅ 姆巴佩+登貝萊雙翼齊飛 | 坎特回歸中場屏障 | 吉魯支點作用</div>
+        </div>
+        <div class="lineup-team">
+          <div class="lineup-team-name">🇲🇦 Morocco (4-1-4-1)</div>
+          <div class="lineup-players">
+            <div class="lineup-row"><span class="pos pos-gk">GK</span>布努 #1</div>
+<div class="lineup-row"><span class="pos pos-df">DF</span>哈基米 #2 | 阿格德 #5 | 賽斯 #6 | 馬茲拉維 #3</div>
+<div class="lineup-row"><span class="pos pos-mf">MF</span>阿姆拉巴特 #4 | 齊耶赫 #7 | 阿姆拉巴特 #15 | 恩內斯里 #19</div>
+<div class="lineup-row"><span class="pos pos-fw">FW</span>恩內斯里 #19 (C)</div>
+
+          </div>
+          <div class="lineup-note">⚠️ 恩內斯里單前鋒孤立 | 齊耶赫+哈基米右路連線 | 深度防守反擊</div>
+        </div>
+      </div>
+      <div class="lineup-impact">
+        <div class="lineup-impact-title">🔍 陣容影響評估</div>
+        <div class="lineup-impact-line">• 法國姆巴佩+登貝萊雙翼面對摩洛哥緊湊防守，需要耐心破密集</div>
+<div class="lineup-impact-line">• 摩洛哥恩內斯里單前鋒難以威脅法國中衛(薩利巴+於帕梅卡諾)，客隊xG下調</div>
+<div class="lineup-impact-line">• 坎特回歸增強法國中場攔截，預計控球率 58%</div>
+<div class="lineup-impact-line">• 摩洛哥上屆四強經驗，防守紀律極好，細球有機會</div>
+<div class="lineup-impact-line">• 角球預計 10 個，法國壓制但摩洛哥收縮，角球數可能受限</div>
+
+      </div>
+    </div>
 
     <div class="score-prediction">
-      <div class="score-main">2 - 1</div>
+      <div class="score-main">2-1</div>
       <div class="score-sub">最可能比分 | 預計總入球 3.3</div>
       <div class="score-xg">xG: 2.42 - 0.90</div>
       <div class="top-scores">
         <div class="top-score-item best">2-1 16.8%</div>
-        <div class="top-score-item">2-0 15.2%</div>
-        <div class="top-score-item">1-0 12.5%</div>
+<div class="top-score-item ">2-0 15.2%</div>
+<div class="top-score-item ">1-0 12.5%</div>
+
       </div>
     </div>
-
     <div class="prob-grid">
       <div class="prob-box">
         <div class="prob-label">1X2 主勝 <span class="prob-value home">67%</span></div>
@@ -1112,71 +1203,58 @@ body {
         <div class="prob-bar-bg"><div class="prob-bar-fill" style="width:45%;background:var(--accent-gold)"></div></div>
       </div>
       <div class="prob-box">
-        <div class="prob-label">角球Over 8.5 <span class="prob-value over">52%</span></div>
-        <div class="prob-bar-bg"><div class="prob-bar-fill" style="width:52%;background:var(--accent-green)"></div></div>
+        <div class="prob-label">角球Over 8.5 <span class="prob-value over">72%</span></div>
+        <div class="prob-bar-bg"><div class="prob-bar-fill" style="width:72%;background:var(--accent-green)"></div></div>
       </div>
     </div>
-
     <div class="ko-box">
       <div class="ko-title">⚔️ 淘汰賽專項</div>
       <div class="ko-grid">
         <div class="ko-item"><div class="ko-label">加時賽機率</div><div class="ko-value">22%</div></div>
         <div class="ko-item"><div class="ko-label">點球大戰機率</div><div class="ko-value">10%</div></div>
-        <div class="ko-item"><div class="ko-label">法國PK勝率</div><div class="ko-value">48%</div></div>
+        <div class="ko-item"><div class="ko-label">FrancePK勝率</div><div class="ko-value">48%</div></div>
       </div>
     </div>
-
     <div class="trader-box">
       <div class="trader-title">💼 專業操盤師解讀</div>
-      <div class="trader-line"><strong>【方向盤】</strong>法國讓球盤信心高，盤口若開-0.75有價值。但注意摩洛哥淘汰賽韌性極強（上屆四強）。</div>
-      <div class="trader-line"><strong>【大小球】</strong>大2.5有緩衝，法國進攻火力充足。但摩洛哥防守紀律好，細球亦有機會。</div>
-      <div class="trader-line"><strong>【雙方入球】</strong>五五波，摩洛哥反擊有威脅，法國防守非無懈可擊。</div>
-      <div class="trader-line"><strong>【角球】</strong>Over 8.5邊緣，法國壓制但摩洛哥收縮，角球數可能受限。</div>
-      <div class="trader-line"><strong>【淘汰賽】</strong>摩洛哥上屆黑馬本色，8強經驗豐富。法國需警惕90分鐘內被拖垮。</div>
+      <div class="trader-line"><strong>【方向盤】</strong>France讓球盤信心極高，盤口若開-1.0/-1.25有價值。ELO差距240分，實力懸殊。</div>
+<div class="trader-line"><strong>【大小球】</strong>大2.5球方向明確，預計3.3球有緩衝。</div>
+<div class="trader-line"><strong>【雙方入球】</strong>五五波，雙方防守各有優劣。</div>
+<div class="trader-line"><strong>【角球】</strong>Over 8.5有緩衝，預計10個角球。</div>
+<div class="trader-line"><strong>【淘汰賽】</strong>加時機率0%，90分鐘平局機會不低。</div>
     </div>
-
     <div class="script-box">
       <div class="script-title">📜 動態劇本推演</div>
       <div class="script-timeline">
-        <div class="script-item"><div class="script-time">0-15'</div><div class="script-name">試探階段</div><div class="script-desc">法國控球為主，摩洛哥深度防守，雙方試探。</div></div>
-        <div class="script-item"><div class="script-time">15-30'</div><div class="script-name">圍攻階段</div><div class="script-desc">法國加快節奏，Mbappé突破威脅顯現，可能先開紀錄。</div></div>
-        <div class="script-item"><div class="script-time">30-45'</div><div class="script-name">上半場尾段</div><div class="script-desc">摩洛哥反擊機會，可能扳平。預計1-1或2-0進入中場。</div></div>
-        <div class="script-item"><div class="script-time">45-60'</div><div class="script-name">下半場初段</div><div class="script-desc">換人調整，節奏可能放緩。摩洛哥體力儲備開始顯現。</div></div>
-        <div class="script-item"><div class="script-time">60-75'</div><div class="script-name">關鍵決勝期</div><div class="script-desc">法國再入一球鎖定勝局，或摩洛哥反擊得手拖入僵局。</div></div>
-        <div class="script-item"><div class="script-time">75-90+'</div><div class="script-name">尾段搏殺</div><div class="script-desc">落後方全力反撲，角球數急升。最終2-1或進入加時。</div></div>
+        <div class="script-item"><div class="script-time">0-15'</div><div class="script-name">試探階段</div><div class="script-desc">France控制節奏，Morocco收縮防守，角球可能出現但入球機會低。</div></div>
+<div class="script-item"><div class="script-time">15-30'</div><div class="script-name">圍攻階段</div><div class="script-desc">France加快進攻節奏，預計取得領先。角球數上升。</div></div>
+<div class="script-item"><div class="script-time">30-45'</div><div class="script-name">上半場尾段</div><div class="script-desc">定位球威脅增加，預計1-0進入中場。</div></div>
+<div class="script-item"><div class="script-time">45-60'</div><div class="script-name">下半場初段</div><div class="script-desc">換人調整期，戰術微調，可能出現閃電入球。</div></div>
+<div class="script-item"><div class="script-time">60-75'</div><div class="script-name">關鍵決勝期</div><div class="script-desc">落後方全力反撲，領先方收縮防守，入球機會最高。角球數急升。</div></div>
+<div class="script-item"><div class="script-time">75-90+'</div><div class="script-name">尾段搏殺</div><div class="script-desc">體力透支，長傳增多，補時階段絕殺機會。最終2-1。</div></div>
+
       </div>
     </div>
-
     <div class="factors-box">
-      <div class="factor-tag">法國 ELO優勢(+240)</div>
-      <div class="factor-tag">淘汰賽制，平局機率上升</div>
-      <div class="factor-tag">天氣：Clear</div>
-      <div class="factor-tag">摩洛哥 疲勞偏高(38)</div>
-      <div class="factor-tag">法國 休息充足(5天)</div>
-    </div>
+      <div class="factor-tag ">法國 ELO優勢(+240)</div>
+<div class="factor-tag ">淘汰賽制</div>
+<div class="factor-tag ">天氣：Clear</div>
+<div class="factor-tag ">摩洛哥疲勞偏高(38)</div>
+<div class="factor-tag ">法國休息充足(5天)</div>
 
+    </div>
     <div class="bets-box">
       <div class="bets-title">🎯 推薦投注</div>
-      <div class="bet-row">
-        <div><div class="bet-market">1X2 主勝</div><div class="bet-selection">法國</div></div>
-        <div><span class="bet-conf">信心 45%</span></div>
-        <div><span class="bet-stake medium">中注</span></div>
-      </div>
-      <div class="bet-row">
-        <div><div class="bet-market">大小球 2.5</div><div class="bet-selection">大球</div></div>
-        <div><span class="bet-conf">信心 16%</span></div>
-        <div><span class="bet-stake low">小注</span></div>
-      </div>
+      <div class="bet-row"><div><div class="bet-market">1X2 1</div><div class="bet-selection">France</div></div><div><span class="bet-conf">信心 56%</span></div><div><span class="bet-stake low">小注</span></div></div>
+<div class="bet-row"><div><div class="bet-market">大小球 2.5</div><div class="bet-selection">大球</div></div><div><span class="bet-conf">信心 16%</span></div><div><span class="bet-stake low">小注</span></div></div>
+<div class="bet-row"><div><div class="bet-market">角球 Over 8.5</div><div class="bet-selection">Over</div></div><div><span class="bet-conf">信心 44%</span></div><div><span class="bet-stake low">小注</span></div></div>
     </div>
-  </div>
-
-  <!-- Spain vs Belgium -->
-  <div class="match-card">
+  </div><div class="match-card ">
     <div class="match-header">
       <div class="match-info">
         <div class="team-block">
           <div class="team-flag">🇪🇸</div>
-          <div class="team-name">西班牙</div>
+          <div class="team-name">Spain</div>
           <div class="team-rank">FIFA #3 | ELO 2080</div>
         </div>
         <div class="vs-block">
@@ -1185,7 +1263,7 @@ body {
         </div>
         <div class="team-block">
           <div class="team-flag">🇧🇪</div>
-          <div class="team-name">比利時</div>
+          <div class="team-name">Belgium</div>
           <div class="team-rank">FIFA #4 | ELO 2050</div>
         </div>
       </div>
@@ -1195,18 +1273,55 @@ body {
         <div>☀️ Clear, 24°C, 60%濕度</div>
       </div>
     </div>
+    
+    <div class="lineup-box">
+      <div class="lineup-title">📋 預計首發陣容分析</div>
+      <div class="lineup-grid">
+        <div class="lineup-team">
+          <div class="lineup-team-name">🇪🇸 Spain (4-3-3)</div>
+          <div class="lineup-players">
+            <div class="lineup-row"><span class="pos pos-gk">GK</span>烏奈·西蒙 #23</div>
+<div class="lineup-row"><span class="pos pos-df">DF</span>卡瓦哈爾 #2 | 勒諾爾芒 #3 | 拉波爾特 #14 | 庫庫雷利亞 #24</div>
+<div class="lineup-row"><span class="pos pos-mf">MF</span>羅德里 #16 | 佩德里 #26 | 奧爾莫 #10</div>
+<div class="lineup-row"><span class="pos pos-fw">FW</span>亞馬爾 #19 | 莫拉塔 #7 (C) | 威廉斯 #11</div>
+
+          </div>
+          <div class="lineup-note">✅ 亞馬爾+威廉斯雙翼爆點 | 羅德里中場司令塔 | 佩德里創造力</div>
+        </div>
+        <div class="lineup-team">
+          <div class="lineup-team-name">🇧🇪 Belgium (3-4-2-1)</div>
+          <div class="lineup-players">
+            <div class="lineup-row"><span class="pos pos-gk">GK</span>卡斯特爾斯 #13</div>
+<div class="lineup-row"><span class="pos pos-df">DF</span>費斯 #3 | 德巴斯特 #2 | 維爾通亨 #5 (C)</div>
+<div class="lineup-row"><span class="pos pos-mf">MF</span>卡斯塔涅 #21 | 曼加拉 #8 | 奧納納 #18 | 特羅薩德 #11</div>
+<div class="lineup-row"><span class="pos pos-fw">FW</span>德布勞內 #7 | 多庫 #10 | 盧卡庫 #9</div>
+
+          </div>
+          <div class="lineup-note">⚠️ 德布勞內+多庫雙核 | 盧卡庫單前鋒 | 三後衛年齡偏大</div>
+        </div>
+      </div>
+      <div class="lineup-impact">
+        <div class="lineup-impact-title">🔍 陣容影響評估</div>
+        <div class="lineup-impact-line">• 西班牙亞馬爾+威廉斯雙翼速度極快，比利時三後衛(維爾通亨+費斯)年齡偏大，防守壓力大</div>
+<div class="lineup-impact-line">• 德布勞內+多庫組合創造力強，預計製造多次入球機會，BTTS機率高</div>
+<div class="lineup-impact-line">• 羅德里vs德布勞內中場對決是關鍵，預計控球率 55% vs 45%</div>
+<div class="lineup-impact-line">• 雙方攻擊力強大，大2.5球機率上調至 56%</div>
+<div class="lineup-impact-line">• 角球預計 11 個，對攻戰會製造大量角球</div>
+
+      </div>
+    </div>
 
     <div class="score-prediction">
-      <div class="score-main">2 - 2</div>
+      <div class="score-main">2-2</div>
       <div class="score-sub">最可能比分 | 預計總入球 3.4</div>
       <div class="score-xg">xG: 1.73 - 1.68</div>
       <div class="top-scores">
         <div class="top-score-item best">2-2 12.5%</div>
-        <div class="top-score-item">1-2 11.8%</div>
-        <div class="top-score-item">2-1 11.5%</div>
+<div class="top-score-item ">1-2 11.8%</div>
+<div class="top-score-item ">2-1 11.5%</div>
+
       </div>
     </div>
-
     <div class="prob-grid">
       <div class="prob-box">
         <div class="prob-label">1X2 主勝 <span class="prob-value home">38%</span></div>
@@ -1229,76 +1344,59 @@ body {
         <div class="prob-bar-bg"><div class="prob-bar-fill" style="width:58%;background:var(--accent-gold)"></div></div>
       </div>
       <div class="prob-box">
-        <div class="prob-label">角球Over 8.5 <span class="prob-value over">62%</span></div>
-        <div class="prob-bar-bg"><div class="prob-bar-fill" style="width:62%;background:var(--accent-green)"></div></div>
+        <div class="prob-label">角球Over 8.5 <span class="prob-value over">68%</span></div>
+        <div class="prob-bar-bg"><div class="prob-bar-fill" style="width:68%;background:var(--accent-green)"></div></div>
       </div>
     </div>
-
     <div class="ko-box">
       <div class="ko-title">⚔️ 淘汰賽專項</div>
       <div class="ko-grid">
         <div class="ko-item"><div class="ko-label">加時賽機率</div><div class="ko-value">26%</div></div>
         <div class="ko-item"><div class="ko-label">點球大戰機率</div><div class="ko-value">13%</div></div>
-        <div class="ko-item"><div class="ko-label">西班牙PK勝率</div><div class="ko-value">45%</div></div>
+        <div class="ko-item"><div class="ko-label">SpainPK勝率</div><div class="ko-value">45%</div></div>
       </div>
     </div>
-
     <div class="trader-box">
       <div class="trader-title">💼 專業操盤師解讀</div>
-      <div class="trader-line"><strong>【方向盤】</strong>雙方實力極度接近，讓球盤風險極高。建議避開1X2，或走地觀察15分鐘後介入。</div>
-      <div class="trader-line"><strong>【大小球】</strong>大2.5有微弱優勢，兩隊攻擊力強大。但淘汰賽謹慎因素存在，3.0盤口更安全。</div>
-      <div class="trader-line"><strong>【雙方入球】</strong>Yes方向機會高（58%），兩隊防守都有明顯漏洞，BTTS是本场最佳選擇。</div>
-      <div class="trader-line"><strong>【角球】</strong>Over 8.5信心充足，兩隊對攻會製造大量角球，預計11個。</div>
-      <div class="trader-line"><strong>【淘汰賽】</strong>90分鐘平局機率29%，這場極可能進入加時。西班牙點球歷史較差。</div>
+      <div class="trader-line"><strong>【方向盤】</strong>雙方實力接近，讓球盤風險高，考慮避開或走地介入。</div>
+<div class="trader-line"><strong>【大小球】</strong>大2.5球方向明確，預計3.4球有緩衝。</div>
+<div class="trader-line"><strong>【雙方入球】</strong>Yes方向機會高（58%），兩隊防守都有漏洞。</div>
+<div class="trader-line"><strong>【角球】</strong>Over 8.5有緩衝，預計11個角球。</div>
+<div class="trader-line"><strong>【淘汰賽】</strong>加時機率0%，90分鐘平局機會不低。</div>
+<div class="trader-line"><strong>【十二碼】</strong>PK大戰機率0%，本屆命中率僅68%低於歷史均值。</div>
     </div>
-
     <div class="script-box">
       <div class="script-title">📜 動態劇本推演</div>
       <div class="script-timeline">
-        <div class="script-item"><div class="script-time">0-15'</div><div class="script-name">試探階段</div><div class="script-desc">兩隊試探，西班牙控球，比利時等待反擊機會。</div></div>
-        <div class="script-item"><div class="script-time">15-30'</div><div class="script-name">圍攻階段</div><div class="script-desc">比利時反擊得手，西班牙迅速扳平。1-1。</div></div>
-        <div class="script-item"><div class="script-time">30-45'</div><div class="script-name">上半場尾段</div><div class="script-desc">西班牙反超，比利時再扳平。上半場2-2或2-1。</div></div>
-        <div class="script-item"><div class="script-time">45-60'</div><div class="script-name">下半場初段</div><div class="script-desc">換人調整，節奏放緩，雙方都謹慎。</div></div>
-        <div class="script-item"><div class="script-time">60-75'</div><div class="script-name">關鍵決勝期</div><div class="script-desc">入球高峰期，可能出現3-2或維持平局。</div></div>
-        <div class="script-item"><div class="script-time">75-90+'</div><div class="script-name">尾段搏殺</div><div class="script-desc">體力透支，長傳增多。最終2-2進入加時機率高。</div></div>
+        <div class="script-item"><div class="script-time">0-15'</div><div class="script-name">試探階段</div><div class="script-desc">雙方試探，控球為主，防守穩陣。</div></div>
+<div class="script-item"><div class="script-time">15-30'</div><div class="script-name">圍攻階段</div><div class="script-desc">進攻節奏加快，角球數上升，弱隊可能靠反擊偷襲。</div></div>
+<div class="script-item"><div class="script-time">30-45'</div><div class="script-name">上半場尾段</div><div class="script-desc">體力開始下降，定位球威脅增加，上半場入球高峰期。</div></div>
+<div class="script-item"><div class="script-time">45-60'</div><div class="script-name">下半場初段</div><div class="script-desc">換人調整期，戰術微調，可能出現閃電入球。</div></div>
+<div class="script-item"><div class="script-time">60-75'</div><div class="script-name">關鍵決勝期</div><div class="script-desc">落後方全力反撲，領先方收縮防守，入球機會最高。角球數急升。</div></div>
+<div class="script-item"><div class="script-time">75-90+'</div><div class="script-name">尾段搏殺</div><div class="script-desc">體力透支，長傳增多，補時階段絕殺機會。最終2-2。</div></div>
+
       </div>
     </div>
-
     <div class="factors-box">
-      <div class="factor-tag">實力極度接近(ELO差30)</div>
-      <div class="factor-tag">淘汰賽制，平局機率上升</div>
-      <div class="factor-tag">天氣：Clear</div>
-      <div class="factor-tag">兩隊休息相同(4天)</div>
-      <div class="factor-tag">西班牙 點球歷史較差</div>
-    </div>
+      <div class="factor-tag ">實力極度接近(ELO差30)</div>
+<div class="factor-tag ">淘汰賽制</div>
+<div class="factor-tag ">天氣：Clear</div>
+<div class="factor-tag ">兩隊休息相同(4天)</div>
+<div class="factor-tag ">西班牙點球歷史較差</div>
 
+    </div>
     <div class="bets-box">
       <div class="bets-title">🎯 推薦投注</div>
-      <div class="bet-row">
-        <div><div class="bet-market">雙方入球</div><div class="bet-selection">Yes</div></div>
-        <div><span class="bet-conf">信心 16%</span></div>
-        <div><span class="bet-stake medium">中注</span></div>
-      </div>
-      <div class="bet-row">
-        <div><div class="bet-market">角球 Over 8.5</div><div class="bet-selection">Over</div></div>
-        <div><span class="bet-conf">信心 24%</span></div>
-        <div><span class="bet-stake medium">中注</span></div>
-      </div>
-      <div class="bet-row">
-        <div><div class="bet-market">大小球 2.5</div><div class="bet-selection">大球</div></div>
-        <div><span class="bet-conf">信心 12%</span></div>
-        <div><span class="bet-stake low">小注</span></div>
-      </div>
+      <div class="bet-row"><div><div class="bet-market">大小球 2.5</div><div class="bet-selection">大球</div></div><div><span class="bet-conf">信心 12%</span></div><div><span class="bet-stake low">小注</span></div></div>
+<div class="bet-row"><div><div class="bet-market">雙方入球</div><div class="bet-selection">Yes</div></div><div><span class="bet-conf">信心 16%</span></div><div><span class="bet-stake low">小注</span></div></div>
+<div class="bet-row"><div><div class="bet-market">角球 Over 8.5</div><div class="bet-selection">Over</div></div><div><span class="bet-conf">信心 36%</span></div><div><span class="bet-stake low">小注</span></div></div>
     </div>
-  </div>
-
-  <!-- Norway vs England -->
-  <div class="match-card upset-alert">
+  </div><div class="match-card upset-alert">
     <div class="match-header">
       <div class="match-info">
         <div class="team-block">
           <div class="team-flag">🇳🇴</div>
-          <div class="team-name">挪威</div>
+          <div class="team-name">Norway</div>
           <div class="team-rank">FIFA #43 | ELO 1700</div>
         </div>
         <div class="vs-block">
@@ -1307,7 +1405,7 @@ body {
         </div>
         <div class="team-block">
           <div class="team-flag">🏴󠁧󠁢󠁥󠁮󠁧󠁿</div>
-          <div class="team-name">英格蘭</div>
+          <div class="team-name">England</div>
           <div class="team-rank">FIFA #5 | ELO 2020</div>
         </div>
       </div>
@@ -1317,18 +1415,55 @@ body {
         <div>☀️ Clear, 27°C, 65%濕度</div>
       </div>
     </div>
+    
+    <div class="lineup-box">
+      <div class="lineup-title">📋 預計首發陣容分析</div>
+      <div class="lineup-grid">
+        <div class="lineup-team">
+          <div class="lineup-team-name">🇳🇴 Norway (4-3-3)</div>
+          <div class="lineup-players">
+            <div class="lineup-row"><span class="pos pos-gk">GK</span>尼蘭德 #1</div>
+<div class="lineup-row"><span class="pos pos-df">DF</span>瑞爾森 #2 | 斯特蘭德貝里 #4 | 厄斯蒂高 #5 | 梅勒 #14</div>
+<div class="lineup-row"><span class="pos pos-mf">MF</span>貝格 #8 | 桑德·貝格 #6 | 厄德高 #10 (C)</div>
+<div class="lineup-row"><span class="pos pos-fw">FW</span>哈蘭德 #9 | 索爾洛特 #23 | 埃尤努西 #7</div>
+
+          </div>
+          <div class="lineup-note">✅ 哈蘭德+厄德高雙核 | 全隊士氣高漲 | 擊敗巴西信心足</div>
+        </div>
+        <div class="lineup-team">
+          <div class="lineup-team-name">🏴󠁧󠁢󠁥󠁮󠁧󠁿 England (4-2-3-1)</div>
+          <div class="lineup-players">
+            <div class="lineup-row"><span class="pos pos-gk">GK</span>皮克福德 #1</div>
+<div class="lineup-row"><span class="pos pos-df">DF</span>沃克 #2 | 斯通斯 #5 | 格伊 #6 | 特里皮爾 #12</div>
+<div class="lineup-row"><span class="pos pos-mf">MF</span>賴斯 #4 | 貝林厄姆 #10 | 福登 #11 | 薩卡 #7 | 鮑恩 #20</div>
+<div class="lineup-row"><span class="pos pos-fw">FW</span>凱恩 #9 (C)</div>
+
+          </div>
+          <div class="lineup-note">⚠️ 凱恩單前鋒效率一般 | 福登+薩卡+鮑恩三翼齊飛 | 心理包袱重</div>
+        </div>
+      </div>
+      <div class="lineup-impact">
+        <div class="lineup-impact-title">🔍 陣容影響評估</div>
+        <div class="lineup-impact-line">• 挪威哈蘭德+厄德高雙核狀態火熱，擊敗巴西後士氣高漲，xG上調</div>
+<div class="lineup-impact-line">• 英格蘭凱恩單前鋒面對挪威中衛(斯特蘭德貝里+厄斯蒂高)，預計效率一般</div>
+<div class="lineup-impact-line">• 英格蘭福登+薩卡+鮑恩三翼齊飛，但凱恩終結能力不穩，進攻流暢但入球效率存疑</div>
+<div class="lineup-impact-line">• 挪威多休息1天，體力優勢在60分鐘後可能顯現</div>
+<div class="lineup-impact-line">• ⚠️ 英格蘭點球歷史極差(35%)，若拖入PK大戰挪威反而佔優</div>
+
+      </div>
+    </div>
 
     <div class="score-prediction">
-      <div class="score-main">1 - 2</div>
+      <div class="score-main">1-2</div>
       <div class="score-sub">最可能比分 | 預計總入球 3.0</div>
       <div class="score-xg">xG: 1.21 - 1.80</div>
       <div class="top-scores">
         <div class="top-score-item best">1-2 13.8%</div>
-        <div class="top-score-item">0-2 12.5%</div>
-        <div class="top-score-item">1-1 11.8%</div>
+<div class="top-score-item ">0-2 12.5%</div>
+<div class="top-score-item ">1-1 11.8%</div>
+
       </div>
     </div>
-
     <div class="prob-grid">
       <div class="prob-box">
         <div class="prob-label">1X2 主勝 <span class="prob-value home">23%</span></div>
@@ -1351,183 +1486,97 @@ body {
         <div class="prob-bar-bg"><div class="prob-bar-fill" style="width:48%;background:var(--accent-gold)"></div></div>
       </div>
       <div class="prob-box">
-        <div class="prob-label">角球Over 8.5 <span class="prob-value over">48%</span></div>
-        <div class="prob-bar-bg"><div class="prob-bar-fill" style="width:48%;background:var(--accent-green)"></div></div>
+        <div class="prob-label">角球Over 8.5 <span class="prob-value over">62%</span></div>
+        <div class="prob-bar-bg"><div class="prob-bar-fill" style="width:62%;background:var(--accent-green)"></div></div>
       </div>
     </div>
-
     <div class="ko-box">
       <div class="ko-title">⚔️ 淘汰賽專項</div>
       <div class="ko-grid">
         <div class="ko-item"><div class="ko-label">加時賽機率</div><div class="ko-value">28%</div></div>
         <div class="ko-item"><div class="ko-label">點球大戰機率</div><div class="ko-value">14%</div></div>
-        <div class="ko-item"><div class="ko-label">英格蘭PK勝率</div><div class="ko-value">41%</div></div>
+        <div class="ko-item"><div class="ko-label">NorwayPK勝率</div><div class="ko-value">59%</div></div>
       </div>
     </div>
-
     <div class="trader-box">
       <div class="trader-title">💼 專業操盤師解讀</div>
-      <div class="trader-line"><strong>【方向盤】</strong>英格蘭有優勢但緩衝空間有限，盤口若開-0.5/-0.75需謹慎。挪威爆冷擊敗巴西後士氣高漲。</div>
-      <div class="trader-line"><strong>【大小球】</strong>2.5盤口接近五五波，英格蘭防守穩健但進攻效率一般，細球有微弱優勢。</div>
-      <div class="trader-line"><strong>【雙方入球】</strong>五五波，Haaland有能力破門，英格蘭防守亦非無懈可擊。</div>
-      <div class="trader-line"><strong>【角球】</strong>8.5盤口邊緣，挪威反擊型打法角球數可能偏低。</div>
-      <div class="trader-line"><strong>【淘汰賽】</strong>⚠️ 英格蘭點球歷史極差（35%勝率），若拖入PK大戰挪威反而佔優。90分鐘內解決是英格蘭最佳策略。</div>
+      <div class="trader-line"><strong>【方向盤】</strong>England有優勢但緩衝空間有限，建議觀察初盤水位。</div>
+<div class="trader-line"><strong>【大小球】</strong>2.5盤口接近五五波，邊緣盤口建議觀察。</div>
+<div class="trader-line"><strong>【雙方入球】</strong>五五波，雙方防守各有優劣。</div>
+<div class="trader-line"><strong>【角球】</strong>Over 8.5有緩衝，預計10個角球。</div>
+<div class="trader-line"><strong>【淘汰賽】</strong>加時機率0%，90分鐘平局機會不低。</div>
+<div class="trader-line"><strong>【十二碼】</strong>PK大戰機率0%，本屆命中率僅68%低於歷史均值。</div>
+<div class="trader-line"><strong>【爆冷預警】</strong>⚠️ 冷門機率0%，需警惕。</div>
     </div>
-
     <div class="script-box">
       <div class="script-title">📜 動態劇本推演</div>
       <div class="script-timeline">
-        <div class="script-item"><div class="script-time">0-15'</div><div class="script-name">試探階段</div><div class="script-desc">英格蘭控球，挪威收縮等待Haaland反擊機會。</div></div>
-        <div class="script-item"><div class="script-time">15-30'</div><div class="script-name">圍攻階段</div><div class="script-desc">英格蘭圍攻但效率一般，挪威零星反擊有威脅。</div></div>
-        <div class="script-item"><div class="script-time">30-45'</div><div class="script-name">上半場尾段</div><div class="script-desc">英格蘭可能打破僵局，或挪威反擊得手。0-1或1-0。</div></div>
-        <div class="script-item"><div class="script-time">45-60'</div><div class="script-name">下半場初段</div><div class="script-desc">換人調整，挪威體力儲備較好（多休息1天）。</div></div>
-        <div class="script-item"><div class="script-time">60-75'</div><div class="script-name">關鍵決勝期</div><div class="script-desc">Haaland體力優勢顯現，挪威可能扳平或反超。</div></div>
-        <div class="script-item"><div class="script-time">75-90+'</div><div class="script-name">尾段搏殺</div><div class="script-desc">英格蘭經驗發揮，或挪威體力優勢持續。最終1-2或1-1進入加時。</div></div>
+        <div class="script-item"><div class="script-time">0-15'</div><div class="script-name">試探階段</div><div class="script-desc">雙方試探，控球為主，防守穩陣。</div></div>
+<div class="script-item"><div class="script-time">15-30'</div><div class="script-name">圍攻階段</div><div class="script-desc">進攻節奏加快，角球數上升，弱隊可能靠反擊偷襲。</div></div>
+<div class="script-item"><div class="script-time">30-45'</div><div class="script-name">上半場尾段</div><div class="script-desc">體力開始下降，定位球威脅增加，上半場入球高峰期。</div></div>
+<div class="script-item"><div class="script-time">45-60'</div><div class="script-name">下半場初段</div><div class="script-desc">換人調整期，戰術微調，可能出現閃電入球。</div></div>
+<div class="script-item"><div class="script-time">60-75'</div><div class="script-name">關鍵決勝期</div><div class="script-desc">落後方全力反撲，領先方收縮防守，入球機會最高。角球數急升。</div></div>
+<div class="script-item"><div class="script-time">75-90+'</div><div class="script-name">尾段搏殺</div><div class="script-desc">體力透支，長傳增多。若平局進入加時。</div></div>
+
       </div>
     </div>
-
     <div class="factors-box">
       <div class="factor-tag warning">⚠️ 爆冷預警：挪威士氣高漲</div>
-      <div class="factor-tag">英格蘭 ELO優勢(+320)</div>
-      <div class="factor-tag">淘汰賽制，平局機率上升</div>
-      <div class="factor-tag">挪威 多休息1天</div>
-      <div class="factor-tag">英格蘭 點球歷史極差</div>
-    </div>
+<div class="factor-tag ">英格蘭 ELO優勢(+320)</div>
+<div class="factor-tag ">淘汰賽制</div>
+<div class="factor-tag ">挪威多休息1天</div>
+<div class="factor-tag ">英格蘭點球歷史極差</div>
 
+    </div>
     <div class="bets-box">
       <div class="bets-title">🎯 推薦投注</div>
-      <div class="bet-row">
-        <div><div class="bet-market">1X2 客勝</div><div class="bet-selection">英格蘭</div></div>
-        <div><span class="bet-conf">信心 24%</span></div>
-        <div><span class="bet-stake low">小注</span></div>
-      </div>
-      <div class="bet-row">
-        <div><div class="bet-market">大小球 2.5</div><div class="bet-selection">細球</div></div>
-        <div><span class="bet-conf">信心 0%</span></div>
-        <div><span class="bet-stake low">小注</span></div>
-      </div>
-      <div class="bet-row">
-        <div><div class="bet-market">90分鐘平局</div><div class="bet-selection">X</div></div>
-        <div><span class="bet-conf">信心 0%</span></div>
-        <div><span class="bet-stake low">小注</span></div>
-      </div>
+      <div class="bet-row"><div><div class="bet-market">角球 Over 8.5</div><div class="bet-selection">Over</div></div><div><span class="bet-conf">信心 24%</span></div><div><span class="bet-stake low">小注</span></div></div>
     </div>
-  </div>
-</div>
-
-<!-- Bracket Section -->
+  </div></div>
 <div id="bracket" class="section">
   <h2 class="section-title">淘汰賽賽程圖</h2>
-
   <div class="bracket-container">
     <div class="bracket-round">
       <div class="bracket-round-title">16強 Round of 16</div>
-      <div class="bracket-match">
-        <span class="bracket-team loser">加拿大 0</span>
-        <span class="bracket-vs">vs</span>
-        <span class="bracket-team winner">摩洛哥 3 ✓</span>
-      </div>
-      <div class="bracket-match">
-        <span class="bracket-team loser">巴拉圭 0</span>
-        <span class="bracket-vs">vs</span>
-        <span class="bracket-team winner">法國 1 ✓</span>
-      </div>
-      <div class="bracket-match">
-        <span class="bracket-team loser">巴西 1</span>
-        <span class="bracket-vs">vs</span>
-        <span class="bracket-team winner">挪威 2 ✓</span>
-      </div>
-      <div class="bracket-match">
-        <span class="bracket-team loser">墨西哥 2</span>
-        <span class="bracket-vs">vs</span>
-        <span class="bracket-team winner">英格蘭 3 ✓</span>
-      </div>
-      <div class="bracket-match">
-        <span class="bracket-team loser">葡萄牙 0</span>
-        <span class="bracket-vs">vs</span>
-        <span class="bracket-team winner">西班牙 1 ✓</span>
-      </div>
-      <div class="bracket-match">
-        <span class="bracket-team loser">美國 1</span>
-        <span class="bracket-vs">vs</span>
-        <span class="bracket-team winner">比利時 4 ✓</span>
-      </div>
-      <div class="bracket-match">
-        <span class="bracket-team">阿根廷</span>
-        <span class="bracket-vs">vs</span>
-        <span class="bracket-team">埃及</span>
-      </div>
-      <div class="bracket-match">
-        <span class="bracket-team">瑞士</span>
-        <span class="bracket-vs">vs</span>
-        <span class="bracket-team">哥倫比亞</span>
-      </div>
+      <div class="bracket-match"><span class="bracket-team loser">加拿大 0</span><span class="bracket-vs">vs</span><span class="bracket-team winner">摩洛哥 3 ✓</span></div>
+      <div class="bracket-match"><span class="bracket-team loser">巴拉圭 0</span><span class="bracket-vs">vs</span><span class="bracket-team winner">法國 1 ✓</span></div>
+      <div class="bracket-match"><span class="bracket-team loser">巴西 1</span><span class="bracket-vs">vs</span><span class="bracket-team winner">挪威 2 ✓</span></div>
+      <div class="bracket-match"><span class="bracket-team loser">墨西哥 2</span><span class="bracket-vs">vs</span><span class="bracket-team winner">英格蘭 3 ✓</span></div>
+      <div class="bracket-match"><span class="bracket-team loser">葡萄牙 0</span><span class="bracket-vs">vs</span><span class="bracket-team winner">西班牙 1 ✓</span></div>
+      <div class="bracket-match"><span class="bracket-team loser">美國 1</span><span class="bracket-vs">vs</span><span class="bracket-team winner">比利時 4 ✓</span></div>
+      <div class="bracket-match"><span class="bracket-team">阿根廷</span><span class="bracket-vs">vs</span><span class="bracket-team">埃及</span></div>
+      <div class="bracket-match"><span class="bracket-team">瑞士</span><span class="bracket-vs">vs</span><span class="bracket-team">哥倫比亞</span></div>
     </div>
-
     <div class="bracket-round">
       <div class="bracket-round-title">8強 Quarter-Finals</div>
-      <div class="bracket-match">
-        <span class="bracket-team winner">法國 ✓</span>
-        <span class="bracket-vs">vs</span>
-        <span class="bracket-team winner">摩洛哥 ✓</span>
-      </div>
-      <div class="bracket-match">
-        <span class="bracket-team winner">西班牙 ✓</span>
-        <span class="bracket-vs">vs</span>
-        <span class="bracket-team winner">比利時 ✓</span>
-      </div>
-      <div class="bracket-match">
-        <span class="bracket-team winner">挪威 ✓</span>
-        <span class="bracket-vs">vs</span>
-        <span class="bracket-team winner">英格蘭 ✓</span>
-      </div>
-      <div class="bracket-match">
-        <span class="bracket-team">阿根廷/埃及</span>
-        <span class="bracket-vs">vs</span>
-        <span class="bracket-team">瑞士/哥倫比亞</span>
-      </div>
+      <div class="bracket-match"><span class="bracket-team winner">法國 ✓</span><span class="bracket-vs">vs</span><span class="bracket-team winner">摩洛哥 ✓</span></div>
+      <div class="bracket-match"><span class="bracket-team winner">西班牙 ✓</span><span class="bracket-vs">vs</span><span class="bracket-team winner">比利時 ✓</span></div>
+      <div class="bracket-match"><span class="bracket-team winner">挪威 ✓</span><span class="bracket-vs">vs</span><span class="bracket-team winner">英格蘭 ✓</span></div>
+      <div class="bracket-match"><span class="bracket-team">阿根廷/埃及</span><span class="bracket-vs">vs</span><span class="bracket-team">瑞士/哥倫比亞</span></div>
     </div>
-
     <div class="bracket-round">
       <div class="bracket-round-title">4強 Semi-Finals</div>
-      <div class="bracket-match">
-        <span class="bracket-team">W QF1</span>
-        <span class="bracket-vs">vs</span>
-        <span class="bracket-team">W QF2</span>
-      </div>
-      <div class="bracket-match">
-        <span class="bracket-team">W QF3</span>
-        <span class="bracket-vs">vs</span>
-        <span class="bracket-team">W QF4</span>
-      </div>
+      <div class="bracket-match"><span class="bracket-team">W QF1</span><span class="bracket-vs">vs</span><span class="bracket-team">W QF2</span></div>
+      <div class="bracket-match"><span class="bracket-team">W QF3</span><span class="bracket-vs">vs</span><span class="bracket-team">W QF4</span></div>
     </div>
-
     <div class="bracket-round">
       <div class="bracket-round-title">決賽 Final</div>
-      <div class="bracket-match">
-        <span class="bracket-team">W SF1</span>
-        <span class="bracket-vs">vs</span>
-        <span class="bracket-team">W SF2</span>
-      </div>
+      <div class="bracket-match"><span class="bracket-team">W SF1</span><span class="bracket-vs">vs</span><span class="bracket-team">W SF2</span></div>
     </div>
   </div>
 </div>
-
-<!-- Trader Overview Section -->
 <div id="trader" class="section">
   <h2 class="section-title">操盤師總覽</h2>
-
   <div class="match-card">
     <div class="trader-box">
       <div class="trader-title">📊 五場核心觀點</div>
-      <div class="trader-line"><strong>阿根廷 vs 埃及：</strong>實力懸殊，阿根廷-1.0讓球有價值。大2.5球有緩衝。BTTS No穩陣。角球Over 8.5有信心。</div>
+      <div class="trader-line"><strong>阿根廷 vs 埃及：</strong>實力懸殊，阿根廷-1.0讓球有價值。大2.5球有緩衝。BTTS No穩陣。角球Over 8.5有信心。首發陣容確認梅西+阿爾瓦雷斯雙前鋒，進攻火力更強。</div>
       <div class="trader-line"><strong>瑞士 vs 哥倫比亞：</strong>實力接近，避開1X2。BTTS Yes有價值。角球Over 8.5有緩衝。90分鐘平局值得考慮。</div>
       <div class="trader-line"><strong>法國 vs 摩洛哥：</strong>法國方向明確但需警惕摩洛哥韌性。大2.5有緩衝。讓球盤-0.75可接受。</div>
       <div class="trader-line"><strong>西班牙 vs 比利時：</strong>本輪最難預測，避開1X2。BTTS Yes是最佳選擇。角球Over 8.5信心高。大2.5有微弱優勢。</div>
       <div class="trader-line"><strong>挪威 vs 英格蘭：</strong>⚠️ 冷門風險存在。英格蘭方向有優勢但緩衝有限。細球2.5更安全。關注Haaland狀態。</div>
     </div>
   </div>
-
   <div class="match-card">
     <div class="trader-box">
       <div class="trader-title">🎯 過關建議</div>
@@ -1537,7 +1586,6 @@ body {
       <div class="trader-line"><strong>避開：</strong>挪威vs英格蘭 1X2（信心過低）、瑞士vs哥倫比亞 大小球（邊緣盤口）</div>
     </div>
   </div>
-
   <div class="match-card">
     <div class="trader-box">
       <div class="trader-title">⚠️ 風險提示</div>
@@ -1549,12 +1597,343 @@ body {
     </div>
   </div>
 </div>
+<div id="cards" class="section">
+  <h2 class="section-title">🟨 罸牌分析 (5場)</h2>
+
+  <div class="match-card">
+    <div class="match-header">
+      <div class="match-info">
+        <div class="team-block"><div class="team-flag">🇦🇷</div><div class="team-name">Argentina</div></div>
+        <div class="vs-block"><div class="vs-text">VS</div><div class="vs-round">R16</div></div>
+        <div class="team-block"><div class="team-flag">🇪🇬</div><div class="team-name">Egypt</div></div>
+      </div>
+      <div class="match-meta"><div class="date">7月8日 00:00</div><div>Mercedes-Benz Stadium, Atlanta</div><div>☀️ Clear, 28°C</div></div>
+    </div>
+    <div class="card-section-title">🟨 罸牌預測</div>
+    <div class="card-grid">
+      <div class="card-stat-box"><div class="card-stat-label">預計黃牌</div><div class="card-stat-value">3.7</div><div class="card-stat-sub">主 2.0 / 客 1.7</div></div>
+      <div class="card-stat-box"><div class="card-stat-label">預計紅牌</div><div class="card-stat-value">0.14</div><div class="card-stat-sub">機率 14%</div></div>
+      <div class="card-stat-box"><div class="card-stat-label">總罸牌數</div><div class="card-stat-value">4.1</div><div class="card-stat-sub">風險等級: <span style="color:var(--accent-green)">低</span></div></div>
+    </div>
+    <div class="card-prob-grid">
+      <div class="card-prob-item"><div class="card-prob-label">Over 4.5</div><div class="card-prob-value">40%</div></div>
+      <div class="card-prob-item"><div class="card-prob-label">Over 5.5</div><div class="card-prob-value">21%</div></div>
+      <div class="card-prob-item"><div class="card-prob-label">Over 6.5</div><div class="card-prob-value">9%</div></div>
+    </div>
+    <div class="card-risk-bar"><div class="card-risk-fill" style="width:51.0%"></div></div>
+    <div class="trader-box" style="margin-top:16px;">
+      <div class="trader-title">💼 罸牌操盤解讀</div>
+      <div class="trader-line"><strong>【黃牌】</strong>Under 4.5 有微弱優勢。Argentina 壓迫打法預計領取較多黃牌。</div>
+      <div class="trader-line"><strong>【紅牌】</strong>紅牌機率正常（14%）。預計不會出現紅牌。</div>
+      <div class="trader-line"><strong>【天氣因素】</strong>天氣良好，罸牌數按正常預期。</div>
+      <div class="trader-line"><strong>【建議】</strong>罸牌盤口邊緣，建議觀察走地</div>
+    </div>
+  </div>
+  <div class="match-card">
+    <div class="match-header">
+      <div class="match-info">
+        <div class="team-block"><div class="team-flag">🇨🇭</div><div class="team-name">Switzerland</div></div>
+        <div class="vs-block"><div class="vs-text">VS</div><div class="vs-round">R16</div></div>
+        <div class="team-block"><div class="team-flag">🇨🇴</div><div class="team-name">Colombia</div></div>
+      </div>
+      <div class="match-meta"><div class="date">7月8日 04:00</div><div>BC Place, Vancouver</div><div>🌧️ Rain, 18°C</div></div>
+    </div>
+    <div class="card-section-title">🟨 罸牌預測</div>
+    <div class="card-grid">
+      <div class="card-stat-box"><div class="card-stat-label">預計黃牌</div><div class="card-stat-value">5.3</div><div class="card-stat-sub">主 2.6 / 客 2.7</div></div>
+      <div class="card-stat-box"><div class="card-stat-label">預計紅牌</div><div class="card-stat-value">0.17</div><div class="card-stat-sub">機率 17%</div></div>
+      <div class="card-stat-box"><div class="card-stat-label">總罸牌數</div><div class="card-stat-value">5.7</div><div class="card-stat-sub">風險等級: <span style="color:var(--accent-red)">高</span></div></div>
+    </div>
+    <div class="card-prob-grid">
+      <div class="card-prob-item"><div class="card-prob-label">Over 4.5</div><div class="card-prob-value">76%</div></div>
+      <div class="card-prob-item"><div class="card-prob-label">Over 5.5</div><div class="card-prob-value">56%</div></div>
+      <div class="card-prob-item"><div class="card-prob-label">Over 6.5</div><div class="card-prob-value">33%</div></div>
+    </div>
+    <div class="card-risk-bar"><div class="card-risk-fill" style="width:86.0%"></div></div>
+    <div class="trader-box" style="margin-top:16px;">
+      <div class="trader-title">💼 罸牌操盤解讀</div>
+      <div class="trader-line"><strong>【黃牌】</strong>Over 4.5 有明顯優勢。Colombia 壓迫打法預計領取較多黃牌。</div>
+      <div class="trader-line"><strong>【紅牌】</strong>紅牌機率正常（17%）。預計不會出現紅牌。</div>
+      <div class="trader-line"><strong>【天氣因素】</strong>雨天增加犯規機率，罸牌數可能上升15-20%。</div>
+      <div class="trader-line"><strong>【建議】</strong>罸牌Over 4.5有價值，可小注</div>
+    </div>
+  </div>
+  <div class="match-card">
+    <div class="match-header">
+      <div class="match-info">
+        <div class="team-block"><div class="team-flag">🇫🇷</div><div class="team-name">France</div></div>
+        <div class="vs-block"><div class="vs-text">VS</div><div class="vs-round">QF</div></div>
+        <div class="team-block"><div class="team-flag">🇲🇦</div><div class="team-name">Morocco</div></div>
+      </div>
+      <div class="match-meta"><div class="date">7月10日 04:00</div><div>Gillette Stadium, Foxborough</div><div>☀️ Clear, 24°C</div></div>
+    </div>
+    <div class="card-section-title">🟨 罸牌預測</div>
+    <div class="card-grid">
+      <div class="card-stat-box"><div class="card-stat-label">預計黃牌</div><div class="card-stat-value">4.8</div><div class="card-stat-sub">主 2.4 / 客 2.3</div></div>
+      <div class="card-stat-box"><div class="card-stat-label">預計紅牌</div><div class="card-stat-value">0.22</div><div class="card-stat-sub">⚠️ 機率 22%</div></div>
+      <div class="card-stat-box"><div class="card-stat-label">總罸牌數</div><div class="card-stat-value">5.3</div><div class="card-stat-sub">風險等級: <span style="color:var(--accent-gold)">中</span></div></div>
+    </div>
+    <div class="card-prob-grid">
+      <div class="card-prob-item"><div class="card-prob-label">Over 4.5</div><div class="card-prob-value">68%</div></div>
+      <div class="card-prob-item"><div class="card-prob-label">Over 5.5</div><div class="card-prob-value">46%</div></div>
+      <div class="card-prob-item"><div class="card-prob-label">Over 6.5</div><div class="card-prob-value">26%</div></div>
+    </div>
+    <div class="card-risk-bar"><div class="card-risk-fill" style="width:76.0%"></div></div>
+    <div class="trader-box" style="margin-top:16px;">
+      <div class="trader-title">💼 罸牌操盤解讀</div>
+      <div class="trader-line"><strong>【黃牌】</strong>Over 4.5 有明顯優勢。France 壓迫打法預計領取較多黃牌。</div>
+      <div class="trader-line"><strong>【紅牌】</strong>⚠️ 紅牌風險偏高（22%）。淘汰賽壓力大，戰術犯規可能升級。</div>
+      <div class="trader-line"><strong>【天氣因素】</strong>天氣良好，罸牌數按正常預期。</div>
+      <div class="trader-line"><strong>【建議】</strong>罸牌Over 4.5有價值，可小注</div>
+    </div>
+  </div>
+  <div class="match-card">
+    <div class="match-header">
+      <div class="match-info">
+        <div class="team-block"><div class="team-flag">🇪🇸</div><div class="team-name">Spain</div></div>
+        <div class="vs-block"><div class="vs-text">VS</div><div class="vs-round">QF</div></div>
+        <div class="team-block"><div class="team-flag">🇧🇪</div><div class="team-name">Belgium</div></div>
+      </div>
+      <div class="match-meta"><div class="date">7月11日 03:00</div><div>SoFi Stadium, Inglewood</div><div>☀️ Clear, 24°C</div></div>
+    </div>
+    <div class="card-section-title">🟨 罸牌預測</div>
+    <div class="card-grid">
+      <div class="card-stat-box"><div class="card-stat-label">預計黃牌</div><div class="card-stat-value">5.4</div><div class="card-stat-sub">主 2.8 / 客 2.6</div></div>
+      <div class="card-stat-box"><div class="card-stat-label">預計紅牌</div><div class="card-stat-value">0.22</div><div class="card-stat-sub">⚠️ 機率 22%</div></div>
+      <div class="card-stat-box"><div class="card-stat-label">總罸牌數</div><div class="card-stat-value">5.9</div><div class="card-stat-sub">風險等級: <span style="color:var(--accent-red)">高</span></div></div>
+    </div>
+    <div class="card-prob-grid">
+      <div class="card-prob-item"><div class="card-prob-label">Over 4.5</div><div class="card-prob-value">79%</div></div>
+      <div class="card-prob-item"><div class="card-prob-label">Over 5.5</div><div class="card-prob-value">59%</div></div>
+      <div class="card-prob-item"><div class="card-prob-label">Over 6.5</div><div class="card-prob-value">37%</div></div>
+    </div>
+    <div class="card-risk-bar"><div class="card-risk-fill" style="width:89.0%"></div></div>
+    <div class="trader-box" style="margin-top:16px;">
+      <div class="trader-title">💼 罸牌操盤解讀</div>
+      <div class="trader-line"><strong>【黃牌】</strong>Over 4.5 有明顯優勢。Spain 壓迫打法預計領取較多黃牌。</div>
+      <div class="trader-line"><strong>【紅牌】</strong>⚠️ 紅牌風險偏高（22%）。淘汰賽壓力大，戰術犯規可能升級。</div>
+      <div class="trader-line"><strong>【天氣因素】</strong>天氣良好，罸牌數按正常預期。</div>
+      <div class="trader-line"><strong>【建議】</strong>罸牌Over 4.5有價值，可小注</div>
+    </div>
+  </div>
+  <div class="match-card">
+    <div class="match-header">
+      <div class="match-info">
+        <div class="team-block"><div class="team-flag">🇳🇴</div><div class="team-name">Norway</div></div>
+        <div class="vs-block"><div class="vs-text">VS</div><div class="vs-round">QF</div></div>
+        <div class="team-block"><div class="team-flag">🏴󠁧󠁢󠁥󠁮󠁧󠁿</div><div class="team-name">England</div></div>
+      </div>
+      <div class="match-meta"><div class="date">7月12日 05:00</div><div>GEHA Field, Kansas City</div><div>☀️ Clear, 27°C</div></div>
+    </div>
+    <div class="card-section-title">🟨 罸牌預測</div>
+    <div class="card-grid">
+      <div class="card-stat-box"><div class="card-stat-label">預計黃牌</div><div class="card-stat-value">4.3</div><div class="card-stat-sub">主 2.1 / 客 2.1</div></div>
+      <div class="card-stat-box"><div class="card-stat-label">預計紅牌</div><div class="card-stat-value">0.16</div><div class="card-stat-sub">機率 16%</div></div>
+      <div class="card-stat-box"><div class="card-stat-label">總罸牌數</div><div class="card-stat-value">4.7</div><div class="card-stat-sub">風險等級: <span style="color:var(--accent-gold)">中</span></div></div>
+    </div>
+    <div class="card-prob-grid">
+      <div class="card-prob-item"><div class="card-prob-label">Over 4.5</div><div class="card-prob-value">54%</div></div>
+      <div class="card-prob-item"><div class="card-prob-label">Over 5.5</div><div class="card-prob-value">33%</div></div>
+      <div class="card-prob-item"><div class="card-prob-label">Over 6.5</div><div class="card-prob-value">16%</div></div>
+    </div>
+    <div class="card-risk-bar"><div class="card-risk-fill" style="width:63.0%"></div></div>
+    <div class="trader-box" style="margin-top:16px;">
+      <div class="trader-title">💼 罸牌操盤解讀</div>
+      <div class="trader-line"><strong>【黃牌】</strong>Over 4.5 有微弱優勢。England 壓迫打法預計領取較多黃牌。</div>
+      <div class="trader-line"><strong>【紅牌】</strong>紅牌機率正常（16%）。預計不會出現紅牌。</div>
+      <div class="trader-line"><strong>【天氣因素】</strong>天氣良好，罸牌數按正常預期。</div>
+      <div class="trader-line"><strong>【建議】</strong>罸牌盤口邊緣，建議觀察走地</div>
+    </div>
+  </div></div>
+<div id="ht" class="section">
+  <h2 class="section-title">⏱️ 上半場分析 (5場)</h2>
+
+  <div class="match-card">
+    <div class="match-header">
+      <div class="match-info">
+        <div class="team-block"><div class="team-flag">🇦🇷</div><div class="team-name">Argentina</div></div>
+        <div class="vs-block"><div class="vs-text">VS</div><div class="vs-round">R16</div></div>
+        <div class="team-block"><div class="team-flag">🇪🇬</div><div class="team-name">Egypt</div></div>
+      </div>
+      <div class="match-meta"><div class="date">7月8日 00:00</div><div>上半場專項分析</div></div>
+    </div>
+    <div class="ht-score-box">
+      <div class="ht-score-main">1-0</div>
+      <div class="ht-score-sub">預計半場比分 | 半場xG: 1.21 - 0.25 | 全場xG: 2.93 - 0.68</div>
+    </div>
+    <div class="ht-grid">
+      <div class="ht-item"><div class="ht-label">半場主勝</div><div class="ht-value highlight">61%</div></div>
+      <div class="ht-item"><div class="ht-label">半場平局</div><div class="ht-value">31%</div></div>
+      <div class="ht-item"><div class="ht-label">半場客勝</div><div class="ht-value">8%</div></div>
+      <div class="ht-item"><div class="ht-label">半場大1.0</div><div class="ht-value">43%</div></div>
+      <div class="ht-item"><div class="ht-label">半場大1.5</div><div class="ht-value">43%</div></div>
+      <div class="ht-item"><div class="ht-label">半場BTTS</div><div class="ht-value">17%</div></div>
+      <div class="ht-item"><div class="ht-label">半場角球</div><div class="ht-value highlight">5.4</div></div>
+      <div class="ht-item"><div class="ht-label">角球O4.5</div><div class="ht-value highlight">68%</div></div>
+    </div>
+    <div class="htft-box">
+      <div class="htft-title">🏁 半場/全場 (HT/FT) 雙選概率</div>
+      <div class="htft-row"><span class="htft-combo">1 → 1</span><div class="htft-bar"><div class="htft-bar-fill" style="width:100%"></div></div><span class="htft-prob">35.5%</span></div><div class="htft-row"><span class="htft-combo">X → 1</span><div class="htft-bar"><div class="htft-bar-fill" style="width:42.599999999999994%"></div></div><span class="htft-prob">14.2%</span></div><div class="htft-row"><span class="htft-combo">X → X</span><div class="htft-bar"><div class="htft-bar-fill" style="width:21.599999999999998%"></div></div><span class="htft-prob">7.2%</span></div>
+    </div>
+    <div class="ht-trader-box">
+      <div class="ht-trader-title">💼 上半場操盤解讀</div>
+      <div class="ht-trader-line"><strong>【半場1X2】</strong>主隊半場領先機會較高（61%）。開場壓制力強，預計15-30分鐘取得領先。</div>
+      <div class="ht-trader-line"><strong>【半場大小球】</strong>Under 1.0較穩陣（43%）。上半場可能互交白卷。</div>
+      <div class="ht-trader-line"><strong>【半場角球】</strong>預計5.4個角球，Over 4.5有緩衝（68%）。</div>
+      <div class="ht-trader-line"><strong>【HT/FT】</strong>最可能組合為 <strong>1→1</strong>（35.5%）。半場領先後全場維持優勢。</div>
+      <div class="ht-trader-line"><strong>【半場罸牌】</strong>預計2.0張黃牌，上半場相對平和。</div>
+    </div>
+  </div>
+  <div class="match-card">
+    <div class="match-header">
+      <div class="match-info">
+        <div class="team-block"><div class="team-flag">🇨🇭</div><div class="team-name">Switzerland</div></div>
+        <div class="vs-block"><div class="vs-text">VS</div><div class="vs-round">R16</div></div>
+        <div class="team-block"><div class="team-flag">🇨🇴</div><div class="team-name">Colombia</div></div>
+      </div>
+      <div class="match-meta"><div class="date">7月8日 04:00</div><div>上半場專項分析</div></div>
+    </div>
+    <div class="ht-score-box">
+      <div class="ht-score-main">1-1</div>
+      <div class="ht-score-sub">預計半場比分 | 半場xG: 0.56 - 0.56 | 全場xG: 1.35 - 1.51</div>
+    </div>
+    <div class="ht-grid">
+      <div class="ht-item"><div class="ht-label">半場主勝</div><div class="ht-value">28%</div></div>
+      <div class="ht-item"><div class="ht-label">半場平局</div><div class="ht-value highlight">44%</div></div>
+      <div class="ht-item"><div class="ht-label">半場客勝</div><div class="ht-value">28%</div></div>
+      <div class="ht-item"><div class="ht-label">半場大1.0</div><div class="ht-value">31%</div></div>
+      <div class="ht-item"><div class="ht-label">半場大1.5</div><div class="ht-value">31%</div></div>
+      <div class="ht-item"><div class="ht-label">半場BTTS</div><div class="ht-value">20%</div></div>
+      <div class="ht-item"><div class="ht-label">半場角球</div><div class="ht-value highlight">4.5</div></div>
+      <div class="ht-item"><div class="ht-label">角球O4.5</div><div class="ht-value">50%</div></div>
+    </div>
+    <div class="htft-box">
+      <div class="htft-title">🏁 半場/全場 (HT/FT) 雙選概率</div>
+      <div class="htft-row"><span class="htft-combo">2 → 2</span><div class="htft-bar"><div class="htft-bar-fill" style="width:54.3%"></div></div><span class="htft-prob">18.1%</span></div><div class="htft-row"><span class="htft-combo">1 → 1</span><div class="htft-bar"><div class="htft-bar-fill" style="width:50.7%"></div></div><span class="htft-prob">16.9%</span></div><div class="htft-row"><span class="htft-combo">X → X</span><div class="htft-bar"><div class="htft-bar-fill" style="width:45.599999999999994%"></div></div><span class="htft-prob">15.2%</span></div>
+    </div>
+    <div class="ht-trader-box">
+      <div class="ht-trader-title">💼 上半場操盤解讀</div>
+      <div class="ht-trader-line"><strong>【半場1X2】</strong>半場平局機會較高（44%）。開場謹慎，雙方試探為主。</div>
+      <div class="ht-trader-line"><strong>【半場大小球】</strong>Under 1.0較穩陣（31%）。上半場可能互交白卷。</div>
+      <div class="ht-trader-line"><strong>【半場角球】</strong>預計4.5個角球，角球數偏少（50%）。</div>
+      <div class="ht-trader-line"><strong>【HT/FT】</strong>最可能組合為 <strong>2→2</strong>（18.1%）。半場領先後全場維持優勢。</div>
+      <div class="ht-trader-line"><strong>【半場罸牌】</strong>預計2.9張黃牌，上半場紀律壓力較大。</div>
+    </div>
+  </div>
+  <div class="match-card">
+    <div class="match-header">
+      <div class="match-info">
+        <div class="team-block"><div class="team-flag">🇫🇷</div><div class="team-name">France</div></div>
+        <div class="vs-block"><div class="vs-text">VS</div><div class="vs-round">QF</div></div>
+        <div class="team-block"><div class="team-flag">🇲🇦</div><div class="team-name">Morocco</div></div>
+      </div>
+      <div class="match-meta"><div class="date">7月10日 04:00</div><div>上半場專項分析</div></div>
+    </div>
+    <div class="ht-score-box">
+      <div class="ht-score-main">1-0</div>
+      <div class="ht-score-sub">預計半場比分 | 半場xG: 1.0 - 0.33 | 全場xG: 2.42 - 0.9</div>
+    </div>
+    <div class="ht-grid">
+      <div class="ht-item"><div class="ht-label">半場主勝</div><div class="ht-value highlight">52%</div></div>
+      <div class="ht-item"><div class="ht-label">半場平局</div><div class="ht-value highlight">36%</div></div>
+      <div class="ht-item"><div class="ht-label">半場客勝</div><div class="ht-value">12%</div></div>
+      <div class="ht-item"><div class="ht-label">半場大1.0</div><div class="ht-value">38%</div></div>
+      <div class="ht-item"><div class="ht-label">半場大1.5</div><div class="ht-value">38%</div></div>
+      <div class="ht-item"><div class="ht-label">半場BTTS</div><div class="ht-value">20%</div></div>
+      <div class="ht-item"><div class="ht-label">半場角球</div><div class="ht-value highlight">5.0</div></div>
+      <div class="ht-item"><div class="ht-label">角球O4.5</div><div class="ht-value highlight">61%</div></div>
+    </div>
+    <div class="htft-box">
+      <div class="htft-title">🏁 半場/全場 (HT/FT) 雙選概率</div>
+      <div class="htft-row"><span class="htft-combo">1 → 1</span><div class="htft-bar"><div class="htft-bar-fill" style="width:97.5%"></div></div><span class="htft-prob">32.5%</span></div><div class="htft-row"><span class="htft-combo">X → 1</span><div class="htft-bar"><div class="htft-bar-fill" style="width:45.3%"></div></div><span class="htft-prob">15.1%</span></div><div class="htft-row"><span class="htft-combo">X → X</span><div class="htft-bar"><div class="htft-bar-fill" style="width:30.599999999999998%"></div></div><span class="htft-prob">10.2%</span></div>
+    </div>
+    <div class="ht-trader-box">
+      <div class="ht-trader-title">💼 上半場操盤解讀</div>
+      <div class="ht-trader-line"><strong>【半場1X2】</strong>主隊半場領先機會較高（52%）。開場壓制力強，預計15-30分鐘取得領先。</div>
+      <div class="ht-trader-line"><strong>【半場大小球】</strong>Under 1.0較穩陣（38%）。上半場可能互交白卷。</div>
+      <div class="ht-trader-line"><strong>【半場角球】</strong>預計5.0個角球，Over 4.5有緩衝（61%）。</div>
+      <div class="ht-trader-line"><strong>【HT/FT】</strong>最可能組合為 <strong>1→1</strong>（32.5%）。半場領先後全場維持優勢。</div>
+      <div class="ht-trader-line"><strong>【半場罸牌】</strong>預計2.6張黃牌，上半場紀律壓力較大。</div>
+    </div>
+  </div>
+  <div class="match-card">
+    <div class="match-header">
+      <div class="match-info">
+        <div class="team-block"><div class="team-flag">🇪🇸</div><div class="team-name">Spain</div></div>
+        <div class="vs-block"><div class="vs-text">VS</div><div class="vs-round">QF</div></div>
+        <div class="team-block"><div class="team-flag">🇧🇪</div><div class="team-name">Belgium</div></div>
+      </div>
+      <div class="match-meta"><div class="date">7月11日 03:00</div><div>上半場專項分析</div></div>
+    </div>
+    <div class="ht-score-box">
+      <div class="ht-score-main">1-1</div>
+      <div class="ht-score-sub">預計半場比分 | 半場xG: 0.72 - 0.62 | 全場xG: 1.73 - 1.68</div>
+    </div>
+    <div class="ht-grid">
+      <div class="ht-item"><div class="ht-label">半場主勝</div><div class="ht-value">33%</div></div>
+      <div class="ht-item"><div class="ht-label">半場平局</div><div class="ht-value highlight">39%</div></div>
+      <div class="ht-item"><div class="ht-label">半場客勝</div><div class="ht-value">27%</div></div>
+      <div class="ht-item"><div class="ht-label">半場大1.0</div><div class="ht-value">39%</div></div>
+      <div class="ht-item"><div class="ht-label">半場大1.5</div><div class="ht-value">39%</div></div>
+      <div class="ht-item"><div class="ht-label">半場BTTS</div><div class="ht-value">26%</div></div>
+      <div class="ht-item"><div class="ht-label">半場角球</div><div class="ht-value highlight">5.5</div></div>
+      <div class="ht-item"><div class="ht-label">角球O4.5</div><div class="ht-value highlight">71%</div></div>
+    </div>
+    <div class="htft-box">
+      <div class="htft-title">🏁 半場/全場 (HT/FT) 雙選概率</div>
+      <div class="htft-row"><span class="htft-combo">1 → 1</span><div class="htft-bar"><div class="htft-bar-fill" style="width:56.099999999999994%"></div></div><span class="htft-prob">18.7%</span></div><div class="htft-row"><span class="htft-combo">2 → 2</span><div class="htft-bar"><div class="htft-bar-fill" style="width:47.400000000000006%"></div></div><span class="htft-prob">15.8%</span></div><div class="htft-row"><span class="htft-combo">X → X</span><div class="htft-bar"><div class="htft-bar-fill" style="width:36.599999999999994%"></div></div><span class="htft-prob">12.2%</span></div>
+    </div>
+    <div class="ht-trader-box">
+      <div class="ht-trader-title">💼 上半場操盤解讀</div>
+      <div class="ht-trader-line"><strong>【半場1X2】</strong>半場平局機會較高（39%）。開場謹慎，雙方試探為主。</div>
+      <div class="ht-trader-line"><strong>【半場大小球】</strong>Under 1.0較穩陣（39%）。上半場可能互交白卷。</div>
+      <div class="ht-trader-line"><strong>【半場角球】</strong>預計5.5個角球，Over 4.5有緩衝（71%）。</div>
+      <div class="ht-trader-line"><strong>【HT/FT】</strong>最可能組合為 <strong>1→1</strong>（18.7%）。半場領先後全場維持優勢。</div>
+      <div class="ht-trader-line"><strong>【半場罸牌】</strong>預計3.0張黃牌，上半場紀律壓力較大。</div>
+    </div>
+  </div>
+  <div class="match-card">
+    <div class="match-header">
+      <div class="match-info">
+        <div class="team-block"><div class="team-flag">🇳🇴</div><div class="team-name">Norway</div></div>
+        <div class="vs-block"><div class="vs-text">VS</div><div class="vs-round">QF</div></div>
+        <div class="team-block"><div class="team-flag">🏴󠁧󠁢󠁥󠁮󠁧󠁿</div><div class="team-name">England</div></div>
+      </div>
+      <div class="match-meta"><div class="date">7月12日 05:00</div><div>上半場專項分析</div></div>
+    </div>
+    <div class="ht-score-box">
+      <div class="ht-score-main">1-1</div>
+      <div class="ht-score-sub">預計半場比分 | 半場xG: 0.5 - 0.67 | 全場xG: 1.21 - 1.8</div>
+    </div>
+    <div class="ht-grid">
+      <div class="ht-item"><div class="ht-label">半場主勝</div><div class="ht-value">24%</div></div>
+      <div class="ht-item"><div class="ht-label">半場平局</div><div class="ht-value highlight">42%</div></div>
+      <div class="ht-item"><div class="ht-label">半場客勝</div><div class="ht-value">34%</div></div>
+      <div class="ht-item"><div class="ht-label">半場大1.0</div><div class="ht-value">32%</div></div>
+      <div class="ht-item"><div class="ht-label">半場大1.5</div><div class="ht-value">32%</div></div>
+      <div class="ht-item"><div class="ht-label">半場BTTS</div><div class="ht-value">21%</div></div>
+      <div class="ht-item"><div class="ht-label">半場角球</div><div class="ht-value highlight">5.0</div></div>
+      <div class="ht-item"><div class="ht-label">角球O4.5</div><div class="ht-value highlight">61%</div></div>
+    </div>
+    <div class="htft-box">
+      <div class="htft-title">🏁 半場/全場 (HT/FT) 雙選概率</div>
+      <div class="htft-row"><span class="htft-combo">2 → 2</span><div class="htft-bar"><div class="htft-bar-fill" style="width:66.9%"></div></div><span class="htft-prob">22.3%</span></div><div class="htft-row"><span class="htft-combo">X → 2</span><div class="htft-bar"><div class="htft-bar-fill" style="width:45.0%"></div></div><span class="htft-prob">15.0%</span></div><div class="htft-row"><span class="htft-combo">X → X</span><div class="htft-bar"><div class="htft-bar-fill" style="width:41.7%"></div></div><span class="htft-prob">13.9%</span></div>
+    </div>
+    <div class="ht-trader-box">
+      <div class="ht-trader-title">💼 上半場操盤解讀</div>
+      <div class="ht-trader-line"><strong>【半場1X2】</strong>半場平局機會較高（42%）。開場謹慎，雙方試探為主。</div>
+      <div class="ht-trader-line"><strong>【半場大小球】</strong>Under 1.0較穩陣（32%）。上半場可能互交白卷。</div>
+      <div class="ht-trader-line"><strong>【半場角球】</strong>預計5.0個角球，Over 4.5有緩衝（61%）。</div>
+      <div class="ht-trader-line"><strong>【HT/FT】</strong>最可能組合為 <strong>2→2</strong>（22.3%）。半場領先後全場維持優勢。</div>
+      <div class="ht-trader-line"><strong>【半場罸牌】</strong>預計2.4張黃牌，上半場相對平和。</div>
+    </div>
+  </div></div>
 
 <!-- Footer -->
 <div class="footer">
   UNIFIED Football Prediction Framework v4.0.12 | World Cup 2026 Edition<br>
-  Calibration: 14,283 matches | Model: Poisson-xG + ELO + Weather + Fatigue + Motivation<br>
-  Generated: 2026-07-07 | For analytical purposes only
+  Calibration: 14,283 matches | Model: Poisson-xG + ELO + Weather + Fatigue + Motivation + Lineup<br>
+  Generated: 2026-07-07 22:52 | For analytical purposes only
 </div>
 
 </div>
@@ -1568,829 +1947,4 @@ function showSection(id) {
 }
 </script>
 </body>
-
-<!-- Cards Section -->
-<div id="cards" class="section">
-  <h2 class="section-title">🟨 罸牌分析 (5場)</h2>
-
-  <div class="match-card">
-    <div class="match-header">
-      <div class="match-info">
-        <div class="team-block">
-          <div class="team-flag">🇦🇷</div>
-          <div class="team-name">Argentina</div>
-        </div>
-        <div class="vs-block">
-          <div class="vs-text">VS</div>
-          <div class="vs-round">R16</div>
-        </div>
-        <div class="team-block">
-          <div class="team-flag">🇪🇬</div>
-          <div class="team-name">Egypt</div>
-        </div>
-      </div>
-      <div class="match-meta">
-        <div class="date">7月8日 00:00</div>
-        <div>Mercedes-Benz Stadium, Atlanta</div>
-        <div>☀️ Clear, 28°C</div>
-      </div>
-    </div>
-
-    <div class="card-section-title">🟨 罸牌預測</div>
-
-    <div class="card-grid">
-      <div class="card-stat-box">
-        <div class="card-stat-label">預計黃牌</div>
-        <div class="card-stat-value">3.7</div>
-        <div class="card-stat-sub">主 2.0 / 客 1.7</div>
-      </div>
-      <div class="card-stat-box">
-        <div class="card-stat-label">預計紅牌</div>
-        <div class="card-stat-value">0.14</div>
-        <div class="card-stat-sub">機率 14%</div>
-      </div>
-      <div class="card-stat-box">
-        <div class="card-stat-label">總罸牌數</div>
-        <div class="card-stat-value">4.1</div>
-        <div class="card-stat-sub">風險等級: <span style="color:var(--accent-green)">低</span></div>
-      </div>
-    </div>
-
-    <div class="card-prob-grid">
-      <div class="card-prob-item">
-        <div class="card-prob-label">Over 4.5</div>
-        <div class="card-prob-value">40%</div>
-      </div>
-      <div class="card-prob-item">
-        <div class="card-prob-label">Over 5.5</div>
-        <div class="card-prob-value">21%</div>
-      </div>
-      <div class="card-prob-item">
-        <div class="card-prob-label">Over 6.5</div>
-        <div class="card-prob-value">9%</div>
-      </div>
-    </div>
-
-    <div class="card-risk-bar">
-      <div class="card-risk-fill" style="width:51.099999999999994%"></div>
-    </div>
-
-    <div class="trader-box" style="margin-top:16px;">
-      <div class="trader-title">💼 罸牌操盤解讀</div>
-      <div class="trader-line"><strong>【黃牌】</strong>Under 4.5 有微弱優勢。Argentina 壓迫打法預計領取較多黃牌。</div>
-      <div class="trader-line"><strong>【紅牌】</strong>紅牌機率正常（14%）。預計不會出現紅牌。</div>
-      <div class="trader-line"><strong>【天氣因素】</strong>天氣良好，罸牌數按正常預期。</div>
-      <div class="trader-line"><strong>【建議】</strong>罸牌盤口邊緣，建議觀察走地</div>
-    </div>
-  </div>
-
-  <div class="match-card">
-    <div class="match-header">
-      <div class="match-info">
-        <div class="team-block">
-          <div class="team-flag">🇨🇭</div>
-          <div class="team-name">Switzerland</div>
-        </div>
-        <div class="vs-block">
-          <div class="vs-text">VS</div>
-          <div class="vs-round">R16</div>
-        </div>
-        <div class="team-block">
-          <div class="team-flag">🇨🇴</div>
-          <div class="team-name">Colombia</div>
-        </div>
-      </div>
-      <div class="match-meta">
-        <div class="date">7月8日 04:00</div>
-        <div>BC Place, Vancouver</div>
-        <div>🌧️ Rain, 18°C</div>
-      </div>
-    </div>
-
-    <div class="card-section-title">🟨 罸牌預測</div>
-
-    <div class="card-grid">
-      <div class="card-stat-box">
-        <div class="card-stat-label">預計黃牌</div>
-        <div class="card-stat-value">5.3</div>
-        <div class="card-stat-sub">主 2.6 / 客 2.7</div>
-      </div>
-      <div class="card-stat-box">
-        <div class="card-stat-label">預計紅牌</div>
-        <div class="card-stat-value">0.17</div>
-        <div class="card-stat-sub">機率 17%</div>
-      </div>
-      <div class="card-stat-box">
-        <div class="card-stat-label">總罸牌數</div>
-        <div class="card-stat-value">5.7</div>
-        <div class="card-stat-sub">風險等級: <span style="color:var(--accent-red)">高</span></div>
-      </div>
-    </div>
-
-    <div class="card-prob-grid">
-      <div class="card-prob-item">
-        <div class="card-prob-label">Over 4.5</div>
-        <div class="card-prob-value">76%</div>
-      </div>
-      <div class="card-prob-item">
-        <div class="card-prob-label">Over 5.5</div>
-        <div class="card-prob-value">56%</div>
-      </div>
-      <div class="card-prob-item">
-        <div class="card-prob-label">Over 6.5</div>
-        <div class="card-prob-value">34%</div>
-      </div>
-    </div>
-
-    <div class="card-risk-bar">
-      <div class="card-risk-fill" style="width:85.5%"></div>
-    </div>
-
-    <div class="trader-box" style="margin-top:16px;">
-      <div class="trader-title">💼 罸牌操盤解讀</div>
-      <div class="trader-line"><strong>【黃牌】</strong>Over 4.5 有明顯優勢。Colombia 壓迫打法預計領取較多黃牌。</div>
-      <div class="trader-line"><strong>【紅牌】</strong>紅牌機率正常（17%）。預計不會出現紅牌。</div>
-      <div class="trader-line"><strong>【天氣因素】</strong>雨天增加犯規機率，罸牌數可能上升15-20%。</div>
-      <div class="trader-line"><strong>【建議】</strong>罸牌Over 4.5有價值，可小注</div>
-    </div>
-  </div>
-
-  <div class="match-card">
-    <div class="match-header">
-      <div class="match-info">
-        <div class="team-block">
-          <div class="team-flag">🇫🇷</div>
-          <div class="team-name">France</div>
-        </div>
-        <div class="vs-block">
-          <div class="vs-text">VS</div>
-          <div class="vs-round">QF</div>
-        </div>
-        <div class="team-block">
-          <div class="team-flag">🇲🇦</div>
-          <div class="team-name">Morocco</div>
-        </div>
-      </div>
-      <div class="match-meta">
-        <div class="date">7月10日 04:00</div>
-        <div>Gillette Stadium, Foxborough</div>
-        <div>☀️ Clear, 24°C</div>
-      </div>
-    </div>
-
-    <div class="card-section-title">🟨 罸牌預測</div>
-
-    <div class="card-grid">
-      <div class="card-stat-box">
-        <div class="card-stat-label">預計黃牌</div>
-        <div class="card-stat-value">4.8</div>
-        <div class="card-stat-sub">主 2.4 / 客 2.3</div>
-      </div>
-      <div class="card-stat-box">
-        <div class="card-stat-label">預計紅牌</div>
-        <div class="card-stat-value">0.22</div>
-        <div class="card-stat-sub">⚠️ 機率 22%</div>
-      </div>
-      <div class="card-stat-box">
-        <div class="card-stat-label">總罸牌數</div>
-        <div class="card-stat-value">5.3</div>
-        <div class="card-stat-sub">風險等級: <span style="color:var(--accent-gold)">中</span></div>
-      </div>
-    </div>
-
-    <div class="card-prob-grid">
-      <div class="card-prob-item">
-        <div class="card-prob-label">Over 4.5</div>
-        <div class="card-prob-value">68%</div>
-      </div>
-      <div class="card-prob-item">
-        <div class="card-prob-label">Over 5.5</div>
-        <div class="card-prob-value">46%</div>
-      </div>
-      <div class="card-prob-item">
-        <div class="card-prob-label">Over 6.5</div>
-        <div class="card-prob-value">26%</div>
-      </div>
-    </div>
-
-    <div class="card-risk-bar">
-      <div class="card-risk-fill" style="width:75.9%"></div>
-    </div>
-
-    <div class="trader-box" style="margin-top:16px;">
-      <div class="trader-title">💼 罸牌操盤解讀</div>
-      <div class="trader-line"><strong>【黃牌】</strong>Over 4.5 有明顯優勢。France 壓迫打法預計領取較多黃牌。</div>
-      <div class="trader-line"><strong>【紅牌】</strong>⚠️ 紅牌風險偏高（22%）。淘汰賽壓力大，戰術犯規可能升級。</div>
-      <div class="trader-line"><strong>【天氣因素】</strong>天氣良好，罸牌數按正常預期。</div>
-      <div class="trader-line"><strong>【建議】</strong>罸牌Over 4.5有價值，可小注</div>
-    </div>
-  </div>
-
-  <div class="match-card">
-    <div class="match-header">
-      <div class="match-info">
-        <div class="team-block">
-          <div class="team-flag">🇪🇸</div>
-          <div class="team-name">Spain</div>
-        </div>
-        <div class="vs-block">
-          <div class="vs-text">VS</div>
-          <div class="vs-round">QF</div>
-        </div>
-        <div class="team-block">
-          <div class="team-flag">🇧🇪</div>
-          <div class="team-name">Belgium</div>
-        </div>
-      </div>
-      <div class="match-meta">
-        <div class="date">7月11日 03:00</div>
-        <div>SoFi Stadium, Inglewood</div>
-        <div>☀️ Clear, 24°C</div>
-      </div>
-    </div>
-
-    <div class="card-section-title">🟨 罸牌預測</div>
-
-    <div class="card-grid">
-      <div class="card-stat-box">
-        <div class="card-stat-label">預計黃牌</div>
-        <div class="card-stat-value">5.4</div>
-        <div class="card-stat-sub">主 2.8 / 客 2.6</div>
-      </div>
-      <div class="card-stat-box">
-        <div class="card-stat-label">預計紅牌</div>
-        <div class="card-stat-value">0.22</div>
-        <div class="card-stat-sub">⚠️ 機率 22%</div>
-      </div>
-      <div class="card-stat-box">
-        <div class="card-stat-label">總罸牌數</div>
-        <div class="card-stat-value">5.9</div>
-        <div class="card-stat-sub">風險等級: <span style="color:var(--accent-red)">高</span></div>
-      </div>
-    </div>
-
-    <div class="card-prob-grid">
-      <div class="card-prob-item">
-        <div class="card-prob-label">Over 4.5</div>
-        <div class="card-prob-value">79%</div>
-      </div>
-      <div class="card-prob-item">
-        <div class="card-prob-label">Over 5.5</div>
-        <div class="card-prob-value">59%</div>
-      </div>
-      <div class="card-prob-item">
-        <div class="card-prob-label">Over 6.5</div>
-        <div class="card-prob-value">38%</div>
-      </div>
-    </div>
-
-    <div class="card-risk-bar">
-      <div class="card-risk-fill" style="width:89.4%"></div>
-    </div>
-
-    <div class="trader-box" style="margin-top:16px;">
-      <div class="trader-title">💼 罸牌操盤解讀</div>
-      <div class="trader-line"><strong>【黃牌】</strong>Over 4.5 有明顯優勢。Spain 壓迫打法預計領取較多黃牌。</div>
-      <div class="trader-line"><strong>【紅牌】</strong>⚠️ 紅牌風險偏高（22%）。淘汰賽壓力大，戰術犯規可能升級。</div>
-      <div class="trader-line"><strong>【天氣因素】</strong>天氣良好，罸牌數按正常預期。</div>
-      <div class="trader-line"><strong>【建議】</strong>罸牌Over 4.5有價值，可小注</div>
-    </div>
-  </div>
-
-  <div class="match-card">
-    <div class="match-header">
-      <div class="match-info">
-        <div class="team-block">
-          <div class="team-flag">🇳🇴</div>
-          <div class="team-name">Norway</div>
-        </div>
-        <div class="vs-block">
-          <div class="vs-text">VS</div>
-          <div class="vs-round">QF</div>
-        </div>
-        <div class="team-block">
-          <div class="team-flag">🏴󠁧󠁢󠁥󠁮󠁧󠁿</div>
-          <div class="team-name">England</div>
-        </div>
-      </div>
-      <div class="match-meta">
-        <div class="date">7月12日 05:00</div>
-        <div>GEHA Field, Kansas City</div>
-        <div>☀️ Clear, 27°C</div>
-      </div>
-    </div>
-
-    <div class="card-section-title">🟨 罸牌預測</div>
-
-    <div class="card-grid">
-      <div class="card-stat-box">
-        <div class="card-stat-label">預計黃牌</div>
-        <div class="card-stat-value">4.3</div>
-        <div class="card-stat-sub">主 2.1 / 客 2.1</div>
-      </div>
-      <div class="card-stat-box">
-        <div class="card-stat-label">預計紅牌</div>
-        <div class="card-stat-value">0.16</div>
-        <div class="card-stat-sub">機率 16%</div>
-      </div>
-      <div class="card-stat-box">
-        <div class="card-stat-label">總罸牌數</div>
-        <div class="card-stat-value">4.7</div>
-        <div class="card-stat-sub">風險等級: <span style="color:var(--accent-gold)">中</span></div>
-      </div>
-    </div>
-
-    <div class="card-prob-grid">
-      <div class="card-prob-item">
-        <div class="card-prob-label">Over 4.5</div>
-        <div class="card-prob-value">54%</div>
-      </div>
-      <div class="card-prob-item">
-        <div class="card-prob-label">Over 5.5</div>
-        <div class="card-prob-value">33%</div>
-      </div>
-      <div class="card-prob-item">
-        <div class="card-prob-label">Over 6.5</div>
-        <div class="card-prob-value">16%</div>
-      </div>
-    </div>
-
-    <div class="card-risk-bar">
-      <div class="card-risk-fill" style="width:62.6%"></div>
-    </div>
-
-    <div class="trader-box" style="margin-top:16px;">
-      <div class="trader-title">💼 罸牌操盤解讀</div>
-      <div class="trader-line"><strong>【黃牌】</strong>Over 4.5 有微弱優勢。England 壓迫打法預計領取較多黃牌。</div>
-      <div class="trader-line"><strong>【紅牌】</strong>紅牌機率正常（16%）。預計不會出現紅牌。</div>
-      <div class="trader-line"><strong>【天氣因素】</strong>天氣良好，罸牌數按正常預期。</div>
-      <div class="trader-line"><strong>【建議】</strong>罸牌盤口邊緣，建議觀察走地</div>
-    </div>
-  </div>
-</div>
-
-<!-- HT Section -->
-<div id="ht" class="section">
-  <h2 class="section-title">⏱️ 上半場分析 (5場)</h2>
-
-  <div class="match-card">
-    <div class="match-header">
-      <div class="match-info">
-        <div class="team-block">
-          <div class="team-flag">🇦🇷</div>
-          <div class="team-name">Argentina</div>
-        </div>
-        <div class="vs-block">
-          <div class="vs-text">VS</div>
-          <div class="vs-round">R16</div>
-        </div>
-        <div class="team-block">
-          <div class="team-flag">🇪🇬</div>
-          <div class="team-name">Egypt</div>
-        </div>
-      </div>
-      <div class="match-meta">
-        <div class="date">7月8日 00:00</div>
-        <div>上半場專項分析</div>
-      </div>
-    </div>
-
-    <div class="ht-score-box">
-      <div class="ht-score-main">1-0</div>
-      <div class="ht-score-sub">預計半場比分 | 半場xG: 1.05 - 0.28 | 全場xG: 2.53 - 0.75</div>
-    </div>
-
-    <div class="ht-grid">
-      <div class="ht-item">
-        <div class="ht-label">半場主勝</div>
-        <div class="ht-value highlight">55%</div>
-      </div>
-      <div class="ht-item">
-        <div class="ht-label">半場平局</div>
-        <div class="ht-value">35%</div>
-      </div>
-      <div class="ht-item">
-        <div class="ht-label">半場客勝</div>
-        <div class="ht-value">10%</div>
-      </div>
-      <div class="ht-item">
-        <div class="ht-label">半場大1.0</div>
-        <div class="ht-value">38%</div>
-      </div>
-      <div class="ht-item">
-        <div class="ht-label">半場大1.5</div>
-        <div class="ht-value">38%</div>
-      </div>
-      <div class="ht-item">
-        <div class="ht-label">半場BTTS</div>
-        <div class="ht-value">17%</div>
-      </div>
-      <div class="ht-item">
-        <div class="ht-label">半場角球</div>
-        <div class="ht-value highlight">5.2</div>
-      </div>
-      <div class="ht-item">
-        <div class="ht-label">角球O4.5</div>
-        <div class="ht-value highlight">66%</div>
-      </div>
-    </div>
-
-    <div class="htft-box">
-      <div class="htft-title">🏁 半場/全場 (HT/FT) 雙選概率</div>
-      
-      <div class="htft-row">
-        <span class="htft-combo">1 → 1</span>
-        <div class="htft-bar"><div class="htft-bar-fill" style="width:100%"></div></div>
-        <span class="htft-prob">34.8%</span>
-      </div>
-      <div class="htft-row">
-        <span class="htft-combo">X → 1</span>
-        <div class="htft-bar"><div class="htft-bar-fill" style="width:46.8%"></div></div>
-        <span class="htft-prob">15.6%</span>
-      </div>
-      <div class="htft-row">
-        <span class="htft-combo">X → X</span>
-        <div class="htft-bar"><div class="htft-bar-fill" style="width:28.5%"></div></div>
-        <span class="htft-prob">9.5%</span>
-      </div>
-    </div>
-
-    <div class="ht-trader-box">
-      <div class="ht-trader-title">💼 上半場操盤解讀</div>
-      <div class="ht-trader-line"><strong>【半場1X2】</strong>主隊半場領先機會較高（55%）。開場壓制力強，預計15-30分鐘取得領先。</div>
-      <div class="ht-trader-line"><strong>【半場大小球】</strong>Under 1.0較穩陣（38%）。上半場可能互交白卷。</div>
-      <div class="ht-trader-line"><strong>【半場角球】</strong>預計5.2個角球，Over 4.5有緩衝（66%）。</div>
-      <div class="ht-trader-line"><strong>【HT/FT】</strong>最可能組合為 <strong>1→1</strong>（34.8%）。半場領先後全場維持優勢。</div>
-      <div class="ht-trader-line"><strong>【半場罸牌】</strong>預計2.0張黃牌，上半場相對平和。</div>
-    </div>
-  </div>
-
-  <div class="match-card">
-    <div class="match-header">
-      <div class="match-info">
-        <div class="team-block">
-          <div class="team-flag">🇨🇭</div>
-          <div class="team-name">Switzerland</div>
-        </div>
-        <div class="vs-block">
-          <div class="vs-text">VS</div>
-          <div class="vs-round">R16</div>
-        </div>
-        <div class="team-block">
-          <div class="team-flag">🇨🇴</div>
-          <div class="team-name">Colombia</div>
-        </div>
-      </div>
-      <div class="match-meta">
-        <div class="date">7月8日 04:00</div>
-        <div>上半場專項分析</div>
-      </div>
-    </div>
-
-    <div class="ht-score-box">
-      <div class="ht-score-main">1-1</div>
-      <div class="ht-score-sub">預計半場比分 | 半場xG: 0.56 - 0.56 | 全場xG: 1.35 - 1.51</div>
-    </div>
-
-    <div class="ht-grid">
-      <div class="ht-item">
-        <div class="ht-label">半場主勝</div>
-        <div class="ht-value">28%</div>
-      </div>
-      <div class="ht-item">
-        <div class="ht-label">半場平局</div>
-        <div class="ht-value highlight">44%</div>
-      </div>
-      <div class="ht-item">
-        <div class="ht-label">半場客勝</div>
-        <div class="ht-value">28%</div>
-      </div>
-      <div class="ht-item">
-        <div class="ht-label">半場大1.0</div>
-        <div class="ht-value">31%</div>
-      </div>
-      <div class="ht-item">
-        <div class="ht-label">半場大1.5</div>
-        <div class="ht-value">31%</div>
-      </div>
-      <div class="ht-item">
-        <div class="ht-label">半場BTTS</div>
-        <div class="ht-value">20%</div>
-      </div>
-      <div class="ht-item">
-        <div class="ht-label">半場角球</div>
-        <div class="ht-value highlight">4.5</div>
-      </div>
-      <div class="ht-item">
-        <div class="ht-label">角球O4.5</div>
-        <div class="ht-value highlight">50%</div>
-      </div>
-    </div>
-
-    <div class="htft-box">
-      <div class="htft-title">🏁 半場/全場 (HT/FT) 雙選概率</div>
-      
-      <div class="htft-row">
-        <span class="htft-combo">2 → 2</span>
-        <div class="htft-bar"><div class="htft-bar-fill" style="width:54.3%"></div></div>
-        <span class="htft-prob">18.1%</span>
-      </div>
-      <div class="htft-row">
-        <span class="htft-combo">1 → 1</span>
-        <div class="htft-bar"><div class="htft-bar-fill" style="width:50.7%"></div></div>
-        <span class="htft-prob">16.9%</span>
-      </div>
-      <div class="htft-row">
-        <span class="htft-combo">X → X</span>
-        <div class="htft-bar"><div class="htft-bar-fill" style="width:45.599999999999994%"></div></div>
-        <span class="htft-prob">15.2%</span>
-      </div>
-    </div>
-
-    <div class="ht-trader-box">
-      <div class="ht-trader-title">💼 上半場操盤解讀</div>
-      <div class="ht-trader-line"><strong>【半場1X2】</strong>半場平局機會較高（44%）。開場謹慎，雙方試探為主。</div>
-      <div class="ht-trader-line"><strong>【半場大小球】</strong>Under 1.0較穩陣（31%）。上半場可能互交白卷。</div>
-      <div class="ht-trader-line"><strong>【半場角球】</strong>預計4.5個角球，角球數偏少（50%）。</div>
-      <div class="ht-trader-line"><strong>【HT/FT】</strong>最可能組合為 <strong>2→2</strong>（18.1%）。半場領先後全場維持優勢。</div>
-      <div class="ht-trader-line"><strong>【半場罸牌】</strong>預計2.9張黃牌，上半場紀律壓力較大。</div>
-    </div>
-  </div>
-
-  <div class="match-card">
-    <div class="match-header">
-      <div class="match-info">
-        <div class="team-block">
-          <div class="team-flag">🇫🇷</div>
-          <div class="team-name">France</div>
-        </div>
-        <div class="vs-block">
-          <div class="vs-text">VS</div>
-          <div class="vs-round">QF</div>
-        </div>
-        <div class="team-block">
-          <div class="team-flag">🇲🇦</div>
-          <div class="team-name">Morocco</div>
-        </div>
-      </div>
-      <div class="match-meta">
-        <div class="date">7月10日 04:00</div>
-        <div>上半場專項分析</div>
-      </div>
-    </div>
-
-    <div class="ht-score-box">
-      <div class="ht-score-main">1-0</div>
-      <div class="ht-score-sub">預計半場比分 | 半場xG: 1.0 - 0.33 | 全場xG: 2.42 - 0.9</div>
-    </div>
-
-    <div class="ht-grid">
-      <div class="ht-item">
-        <div class="ht-label">半場主勝</div>
-        <div class="ht-value highlight">52%</div>
-      </div>
-      <div class="ht-item">
-        <div class="ht-label">半場平局</div>
-        <div class="ht-value highlight">36%</div>
-      </div>
-      <div class="ht-item">
-        <div class="ht-label">半場客勝</div>
-        <div class="ht-value">12%</div>
-      </div>
-      <div class="ht-item">
-        <div class="ht-label">半場大1.0</div>
-        <div class="ht-value">38%</div>
-      </div>
-      <div class="ht-item">
-        <div class="ht-label">半場大1.5</div>
-        <div class="ht-value">38%</div>
-      </div>
-      <div class="ht-item">
-        <div class="ht-label">半場BTTS</div>
-        <div class="ht-value">20%</div>
-      </div>
-      <div class="ht-item">
-        <div class="ht-label">半場角球</div>
-        <div class="ht-value highlight">6.0</div>
-      </div>
-      <div class="ht-item">
-        <div class="ht-label">角球O4.5</div>
-        <div class="ht-value highlight">79%</div>
-      </div>
-    </div>
-
-    <div class="htft-box">
-      <div class="htft-title">🏁 半場/全場 (HT/FT) 雙選概率</div>
-      
-      <div class="htft-row">
-        <span class="htft-combo">1 → 1</span>
-        <div class="htft-bar"><div class="htft-bar-fill" style="width:97.5%"></div></div>
-        <span class="htft-prob">32.5%</span>
-      </div>
-      <div class="htft-row">
-        <span class="htft-combo">X → 1</span>
-        <div class="htft-bar"><div class="htft-bar-fill" style="width:45.3%"></div></div>
-        <span class="htft-prob">15.1%</span>
-      </div>
-      <div class="htft-row">
-        <span class="htft-combo">X → X</span>
-        <div class="htft-bar"><div class="htft-bar-fill" style="width:30.599999999999998%"></div></div>
-        <span class="htft-prob">10.2%</span>
-      </div>
-    </div>
-
-    <div class="ht-trader-box">
-      <div class="ht-trader-title">💼 上半場操盤解讀</div>
-      <div class="ht-trader-line"><strong>【半場1X2】</strong>主隊半場領先機會較高（52%）。開場壓制力強，預計15-30分鐘取得領先。</div>
-      <div class="ht-trader-line"><strong>【半場大小球】</strong>Under 1.0較穩陣（38%）。上半場可能互交白卷。</div>
-      <div class="ht-trader-line"><strong>【半場角球】</strong>預計6.0個角球，Over 4.5有緩衝（79%）。</div>
-      <div class="ht-trader-line"><strong>【HT/FT】</strong>最可能組合為 <strong>1→1</strong>（32.5%）。半場領先後全場維持優勢。</div>
-      <div class="ht-trader-line"><strong>【半場罸牌】</strong>預計2.6張黃牌，上半場紀律壓力較大。</div>
-    </div>
-  </div>
-
-  <div class="match-card">
-    <div class="match-header">
-      <div class="match-info">
-        <div class="team-block">
-          <div class="team-flag">🇪🇸</div>
-          <div class="team-name">Spain</div>
-        </div>
-        <div class="vs-block">
-          <div class="vs-text">VS</div>
-          <div class="vs-round">QF</div>
-        </div>
-        <div class="team-block">
-          <div class="team-flag">🇧🇪</div>
-          <div class="team-name">Belgium</div>
-        </div>
-      </div>
-      <div class="match-meta">
-        <div class="date">7月11日 03:00</div>
-        <div>上半場專項分析</div>
-      </div>
-    </div>
-
-    <div class="ht-score-box">
-      <div class="ht-score-main">1-1</div>
-      <div class="ht-score-sub">預計半場比分 | 半場xG: 0.72 - 0.62 | 全場xG: 1.73 - 1.68</div>
-    </div>
-
-    <div class="ht-grid">
-      <div class="ht-item">
-        <div class="ht-label">半場主勝</div>
-        <div class="ht-value">33%</div>
-      </div>
-      <div class="ht-item">
-        <div class="ht-label">半場平局</div>
-        <div class="ht-value highlight">39%</div>
-      </div>
-      <div class="ht-item">
-        <div class="ht-label">半場客勝</div>
-        <div class="ht-value">27%</div>
-      </div>
-      <div class="ht-item">
-        <div class="ht-label">半場大1.0</div>
-        <div class="ht-value">39%</div>
-      </div>
-      <div class="ht-item">
-        <div class="ht-label">半場大1.5</div>
-        <div class="ht-value">39%</div>
-      </div>
-      <div class="ht-item">
-        <div class="ht-label">半場BTTS</div>
-        <div class="ht-value">26%</div>
-      </div>
-      <div class="ht-item">
-        <div class="ht-label">半場角球</div>
-        <div class="ht-value highlight">5.1</div>
-      </div>
-      <div class="ht-item">
-        <div class="ht-label">角球O4.5</div>
-        <div class="ht-value highlight">64%</div>
-      </div>
-    </div>
-
-    <div class="htft-box">
-      <div class="htft-title">🏁 半場/全場 (HT/FT) 雙選概率</div>
-      
-      <div class="htft-row">
-        <span class="htft-combo">1 → 1</span>
-        <div class="htft-bar"><div class="htft-bar-fill" style="width:56.099999999999994%"></div></div>
-        <span class="htft-prob">18.7%</span>
-      </div>
-      <div class="htft-row">
-        <span class="htft-combo">2 → 2</span>
-        <div class="htft-bar"><div class="htft-bar-fill" style="width:47.400000000000006%"></div></div>
-        <span class="htft-prob">15.8%</span>
-      </div>
-      <div class="htft-row">
-        <span class="htft-combo">X → X</span>
-        <div class="htft-bar"><div class="htft-bar-fill" style="width:36.599999999999994%"></div></div>
-        <span class="htft-prob">12.2%</span>
-      </div>
-    </div>
-
-    <div class="ht-trader-box">
-      <div class="ht-trader-title">💼 上半場操盤解讀</div>
-      <div class="ht-trader-line"><strong>【半場1X2】</strong>半場平局機會較高（39%）。開場謹慎，雙方試探為主。</div>
-      <div class="ht-trader-line"><strong>【半場大小球】</strong>Under 1.0較穩陣（39%）。上半場可能互交白卷。</div>
-      <div class="ht-trader-line"><strong>【半場角球】</strong>預計5.1個角球，Over 4.5有緩衝（64%）。</div>
-      <div class="ht-trader-line"><strong>【HT/FT】</strong>最可能組合為 <strong>1→1</strong>（18.7%）。半場領先後全場維持優勢。</div>
-      <div class="ht-trader-line"><strong>【半場罸牌】</strong>預計3.0張黃牌，上半場紀律壓力較大。</div>
-    </div>
-  </div>
-
-  <div class="match-card">
-    <div class="match-header">
-      <div class="match-info">
-        <div class="team-block">
-          <div class="team-flag">🇳🇴</div>
-          <div class="team-name">Norway</div>
-        </div>
-        <div class="vs-block">
-          <div class="vs-text">VS</div>
-          <div class="vs-round">QF</div>
-        </div>
-        <div class="team-block">
-          <div class="team-flag">🏴󠁧󠁢󠁥󠁮󠁧󠁿</div>
-          <div class="team-name">England</div>
-        </div>
-      </div>
-      <div class="match-meta">
-        <div class="date">7月12日 05:00</div>
-        <div>上半場專項分析</div>
-      </div>
-    </div>
-
-    <div class="ht-score-box">
-      <div class="ht-score-main">1-1</div>
-      <div class="ht-score-sub">預計半場比分 | 半場xG: 0.5 - 0.67 | 全場xG: 1.21 - 1.8</div>
-    </div>
-
-    <div class="ht-grid">
-      <div class="ht-item">
-        <div class="ht-label">半場主勝</div>
-        <div class="ht-value">24%</div>
-      </div>
-      <div class="ht-item">
-        <div class="ht-label">半場平局</div>
-        <div class="ht-value highlight">42%</div>
-      </div>
-      <div class="ht-item">
-        <div class="ht-label">半場客勝</div>
-        <div class="ht-value">34%</div>
-      </div>
-      <div class="ht-item">
-        <div class="ht-label">半場大1.0</div>
-        <div class="ht-value">32%</div>
-      </div>
-      <div class="ht-item">
-        <div class="ht-label">半場大1.5</div>
-        <div class="ht-value">32%</div>
-      </div>
-      <div class="ht-item">
-        <div class="ht-label">半場BTTS</div>
-        <div class="ht-value">21%</div>
-      </div>
-      <div class="ht-item">
-        <div class="ht-label">半場角球</div>
-        <div class="ht-value highlight">5.5</div>
-      </div>
-      <div class="ht-item">
-        <div class="ht-label">角球O4.5</div>
-        <div class="ht-value highlight">70%</div>
-      </div>
-    </div>
-
-    <div class="htft-box">
-      <div class="htft-title">🏁 半場/全場 (HT/FT) 雙選概率</div>
-      
-      <div class="htft-row">
-        <span class="htft-combo">2 → 2</span>
-        <div class="htft-bar"><div class="htft-bar-fill" style="width:66.9%"></div></div>
-        <span class="htft-prob">22.3%</span>
-      </div>
-      <div class="htft-row">
-        <span class="htft-combo">X → 2</span>
-        <div class="htft-bar"><div class="htft-bar-fill" style="width:45.0%"></div></div>
-        <span class="htft-prob">15.0%</span>
-      </div>
-      <div class="htft-row">
-        <span class="htft-combo">X → X</span>
-        <div class="htft-bar"><div class="htft-bar-fill" style="width:41.7%"></div></div>
-        <span class="htft-prob">13.9%</span>
-      </div>
-    </div>
-
-    <div class="ht-trader-box">
-      <div class="ht-trader-title">💼 上半場操盤解讀</div>
-      <div class="ht-trader-line"><strong>【半場1X2】</strong>半場平局機會較高（42%）。開場謹慎，雙方試探為主。</div>
-      <div class="ht-trader-line"><strong>【半場大小球】</strong>Under 1.0較穩陣（32%）。上半場可能互交白卷。</div>
-      <div class="ht-trader-line"><strong>【半場角球】</strong>預計5.5個角球，Over 4.5有緩衝（70%）。</div>
-      <div class="ht-trader-line"><strong>【HT/FT】</strong>最可能組合為 <strong>2→2</strong>（22.3%）。半場領先後全場維持優勢。</div>
-      <div class="ht-trader-line"><strong>【半場罸牌】</strong>預計2.4張黃牌，上半場相對平和。</div>
-    </div>
-  </div>
-</div>
 </html>
