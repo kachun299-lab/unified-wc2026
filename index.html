@@ -92,6 +92,45 @@
   .tactical-bar .bar-home { background: #3b82f6; }
   .tactical-bar .bar-away { background: #ef4444; }
   .tactical-bar .bar-label { font-size: 10px; color: #666; min-width: 50px; }
+
+  /* Strength table */
+  .strength-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 8px; }
+  .strength-table th { text-align: left; padding: 6px 4px; color: #888; border-bottom: 1px solid #2a2a35; font-weight: 500; }
+  .strength-table td { padding: 5px 4px; border-bottom: 1px solid #1c1c24; }
+  .strength-table tr:hover td { background: #1c1c24; }
+  .tier1 { color: #22c55e; font-weight: 600; }
+  .tier2 { color: #3b82f6; }
+  .tier3 { color: #888; }
+  .fatigue-high { color: #ef4444; }
+  .fatigue-mid { color: #fbbf24; }
+  .fatigue-low { color: #22c55e; }
+
+  /* Matrix */
+  .matrix-table { width: 100%; border-collapse: collapse; font-size: 11px; margin-top: 8px; }
+  .matrix-table th { text-align: center; padding: 5px 2px; color: #888; border-bottom: 1px solid #2a2a35; font-weight: 500; }
+  .matrix-table td { text-align: center; padding: 5px 2px; border-bottom: 1px solid #1c1c24; }
+  .matrix-table tr:hover td { background: #1c1c24; }
+  .matrix-high { color: #22c55e; font-weight: 600; }
+  .matrix-mid { color: #aaa; }
+  .matrix-low { color: #666; }
+  .matrix-diag { color: #444; }
+
+  /* Tactical cards */
+  .tactic-card { background: #14141a; border: 1px solid #2a2a35; border-radius: 8px; padding: 10px; margin-bottom: 8px; }
+  .tactic-card .t-title { font-size: 13px; font-weight: 600; color: #fff; margin-bottom: 4px; }
+  .tactic-card .t-row { display: flex; justify-content: space-between; font-size: 11px; padding: 2px 0; }
+  .tactic-card .t-label { color: #666; }
+  .tactic-card .t-val { color: #ccc; }
+  .tactic-card .t-desc { font-size: 11px; color: #888; margin-top: 4px; line-height: 1.4; }
+
+  /* Champion odds */
+  .champ-row { display: flex; align-items: center; gap: 8px; padding: 6px 0; border-bottom: 1px solid #1c1c24; }
+  .champ-rank { font-size: 14px; font-weight: 700; color: #888; width: 20px; }
+  .champ-team { font-size: 13px; font-weight: 500; flex: 1; }
+  .champ-bar { flex: 2; height: 6px; background: #2a2a35; border-radius: 3px; overflow: hidden; }
+  .champ-fill { height: 100%; border-radius: 3px; }
+  .champ-pct { font-size: 12px; font-weight: 600; color: #ddd; width: 45px; text-align: right; font-variant-numeric: tabular-nums; }
+  .champ-final { font-size: 11px; color: #666; width: 55px; text-align: right; }
 </style>
 <base target="_blank">
 </head>
@@ -99,7 +138,7 @@
 <div class="container">
   <div class="header">
     <h1>World Cup 2026 淘汰賽預測儀表板</h1>
-    <div class="meta">UNIFIED v4.0.17-LU | 更新時間: 2026-07-11 22:57 (HK) | 14,283場校準 | 首發陣容已確認</div>
+    <div class="meta">UNIFIED v4.0.17-LU | 更新: 2026-07-11 23:20 (HK) | 14,283場校準 | 首發陣容已確認</div>
   </div>
 
   <!-- 已完場 -->
@@ -141,7 +180,6 @@
   <div class="section">
     <div class="section-title">8強 (Quarter-Finals)</div>
 
-    <!-- 挪威 vs 英格蘭 -->
     <div class="match-card upcoming" onclick="toggle('m3')">
       <div class="match-header">
         <div class="teams">挪威 <span style="color:#555;">vs</span> 英格蘭</div>
@@ -150,13 +188,8 @@
       <div class="meta">7月11日 | Miami Gardens | 8強</div>
       <div class="prob-bar"><div class="prob-seg prob-home" style="width:22.3%"></div><div class="prob-seg prob-draw" style="width:39.4%"></div><div class="prob-seg prob-away" style="width:38.3%"></div></div>
       <div class="prob-labels"><span>主勝 22%</span><span>平 39%</span><span>客勝 38%</span></div>
-      <div class="chips">
-        <span class="chip strong">亞洲讓球 -1.0 英格蘭 82%</span>
-        <span class="chip">角球 Over 8.5 64%</span>
-        <span class="chip">最可能 1-1</span>
-      </div>
+      <div class="chips"><span class="chip strong">亞洲讓球 -1.0 英格蘭 82%</span><span class="chip">角球 Over 8.5 64%</span><span class="chip">最可能 1-1</span></div>
       <div class="detail" id="m3">
-        <!-- 全場預測 -->
         <div class="detail-section">
           <div class="detail-section-title">全場預測</div>
           <div class="detail-grid">
@@ -170,7 +203,6 @@
             <div class="d-item"><span class="d-label">黃牌</span><span class="d-val">4.5張</span></div>
           </div>
         </div>
-        <!-- 上半場預測 -->
         <div class="detail-section">
           <div class="detail-section-title">上半場預測</div>
           <div class="ht-grid">
@@ -185,7 +217,6 @@
             <div class="d-item"><span class="d-label">HT角球</span><span class="d-val">5個</span></div>
           </div>
         </div>
-        <!-- 射手預測 -->
         <div class="detail-section">
           <div class="detail-section-title">Anytime 射手機率</div>
           <div class="scorer-list">
@@ -196,7 +227,6 @@
             <div class="scorer-item"><span class="scorer-name">Martin Odegaard (挪威)</span><span class="scorer-prob">15%</span></div>
           </div>
         </div>
-        <!-- 精確比分 -->
         <div class="detail-section">
           <div class="detail-section-title">精確比分機率</div>
           <div class="detail-grid">
@@ -208,7 +238,6 @@
             <div class="d-item"><span class="d-label">0-2</span><span class="d-val">7%</span></div>
           </div>
         </div>
-        <!-- 首球時間 -->
         <div class="detail-section">
           <div class="detail-section-title">首個入球時間</div>
           <div class="detail-grid">
@@ -221,7 +250,6 @@
           </div>
           <div class="d-item" style="margin-top:4px;"><span class="d-label">無入球</span><span class="d-val">8%</span></div>
         </div>
-        <!-- 戰術分析 -->
         <div class="detail-section">
           <div class="detail-section-title">戰術深度分析</div>
           <div class="tactical-bar">
@@ -240,14 +268,12 @@
             英格蘭中場控制佔優 (+1.2)；挪威反擊威脅被高壓壓制；英格蘭調整能力更強，下半場/換人後有望佔優
           </div>
         </div>
-        <!-- 情報 -->
         <div style="margin-top:8px; font-size:11px; color:#666;">
           情報: James+Guehi回歸正選，英格蘭防線完整。Henderson報銷、Quansah停賽。Rice生病已康復。
         </div>
       </div>
     </div>
 
-    <!-- 阿根廷 vs 瑞士 -->
     <div class="match-card upcoming" onclick="toggle('m4')">
       <div class="match-header">
         <div class="teams">阿根廷 <span style="color:#555;">vs</span> 瑞士</div>
@@ -256,11 +282,7 @@
       <div class="meta">7月12日 | Kansas City | 8強</div>
       <div class="prob-bar"><div class="prob-seg prob-home" style="width:68.2%"></div><div class="prob-seg prob-draw" style="width:25.5%"></div><div class="prob-seg prob-away" style="width:6.3%"></div></div>
       <div class="prob-labels"><span>主勝 68%</span><span>平 26%</span><span>客勝 6%</span></div>
-      <div class="chips">
-        <span class="chip strong">亞洲讓球 +1.0 阿根廷 96%</span>
-        <span class="chip">角球 Over 8.5 67%</span>
-        <span class="chip">最可能 2-0</span>
-      </div>
+      <div class="chips"><span class="chip strong">亞洲讓球 +1.0 阿根廷 96%</span><span class="chip">角球 Over 8.5 67%</span><span class="chip">最可能 2-0</span></div>
       <div class="detail" id="m4">
         <div class="detail-section">
           <div class="detail-section-title">全場預測</div>
@@ -337,11 +359,11 @@
             <div class="bar-track"><div class="bar-fill bar-home" style="width:58%; margin-left:0;"></div></div>
           </div>
           <div style="margin-top:6px; font-size:11px; color:#888;">
-            阿根廷陣型克制瑞士：高壓逼搖被反擊針對；阿根廷中場控制佔優 (+2.8)；阿根廷調整能力更強，下半場/換人後有望佔優
+            阿根廷陣型克制瑞士：高壓逼搶被反擊針對；阿根廷中場控制佔優 (+2.8)；阿根廷調整能力更強，下半場/換人後有望佔優
           </div>
         </div>
         <div style="margin-top:8px; font-size:11px; color:#666;">
-          情報: 瑞士Manzambi膝傷缺陣(3球2助攻)，進攻癱瘓。梅西410分鐘疲勞但逆轉DNA強(mental_resilience 9.8)。
+          情報: 瑞士Manzambi膝傷缺陣(3球2助攻)，進攻癱瘓。梅西410分鐘疲勞但逆轉DNA強(9.8)。
         </div>
       </div>
     </div>
@@ -351,18 +373,13 @@
   <div class="section">
     <div class="section-title">4強 (Semi-Finals)</div>
     <div class="connector"><div class="line"></div><span style="font-size:12px;">▼</span><div class="line"></div></div>
-
     <div class="match-card" style="border-left:3px solid #3b82f6;" onclick="toggle('m5')">
       <div class="match-header">
         <div class="teams">法國 <span style="color:#555;">vs</span> 西班牙</div>
         <div><span class="badge badge-upcoming">7月14 03:00</span></div>
       </div>
       <div class="meta">Arlington | 4強 | 模型: 主勝42% 平29% 客勝29%</div>
-      <div class="chips">
-        <span class="chip">大球2.5 55%</span>
-        <span class="chip">BTTS 58%</span>
-        <span class="chip">最可能 2-1</span>
-      </div>
+      <div class="chips"><span class="chip">大球2.5 55%</span><span class="chip">BTTS 58%</span><span class="chip">最可能 2-1</span></div>
       <div class="detail" id="m5">
         <div class="detail-section">
           <div class="detail-section-title">全場預測</div>
@@ -402,17 +419,6 @@
           </div>
         </div>
         <div class="detail-section">
-          <div class="detail-section-title">精確比分機率</div>
-          <div class="detail-grid">
-            <div class="d-item"><span class="d-label">2-1</span><span class="d-val">13%</span></div>
-            <div class="d-item"><span class="d-label">1-1</span><span class="d-val">12%</span></div>
-            <div class="d-item"><span class="d-label">2-0</span><span class="d-val">10%</span></div>
-            <div class="d-item"><span class="d-label">1-0</span><span class="d-val">9%</span></div>
-            <div class="d-item"><span class="d-label">1-2</span><span class="d-val">8%</span></div>
-            <div class="d-item"><span class="d-label">0-1</span><span class="d-val">7%</span></div>
-          </div>
-        </div>
-        <div class="detail-section">
           <div class="detail-section-title">戰術深度分析</div>
           <div class="tactical-bar">
             <span class="bar-label">中場控制</span>
@@ -432,7 +438,6 @@
         </div>
       </div>
     </div>
-
     <div class="match-card projected" onclick="toggle('m6')">
       <div class="match-header">
         <div class="teams">Winner QF3 <span style="color:#555;">vs</span> Winner QF4</div>
@@ -440,11 +445,7 @@
       </div>
       <div class="meta">7月15 03:00 | Atlanta | 4強</div>
       <div style="margin-top:5px; font-size:13px; color:#aaa;">模型預測: <b>阿根廷</b> vs <b>英格蘭</b></div>
-      <div class="chips">
-        <span class="chip">大球2.5 58%</span>
-        <span class="chip">BTTS 62%</span>
-        <span class="chip">最可能 2-1</span>
-      </div>
+      <div class="chips"><span class="chip">大球2.5 58%</span><span class="chip">BTTS 62%</span><span class="chip">最可能 2-1</span></div>
       <div class="detail" id="m6">
         <div class="detail-section">
           <div class="detail-section-title">全場預測 (阿根廷 vs 英格蘭)</div>
@@ -501,7 +502,166 @@
     </div>
   </div>
 
-  <!-- 高信心注碼總覽 -->
+  <!-- 球隊實力分析 -->
+  <div class="section">
+    <div class="section-title">球隊實力分析</div>
+    <table class="strength-table">
+      <tr>
+        <th>球隊</th><th>攻擊</th><th>防守</th><th>中場</th><th>整體</th><th>xG</th><th>xGA</th><th>狀態</th><th>經驗</th><th>疲勞</th><th>關鍵球員</th>
+      </tr>
+      <tr>
+        <td class="tier1">西班牙</td><td>8.5</td><td>8.0</td><td class="tier1">7.5</td><td class="tier1">8.0</td><td>2.0</td><td>0.6</td><td>15</td><td>14</td><td class="fatigue-low">30</td><td>90%</td>
+      </tr>
+      <tr>
+        <td class="tier1">阿根廷</td><td class="tier1">9.2</td><td>8.8</td><td>5.0</td><td class="tier1">7.7</td><td>2.1</td><td>0.8</td><td>13</td><td>12</td><td class="fatigue-high">42</td><td>95%</td>
+      </tr>
+      <tr>
+        <td class="tier1">法國</td><td>9.0</td><td>8.5</td><td>5.0</td><td class="tier1">7.5</td><td class="tier1">2.3</td><td class="tier1">0.7</td><td class="tier1">15</td><td class="tier1">15</td><td class="fatigue-low">30</td><td>96%</td>
+      </tr>
+      <tr>
+        <td class="tier2">英格蘭</td><td>8.0</td><td>7.9</td><td>5.0</td><td class="tier2">7.0</td><td>1.9</td><td>0.8</td><td>13</td><td class="tier1">16</td><td class="fatigue-mid">34</td><td>94%</td>
+      </tr>
+      <tr>
+        <td class="tier2">比利時</td><td>8.2</td><td>7.2</td><td>5.0</td><td class="tier2">6.8</td><td>1.9</td><td>1.0</td><td>15</td><td>11</td><td class="fatigue-mid">32</td><td>85%</td>
+      </tr>
+      <tr>
+        <td class="tier3">摩洛哥</td><td>6.2</td><td class="tier2">7.8</td><td>5.0</td><td class="tier3">6.3</td><td>1.3</td><td>0.8</td><td>13</td><td>7</td><td class="fatigue-mid">38</td><td>88%</td>
+      </tr>
+      <tr>
+        <td class="tier3">挪威</td><td>7.5</td><td>6.5</td><td>5.0</td><td class="tier3">6.3</td><td>1.8</td><td>1.2</td><td>13</td><td>4</td><td class="fatigue-mid">37</td><td>95%</td>
+      </tr>
+      <tr>
+        <td class="tier3">瑞士</td><td>6.2</td><td>7.2</td><td>5.0</td><td class="tier3">6.1</td><td>1.3</td><td>0.9</td><td>13</td><td>8</td><td class="fatigue-mid">35</td><td>82%</td>
+      </tr>
+    </table>
+    <div style="margin-top:8px; font-size:11px; color:#666;">
+      <span class="tier1">■ Tier 1 (8.0+)</span> <span class="tier2">■ Tier 2 (6.5-7.5)</span> <span class="tier3">■ Tier 3 (&lt;6.5)</span>
+      <span style="margin-left:12px;">疲勞: <span class="fatigue-low">低</span> <span class="fatigue-mid">中</span> <span class="fatigue-high">高</span></span>
+    </div>
+  </div>
+
+  <!-- 陣營對戰矩陣 -->
+  <div class="section">
+    <div class="section-title">陣營對戰矩陣 (主勝率)</div>
+    <table class="matrix-table">
+      <tr>
+        <th>主＼客</th><th>阿根廷</th><th>瑞士</th><th>法國</th><th>摩洛哥</th><th>西班牙</th><th>比利時</th><th>挪威</th><th>英格蘭</th>
+      </tr>
+      <tr><td><b>阿根廷</b></td><td class="matrix-diag">—</td><td class="matrix-high">68%</td><td>40%</td><td class="matrix-high">69%</td><td>52%</td><td>43%</td><td>59%</td><td>49%</td></tr>
+      <tr><td><b>瑞士</b></td><td class="matrix-low">8%</td><td class="matrix-diag">—</td><td class="matrix-low">8%</td><td>28%</td><td class="matrix-low">14%</td><td class="matrix-low">11%</td><td>20%</td><td class="matrix-low">13%</td></tr>
+      <tr><td><b>法國</b></td><td>35%</td><td class="matrix-high">72%</td><td class="matrix-diag">—</td><td class="matrix-high">73%</td><td>51%</td><td>45%</td><td class="matrix-high">62%</td><td>51%</td></tr>
+      <tr><td><b>摩洛哥</b></td><td class="matrix-low">8%</td><td>32%</td><td class="matrix-low">9%</td><td class="matrix-diag">—</td><td class="matrix-low">15%</td><td class="matrix-low">12%</td><td>20%</td><td class="matrix-low">13%</td></tr>
+      <tr><td><b>西班牙</b></td><td>26%</td><td class="matrix-high">57%</td><td>30%</td><td class="matrix-high">57%</td><td class="matrix-diag">—</td><td>32%</td><td>46%</td><td>36%</td></tr>
+      <tr><td><b>比利時</b></td><td>24%</td><td class="matrix-high">54%</td><td>26%</td><td class="matrix-high">55%</td><td>41%</td><td class="matrix-diag">—</td><td>45%</td><td>38%</td></tr>
+      <tr><td><b>挪威</b></td><td class="matrix-low">14%</td><td>38%</td><td class="matrix-low">14%</td><td>38%</td><td>24%</td><td class="matrix-low">19%</td><td class="matrix-diag">—</td><td>22%</td></tr>
+      <tr><td><b>英格蘭</b></td><td>23%</td><td class="matrix-high">53%</td><td>26%</td><td class="matrix-high">54%</td><td>37%</td><td>28%</td><td>44%</td><td class="matrix-diag">—</td></tr>
+    </table>
+    <div style="margin-top:6px; font-size:11px; color:#666;">
+      數字為主隊勝率。綠色=高勝率(≥50%)，灰色=低勝率(&lt;20%)。行為主隊，列為客隊。
+    </div>
+  </div>
+
+  <!-- 戰術風格 -->
+  <div class="section">
+    <div class="section-title">戰術風格分析</div>
+    <div class="tactic-card">
+      <div class="t-title">🇦🇷 阿根廷 — 控球進攻 + 梅西核心</div>
+      <div class="t-row"><span class="t-label">陣型</span><span class="t-val">4-3-3 / 4-4-2</span></div>
+      <div class="t-row"><span class="t-label">強項</span><span class="t-val">個人突破、定位球、逆轉DNA(9.8)</span></div>
+      <div class="t-row"><span class="t-label">弱點</span><span class="t-val">梅西依賴、防線速度、疲勞累積(42)</span></div>
+      <div class="t-row"><span class="t-label">關鍵球員</span><span class="t-val">Messi (42%), Lautaro, Enzo</span></div>
+      <div class="t-desc">Messi自由人角色，中場快速過渡。逆轉能力極強，但410分鐘疲勞是隱患。</div>
+    </div>
+    <div class="tactic-card">
+      <div class="t-title">🇫🇷 法國 — 快速反擊 + 邊路爆破</div>
+      <div class="t-row"><span class="t-label">陣型</span><span class="t-val">4-3-3 / 4-2-3-1</span></div>
+      <div class="t-row"><span class="t-label">強項</span><span class="t-val">Mbappe速度、陣容深度、身體素質</span></div>
+      <div class="t-row"><span class="t-label">弱點</span><span class="t-val">Mbappe腳踝輕傷、中場創造力不穩</span></div>
+      <div class="t-row"><span class="t-label">關鍵球員</span><span class="t-val">Mbappe (45%), Griezmann, Dembele</span></div>
+      <div class="t-desc">Mbappe左路爆破 + Griezmann組織，快速轉換。對弱隊勝率超70%，穩定性最強。</div>
+    </div>
+    <div class="tactic-card">
+      <div class="t-title">🇪🇸 西班牙 — 傳控 + 高位逼搶</div>
+      <div class="t-row"><span class="t-label">陣型</span><span class="t-val">4-3-3 / 4-2-3-1</span></div>
+      <div class="t-row"><span class="t-label">強項</span><span class="t-val">傳控(58%)、陣型紀律、邊路進攻</span></div>
+      <div class="t-row"><span class="t-label">弱點</span><span class="t-val">Pedri+Gavi不首發、終結效率</span></div>
+      <div class="t-row"><span class="t-label">關鍵球員</span><span class="t-val">Morata (22%), Yamal (18%), Fabian Ruiz</span></div>
+      <div class="t-desc">Fabian Ruiz替代Pedri組織，邊路內切。中場控制最強(7.5)，但缺核心影響大。</div>
+    </div>
+    <div class="tactic-card">
+      <div class="t-title">🏴󠁧󠁢󠁥󠁮󠁧󠁿 英格蘭 — 控球圍攻 + 邊路壓制</div>
+      <div class="t-row"><span class="t-label">陣型</span><span class="t-val">4-2-3-1 / 4-3-3</span></div>
+      <div class="t-row"><span class="t-label">強項</span><span class="t-val">陣容深度、邊路進攻、Kane終結</span></div>
+      <div class="t-row"><span class="t-label">弱點</span><span class="t-val">Henderson報銷、Quansah停賽、James非100%</span></div>
+      <div class="t-row"><span class="t-label">關鍵球員</span><span class="t-val">Kane (38%), Saka (22%), Bellingham (18%)</span></div>
+      <div class="t-desc">Saka/Gordon邊路壓制，Kane回撤組織，Rice攔截。淘汰賽經驗最豐富(16次)。</div>
+    </div>
+    <div class="tactic-card">
+      <div class="t-title">🇳🇴 挪威 — 直接進攻 + Haaland核心</div>
+      <div class="t-row"><span class="t-label">陣型</span><span class="t-val">4-4-2 / 4-3-3</span></div>
+      <div class="t-row"><span class="t-label">強項</span><span class="t-val">Haaland終結、身體對抗、定位球</span></div>
+      <div class="t-row"><span class="t-label">弱點</span><span class="t-val">過度依賴Haaland、中場創造力弱</span></div>
+      <div class="t-row"><span class="t-label">關鍵球員</span><span class="t-val">Haaland (35%), Odegaard (15%)</span></div>
+      <div class="t-desc">Odegaard送直塞，Haaland跑位終結。對任何Top 4勝率均低於25%，單點難改全局。</div>
+    </div>
+    <div class="tactic-card">
+      <div class="t-title">🇨🇭 瑞士 — 防守反擊 + 高位逼搶</div>
+      <div class="t-row"><span class="t-label">陣型</span><span class="t-val">3-4-2-1 / 4-2-3-1</span></div>
+      <div class="t-row"><span class="t-label">強項</span><span class="t-val">組織紀律、定位球、團隊防守</span></div>
+      <div class="t-row"><span class="t-label">弱點</span><span class="t-val">Manzambi缺陣後進攻癱瘓、創造力不足</span></div>
+      <div class="t-row"><span class="t-label">關鍵球員</span><span class="t-val">Embolo (12%), Xhaka, Akanji</span></div>
+      <div class="t-desc">收縮防線後快速反擊，依賴邊路傳中。Manzambi(3球2助攻)缺陣後進攻幾乎癱瘓。</div>
+    </div>
+  </div>
+
+  <!-- 奪冠概率 -->
+  <div class="section">
+    <div class="section-title">奪冠概率預測</div>
+    <div class="champ-row">
+      <span class="champ-rank">1</span>
+      <span class="champ-team">法國</span>
+      <div class="champ-bar"><div class="champ-fill" style="width:28%; background:#22c55e;"></div></div>
+      <span class="champ-pct">28%</span>
+      <span class="champ-final">晉級42%</span>
+    </div>
+    <div class="champ-row">
+      <span class="champ-rank">2</span>
+      <span class="champ-team">阿根廷</span>
+      <div class="champ-bar"><div class="champ-fill" style="width:22%; background:#3b82f6;"></div></div>
+      <span class="champ-pct">22%</span>
+      <span class="champ-final">晉級40%</span>
+    </div>
+    <div class="champ-row">
+      <span class="champ-rank">3</span>
+      <span class="champ-team">西班牙</span>
+      <div class="champ-bar"><div class="champ-fill" style="width:18%; background:#3b82f6;"></div></div>
+      <span class="champ-pct">18%</span>
+      <span class="champ-final">晉級29%</span>
+    </div>
+    <div class="champ-row">
+      <span class="champ-rank">4</span>
+      <span class="champ-team">英格蘭</span>
+      <div class="champ-bar"><div class="champ-fill" style="width:16%; background:#f59e0b;"></div></div>
+      <span class="champ-pct">16%</span>
+      <span class="champ-final">晉級34%</span>
+    </div>
+    <div class="champ-row">
+      <span class="champ-rank">5</span>
+      <span class="champ-team">挪威</span>
+      <div class="champ-bar"><div class="champ-fill" style="width:6%; background:#666;"></div></div>
+      <span class="champ-pct">6%</span>
+      <span class="champ-final">晉級11%</span>
+    </div>
+    <div class="champ-row">
+      <span class="champ-rank">6</span>
+      <span class="champ-team">瑞士</span>
+      <div class="champ-bar"><div class="champ-fill" style="width:4%; background:#666;"></div></div>
+      <span class="champ-pct">4%</span>
+      <span class="champ-final">晉級6%</span>
+    </div>
+  </div>
+
+  <!-- 高信心注碼 -->
   <div class="section">
     <div class="section-title">高信心注碼總覽</div>
     <div class="summary-grid">
@@ -538,7 +698,7 @@
     </div>
   </div>
 
-  <!-- 走地盤介入點 -->
+  <!-- 走地盤 -->
   <div class="section">
     <div class="section-title">走地盤關鍵介入點</div>
     <div class="summary-grid">
