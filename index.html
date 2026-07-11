@@ -3,28 +3,28 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>World Cup 2026 預測儀表板 | UNIFIED v4.0.17</title>
+<title>World Cup 2026 預測儀表板 | UNIFIED v4.0.17-LU</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     background: #0a0a0f;
     color: #e8e8ec;
-    padding: 20px;
+    padding: 16px;
     line-height: 1.5;
   }
   .container { max-width: 720px; margin: 0 auto; }
-  .header { margin-bottom: 24px; }
-  .header h1 { font-size: 22px; font-weight: 600; color: #fff; }
-  .header .meta { font-size: 13px; color: #888; margin-top: 4px; }
-  .section { margin-bottom: 20px; }
-  .section-title { font-size: 16px; font-weight: 600; margin-bottom: 12px; color: #fff; }
+  .header { margin-bottom: 20px; }
+  .header h1 { font-size: 20px; font-weight: 600; color: #fff; }
+  .header .meta { font-size: 12px; color: #888; margin-top: 4px; }
+  .section { margin-bottom: 16px; }
+  .section-title { font-size: 15px; font-weight: 600; margin-bottom: 10px; color: #fff; }
   .match-card {
     background: #14141a;
     border: 1px solid #2a2a35;
     border-radius: 10px;
-    padding: 14px 16px;
-    margin-bottom: 10px;
+    padding: 12px 14px;
+    margin-bottom: 8px;
     cursor: pointer;
     transition: background 0.15s ease;
   }
@@ -32,49 +32,66 @@
   .match-card.confirmed { border-left: 3px solid #22c55e; }
   .match-card.upcoming { border-left: 3px solid #3b82f6; }
   .match-card.projected { border-left: 3px dashed #555; opacity: 0.85; }
-  .match-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
-  .teams { display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 500; }
+  .match-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+  .teams { display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 500; }
   .score { font-size: 15px; font-weight: 600; font-variant-numeric: tabular-nums; }
-  .meta { font-size: 12px; color: #666; display: flex; gap: 14px; margin-top: 4px; }
+  .meta { font-size: 12px; color: #666; display: flex; gap: 12px; margin-top: 3px; flex-wrap: wrap; }
   .badge {
     font-size: 11px;
-    padding: 2px 7px;
+    padding: 2px 6px;
     border-radius: 4px;
     font-weight: 500;
   }
   .badge-ft { background: rgba(34,197,94,0.15); color: #22c55e; }
   .badge-upcoming { background: rgba(59,130,246,0.15); color: #3b82f6; }
   .badge-proj { background: rgba(100,100,100,0.15); color: #888; }
-  .prob-bar { display: flex; height: 6px; border-radius: 3px; overflow: hidden; margin-top: 6px; }
+  .prob-bar { display: flex; height: 5px; border-radius: 3px; overflow: hidden; margin-top: 6px; }
   .prob-seg { height: 100%; }
   .prob-home { background: #3b82f6; }
   .prob-draw { background: #6b7280; }
   .prob-away { background: #ef4444; }
-  .prob-labels { display: flex; justify-content: space-between; font-size: 11px; color: #666; margin-top: 3px; }
-  .chips { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+  .prob-labels { display: flex; justify-content: space-between; font-size: 11px; color: #666; margin-top: 2px; }
+  .chips { display: flex; gap: 5px; margin-top: 7px; flex-wrap: wrap; }
   .chip {
-    font-size: 12px;
-    padding: 3px 10px;
-    border-radius: 6px;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 5px;
     background: rgba(59,130,246,0.1);
     color: #aaa;
     border: 1px solid #2a2a35;
   }
   .chip.strong { background: rgba(34,197,94,0.12); color: #fff; }
-  .detail { display: none; margin-top: 10px; padding: 10px; border-radius: 8px; background: #1c1c24; font-size: 13px; }
+  .chip.warning { background: rgba(245,158,11,0.12); color: #fbbf24; }
+  .detail { display: none; margin-top: 10px; padding: 10px; border-radius: 8px; background: #1c1c24; font-size: 12px; }
   .detail.open { display: block; }
-  .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-  .d-item { display: flex; justify-content: space-between; }
+  .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .d-item { display: flex; justify-content: space-between; padding: 2px 0; }
   .d-label { color: #666; }
   .d-val { font-weight: 500; font-variant-numeric: tabular-nums; }
-  .connector { display: flex; align-items: center; gap: 4px; margin: 6px 0; color: #444; }
+  .detail-section { margin-top: 8px; padding-top: 8px; border-top: 1px solid #2a2a35; }
+  .detail-section-title { font-size: 12px; font-weight: 600; color: #aaa; margin-bottom: 5px; }
+  .connector { display: flex; align-items: center; gap: 4px; margin: 5px 0; color: #444; }
   .connector .line { flex: 1; height: 1px; background: #2a2a35; }
-  .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .summary-card { background: #14141a; border: 1px solid #2a2a35; border-radius: 10px; padding: 14px; }
-  .summary-card .label { color: #666; font-size: 12px; margin-bottom: 4px; }
-  .summary-card .value { font-weight: 600; font-size: 14px; }
-  .summary-card .note { color: #666; font-size: 12px; margin-top: 4px; }
-  .footer { margin-top: 30px; padding-top: 20px; border-top: 1px solid #2a2a35; font-size: 12px; color: #555; text-align: center; }
+  .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .summary-card { background: #14141a; border: 1px solid #2a2a35; border-radius: 10px; padding: 12px; }
+  .summary-card .label { color: #666; font-size: 11px; margin-bottom: 3px; }
+  .summary-card .value { font-weight: 600; font-size: 13px; }
+  .summary-card .note { color: #666; font-size: 11px; margin-top: 3px; }
+  .footer { margin-top: 24px; padding-top: 16px; border-top: 1px solid #2a2a35; font-size: 11px; color: #555; text-align: center; }
+  .scorer-list { display: flex; flex-direction: column; gap: 3px; }
+  .scorer-item { display: flex; justify-content: space-between; }
+  .scorer-name { color: #ccc; }
+  .scorer-prob { color: #888; font-variant-numeric: tabular-nums; }
+  .ht-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4px; text-align: center; }
+  .ht-cell { background: #14141a; padding: 4px 6px; border-radius: 4px; }
+  .ht-cell .ht-label { font-size: 10px; color: #666; }
+  .ht-cell .ht-val { font-size: 12px; font-weight: 500; color: #ddd; }
+  .tactical-bar { display: flex; align-items: center; gap: 6px; margin: 3px 0; }
+  .tactical-bar .bar-track { flex: 1; height: 4px; background: #2a2a35; border-radius: 2px; position: relative; }
+  .tactical-bar .bar-fill { height: 100%; border-radius: 2px; }
+  .tactical-bar .bar-home { background: #3b82f6; }
+  .tactical-bar .bar-away { background: #ef4444; }
+  .tactical-bar .bar-label { font-size: 10px; color: #666; min-width: 50px; }
 </style>
 <base target="_blank">
 </head>
@@ -82,17 +99,18 @@
 <div class="container">
   <div class="header">
     <h1>World Cup 2026 淘汰賽預測儀表板</h1>
-    <div class="meta">UNIFIED v4.0.17 | 更新時間: 2026-07-11 22:47 (HK) | 14,000+場校準</div>
+    <div class="meta">UNIFIED v4.0.17-LU | 更新時間: 2026-07-11 22:57 (HK) | 14,283場校準 | 首發陣容已確認</div>
   </div>
 
+  <!-- 已完場 -->
   <div class="section">
     <div class="section-title">已完場</div>
     <div class="match-card confirmed" onclick="toggle('m1')">
       <div class="match-header">
-        <div class="teams">France <span style="color:#555;">vs</span> Morocco</div>
+        <div class="teams">法國 <span style="color:#555;">vs</span> 摩洛哥</div>
         <div><span class="score">2 - 0</span> <span class="badge badge-ft">完場</span></div>
       </div>
-      <div class="meta">7月9日 21:00 | Foxborough | QF</div>
+      <div class="meta">7月9日 21:00 | Foxborough | 8強</div>
       <div class="detail" id="m1">
         <div class="detail-grid">
           <div class="d-item"><span class="d-label">入球</span><span class="d-val">Mbappe 60', Dembele 66'</span></div>
@@ -104,10 +122,10 @@
     </div>
     <div class="match-card confirmed" onclick="toggle('m2')">
       <div class="match-header">
-        <div class="teams">Spain <span style="color:#555;">vs</span> Belgium</div>
+        <div class="teams">西班牙 <span style="color:#555;">vs</span> 比利時</div>
         <div><span class="score">2 - 1</span> <span class="badge badge-ft">完場</span></div>
       </div>
-      <div class="meta">7月10日 20:00 | Inglewood | QF</div>
+      <div class="meta">7月10日 20:00 | Inglewood | 8強</div>
       <div class="detail" id="m2">
         <div class="detail-grid">
           <div class="d-item"><span class="d-label">入球</span><span class="d-val">Fabian Ruiz 30', Merino 88' / De Ketelaere 41'</span></div>
@@ -119,74 +137,358 @@
     </div>
   </div>
 
+  <!-- 8強 -->
   <div class="section">
     <div class="section-title">8強 (Quarter-Finals)</div>
+
+    <!-- 挪威 vs 英格蘭 -->
     <div class="match-card upcoming" onclick="toggle('m3')">
       <div class="match-header">
-        <div class="teams">Norway <span style="color:#555;">vs</span> England</div>
+        <div class="teams">挪威 <span style="color:#555;">vs</span> 英格蘭</div>
         <div><span class="badge badge-upcoming">今晚 22:00</span></div>
       </div>
-      <div class="meta">7月11日 | Miami Gardens | QF</div>
+      <div class="meta">7月11日 | Miami Gardens | 8強</div>
       <div class="prob-bar"><div class="prob-seg prob-home" style="width:22.3%"></div><div class="prob-seg prob-draw" style="width:39.4%"></div><div class="prob-seg prob-away" style="width:38.3%"></div></div>
       <div class="prob-labels"><span>主勝 22%</span><span>平 39%</span><span>客勝 38%</span></div>
-      <div class="chips"><span class="chip strong">亞洲讓球 -1.0 英格蘭 82%</span><span class="chip">角球 Over 8.5 64%</span><span class="chip">最可能 1-1</span></div>
+      <div class="chips">
+        <span class="chip strong">亞洲讓球 -1.0 英格蘭 82%</span>
+        <span class="chip">角球 Over 8.5 64%</span>
+        <span class="chip">最可能 1-1</span>
+      </div>
       <div class="detail" id="m3">
-        <div class="detail-grid">
-          <div class="d-item"><span class="d-label">主隊xG</span><span class="d-val">0.9</span></div>
-          <div class="d-item"><span class="d-label">客隊xG</span><span class="d-val">1.2</span></div>
-          <div class="d-item"><span class="d-label">大2.5</span><span class="d-val">31%</span></div>
-          <div class="d-item"><span class="d-label">BTTS</span><span class="d-val">46%</span></div>
-          <div class="d-item"><span class="d-label">角球</span><span class="d-val">11個</span></div>
-          <div class="d-item"><span class="d-label">黃牌</span><span class="d-val">4.5張</span></div>
+        <!-- 全場預測 -->
+        <div class="detail-section">
+          <div class="detail-section-title">全場預測</div>
+          <div class="detail-grid">
+            <div class="d-item"><span class="d-label">主隊xG</span><span class="d-val">0.9</span></div>
+            <div class="d-item"><span class="d-label">客隊xG</span><span class="d-val">1.2</span></div>
+            <div class="d-item"><span class="d-label">大2.5</span><span class="d-val">31%</span></div>
+            <div class="d-item"><span class="d-label">細2.5</span><span class="d-val">69%</span></div>
+            <div class="d-item"><span class="d-label">BTTS Yes</span><span class="d-val">46%</span></div>
+            <div class="d-item"><span class="d-label">BTTS No</span><span class="d-val">54%</span></div>
+            <div class="d-item"><span class="d-label">角球</span><span class="d-val">11個</span></div>
+            <div class="d-item"><span class="d-label">黃牌</span><span class="d-val">4.5張</span></div>
+          </div>
         </div>
-        <div style="margin-top:8px;font-size:12px;color:#666;">情報: James+Guehi回歸正選，英格蘭防線完整。Henderson報銷、Quansah停賽。</div>
+        <!-- 上半場預測 -->
+        <div class="detail-section">
+          <div class="detail-section-title">上半場預測</div>
+          <div class="ht-grid">
+            <div class="ht-cell"><div class="ht-label">HT主勝</div><div class="ht-val">18%</div></div>
+            <div class="ht-cell"><div class="ht-label">HT平局</div><div class="ht-val">62%</div></div>
+            <div class="ht-cell"><div class="ht-label">HT客勝</div><div class="ht-val">20%</div></div>
+          </div>
+          <div style="margin-top:6px; display:grid; grid-template-columns:1fr 1fr; gap:4px;">
+            <div class="d-item"><span class="d-label">HT大1.0</span><span class="d-val">28%</span></div>
+            <div class="d-item"><span class="d-label">HT細1.0</span><span class="d-val">72%</span></div>
+            <div class="d-item"><span class="d-label">HT BTTS</span><span class="d-val">32%</span></div>
+            <div class="d-item"><span class="d-label">HT角球</span><span class="d-val">5個</span></div>
+          </div>
+        </div>
+        <!-- 射手預測 -->
+        <div class="detail-section">
+          <div class="detail-section-title">Anytime 射手機率</div>
+          <div class="scorer-list">
+            <div class="scorer-item"><span class="scorer-name">Harry Kane (英格蘭)</span><span class="scorer-prob">38%</span></div>
+            <div class="scorer-item"><span class="scorer-name">Erling Haaland (挪威)</span><span class="scorer-prob">35%</span></div>
+            <div class="scorer-item"><span class="scorer-name">Bukayo Saka (英格蘭)</span><span class="scorer-prob">22%</span></div>
+            <div class="scorer-item"><span class="scorer-name">Jude Bellingham (英格蘭)</span><span class="scorer-prob">18%</span></div>
+            <div class="scorer-item"><span class="scorer-name">Martin Odegaard (挪威)</span><span class="scorer-prob">15%</span></div>
+          </div>
+        </div>
+        <!-- 精確比分 -->
+        <div class="detail-section">
+          <div class="detail-section-title">精確比分機率</div>
+          <div class="detail-grid">
+            <div class="d-item"><span class="d-label">1-1</span><span class="d-val">14%</span></div>
+            <div class="d-item"><span class="d-label">0-1</span><span class="d-val">16%</span></div>
+            <div class="d-item"><span class="d-label">1-0</span><span class="d-val">11%</span></div>
+            <div class="d-item"><span class="d-label">0-0</span><span class="d-val">10%</span></div>
+            <div class="d-item"><span class="d-label">1-2</span><span class="d-val">9%</span></div>
+            <div class="d-item"><span class="d-label">0-2</span><span class="d-val">7%</span></div>
+          </div>
+        </div>
+        <!-- 首球時間 -->
+        <div class="detail-section">
+          <div class="detail-section-title">首個入球時間</div>
+          <div class="detail-grid">
+            <div class="d-item"><span class="d-label">0-15'</span><span class="d-val">12%</span></div>
+            <div class="d-item"><span class="d-label">15-30'</span><span class="d-val">18%</span></div>
+            <div class="d-item"><span class="d-label">30-45'</span><span class="d-val">22%</span></div>
+            <div class="d-item"><span class="d-label">45-60'</span><span class="d-val">16%</span></div>
+            <div class="d-item"><span class="d-label">60-75'</span><span class="d-val">14%</span></div>
+            <div class="d-item"><span class="d-label">75-90'</span><span class="d-val">10%</span></div>
+          </div>
+          <div class="d-item" style="margin-top:4px;"><span class="d-label">無入球</span><span class="d-val">8%</span></div>
+        </div>
+        <!-- 戰術分析 -->
+        <div class="detail-section">
+          <div class="detail-section-title">戰術深度分析</div>
+          <div class="tactical-bar">
+            <span class="bar-label">中場控制</span>
+            <div class="bar-track"><div class="bar-fill bar-away" style="width:55%; margin-left:45%;"></div></div>
+          </div>
+          <div class="tactical-bar">
+            <span class="bar-label">防守穩定</span>
+            <div class="bar-track"><div class="bar-fill bar-away" style="width:58%; margin-left:42%;"></div></div>
+          </div>
+          <div class="tactical-bar">
+            <span class="bar-label">後備深度</span>
+            <div class="bar-track"><div class="bar-fill bar-away" style="width:62%; margin-left:38%;"></div></div>
+          </div>
+          <div style="margin-top:6px; font-size:11px; color:#888;">
+            英格蘭中場控制佔優 (+1.2)；挪威反擊威脅被高壓壓制；英格蘭調整能力更強，下半場/換人後有望佔優
+          </div>
+        </div>
+        <!-- 情報 -->
+        <div style="margin-top:8px; font-size:11px; color:#666;">
+          情報: James+Guehi回歸正選，英格蘭防線完整。Henderson報銷、Quansah停賽。Rice生病已康復。
+        </div>
       </div>
     </div>
+
+    <!-- 阿根廷 vs 瑞士 -->
     <div class="match-card upcoming" onclick="toggle('m4')">
       <div class="match-header">
-        <div class="teams">Argentina <span style="color:#555;">vs</span> Switzerland</div>
+        <div class="teams">阿根廷 <span style="color:#555;">vs</span> 瑞士</div>
         <div><span class="badge badge-upcoming">明晨 09:00</span></div>
       </div>
-      <div class="meta">7月12日 | Kansas City | QF</div>
+      <div class="meta">7月12日 | Kansas City | 8強</div>
       <div class="prob-bar"><div class="prob-seg prob-home" style="width:68.2%"></div><div class="prob-seg prob-draw" style="width:25.5%"></div><div class="prob-seg prob-away" style="width:6.3%"></div></div>
       <div class="prob-labels"><span>主勝 68%</span><span>平 26%</span><span>客勝 6%</span></div>
-      <div class="chips"><span class="chip strong">亞洲讓球 +1.0 阿根廷 96%</span><span class="chip">角球 Over 8.5 67%</span><span class="chip">最可能 2-0</span></div>
+      <div class="chips">
+        <span class="chip strong">亞洲讓球 +1.0 阿根廷 96%</span>
+        <span class="chip">角球 Over 8.5 67%</span>
+        <span class="chip">最可能 2-0</span>
+      </div>
       <div class="detail" id="m4">
-        <div class="detail-grid">
-          <div class="d-item"><span class="d-label">主隊xG</span><span class="d-val">1.9</span></div>
-          <div class="d-item"><span class="d-label">客隊xG</span><span class="d-val">0.4</span></div>
-          <div class="d-item"><span class="d-label">大2.5</span><span class="d-val">37%</span></div>
-          <div class="d-item"><span class="d-label">BTTS</span><span class="d-val">27%</span></div>
-          <div class="d-item"><span class="d-label">角球</span><span class="d-val">10個</span></div>
-          <div class="d-item"><span class="d-label">黃牌</span><span class="d-val">4.4張</span></div>
+        <div class="detail-section">
+          <div class="detail-section-title">全場預測</div>
+          <div class="detail-grid">
+            <div class="d-item"><span class="d-label">主隊xG</span><span class="d-val">1.9</span></div>
+            <div class="d-item"><span class="d-label">客隊xG</span><span class="d-val">0.4</span></div>
+            <div class="d-item"><span class="d-label">大2.5</span><span class="d-val">37%</span></div>
+            <div class="d-item"><span class="d-label">細2.5</span><span class="d-val">63%</span></div>
+            <div class="d-item"><span class="d-label">BTTS Yes</span><span class="d-val">27%</span></div>
+            <div class="d-item"><span class="d-label">BTTS No</span><span class="d-val">73%</span></div>
+            <div class="d-item"><span class="d-label">角球</span><span class="d-val">10個</span></div>
+            <div class="d-item"><span class="d-label">黃牌</span><span class="d-val">4.4張</span></div>
+          </div>
         </div>
-        <div style="margin-top:8px;font-size:12px;color:#666;">情報: 瑞士Manzambi膝傷缺陣(3球2助攻)，進攻癱瘓。梅西410分鐘疲勞但逆轉DNA強。</div>
+        <div class="detail-section">
+          <div class="detail-section-title">上半場預測</div>
+          <div class="ht-grid">
+            <div class="ht-cell"><div class="ht-label">HT主勝</div><div class="ht-val">52%</div></div>
+            <div class="ht-cell"><div class="ht-label">HT平局</div><div class="ht-val">38%</div></div>
+            <div class="ht-cell"><div class="ht-label">HT客勝</div><div class="ht-val">10%</div></div>
+          </div>
+          <div style="margin-top:6px; display:grid; grid-template-columns:1fr 1fr; gap:4px;">
+            <div class="d-item"><span class="d-label">HT大1.0</span><span class="d-val">35%</span></div>
+            <div class="d-item"><span class="d-label">HT細1.0</span><span class="d-val">65%</span></div>
+            <div class="d-item"><span class="d-label">HT BTTS</span><span class="d-val">22%</span></div>
+            <div class="d-item"><span class="d-label">HT角球</span><span class="d-val">4個</span></div>
+          </div>
+        </div>
+        <div class="detail-section">
+          <div class="detail-section-title">Anytime 射手機率</div>
+          <div class="scorer-list">
+            <div class="scorer-item"><span class="scorer-name">Lionel Messi (阿根廷)</span><span class="scorer-prob">42%</span></div>
+            <div class="scorer-item"><span class="scorer-name">Lautaro Martinez (阿根廷)</span><span class="scorer-prob">28%</span></div>
+            <div class="scorer-item"><span class="scorer-name">Julian Alvarez (阿根廷)</span><span class="scorer-prob">22%</span></div>
+            <div class="scorer-item"><span class="scorer-name">Angel Di Maria (阿根廷)</span><span class="scorer-prob">15%</span></div>
+            <div class="scorer-item"><span class="scorer-name">Breel Embolo (瑞士)</span><span class="scorer-prob">12%</span></div>
+          </div>
+        </div>
+        <div class="detail-section">
+          <div class="detail-section-title">精確比分機率</div>
+          <div class="detail-grid">
+            <div class="d-item"><span class="d-label">2-0</span><span class="d-val">18%</span></div>
+            <div class="d-item"><span class="d-label">1-0</span><span class="d-val">16%</span></div>
+            <div class="d-item"><span class="d-label">2-1</span><span class="d-val">12%</span></div>
+            <div class="d-item"><span class="d-label">1-1</span><span class="d-val">10%</span></div>
+            <div class="d-item"><span class="d-label">3-0</span><span class="d-val">8%</span></div>
+            <div class="d-item"><span class="d-label">0-0</span><span class="d-val">7%</span></div>
+          </div>
+        </div>
+        <div class="detail-section">
+          <div class="detail-section-title">首個入球時間</div>
+          <div class="detail-grid">
+            <div class="d-item"><span class="d-label">0-15'</span><span class="d-val">15%</span></div>
+            <div class="d-item"><span class="d-label">15-30'</span><span class="d-val">20%</span></div>
+            <div class="d-item"><span class="d-label">30-45'</span><span class="d-val">24%</span></div>
+            <div class="d-item"><span class="d-label">45-60'</span><span class="d-val">18%</span></div>
+            <div class="d-item"><span class="d-label">60-75'</span><span class="d-val">12%</span></div>
+            <div class="d-item"><span class="d-label">75-90'</span><span class="d-val">8%</span></div>
+          </div>
+          <div class="d-item" style="margin-top:4px;"><span class="d-label">無入球</span><span class="d-val">3%</span></div>
+        </div>
+        <div class="detail-section">
+          <div class="detail-section-title">戰術深度分析</div>
+          <div class="tactical-bar">
+            <span class="bar-label">中場控制</span>
+            <div class="bar-track"><div class="bar-fill bar-home" style="width:65%; margin-left:0;"></div></div>
+          </div>
+          <div class="tactical-bar">
+            <span class="bar-label">防守穩定</span>
+            <div class="bar-track"><div class="bar-fill bar-home" style="width:60%; margin-left:0;"></div></div>
+          </div>
+          <div class="tactical-bar">
+            <span class="bar-label">後備深度</span>
+            <div class="bar-track"><div class="bar-fill bar-home" style="width:58%; margin-left:0;"></div></div>
+          </div>
+          <div style="margin-top:6px; font-size:11px; color:#888;">
+            阿根廷陣型克制瑞士：高壓逼搖被反擊針對；阿根廷中場控制佔優 (+2.8)；阿根廷調整能力更強，下半場/換人後有望佔優
+          </div>
+        </div>
+        <div style="margin-top:8px; font-size:11px; color:#666;">
+          情報: 瑞士Manzambi膝傷缺陣(3球2助攻)，進攻癱瘓。梅西410分鐘疲勞但逆轉DNA強(mental_resilience 9.8)。
+        </div>
       </div>
     </div>
   </div>
 
+  <!-- 4強 -->
   <div class="section">
     <div class="section-title">4強 (Semi-Finals)</div>
     <div class="connector"><div class="line"></div><span style="font-size:12px;">▼</span><div class="line"></div></div>
-    <div class="match-card" style="border-left:3px solid #3b82f6;">
+
+    <div class="match-card" style="border-left:3px solid #3b82f6;" onclick="toggle('m5')">
       <div class="match-header">
-        <div class="teams">France <span style="color:#555;">vs</span> Spain</div>
+        <div class="teams">法國 <span style="color:#555;">vs</span> 西班牙</div>
         <div><span class="badge badge-upcoming">7月14 03:00</span></div>
       </div>
-      <div class="meta">Arlington | SF | 模型: 主勝42% 平29% 客勝29%</div>
-      <div class="chips"><span class="chip">大球2.5 55%</span><span class="chip">BTTS 58%</span><span class="chip">最可能 2-1</span></div>
+      <div class="meta">Arlington | 4強 | 模型: 主勝42% 平29% 客勝29%</div>
+      <div class="chips">
+        <span class="chip">大球2.5 55%</span>
+        <span class="chip">BTTS 58%</span>
+        <span class="chip">最可能 2-1</span>
+      </div>
+      <div class="detail" id="m5">
+        <div class="detail-section">
+          <div class="detail-section-title">全場預測</div>
+          <div class="detail-grid">
+            <div class="d-item"><span class="d-label">主隊xG</span><span class="d-val">1.8</span></div>
+            <div class="d-item"><span class="d-label">客隊xG</span><span class="d-val">1.3</span></div>
+            <div class="d-item"><span class="d-label">大2.5</span><span class="d-val">55%</span></div>
+            <div class="d-item"><span class="d-label">細2.5</span><span class="d-val">45%</span></div>
+            <div class="d-item"><span class="d-label">BTTS Yes</span><span class="d-val">58%</span></div>
+            <div class="d-item"><span class="d-label">BTTS No</span><span class="d-val">42%</span></div>
+            <div class="d-item"><span class="d-label">角球</span><span class="d-val">12個</span></div>
+            <div class="d-item"><span class="d-label">黃牌</span><span class="d-val">5.5張</span></div>
+          </div>
+        </div>
+        <div class="detail-section">
+          <div class="detail-section-title">上半場預測</div>
+          <div class="ht-grid">
+            <div class="ht-cell"><div class="ht-label">HT主勝</div><div class="ht-val">38%</div></div>
+            <div class="ht-cell"><div class="ht-label">HT平局</div><div class="ht-val">42%</div></div>
+            <div class="ht-cell"><div class="ht-label">HT客勝</div><div class="ht-val">20%</div></div>
+          </div>
+          <div style="margin-top:6px; display:grid; grid-template-columns:1fr 1fr; gap:4px;">
+            <div class="d-item"><span class="d-label">HT大1.0</span><span class="d-val">48%</span></div>
+            <div class="d-item"><span class="d-label">HT細1.0</span><span class="d-val">52%</span></div>
+            <div class="d-item"><span class="d-label">HT BTTS</span><span class="d-val">42%</span></div>
+            <div class="d-item"><span class="d-label">HT角球</span><span class="d-val">5個</span></div>
+          </div>
+        </div>
+        <div class="detail-section">
+          <div class="detail-section-title">Anytime 射手機率</div>
+          <div class="scorer-list">
+            <div class="scorer-item"><span class="scorer-name">Kylian Mbappe (法國)</span><span class="scorer-prob">45%</span></div>
+            <div class="scorer-item"><span class="scorer-name">Olivier Giroud (法國)</span><span class="scorer-prob">28%</span></div>
+            <div class="scorer-item"><span class="scorer-name">Antoine Griezmann (法國)</span><span class="scorer-prob">25%</span></div>
+            <div class="scorer-item"><span class="scorer-name">Alvaro Morata (西班牙)</span><span class="scorer-prob">22%</span></div>
+            <div class="scorer-item"><span class="scorer-name">Lamine Yamal (西班牙)</span><span class="scorer-prob">18%</span></div>
+          </div>
+        </div>
+        <div class="detail-section">
+          <div class="detail-section-title">精確比分機率</div>
+          <div class="detail-grid">
+            <div class="d-item"><span class="d-label">2-1</span><span class="d-val">13%</span></div>
+            <div class="d-item"><span class="d-label">1-1</span><span class="d-val">12%</span></div>
+            <div class="d-item"><span class="d-label">2-0</span><span class="d-val">10%</span></div>
+            <div class="d-item"><span class="d-label">1-0</span><span class="d-val">9%</span></div>
+            <div class="d-item"><span class="d-label">1-2</span><span class="d-val">8%</span></div>
+            <div class="d-item"><span class="d-label">0-1</span><span class="d-val">7%</span></div>
+          </div>
+        </div>
+        <div class="detail-section">
+          <div class="detail-section-title">戰術深度分析</div>
+          <div class="tactical-bar">
+            <span class="bar-label">中場控制</span>
+            <div class="bar-track"><div class="bar-fill bar-home" style="width:52%; margin-left:0;"></div></div>
+          </div>
+          <div class="tactical-bar">
+            <span class="bar-label">防守穩定</span>
+            <div class="bar-track"><div class="bar-fill bar-home" style="width:54%; margin-left:0;"></div></div>
+          </div>
+          <div class="tactical-bar">
+            <span class="bar-label">後備深度</span>
+            <div class="bar-track"><div class="bar-fill bar-home" style="width:56%; margin-left:0;"></div></div>
+          </div>
+          <div style="margin-top:6px; font-size:11px; color:#888;">
+            法國陣型克制西班牙：高壓逼搶被反擊針對；法國中場控制佔優 (+0.8)；雙方調整能力接近，下半場換人後勢均力敵
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="match-card projected">
+
+    <div class="match-card projected" onclick="toggle('m6')">
       <div class="match-header">
         <div class="teams">Winner QF3 <span style="color:#555;">vs</span> Winner QF4</div>
         <div><span class="badge badge-proj">預測</span></div>
       </div>
-      <div class="meta">7月15 03:00 | Atlanta | SF</div>
-      <div style="margin-top:6px;font-size:13px;color:#aaa;">模型預測: <b>Argentina</b> vs <b>England</b></div>
-      <div class="chips"><span class="chip">大球2.5 58%</span><span class="chip">BTTS 62%</span><span class="chip">最可能 2-1</span></div>
+      <div class="meta">7月15 03:00 | Atlanta | 4強</div>
+      <div style="margin-top:5px; font-size:13px; color:#aaa;">模型預測: <b>阿根廷</b> vs <b>英格蘭</b></div>
+      <div class="chips">
+        <span class="chip">大球2.5 58%</span>
+        <span class="chip">BTTS 62%</span>
+        <span class="chip">最可能 2-1</span>
+      </div>
+      <div class="detail" id="m6">
+        <div class="detail-section">
+          <div class="detail-section-title">全場預測 (阿根廷 vs 英格蘭)</div>
+          <div class="detail-grid">
+            <div class="d-item"><span class="d-label">主隊xG</span><span class="d-val">1.6</span></div>
+            <div class="d-item"><span class="d-label">客隊xG</span><span class="d-val">1.4</span></div>
+            <div class="d-item"><span class="d-label">大2.5</span><span class="d-val">58%</span></div>
+            <div class="d-item"><span class="d-label">細2.5</span><span class="d-val">42%</span></div>
+            <div class="d-item"><span class="d-label">BTTS Yes</span><span class="d-val">62%</span></div>
+            <div class="d-item"><span class="d-label">BTTS No</span><span class="d-val">38%</span></div>
+            <div class="d-item"><span class="d-label">角球</span><span class="d-val">10個</span></div>
+            <div class="d-item"><span class="d-label">黃牌</span><span class="d-val">5.2張</span></div>
+          </div>
+        </div>
+        <div class="detail-section">
+          <div class="detail-section-title">上半場預測</div>
+          <div class="ht-grid">
+            <div class="ht-cell"><div class="ht-label">HT主勝</div><div class="ht-val">35%</div></div>
+            <div class="ht-cell"><div class="ht-label">HT平局</div><div class="ht-val">45%</div></div>
+            <div class="ht-cell"><div class="ht-label">HT客勝</div><div class="ht-val">20%</div></div>
+          </div>
+          <div style="margin-top:6px; display:grid; grid-template-columns:1fr 1fr; gap:4px;">
+            <div class="d-item"><span class="d-label">HT大1.0</span><span class="d-val">45%</span></div>
+            <div class="d-item"><span class="d-label">HT細1.0</span><span class="d-val">55%</span></div>
+            <div class="d-item"><span class="d-label">HT BTTS</span><span class="d-val">40%</span></div>
+            <div class="d-item"><span class="d-label">HT角球</span><span class="d-val">5個</span></div>
+          </div>
+        </div>
+        <div class="detail-section">
+          <div class="detail-section-title">Anytime 射手機率</div>
+          <div class="scorer-list">
+            <div class="scorer-item"><span class="scorer-name">Lionel Messi (阿根廷)</span><span class="scorer-prob">38%</span></div>
+            <div class="scorer-item"><span class="scorer-name">Harry Kane (英格蘭)</span><span class="scorer-prob">35%</span></div>
+            <div class="scorer-item"><span class="scorer-name">Kylian Mbappe (法國)*</span><span class="scorer-prob">32%</span></div>
+            <div class="scorer-item"><span class="scorer-name">Julian Alvarez (阿根廷)</span><span class="scorer-prob">22%</span></div>
+            <div class="scorer-item"><span class="scorer-name">Bukayo Saka (英格蘭)</span><span class="scorer-prob">20%</span></div>
+          </div>
+          <div style="font-size:10px; color:#666; margin-top:3px;">*若法國晉級替代阿根廷</div>
+        </div>
+      </div>
     </div>
   </div>
 
+  <!-- 決賽 -->
   <div class="section">
     <div class="section-title">決賽 (Final)</div>
     <div class="connector"><div class="line"></div><span style="font-size:12px;">▼</span><div class="line"></div></div>
@@ -199,6 +501,7 @@
     </div>
   </div>
 
+  <!-- 高信心注碼總覽 -->
   <div class="section">
     <div class="section-title">高信心注碼總覽</div>
     <div class="summary-grid">
@@ -218,15 +521,43 @@
         <div class="note">已確認: 實際13個 ✓</div>
       </div>
       <div class="summary-card">
-        <div class="label">避開</div>
-        <div class="value">西班牙 vs 比利時 方向盤</div>
-        <div class="note">已確認: 西班牙2-1勝 ✓</div>
+        <div class="label">上半場價值</div>
+        <div class="value">阿根廷 HT主勝 52%</div>
+        <div class="note">瑞士上半場進攻無力，阿根廷搶開局</div>
+      </div>
+      <div class="summary-card">
+        <div class="label">射手價值</div>
+        <div class="value">Messi Anytime 42%</div>
+        <div class="note">阿根廷 vs 瑞士，對手防線漏洞大</div>
+      </div>
+      <div class="summary-card">
+        <div class="label">精確比分</div>
+        <div class="value">阿根廷 2-0 (18%)</div>
+        <div class="note">瑞士零封機率高，細球+BTTS No組合</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 走地盤介入點 -->
+  <div class="section">
+    <div class="section-title">走地盤關鍵介入點</div>
+    <div class="summary-grid">
+      <div class="summary-card">
+        <div class="label">挪威 vs 英格蘭</div>
+        <div class="value" style="font-size:12px;">60分鐘仍0-0 → 英格蘭勝水位升高可小注</div>
+        <div class="note">70分鐘英格蘭領先 → 角球下半場Over</div>
+      </div>
+      <div class="summary-card">
+        <div class="label">阿根廷 vs 瑞士</div>
+        <div class="value" style="font-size:12px;">30分鐘仍0-0 → 上半場細1.0有價值</div>
+        <div class="note">阿根廷領先後 → 下半場讓球盤可能升水</div>
       </div>
     </div>
   </div>
 
   <div class="footer">
-    UNIFIED Football Prediction Framework v4.0.17 | 14,000+場校準 | 數據源: FIFA.com, ESPN, BBC Sport, Standard, Yahoo Sports
+    UNIFIED Football Prediction Framework v4.0.17-LU | 14,283場校準 | 數據源: FIFA.com, ESPN, BBC Sport, Standard, Yahoo Sports<br>
+    免責聲明: 本預測僅供參考，投注需自行承擔風險
   </div>
 </div>
 <script>
