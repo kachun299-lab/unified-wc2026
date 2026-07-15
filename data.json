@@ -1,45 +1,56 @@
 {
-  "last_update": "2026-07-16 13:45:00",
+  "last_update": "2026-07-16 14:25:00",
+  "source": "Unified WC2026 Framework",
   "matches": [
     {
-      "league": "FIFA World Cup 2026",
+      "match_id": "wc2026-sf-01",
+      "league": "FIFA World Cup 2026 - 準決賽",
       "home": "英格蘭",
       "away": "阿根廷",
       "home_score": 0,
       "away_score": 0,
-      "status": "準決賽 - 即將開賽"
+      "status": "即將開賽",
+      "kickoff_time": "2026-07-16 03:00",
+      "venue": "Mercedes-Benz Stadium, Atlanta",
+      "weather": "晴朗 28°C",
+      "referee": "Ismail Elfath (USA)",
+      
+      "predictions": {
+        "home_win_prob": 0.32,
+        "draw_prob": 0.28,
+        "away_win_prob": 0.40,
+        "over_25_prob": 0.58,
+        "total_corners": 10.8,
+        "total_cards": 5.4
+      },
+      
+      "recommendations": [
+        "大 2/2.5 總進球",
+        "大 4.5 黃牌",
+        "大 9.5 角球"
+      ],
+      
+      "edge_values": {
+        "over_25": "+5.2%",
+        "cards_over_45": "+6.8%",
+        "corners_over_95": "+5.5%"
+      }
     },
     {
+      "match_id": "nba-summer-01",
       "league": "NBA Summer League",
       "home": "明尼蘇達灰狼",
       "away": "印第安納溜馬",
       "home_score": 92,
       "away_score": 88,
-      "status": "進行中"
-    },
-    {
-      "league": "NBA Summer League",
-      "home": "洛杉磯湖人",
-      "away": "洛杉磯快艇",
-      "home_score": 68,
-      "away_score": 54,
-      "status": "第三節"
-    },
-    {
-      "league": "WNBA",
-      "home": "明尼蘇達天貓",
-      "away": "洛杉磯火花",
-      "home_score": 0,
-      "away_score": 0,
-      "status": "即將開賽"
-    },
-    {
-      "league": "中國香港高級銀牌賽",
-      "home": "香港東方",
-      "away": "康仁福建",
-      "home_score": 96,
-      "away_score": 73,
-      "status": "已結束"
+      "status": "已結束",
+      "kickoff_time": "2026-07-16 03:30",
+      "venue": "Las Vegas",
+      "predictions": {
+        "over_prob": 0.62,
+        "home_win_prob": 0.55
+      },
+      "recommendations": ["大分"]
     }
   ]
 }
