@@ -9,6 +9,7 @@
             --primary: #60a5fa;
             --accent: #f472b6;
             --success: #4ade80;
+            --warning: #fbbf24;
         }
         body {
             font-family: "Microsoft YaHei", system-ui, sans-serif;
@@ -18,7 +19,7 @@
             padding: 20px;
         }
         h1 { text-align: center; color: var(--primary); margin: 10px 0; }
-        .subtitle { text-align: center; color: #94a3b8; margin-bottom: 20px; }
+        .subtitle { text-align: center; color: #94a3b8; margin-bottom: 25px; }
         .update-time { text-align: center; color: #94a3b8; font-size: 14px; margin-bottom: 20px; }
 
         .match-card {
@@ -26,30 +27,26 @@
             border-radius: 16px;
             padding: 20px;
             margin: 15px 0;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
             transition: all 0.3s;
         }
-        .match-card:hover { transform: translateY(-4px); }
+        .match-card:hover { transform: translateY(-5px); }
 
-        .league { color: var(--primary); font-size: 15px; margin-bottom: 10px; }
+        .league { color: var(--primary); font-size: 15px; margin-bottom: 10px; font-weight: 500; }
         .teams { display: flex; justify-content: space-between; align-items: center; font-size: 19px; font-weight: bold; margin: 12px 0; }
-        .score { color: #fbbf24; font-size: 26px; font-weight: bold; }
+        .score { color: var(--warning); font-size: 26px; font-weight: bold; }
 
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin: 12px 0;
-            font-size: 14px;
-        }
-        .stat-item {
+        .probs {
+            display: flex;
+            justify-content: space-around;
             background: #334155;
-            padding: 8px;
-            border-radius: 8px;
-            text-align: center;
+            padding: 12px;
+            border-radius: 10px;
+            margin: 12px 0;
         }
-        .stat-label { color: #94a3b8; font-size: 12px; }
-        .stat-value { font-weight: bold; color: #fbbf24; }
+        .prob-item { text-align: center; }
+        .prob-label { font-size: 12px; color: #94a3b8; }
+        .prob-value { font-size: 18px; font-weight: bold; color: var(--primary); }
 
         .odds {
             background: #334155;
@@ -58,6 +55,13 @@
             margin: 12px 0;
             font-size: 15px;
         }
+
+        .stars {
+            color: #fbbf24;
+            font-size: 18px;
+            margin: 8px 0;
+        }
+
         .recommend {
             background: rgba(74, 222, 128, 0.15);
             color: var(--success);
@@ -106,20 +110,10 @@
                     const card = document.createElement('div');
                     card.className = 'match-card';
 
-                    let oddsHTML = '';
-                    if (match.bet365_odds) {
-                        const o = match.bet365_odds;
-                        oddsHTML = `
-                            <div class="odds">
-                                <strong>${match.home}</strong> ${o.home_win || '-'} | 
-                                平局 ${o.draw || '-'} | 
-                                <strong>${match.away}</strong> ${o.away_win || '-'}
-                            </div>
-                        `;
-                    }
-
                     const pred = match.predictions || {};
-                    const rec = match.recommendations ? match.recommendations.join(" • ") : "推薦觀察";
+                    const odds = match.bet365_odds || {};
+                    const edge = match.edge_values ? Object.values(match.edge_values)[0] : '';
+                    const stars = match.recommendations ? '★★★★☆' : '★★★☆☆';
 
                     card.innerHTML = `
                         <div class="league">${match.league}</div>
@@ -130,26 +124,32 @@
                         </div>
                         <div class="status">${match.status || '即將開賽'}</div>
 
-                        <div class="stats">
-                            <div class="stat-item">
-                                <div class="stat-label">主勝</div>
-                                <div class="stat-value">${(pred.home_win_prob * 100 || 0).toFixed(0)}%</div>
+                        <div class="probs">
+                            <div class="prob-item">
+                                <div class="prob-label">主勝</div>
+                                <div class="prob-value">${(pred.home_win_prob * 100 || 0).toFixed(0)}%</div>
                             </div>
-                            <div class="stat-item">
-                                <div class="stat-label">平局</div>
-                                <div class="stat-value">${(pred.draw_prob * 100 || 0).toFixed(0)}%</div>
+                            <div class="prob-item">
+                                <div class="prob-label">平局</div>
+                                <div class="prob-value">${(pred.draw_prob * 100 || 0).toFixed(0)}%</div>
                             </div>
-                            <div class="stat-item">
-                                <div class="stat-label">客勝</div>
-                                <div class="stat-value">${(pred.away_win_prob * 100 || 0).toFixed(0)}%</div>
+                            <div class="prob-item">
+                                <div class="prob-label">客勝</div>
+                                <div class="prob-value">${(pred.away_win_prob * 100 || 0).toFixed(0)}%</div>
                             </div>
                         </div>
 
-                        ${oddsHTML}
+                        ${match.bet365_odds ? `
+                        <div class="odds">
+                            <strong>${match.home}</strong> ${odds.home_win || '-'} | 
+                            平 ${odds.draw || '-'} | 
+                            <strong>${match.away}</strong> ${odds.away_win || '-'}
+                        </div>` : ''}
 
+                        <div class="stars">${stars}</div>
                         <div class="recommend">
-                            ${rec}<br>
-                            <small>Edge: ${match.edge_values ? Object.values(match.edge_values)[0] || '' : ''}</small>
+                            推薦：${match.recommendations ? match.recommendations.join(" • ") : "觀察中"}<br>
+                            <small>Edge: ${edge}</small>
                         </div>
                     `;
                     container.appendChild(card);
@@ -167,7 +167,7 @@
         }
 
         window.onload = loadData;
-        setInterval(loadData, 180000); // 每3分鐘自動更新
+        setInterval(loadData, 180000);
     </script>
 </body>
 </html>
