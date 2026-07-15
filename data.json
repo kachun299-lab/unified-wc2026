@@ -1,37 +1,45 @@
 {
-  "last_update": "2026-07-16 16:45:00",
-  "source": "Unified WC2026 Framework",
+  "last_update": "2026-07-16 17:05:00",
+  "source": "Unified WC2026 Framework + xG + 黃牌模型",
   "matches": [
     {
       "match_id": "wc2026-sf-01",
       "league": "FIFA World Cup 2026 - 準決賽",
       "home": "英格蘭",
       "away": "阿根廷",
-      "home_score": 1,
-      "away_score": 2,
-      "status": "已結束",
+      "home_score": 0,
+      "away_score": 0,
+      "status": "即將開賽",
       "kickoff_time": "2026-07-16 03:00",
       "venue": "Mercedes-Benz Stadium, Atlanta",
       "weather": "晴朗 28°C",
 
-      "half_score": "0-1",
-      "full_score": "1-2",
+      "half_score": "0-0",
+      "full_score": "預測 1-2",
+
+      "xg": {
+        "home_xg": 1.65,
+        "away_xg": 1.85
+      },
 
       "corners": {
-        "home_corners": 6,
-        "away_corners": 11,
-        "total_corners": 17
+        "home_corners": 5,
+        "away_corners": 7,
+        "total_corners": 12
+      },
+
+      "cards": {
+        "home_yellow": 2.4,
+        "away_yellow": 3.1,
+        "total_yellow": 5.5,
+        "red_card_prob": 0.28
       },
 
       "predictions": {
         "home_win_prob": 0.32,
         "draw_prob": 0.28,
-        "away_win_prob": 0.40
-      },
-
-      "xg": {
-        "home_xg": 1.65,
-        "away_xg": 1.85
+        "away_win_prob": 0.40,
+        "over_25_prob": 0.58
       },
 
       "bet365_odds": {
@@ -42,37 +50,11 @@
         "under": "1.83"
       },
 
-      "recommendations": ["大 2/2.5", "大 9.5 角球"],
+      "recommendations": ["大 2/2.5", "大 4.5 黃牌", "大 9.5 角球"],
       "edge_values": {
         "over_25": "+5.2%",
-        "corners": "+6.1%"
-      }
-    },
-    {
-      "match_id": "nba-summer-01",
-      "league": "NBA Summer League",
-      "home": "明尼蘇達灰狼",
-      "away": "印第安納溜馬",
-      "home_score": 92,
-      "away_score": 88,
-      "status": "已結束",
-      "half_score": "48-42",
-      "full_score": "92-88",
-
-      "xg": {
-        "home_xg": 2.15,
-        "away_xg": 1.95
-      },
-
-      "bet365_odds": {
-        "home_win": "1.76",
-        "away_win": "2.01",
-        "over": "1.91"
-      },
-
-      "recommendations": ["大分"],
-      "edge_values": {
-        "over": "+5.5%"
+        "cards_over_45": "+6.8%",
+        "corners_over_95": "+5.5%"
       }
     }
   ]
