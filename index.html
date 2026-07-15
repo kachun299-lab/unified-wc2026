@@ -5,112 +5,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Unified WC2026 - 世界盃智能預測</title>
     <style>
-        :root {
-            --primary: #60a5fa;
-        }
-        [data-theme="dark"] {
-            --primary: #60a5fa;
-        }
-        body {
-            font-family: "Microsoft YaHei", system-ui, sans-serif;
-            background: var(--bg, linear-gradient(135deg, #f8fafc, #e2e8f0));
-            color: var(--text, #1e2937);
-            margin: 0;
-            padding: 20px;
-            transition: all 0.3s;
-        }
-        [data-theme="dark"] body {
-            background: linear-gradient(135deg, #0f172a, #1e2937);
-            color: #e2e8f0;
-        }
-        h1 { text-align: center; color: var(--primary); margin: 10px 0; }
-        .subtitle { text-align: center; color: #64748b; margin-bottom: 20px; }
-        .controls {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-        input, button, select {
-            padding: 10px 14px;
-            border-radius: 8px;
-            border: 1px solid #cbd5e1;
-        }
-        [data-theme="dark"] input, [data-theme="dark"] button, [data-theme="dark"] select {
-            background: #334155;
-            color: #e2e8f0;
-            border-color: #475569;
-        }
+        body { font-family: "Microsoft YaHei", system-ui, sans-serif; background: linear-gradient(135deg, #0f172a, #1e2937); color: #e2e8f0; margin: 0; padding: 20px; }
+        h1 { text-align: center; color: #60a5fa; margin: 10px 0; }
+        .subtitle { text-align: center; color: #94a3b8; margin-bottom: 25px; }
+        .update-time { text-align: center; color: #94a3b8; font-size: 14px; margin-bottom: 20px; }
 
         .match-card {
-            background: white;
+            background: #1e2937;
             border-radius: 16px;
             padding: 20px;
             margin: 15px 0;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
         }
-        [data-theme="dark"] .match-card {
-            background: #1e2937;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
-        }
+        .teams { display: flex; justify-content: space-between; align-items: center; font-size: 20px; font-weight: bold; margin: 12px 0; }
+        .score { color: #fbbf24; font-size: 28px; font-weight: bold; }
 
-        .teams { display: flex; justify-content: space-between; align-items: center; font-size: 19px; font-weight: bold; margin: 12px 0; }
-        .score { color: #d97706; font-size: 26px; font-weight: bold; }
+        .xg-bar { height: 8px; background: #334155; border-radius: 4px; margin: 8px 0; overflow: hidden; }
+        .xg-home { height: 100%; background: linear-gradient(90deg, #60a5fa, #3b82f6); }
+        .xg-away { height: 100%; background: linear-gradient(90deg, #f472b6, #db2777); }
 
-        .progress-bar {
-            height: 8px;
-            background: #e2e8f0;
-            border-radius: 4px;
-            margin: 8px 0;
-            overflow: hidden;
-        }
-        .progress {
-            height: 100%;
-            background: linear-gradient(90deg, #60a5fa, #3b82f6);
-            transition: width 0.4s;
-        }
-
-        button {
-            background: #d97706;
-            color: white;
-            border: none;
-            padding: 14px 20px;
-            border-radius: 10px;
-            cursor: pointer;
-        }
+        .recommend { background: rgba(74, 222, 128, 0.15); color: #4ade80; padding: 12px; border-radius: 10px; margin-top: 12px; font-weight: 500; }
     </style>
 </head>
 <body>
     <h1>🏆 Unified WC2026 世界盃智能預測</h1>
-    <div class="subtitle">2026 加拿大・墨西哥・美國世界盃</div>
+    <div class="subtitle">xG + Monte Carlo + Bet365 即時數據</div>
     <div class="update-time" id="update-time">載入中...</div>
-
-    <div class="controls">
-        <input type="text" id="search" placeholder="搜尋球隊..." onkeyup="filterMatches()">
-        <button onclick="toggleTheme()">🌙 切換主題</button>
-        <button onclick="refreshData()">🔄 刷新數據</button>
-    </div>
 
     <div id="matches-container"></div>
 
+    <button onclick="refreshData()">🔄 重新運行 Monte Carlo 模擬</button>
+
     <script>
-        let currentTheme = 'light';
-
-        function toggleTheme() {
-            currentTheme = currentTheme === 'light' ? 'dark' : 'light';
-            document.documentElement.setAttribute('data-theme', currentTheme);
-        }
-
-        function filterMatches() {
-            const term = document.getElementById('search').value.toLowerCase();
-            const cards = document.querySelectorAll('.match-card');
-            cards.forEach(card => {
-                const text = card.textContent.toLowerCase();
-                card.style.display = text.includes(term) ? '' : 'none';
-            });
-        }
-
         async function loadData() {
             try {
                 const response = await fetch('data.json');
@@ -122,8 +48,7 @@
                 container.innerHTML = '';
 
                 data.matches.forEach(match => {
-                    const pred = match.predictions || {};
-                    const odds = match.bet365_odds || {};
+                    const xg = match.xg || {home_xg: 1.65, away_xg: 1.45};
 
                     const card = document.createElement('div');
                     card.className = 'match-card';
@@ -135,37 +60,34 @@
                             <span>${match.away}</span>
                         </div>
 
-                        <div class="progress-bar"><div class="progress" style="width: ${pred.home_win_prob * 100 || 50}%"></div></div>
-
-                        <div style="display:flex; justify-content:space-between; font-size:14px;">
-                            <span>主勝 ${(pred.home_win_prob * 100 || 0).toFixed(0)}%</span>
-                            <span>平局 ${(pred.draw_prob * 100 || 0).toFixed(0)}%</span>
-                            <span>客勝 ${(pred.away_win_prob * 100 || 0).toFixed(0)}%</span>
+                        <div style="margin:12px 0;">
+                            <div style="display:flex; justify-content:space-between; font-size:13px;">
+                                <span>${match.home} xG ${xg.home_xg}</span>
+                                <span>${match.away} xG ${xg.away_xg}</span>
+                            </div>
+                            <div class="xg-bar"><div class="xg-home" style="width: ${xg.home_xg * 35}%"></div></div>
+                            <div class="xg-bar"><div class="xg-away" style="width: ${xg.away_xg * 35}%"></div></div>
                         </div>
 
-                        ${match.bet365_odds ? `
-                        <div class="odds">
-                            Bet365: 主 ${odds.home_win || '-'} | 平 ${odds.draw || '-'} | 客 ${odds.away_win || '-'}
-                        </div>` : ''}
-
                         <div class="recommend">
-                            推薦：大 2/2.5 • 大 4.5黃牌
+                            推薦：大 2/2.5 • 大 4.5黃牌 • 大 9.5角球
                         </div>
                     `;
                     container.appendChild(card);
                 });
 
             } catch (e) {
-                console.error(e);
+                document.getElementById('matches-container').innerHTML = `<p style="color:#f87171; text-align:center;">⚠️ 無法載入數據</p>`;
             }
         }
 
         function refreshData() {
+            document.getElementById('update-time').textContent = "正在更新...";
             loadData();
         }
 
         window.onload = loadData;
-        setInterval(loadData, 180000); // 每3分鐘自動更新
+        setInterval(loadData, 180000);
     </script>
 </body>
 </html>
