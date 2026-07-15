@@ -20,21 +20,53 @@
         .teams { display: flex; justify-content: space-between; align-items: center; font-size: 20px; font-weight: bold; margin: 12px 0; }
         .score { color: #fbbf24; font-size: 28px; font-weight: bold; }
 
-        .xg-bar { height: 8px; background: #334155; border-radius: 4px; margin: 8px 0; overflow: hidden; }
-        .xg-home { height: 100%; background: linear-gradient(90deg, #60a5fa, #3b82f6); }
-        .xg-away { height: 100%; background: linear-gradient(90deg, #f472b6, #db2777); }
+        .score-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin: 12px 0;
+            font-size: 14px;
+        }
+        .info-box {
+            background: #334155;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .label { color: #94a3b8; font-size: 12px; }
+        .value { font-weight: bold; color: #fbbf24; }
+
+        .corners {
+            background: #334155;
+            padding: 12px;
+            border-radius: 10px;
+            margin: 12px 0;
+            text-align: center;
+        }
 
         .recommend { background: rgba(74, 222, 128, 0.15); color: #4ade80; padding: 12px; border-radius: 10px; margin-top: 12px; font-weight: 500; }
+
+        button {
+            background: linear-gradient(90deg, #3b82f6, #2563eb);
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+            font-size: 17px;
+        }
     </style>
 </head>
 <body>
-    <h1>🏆 Unified WC2026 世界盃智能預測</h1>
-    <div class="subtitle">xG + Monte Carlo + Bet365 即時數據</div>
+    <h1>🏆 Unified WC2026 - 世界盃智能預測</h1>
+    <div class="subtitle">即時比分 + 角球 + xG + Bet365</div>
     <div class="update-time" id="update-time">載入中...</div>
 
     <div id="matches-container"></div>
 
-    <button onclick="refreshData()">🔄 重新運行 Monte Carlo 模擬</button>
+    <button onclick="refreshData()">🔄 手動刷新最新數據</button>
 
     <script>
         async function loadData() {
@@ -42,16 +74,18 @@
                 const response = await fetch('data.json');
                 const data = await response.json();
                 
-                document.getElementById('update-time').textContent = `最後更新: ${data.last_update}`;
+                document.getElementById('update-time').textContent = 
+                    `最後更新: ${data.last_update}`;
 
                 const container = document.getElementById('matches-container');
                 container.innerHTML = '';
 
                 data.matches.forEach(match => {
-                    const xg = match.xg || {home_xg: 1.65, away_xg: 1.45};
-
                     const card = document.createElement('div');
                     card.className = 'match-card';
+
+                    const corners = match.corners || {home_corners: 5, away_corners: 6, total_corners: 11};
+
                     card.innerHTML = `
                         <div class="league">${match.league}</div>
                         <div class="teams">
@@ -60,34 +94,42 @@
                             <span>${match.away}</span>
                         </div>
 
-                        <div style="margin:12px 0;">
-                            <div style="display:flex; justify-content:space-between; font-size:13px;">
-                                <span>${match.home} xG ${xg.home_xg}</span>
-                                <span>${match.away} xG ${xg.away_xg}</span>
+                        <div class="score-info">
+                            <div class="info-box">
+                                <div class="label">上半場</div>
+                                <div class="value">${match.half_score || '0-0'}</div>
                             </div>
-                            <div class="xg-bar"><div class="xg-home" style="width: ${xg.home_xg * 35}%"></div></div>
-                            <div class="xg-bar"><div class="xg-away" style="width: ${xg.away_xg * 35}%"></div></div>
+                            <div class="info-box">
+                                <div class="label">全場比分</div>
+                                <div class="value">${match.full_score || match.home_score + '-' + match.away_score}</div>
+                            </div>
+                        </div>
+
+                        <div class="corners">
+                            角球：${match.home} ${corners.home_corners} - ${corners.away_corners} ${match.away}<br>
+                            <strong>總角球 ${corners.total_corners}</strong>
                         </div>
 
                         <div class="recommend">
-                            推薦：大 2/2.5 • 大 4.5黃牌 • 大 9.5角球
+                            推薦：大 2/2.5 • 大 9.5 角球 • 大 4.5 黃牌
                         </div>
                     `;
                     container.appendChild(card);
                 });
 
             } catch (e) {
-                document.getElementById('matches-container').innerHTML = `<p style="color:#f87171; text-align:center;">⚠️ 無法載入數據</p>`;
+                document.getElementById('matches-container').innerHTML = 
+                    `<p style="color:#f87171; text-align:center;">⚠️ 無法載入數據</p>`;
             }
         }
 
         function refreshData() {
-            document.getElementById('update-time').textContent = "正在更新...";
+            document.getElementById('update-time').textContent = "正在更新最新數據...";
             loadData();
         }
 
         window.onload = loadData;
-        setInterval(loadData, 180000);
+        setInterval(loadData, 180000); // 每3分鐘自動更新
     </script>
 </body>
 </html>
