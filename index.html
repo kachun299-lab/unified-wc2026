@@ -6,16 +6,34 @@
     <title>Unified WC2026 - 世界盃智能預測</title>
     <style>
         body { font-family: "Microsoft YaHei", system-ui, sans-serif; background: linear-gradient(135deg, #0f172a, #1e2937); color: #e2e8f0; margin: 0; padding: 15px; }
-        h1 { text-align: center; color: #60a5fa; }
+        h1 { text-align: center; color: #60a5fa; margin: 10px 0; }
         .subtitle { text-align: center; color: #94a3b8; margin-bottom: 20px; }
-        .match-card { background: #1e2937; border-radius: 12px; padding: 20px; margin: 15px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.4); }
-        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 15px; }
-        .info-item { background: #334155; padding: 12px; border-radius: 8px; }
-        .label { color: #94a3b8; font-size: 13px; }
-        .value { font-size: 18px; font-weight: bold; color: #fbbf24; }
-        button { background: #3b82f6; color: white; border: none; padding: 14px; border-radius: 10px; cursor: pointer; width: 100%; margin-top: 15px; font-size: 16px; }
-        button:hover { background: #2563eb; }
         .update-time { text-align: center; color: #94a3b8; font-size: 14px; margin-bottom: 15px; }
+        
+        .match-card {
+            background: #1e2937;
+            border-radius: 12px;
+            padding: 18px;
+            margin: 12px 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+        }
+        .league { color: #60a5fa; font-size: 14px; margin-bottom: 8px; }
+        .teams { display: flex; justify-content: space-between; align-items: center; font-size: 18px; font-weight: bold; }
+        .score { color: #fbbf24; font-size: 24px; font-weight: bold; }
+        .status { color: #4ade80; font-size: 14px; margin-top: 8px; }
+        .recommend { color: #f472b6; margin-top: 12px; font-weight: 500; }
+        
+        button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 15px;
+            font-size: 16px;
+        }
     </style>
 </head>
 <body>
@@ -25,7 +43,7 @@
 
     <div id="matches-container"></div>
 
-    <button onclick="refreshData()">🔄 手動刷新世界盃數據</button>
+    <button onclick="refreshData()">🔄 手動刷新最新數據</button>
 
     <script>
         async function loadData() {
@@ -33,74 +51,52 @@
                 const response = await fetch('data.json');
                 const data = await response.json();
                 
-                document.getElementById('update-time').innerHTML = 
-                    `最後更新: ${data.last_update} | <span style="color:#4ade80">英格蘭 vs 阿根廷 準決賽</span>`;
+                document.getElementById('update-time').textContent = 
+                    `最後更新: ${data.last_update}`;
 
                 const container = document.getElementById('matches-container');
                 container.innerHTML = '';
 
-                // 英格蘭 vs 阿根廷重點卡片
-                const wc = {
-                    league: "FIFA World Cup 2026 - 準決賽",
-                    home: "英格蘭",
-                    away: "阿根廷",
-                    home_score: 0,
-                    away_score: 0,
-                    status: "即將開賽"
-                };
+                data.matches.forEach(match => {
+                    const isWC = match.league.includes("World Cup") || match.league.includes("FIFA");
+                    
+                    const card = document.createElement('div');
+                    card.className = 'match-card';
+                    card.style.border = isWC ? '2px solid #60a5fa' : 'none';
+                    
+                    card.innerHTML = `
+                        <div class="league">${match.league} ${isWC ? '⭐' : ''}</div>
+                        <div class="teams">
+                            <span>${match.home}</span>
+                            <span class="score">${match.home_score} - ${match.away_score}</span>
+                            <span>${match.away}</span>
+                        </div>
+                        <div class="status">${match.status || '即將開賽'}</div>
+                        <div class="recommend">
+                            ${isWC ? '推薦：大 2/2.5 • 大 4.5黃牌 • 大 9.5角球' : '推薦：關注大分'}
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
 
-                const card = document.createElement('div');
-                card.className = 'match-card';
-                card.innerHTML = `
-                    <div class="league">${wc.league}</div>
-                    <div class="teams">
-                        <span>${wc.home}</span>
-                        <span class="score">VS</span>
-                        <span>${wc.away}</span>
-                    </div>
-                    <div class="info-grid">
-                        <div class="info-item">
-                            <div class="label">場地 / 天氣</div>
-                            <div class="value">亞特蘭大 • 晴 • 28°C</div>
-                        </div>
-                        <div class="info-item">
-                            <div class="label">主裁判</div>
-                            <div class="value">Ismail Elfath (USA) • 偏嚴</div>
-                        </div>
-                        <div class="info-item">
-                            <div class="label">黃牌預測</div>
-                            <div class="value">大 4.5 (62%)</div>
-                        </div>
-                        <div class="info-item">
-                            <div class="label">角球預測</div>
-                            <div class="value">大 9.5 (58%)</div>
-                        </div>
-                        <div class="info-item">
-                            <div class="label">上半場比分</div>
-                            <div class="value">0-1 / 1-1</div>
-                        </div>
-                        <div class="info-item">
-                            <div class="label">下半場比分</div>
-                            <div class="value">1-2 / 2-2</div>
-                        </div>
-                    </div>
-                    <div class="recommend">強推：大 2/2.5 • 大 4.5黃牌 • 大 9.5角球</div>
-                `;
-                container.appendChild(card);
+                if (data.matches.length === 0) {
+                    container.innerHTML = `<p style="text-align:center; color:#94a3b8;">目前無比賽數據</p>`;
+                }
 
             } catch (e) {
                 document.getElementById('matches-container').innerHTML = 
-                    `<p style="color:#f87171; text-align:center;">⚠️ 無法載入數據</p>`;
+                    `<p style="color:#f87171; text-align:center;">⚠️ 無法載入數據，請確認 data.json 存在</p>`;
             }
         }
 
         function refreshData() {
-            document.getElementById('update-time').textContent = "正在更新世界盃數據...";
+            document.getElementById('update-time').textContent = "正在更新最新數據...";
             loadData();
         }
 
+        // 自動載入 + 每3分鐘刷新
         window.onload = loadData;
-        setInterval(loadData, 180000); // 每3分鐘自動更新
+        setInterval(loadData, 180000);
     </script>
 </body>
 </html>
