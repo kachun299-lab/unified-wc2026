@@ -6,7 +6,7 @@
     <title>Unified WC2026 - 世界盃智能預測</title>
     <style>
         body { font-family: "Microsoft YaHei", system-ui, sans-serif; background: linear-gradient(135deg, #0f172a, #1e2937); color: #e2e8f0; margin: 0; padding: 15px; }
-        h1 { text-align: center; color: #60a5fa; margin: 10px 0; }
+        h1 { text-align: center; color: #60a5fa; }
         .subtitle { text-align: center; color: #94a3b8; margin-bottom: 20px; }
         .update-time { text-align: center; color: #94a3b8; font-size: 14px; margin-bottom: 15px; }
         
@@ -21,7 +21,16 @@
         .teams { display: flex; justify-content: space-between; align-items: center; font-size: 18px; font-weight: bold; }
         .score { color: #fbbf24; font-size: 24px; font-weight: bold; }
         .status { color: #4ade80; font-size: 14px; margin-top: 8px; }
-        .recommend { color: #f472b6; margin-top: 12px; font-weight: 500; }
+        
+        .odds {
+            margin-top: 12px;
+            padding: 10px;
+            background: #334155;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        .odds-title { color: #f472b6; font-weight: bold; margin-bottom: 6px; }
+        .recommend { color: #4ade80; margin-top: 12px; font-weight: 500; }
         
         button {
             background: #3b82f6;
@@ -37,13 +46,13 @@
     </style>
 </head>
 <body>
-    <h1>🏆 Unified WC2026 世界盃智能預測</h1>
-    <div class="subtitle">2026 加拿大・墨西哥・美國世界盃</div>
+    <h1>🏆 Unified WC2026 - 世界盃智能預測</h1>
+    <div class="subtitle">2026 加拿大・墨西哥・美國世界盃 | Bet365 即時賠率</div>
     <div class="update-time" id="update-time">載入中...</div>
 
     <div id="matches-container"></div>
 
-    <button onclick="refreshData()">🔄 手動刷新最新數據</button>
+    <button onclick="refreshData()">🔄 手動刷新 Bet365 賠率</button>
 
     <script>
         async function loadData() {
@@ -52,51 +61,56 @@
                 const data = await response.json();
                 
                 document.getElementById('update-time').textContent = 
-                    `最後更新: ${data.last_update}`;
+                    `最後更新: ${data.last_update} | Bet365 賠率`;
 
                 const container = document.getElementById('matches-container');
                 container.innerHTML = '';
 
                 data.matches.forEach(match => {
-                    const isWC = match.league.includes("World Cup") || match.league.includes("FIFA");
-                    
                     const card = document.createElement('div');
                     card.className = 'match-card';
-                    card.style.border = isWC ? '2px solid #60a5fa' : 'none';
                     
+                    let oddsHTML = '';
+                    if (match.bet365_odds) {
+                        const o = match.bet365_odds;
+                        oddsHTML = `
+                            <div class="odds">
+                                <div class="odds-title">Bet365 即時賠率</div>
+                                <strong>${match.home}</strong> ${o.home_win || '-'} | 
+                                平局 ${o.draw || '-'} | 
+                                <strong>${match.away}</strong> ${o.away_win || '-'}<br>
+                                大小 ${o.over} / ${o.under}
+                            </div>
+                        `;
+                    }
+
                     card.innerHTML = `
-                        <div class="league">${match.league} ${isWC ? '⭐' : ''}</div>
+                        <div class="league">${match.league}</div>
                         <div class="teams">
                             <span>${match.home}</span>
                             <span class="score">${match.home_score} - ${match.away_score}</span>
                             <span>${match.away}</span>
                         </div>
                         <div class="status">${match.status || '即將開賽'}</div>
-                        <div class="recommend">
-                            ${isWC ? '推薦：大 2/2.5 • 大 4.5黃牌 • 大 9.5角球' : '推薦：關注大分'}
-                        </div>
+                        ${oddsHTML}
+                        <div class="recommend">推薦：大 2/2.5 • 大 4.5黃牌</div>
                     `;
                     container.appendChild(card);
                 });
 
-                if (data.matches.length === 0) {
-                    container.innerHTML = `<p style="text-align:center; color:#94a3b8;">目前無比賽數據</p>`;
-                }
-
             } catch (e) {
                 document.getElementById('matches-container').innerHTML = 
-                    `<p style="color:#f87171; text-align:center;">⚠️ 無法載入數據，請確認 data.json 存在</p>`;
+                    `<p style="color:#f87171; text-align:center;">⚠️ 無法載入數據</p>`;
             }
         }
 
         function refreshData() {
-            document.getElementById('update-time').textContent = "正在更新最新數據...";
+            document.getElementById('update-time').textContent = "正在更新 Bet365 賠率...";
             loadData();
         }
 
-        // 自動載入 + 每3分鐘刷新
         window.onload = loadData;
-        setInterval(loadData, 180000);
+        setInterval(loadData, 180000); // 每3分鐘自動更新
     </script>
 </body>
 </html>
