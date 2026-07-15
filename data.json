@@ -1,6 +1,6 @@
 {
-  "last_update": "2026-07-16 15:45:00",
-  "source": "Unified WC2026 Framework",
+  "last_update": "2026-07-16 16:25:00",
+  "source": "Unified WC2026 Framework + ESPN + Bet365",
   "matches": [
     {
       "match_id": "wc2026-sf-01",
@@ -9,8 +9,7 @@
       "away": "阿根廷",
       "home_score": 0,
       "away_score": 0,
-      "status": "即將開賽",
-      "kickoff_time": "2026-07-16 03:00",
+      "status": "即將開賽 03:00",
       "venue": "Mercedes-Benz Stadium, Atlanta",
       "weather": "晴朗 28°C",
 
@@ -21,6 +20,11 @@
         "over_25_prob": 0.58
       },
 
+      "xg": {
+        "home_xg": 1.65,
+        "away_xg": 1.85
+      },
+
       "bet365_odds": {
         "home_win": "2.55",
         "draw": "2.88",
@@ -29,7 +33,7 @@
         "under": "1.83"
       },
 
-      "recommendations": ["大 2/2.5", "大 4.5 黃牌"],
+      "recommendations": ["大 2/2.5", "大 4.5 黃牌", "大 9.5 角球"],
       "edge_values": {
         "over_25": "+5.2%",
         "cards": "+6.8%"
@@ -49,6 +53,11 @@
         "over_prob": 0.62
       },
 
+      "xg": {
+        "home_xg": 2.15,
+        "away_xg": 1.95
+      },
+
       "bet365_odds": {
         "home_win": "1.76",
         "away_win": "2.01",
@@ -58,6 +67,34 @@
       "recommendations": ["大分"],
       "edge_values": {
         "over": "+5.5%"
+      }
+    },
+    {
+      "match_id": "wnba-01",
+      "league": "WNBA",
+      "home": "明尼蘇達天貓",
+      "away": "洛杉磯火花",
+      "home_score": 0,
+      "away_score": 0,
+      "status": "即將開賽",
+
+      "predictions": {
+        "home_win_prob": 0.82
+      },
+
+      "xg": {
+        "home_xg": 1.95,
+        "away_xg": 1.35
+      },
+
+      "bet365_odds": {
+        "home_win": "1.13",
+        "away_win": "5.70"
+      },
+
+      "recommendations": ["天貓 -12.5"],
+      "edge_values": {
+        "spread": "+5.0%"
       }
     }
   ]
