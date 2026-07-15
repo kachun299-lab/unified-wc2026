@@ -5,54 +5,125 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Unified WC2026 - 世界盃智能預測</title>
     <style>
-        body { font-family: "Microsoft YaHei", system-ui, sans-serif; background: linear-gradient(135deg, #0f172a, #1e2937); color: #e2e8f0; margin: 0; padding: 15px; }
-        h1 { text-align: center; color: #60a5fa; }
-        .subtitle { text-align: center; color: #94a3b8; margin-bottom: 20px; }
-        .update-time { text-align: center; color: #94a3b8; font-size: 14px; margin-bottom: 15px; }
-        
+        :root {
+            --primary: #60a5fa;
+            --accent: #f472b6;
+            --success: #4ade80;
+        }
+        body {
+            font-family: "Microsoft YaHei", system-ui, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e2937 100%);
+            color: #e2e8f0;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        h1 {
+            text-align: center;
+            color: var(--primary);
+            margin: 10px 0 5px;
+            font-size: 28px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #94a3b8;
+            margin-bottom: 25px;
+            font-size: 15px;
+        }
+        .update-time {
+            text-align: center;
+            color: #94a3b8;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
         .match-card {
             background: #1e2937;
-            border-radius: 12px;
-            padding: 18px;
+            border-radius: 16px;
+            padding: 20px;
+            margin: 15px 0;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+            transition: all 0.3s ease;
+        }
+        .match-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.5);
+        }
+
+        .league {
+            color: var(--primary);
+            font-size: 15px;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+        .teams {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 19px;
+            font-weight: bold;
             margin: 12px 0;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
         }
-        .league { color: #60a5fa; font-size: 14px; margin-bottom: 8px; }
-        .teams { display: flex; justify-content: space-between; align-items: center; font-size: 18px; font-weight: bold; }
-        .score { color: #fbbf24; font-size: 24px; font-weight: bold; }
-        .status { color: #4ade80; font-size: 14px; margin-top: 8px; }
-        
+        .score {
+            color: #fbbf24;
+            font-size: 26px;
+            font-weight: bold;
+            min-width: 80px;
+            text-align: center;
+        }
+
         .odds {
-            margin-top: 12px;
-            padding: 10px;
             background: #334155;
-            border-radius: 8px;
-            font-size: 14px;
-        }
-        .odds-title { color: #f472b6; font-weight: bold; margin-bottom: 6px; }
-        .recommend { color: #4ade80; margin-top: 12px; font-weight: 500; }
-        
-        button {
-            background: #3b82f6;
-            color: white;
-            border: none;
             padding: 14px;
             border-radius: 10px;
+            margin: 12px 0;
+            font-size: 15px;
+        }
+        .odds-title {
+            color: var(--accent);
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .status {
+            color: var(--success);
+            font-size: 14px;
+            margin-top: 8px;
+        }
+        .recommend {
+            color: #4ade80;
+            background: rgba(74, 222, 128, 0.1);
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 12px;
+            font-weight: 500;
+        }
+
+        button {
+            background: linear-gradient(90deg, #3b82f6, #2563eb);
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 12px;
             cursor: pointer;
             width: 100%;
-            margin-top: 15px;
-            font-size: 16px;
+            margin-top: 20px;
+            font-size: 17px;
+            font-weight: bold;
+        }
+        button:hover {
+            background: linear-gradient(90deg, #2563eb, #1d4ed8);
         }
     </style>
 </head>
 <body>
-    <h1>🏆 Unified WC2026 - 世界盃智能預測</h1>
+    <h1>🏆 Unified WC2026 世界盃智能預測</h1>
     <div class="subtitle">2026 加拿大・墨西哥・美國世界盃 | Bet365 即時賠率</div>
     <div class="update-time" id="update-time">載入中...</div>
 
     <div id="matches-container"></div>
 
-    <button onclick="refreshData()">🔄 手動刷新 Bet365 賠率</button>
+    <button onclick="refreshData()">🔄 手動刷新最新數據與 Bet365 賠率</button>
 
     <script>
         async function loadData() {
@@ -61,7 +132,7 @@
                 const data = await response.json();
                 
                 document.getElementById('update-time').textContent = 
-                    `最後更新: ${data.last_update} | Bet365 賠率`;
+                    `最後更新: ${data.last_update}`;
 
                 const container = document.getElementById('matches-container');
                 container.innerHTML = '';
@@ -69,17 +140,17 @@
                 data.matches.forEach(match => {
                     const card = document.createElement('div');
                     card.className = 'match-card';
-                    
+
                     let oddsHTML = '';
                     if (match.bet365_odds) {
                         const o = match.bet365_odds;
                         oddsHTML = `
                             <div class="odds">
                                 <div class="odds-title">Bet365 即時賠率</div>
-                                <strong>${match.home}</strong> ${o.home_win || '-'} | 
-                                平局 ${o.draw || '-'} | 
+                                <strong>${match.home}</strong> ${o.home_win || '-'}　|　
+                                平局 ${o.draw || '-'}　|　
                                 <strong>${match.away}</strong> ${o.away_win || '-'}<br>
-                                大小 ${o.over} / ${o.under}
+                                大小 ${o.over || '-'} / ${o.under || '-'}
                             </div>
                         `;
                     }
@@ -93,24 +164,25 @@
                         </div>
                         <div class="status">${match.status || '即將開賽'}</div>
                         ${oddsHTML}
-                        <div class="recommend">推薦：大 2/2.5 • 大 4.5黃牌</div>
+                        <div class="recommend">推薦：大 2/2.5 • 大 4.5黃牌 • 大 9.5角球</div>
                     `;
                     container.appendChild(card);
                 });
 
             } catch (e) {
                 document.getElementById('matches-container').innerHTML = 
-                    `<p style="color:#f87171; text-align:center;">⚠️ 無法載入數據</p>`;
+                    `<p style="color:#f87171; text-align:center; padding:20px;">⚠️ 無法載入數據，請確認 data.json 存在</p>`;
             }
         }
 
         function refreshData() {
-            document.getElementById('update-time').textContent = "正在更新 Bet365 賠率...";
+            document.getElementById('update-time').textContent = "正在更新 Bet365 賠率與即時比分...";
             loadData();
         }
 
+        // 自動載入與刷新
         window.onload = loadData;
-        setInterval(loadData, 180000); // 每3分鐘自動更新
+        setInterval(loadData, 180000);   // 每 3 分鐘自動更新
     </script>
 </body>
 </html>
