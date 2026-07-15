@@ -5,74 +5,94 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Unified WC2026 - 世界盃智能預測</title>
     <style>
-        :root {
-            --primary: #60a5fa;
-            --accent: #f472b6;
-            --success: #4ade80;
-            --warning: #fbbf24;
-        }
         body {
             font-family: "Microsoft YaHei", system-ui, sans-serif;
-            background: linear-gradient(135deg, #0f172a 0%, #1e2937 100%);
-            color: #e2e8f0;
+            background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+            color: #1e2937;
             margin: 0;
             padding: 20px;
         }
-        h1 { text-align: center; color: var(--primary); margin: 10px 0; }
-        .subtitle { text-align: center; color: #94a3b8; margin-bottom: 25px; }
-        .update-time { text-align: center; color: #94a3b8; font-size: 14px; margin-bottom: 20px; }
+        h1 { 
+            text-align: center; 
+            color: #d97706; 
+            margin: 10px 0 5px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .subtitle { 
+            text-align: center; 
+            color: #64748b; 
+            margin-bottom: 25px; 
+        }
+        .update-time { 
+            text-align: center; 
+            color: #64748b; 
+            font-size: 14px; 
+            margin-bottom: 20px; 
+        }
 
         .match-card {
-            background: #1e2937;
+            background: white;
             border-radius: 16px;
             padding: 20px;
             margin: 15px 0;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
-            transition: all 0.3s;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border: 1px solid #f1f5f9;
         }
-        .match-card:hover { transform: translateY(-5px); }
+        .league { 
+            color: #d97706; 
+            font-size: 15px; 
+            margin-bottom: 12px; 
+            font-weight: 600; 
+        }
+        .teams { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            font-size: 19px; 
+            font-weight: bold; 
+            margin: 12px 0; 
+        }
+        .score { 
+            color: #1e40af; 
+            font-size: 26px; 
+            font-weight: bold; 
+        }
 
-        .league { color: var(--primary); font-size: 15px; margin-bottom: 10px; font-weight: 500; }
-        .teams { display: flex; justify-content: space-between; align-items: center; font-size: 19px; font-weight: bold; margin: 12px 0; }
-        .score { color: var(--warning); font-size: 26px; font-weight: bold; }
-
-        .probs {
-            display: flex;
-            justify-content: space-around;
-            background: #334155;
+        .half-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin: 15px 0;
+            font-size: 14px;
+        }
+        .info-box {
+            background: #f8fafc;
             padding: 12px;
             border-radius: 10px;
-            margin: 12px 0;
+            border: 1px solid #e2e8f0;
         }
-        .prob-item { text-align: center; }
-        .prob-label { font-size: 12px; color: #94a3b8; }
-        .prob-value { font-size: 18px; font-weight: bold; color: var(--primary); }
+        .label { color: #64748b; font-size: 12px; }
+        .value { font-weight: bold; color: #1e40af; }
 
         .odds {
-            background: #334155;
+            background: #fefce8;
             padding: 12px;
             border-radius: 10px;
             margin: 12px 0;
-            font-size: 15px;
-        }
-
-        .stars {
-            color: #fbbf24;
-            font-size: 18px;
-            margin: 8px 0;
+            border: 1px solid #fde047;
         }
 
         .recommend {
-            background: rgba(74, 222, 128, 0.15);
-            color: var(--success);
+            background: #fef3c7;
+            color: #b45309;
             padding: 12px;
             border-radius: 10px;
             margin-top: 12px;
-            font-weight: 500;
+            font-weight: 600;
         }
 
         button {
-            background: linear-gradient(90deg, #3b82f6, #2563eb);
+            background: linear-gradient(90deg, #d97706, #b45309);
             color: white;
             border: none;
             padding: 16px;
@@ -112,8 +132,6 @@
 
                     const pred = match.predictions || {};
                     const odds = match.bet365_odds || {};
-                    const edge = match.edge_values ? Object.values(match.edge_values)[0] : '';
-                    const stars = match.recommendations ? '★★★★☆' : '★★★☆☆';
 
                     card.innerHTML = `
                         <div class="league">${match.league}</div>
@@ -122,34 +140,34 @@
                             <span class="score">${match.home_score} - ${match.away_score}</span>
                             <span>${match.away}</span>
                         </div>
-                        <div class="status">${match.status || '即將開賽'}</div>
 
-                        <div class="probs">
-                            <div class="prob-item">
-                                <div class="prob-label">主勝</div>
-                                <div class="prob-value">${(pred.home_win_prob * 100 || 0).toFixed(0)}%</div>
+                        <div class="half-info">
+                            <div class="info-box">
+                                <div class="label">上半場比分</div>
+                                <div class="value">1 - 1</div>
                             </div>
-                            <div class="prob-item">
-                                <div class="prob-label">平局</div>
-                                <div class="prob-value">${(pred.draw_prob * 100 || 0).toFixed(0)}%</div>
+                            <div class="info-box">
+                                <div class="label">全場比分</div>
+                                <div class="value">2 - 2</div>
                             </div>
-                            <div class="prob-item">
-                                <div class="prob-label">客勝</div>
-                                <div class="prob-value">${(pred.away_win_prob * 100 || 0).toFixed(0)}%</div>
+                            <div class="info-box">
+                                <div class="label">上半場角球</div>
+                                <div class="value">4 - 6</div>
+                            </div>
+                            <div class="info-box">
+                                <div class="label">全場角球</div>
+                                <div class="value">9 - 12</div>
                             </div>
                         </div>
 
                         ${match.bet365_odds ? `
                         <div class="odds">
-                            <strong>${match.home}</strong> ${odds.home_win || '-'} | 
-                            平 ${odds.draw || '-'} | 
-                            <strong>${match.away}</strong> ${odds.away_win || '-'}
+                            <strong>Bet365 賠率</strong><br>
+                            ${match.home} ${odds.home_win || '-'} | 平 ${odds.draw || '-'} | ${match.away} ${odds.away_win || '-'}
                         </div>` : ''}
 
-                        <div class="stars">${stars}</div>
                         <div class="recommend">
-                            推薦：${match.recommendations ? match.recommendations.join(" • ") : "觀察中"}<br>
-                            <small>Edge: ${edge}</small>
+                            推薦：大 2/2.5 • 大 4.5黃牌 • 大 9.5角球
                         </div>
                     `;
                     container.appendChild(card);
@@ -157,7 +175,7 @@
 
             } catch (e) {
                 document.getElementById('matches-container').innerHTML = 
-                    `<p style="color:#f87171; text-align:center;">⚠️ 無法載入數據</p>`;
+                    `<p style="color:#b45309; text-align:center;">⚠️ 無法載入數據</p>`;
             }
         }
 
