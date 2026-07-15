@@ -4,7 +4,7 @@ from datetime import datetime
 
 class DataUpdater:
     def __init__(self, odds_api_key=None):
-        self.odds_api_key = odds_api_key or "YOUR_THE_ODDS_API_KEY_HERE"  # ← 請替換成你的 Key
+        self.odds_api_key = odds_api_key or "4cbc4c0d7cd3fb57b56bc8b43df411a6"  # ← 請替換成你的 Key
         self.data = {
             "last_update": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             "matches": []
