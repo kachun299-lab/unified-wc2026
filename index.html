@@ -16,26 +16,10 @@
             color: #e2e8f0;
             margin: 0;
             padding: 20px;
-            line-height: 1.6;
         }
-        h1 {
-            text-align: center;
-            color: var(--primary);
-            margin: 10px 0 5px;
-            font-size: 28px;
-        }
-        .subtitle {
-            text-align: center;
-            color: #94a3b8;
-            margin-bottom: 25px;
-            font-size: 15px;
-        }
-        .update-time {
-            text-align: center;
-            color: #94a3b8;
-            font-size: 14px;
-            margin-bottom: 20px;
-        }
+        h1 { text-align: center; color: var(--primary); margin: 10px 0; }
+        .subtitle { text-align: center; color: #94a3b8; margin-bottom: 20px; }
+        .update-time { text-align: center; color: #94a3b8; font-size: 14px; margin-bottom: 20px; }
 
         .match-card {
             background: #1e2937;
@@ -43,58 +27,42 @@
             padding: 20px;
             margin: 15px 0;
             box-shadow: 0 8px 20px rgba(0,0,0,0.4);
-            transition: all 0.3s ease;
+            transition: all 0.3s;
         }
-        .match-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 25px rgba(0,0,0,0.5);
-        }
+        .match-card:hover { transform: translateY(-4px); }
 
-        .league {
-            color: var(--primary);
-            font-size: 15px;
-            margin-bottom: 10px;
-            font-weight: 500;
-        }
-        .teams {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 19px;
-            font-weight: bold;
+        .league { color: var(--primary); font-size: 15px; margin-bottom: 10px; }
+        .teams { display: flex; justify-content: space-between; align-items: center; font-size: 19px; font-weight: bold; margin: 12px 0; }
+        .score { color: #fbbf24; font-size: 26px; font-weight: bold; }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
             margin: 12px 0;
+            font-size: 14px;
         }
-        .score {
-            color: #fbbf24;
-            font-size: 26px;
-            font-weight: bold;
-            min-width: 80px;
+        .stat-item {
+            background: #334155;
+            padding: 8px;
+            border-radius: 8px;
             text-align: center;
         }
+        .stat-label { color: #94a3b8; font-size: 12px; }
+        .stat-value { font-weight: bold; color: #fbbf24; }
 
         .odds {
             background: #334155;
-            padding: 14px;
+            padding: 12px;
             border-radius: 10px;
             margin: 12px 0;
             font-size: 15px;
         }
-        .odds-title {
-            color: var(--accent);
-            font-weight: bold;
-            margin-bottom: 8px;
-        }
-
-        .status {
-            color: var(--success);
-            font-size: 14px;
-            margin-top: 8px;
-        }
         .recommend {
-            color: #4ade80;
-            background: rgba(74, 222, 128, 0.1);
-            padding: 10px;
-            border-radius: 8px;
+            background: rgba(74, 222, 128, 0.15);
+            color: var(--success);
+            padding: 12px;
+            border-radius: 10px;
             margin-top: 12px;
             font-weight: 500;
         }
@@ -111,9 +79,6 @@
             font-size: 17px;
             font-weight: bold;
         }
-        button:hover {
-            background: linear-gradient(90deg, #2563eb, #1d4ed8);
-        }
     </style>
 </head>
 <body>
@@ -123,7 +88,7 @@
 
     <div id="matches-container"></div>
 
-    <button onclick="refreshData()">🔄 手動刷新最新數據與 Bet365 賠率</button>
+    <button onclick="refreshData()">🔄 手動刷新最新數據</button>
 
     <script>
         async function loadData() {
@@ -146,14 +111,15 @@
                         const o = match.bet365_odds;
                         oddsHTML = `
                             <div class="odds">
-                                <div class="odds-title">Bet365 即時賠率</div>
-                                <strong>${match.home}</strong> ${o.home_win || '-'}　|　
-                                平局 ${o.draw || '-'}　|　
-                                <strong>${match.away}</strong> ${o.away_win || '-'}<br>
-                                大小 ${o.over || '-'} / ${o.under || '-'}
+                                <strong>${match.home}</strong> ${o.home_win || '-'} | 
+                                平局 ${o.draw || '-'} | 
+                                <strong>${match.away}</strong> ${o.away_win || '-'}
                             </div>
                         `;
                     }
+
+                    const pred = match.predictions || {};
+                    const rec = match.recommendations ? match.recommendations.join(" • ") : "推薦觀察";
 
                     card.innerHTML = `
                         <div class="league">${match.league}</div>
@@ -163,26 +129,45 @@
                             <span>${match.away}</span>
                         </div>
                         <div class="status">${match.status || '即將開賽'}</div>
+
+                        <div class="stats">
+                            <div class="stat-item">
+                                <div class="stat-label">主勝</div>
+                                <div class="stat-value">${(pred.home_win_prob * 100 || 0).toFixed(0)}%</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-label">平局</div>
+                                <div class="stat-value">${(pred.draw_prob * 100 || 0).toFixed(0)}%</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-label">客勝</div>
+                                <div class="stat-value">${(pred.away_win_prob * 100 || 0).toFixed(0)}%</div>
+                            </div>
+                        </div>
+
                         ${oddsHTML}
-                        <div class="recommend">推薦：大 2/2.5 • 大 4.5黃牌 • 大 9.5角球</div>
+
+                        <div class="recommend">
+                            ${rec}<br>
+                            <small>Edge: ${match.edge_values ? Object.values(match.edge_values)[0] || '' : ''}</small>
+                        </div>
                     `;
                     container.appendChild(card);
                 });
 
             } catch (e) {
                 document.getElementById('matches-container').innerHTML = 
-                    `<p style="color:#f87171; text-align:center; padding:20px;">⚠️ 無法載入數據，請確認 data.json 存在</p>`;
+                    `<p style="color:#f87171; text-align:center;">⚠️ 無法載入數據</p>`;
             }
         }
 
         function refreshData() {
-            document.getElementById('update-time').textContent = "正在更新 Bet365 賠率與即時比分...";
+            document.getElementById('update-time').textContent = "正在更新最新數據...";
             loadData();
         }
 
-        // 自動載入與刷新
         window.onload = loadData;
-        setInterval(loadData, 180000);   // 每 3 分鐘自動更新
+        setInterval(loadData, 180000); // 每3分鐘自動更新
     </script>
 </body>
 </html>
