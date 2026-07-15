@@ -1,6 +1,6 @@
 {
-  "last_update": "2026-07-16 15:12:00",
-  "source": "Unified WC2026 Framework + Bet365 + ESPN",
+  "last_update": "2026-07-16 15:45:00",
+  "source": "Unified WC2026 Framework",
   "matches": [
     {
       "match_id": "wc2026-sf-01",
@@ -18,9 +18,7 @@
         "home_win_prob": 0.32,
         "draw_prob": 0.28,
         "away_win_prob": 0.40,
-        "over_25_prob": 0.58,
-        "total_corners": 10.8,
-        "total_cards": 5.4
+        "over_25_prob": 0.58
       },
 
       "bet365_odds": {
@@ -31,16 +29,10 @@
         "under": "1.83"
       },
 
-      "recommendations": [
-        "大 2/2.5",
-        "大 4.5 黃牌",
-        "大 9.5 角球"
-      ],
-
+      "recommendations": ["大 2/2.5", "大 4.5 黃牌"],
       "edge_values": {
         "over_25": "+5.2%",
-        "cards_over_45": "+6.8%",
-        "corners_over_95": "+5.5%"
+        "cards": "+6.8%"
       }
     },
     {
@@ -51,7 +43,6 @@
       "home_score": 92,
       "away_score": 88,
       "status": "已結束",
-      "kickoff_time": "2026-07-16 03:30",
 
       "predictions": {
         "home_win_prob": 0.55,
@@ -67,31 +58,6 @@
       "recommendations": ["大分"],
       "edge_values": {
         "over": "+5.5%"
-      }
-    },
-    {
-      "match_id": "wnba-01",
-      "league": "WNBA",
-      "home": "明尼蘇達天貓",
-      "away": "洛杉磯火花",
-      "home_score": 0,
-      "away_score": 0,
-      "status": "即將開賽",
-
-      "predictions": {
-        "home_win_prob": 0.82,
-        "over_prob": 0.55
-      },
-
-      "bet365_odds": {
-        "home_win": "1.13",
-        "away_win": "5.70",
-        "spread": "-12.5"
-      },
-
-      "recommendations": ["天貓 -12.5"],
-      "edge_values": {
-        "spread": "+5.0%"
       }
     }
   ]
