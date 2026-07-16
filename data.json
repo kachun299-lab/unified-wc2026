@@ -1,61 +1,66 @@
 {
-  "last_update": "2026-07-16 17:05:00",
-  "source": "Unified WC2026 Framework + xG + 黃牌模型",
+  "last_update": "2026-07-16 10:06:27",
   "matches": [
     {
-      "match_id": "wc2026-sf-01",
-      "league": "FIFA World Cup 2026 - 準決賽",
-      "home": "英格蘭",
-      "away": "阿根廷",
+      "league": "BASKETBALL/NBA",
+      "home": "San Antonio Spurs",
+      "away": "New York Knicks",
+      "home_score": 90,
+      "away_score": 94,
+      "status": "Final",
+      "xg": {
+        "home_xg": 1.55,
+        "away_xg": 1.55
+      }
+    },
+    {
+      "league": "BASKETBALL/WNBA",
+      "home": "Chicago Sky",
+      "away": "Seattle Storm",
+      "home_score": 95,
+      "away_score": 90,
+      "status": "Final",
+      "xg": {
+        "home_xg": 1.55,
+        "away_xg": 1.55
+      }
+    },
+    {
+      "league": "BASKETBALL/WNBA",
+      "home": "Minnesota Lynx",
+      "away": "Los Angeles Sparks",
+      "home_score": 96,
+      "away_score": 87,
+      "status": "Final",
+      "xg": {
+        "home_xg": 1.55,
+        "away_xg": 1.55
+      }
+    },
+    {
+      "league": "BASKETBALL/WNBA",
+      "home": "Indiana Fever",
+      "away": "Golden State Valkyries",
+      "home_score": 75,
+      "away_score": 88,
+      "status": "Final",
+      "xg": {
+        "home_xg": 1.55,
+        "away_xg": 1.55
+      }
+    },
+    {
+      "league": "SOCCER/FIFA.WORLD",
+      "home": "France",
+      "away": "England",
       "home_score": 0,
       "away_score": 0,
-      "status": "即將開賽",
-      "kickoff_time": "2026-07-16 03:00",
-      "venue": "Mercedes-Benz Stadium, Atlanta",
-      "weather": "晴朗 28°C",
-
-      "half_score": "0-0",
-      "full_score": "預測 1-2",
-
+      "status": "Scheduled",
       "xg": {
-        "home_xg": 1.65,
-        "away_xg": 1.85
+        "home_xg": 1.55,
+        "away_xg": 1.55
       },
-
-      "corners": {
-        "home_corners": 5,
-        "away_corners": 7,
-        "total_corners": 12
-      },
-
-      "cards": {
-        "home_yellow": 2.4,
-        "away_yellow": 3.1,
-        "total_yellow": 5.5,
-        "red_card_prob": 0.28
-      },
-
-      "predictions": {
-        "home_win_prob": 0.32,
-        "draw_prob": 0.28,
-        "away_win_prob": 0.40,
-        "over_25_prob": 0.58
-      },
-
-      "bet365_odds": {
-        "home_win": "2.55",
-        "draw": "2.88",
-        "away_win": "3.15",
-        "over": "2.07",
-        "under": "1.83"
-      },
-
-      "recommendations": ["大 2/2.5", "大 4.5 黃牌", "大 9.5 角球"],
-      "edge_values": {
-        "over_25": "+5.2%",
-        "cards_over_45": "+6.8%",
-        "corners_over_95": "+5.5%"
-      }
+      "bet365_odds": null
     }
   ]
 }
