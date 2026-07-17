@@ -2,14 +2,18 @@ name: Daily Sports Data Update
 
 on:
   schedule:
-    - cron: '0 2 * * *'   # 每天 UTC 2:00 (香港時間早上10點)
-  workflow_dispatch:      # 可手動觸發
+    - cron: '0 2 * * *'
+  workflow_dispatch:
 
 jobs:
   update:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
       
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -17,16 +21,17 @@ jobs:
           python-version: '3.11'
           
       - name: Install dependencies
-        run: |
-          pip install requests
+        run: pip install requests
       
       - name: Run Data Update
         env:
           API_FOOTBALL_KEY: ${{ secrets.API_FOOTBALL_KEY }}
-        run: python update_data.py --api football --leagues csl,cl1,wnba --refresh
+        run: python update_data.py --api football --leagues csl,cl1 --refresh
       
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./
+      - name: Commit and push changes
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add data.json index.html
+          git commit -m "Auto-update: $(date +'%Y-%m-%d %H:%M')" || echo "No changes"
+          git push
